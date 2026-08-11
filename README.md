@@ -41,6 +41,8 @@ Una vez configurado, cada vez que se pushea a `main` la página publicada se act
 
 Este repo está pensado para que cualquiera de los dos (Jimena o Gastón) pueda retomarlo con contexto completo, incluso usando un asistente de IA: `contexto.md` explica el negocio y `memory.md` explica las decisiones de diseño y contenido ya tomadas, para no repetir trabajo ni contradecir cosas ya definidas.
 
+**Empezá siempre con `git pull`.** El flujo de trabajo acordado entre los dos está al principio de `memory.md` — leelo antes de la primera sesión.
+
 ## Privacidad
 
 Este repositorio es **público**. No se suben datos personales de alumnas (nombres completos, condiciones de salud, mediciones, contacto) ni información financiera. Los ejemplos de trabajo con alumnas que aparecen en `contexto.md` están descritos en términos generales, sin identificar a nadie.

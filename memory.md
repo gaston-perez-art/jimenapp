@@ -2,6 +2,30 @@
 
 Registro vivo de decisiones ya tomadas, para no repetir trabajo ni contradecir cosas definidas. Se actualiza a medida que el proyecto avanza.
 
+## Antes de empezar a trabajar: `git pull`
+
+**Siempre hacer `git pull` antes de tocar cualquier archivo.** Vale también para un asistente de IA que esté leyendo este archivo: si estás por editar algo de este repo, hacé el pull primero.
+
+No es solo por la web. Cambian también `contexto.md`, este mismo `memory.md` y el `README.md`, y trabajar sobre una versión vieja de cualquiera de ellos significa reescribir decisiones que el otro ya tomó.
+
+## Cómo trabajamos los dos
+
+Somos dos personas (Jimena y Gastón) y trabajamos **directo sobre `main`**, sin branches ni pull requests. La decisión es deliberada: para un proyecto de este tamaño el flujo de branches agrega más ceremonia que valor.
+
+Lo que sostiene ese acuerdo:
+
+• **Nos avisamos antes de empezar.** No editar en paralelo — sobre todo `docs/index.html`, que es un solo archivo con todo el HTML, CSS y JS adentro. Dos ediciones simultáneas ahí generan un conflicto que git no puede resolver solo.
+• **Pull al empezar, push al terminar.** Sesiones cortas y cerradas. Acumular cambios sin pushear durante días es lo que rompe el acuerdo.
+• **`main` es lo que está publicado.** GitHub Pages sirve `main/docs`, así que todo lo que se pushea está en vivo un minuto después. No pushear cosas a medio hacer.
+
+**Si el push sale rechazado** (`rejected` / `fetch first`), significa que el otro pusheó algo mientras trabajabas. No es un error: hacé `git pull` y volvé a pushear.
+
+Para que el pull no genere commits de merge innecesarios, conviene configurar una vez por máquina:
+
+```
+git config pull.rebase true
+```
+
 ## Decisiones de diseño (página web)
 
 **Paleta de colores:**
