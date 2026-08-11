@@ -11,6 +11,17 @@ Colaboran en este proyecto: **Jimena Ibañez** y **Gastón**.
 | `contexto.md` | Contexto de negocio: quién es Jimena, a quién apunta el proyecto, objetivos | Constante |
 | `memory.md` | Decisiones tomadas, preferencias de trabajo, estado actual y pendientes | Constante |
 | `docs/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
+| `herramientas/` | Planillas Excel de uso interno con Jimena y sus alumnas (ficha de ingreso, planificador de mesociclos, calculadora nutricional) | Según cambios |
+
+## Herramientas internas (`herramientas/`)
+
+Planillas Excel (`.xlsx`) de uso interno — **no** se enlazan desde la web pública:
+
+- **`ficha-ingreso.xlsx`** — formulario de alta de una alumna nueva: datos personales, objetivo, historial de salud (incluye condiciones hormonales relevantes), historial de entrenamiento, antropometría inicial (con IMC calculado automáticamente) y consentimiento.
+- **`planificador-mesociclos.xlsx`** — planificador de 6 semanas (3 acumulación / 2 intensificación / 1 descarga) con autorregulación por RPE. Incluye la tabla de referencia RPE → %1RM y calcula la carga sugerida en kg a partir del 1RM cargado y el RPE objetivo de cada semana.
+- **`calculadora-nutricional.xlsx`** — calcula TMB (Mifflin-St Jeor), TDEE y reparto de macros (proteína 2 g/kg, grasas ~27.5% de las calorías, carbohidratos el resto) según objetivo (déficit/mantenimiento/superávit).
+
+Cada `.xlsx` tiene un script `build-*.ps1` homónimo que lo genera desde cero (usa Excel vía COM automation en Windows). Sirven como fuente versionada de la estructura y las fórmulas — si hay que rehacer una planilla o corregir una fórmula, se edita el `.ps1` y se vuelve a ejecutar en PowerShell con Excel instalado, en vez de editar el `.xlsx` a mano.
 
 ## Cómo ver la página web
 
