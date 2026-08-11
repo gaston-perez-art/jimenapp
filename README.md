@@ -12,6 +12,7 @@ Colaboran en este proyecto: **Jimena Ibañez** y **Gastón**.
 | `memory.md` | Decisiones tomadas, preferencias de trabajo, estado actual y pendientes | Constante |
 | `docs/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
 | `herramientas/` | Planillas Excel de uso interno con Jimena y sus alumnas (ficha de ingreso, planificador de mesociclos, calculadora nutricional) | Según cambios |
+| `estrategia/` | Documentos de posicionamiento y propuesta de valor. **En curso**, nada cerrado todavía | En discusión |
 
 ## Herramientas internas (`herramientas/`)
 

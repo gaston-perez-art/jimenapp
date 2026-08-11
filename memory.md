@@ -70,10 +70,29 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 - `planificador-mesociclos.xlsx` usa la tabla RPE→%1RM estándar (Tuchscherer/RTS) para sugerir carga en kg a partir del 1RM cargado por la entrenadora.
 - Nota técnica: generar archivos Excel con Excel COM automation en PowerShell 5.1 tiene un bug conocido — si una misma línea de código asigna valores de tipos alternados (ej. Int32 y luego Double, o número y luego string vacío) a la propiedad `.Value2` dentro de un loop, PowerShell tira `InvalidCastException` de forma intermitente. Solución aplicada: asignar siempre vía `InvokeMember` en vez de la sintaxis de propiedad directa de PowerShell, y evitar escribir `""` alternado con números en la misma celda/loop.
 
+## Estrategia (`estrategia/`)
+
+- Carpeta abierta el 11/08/2026, **en curso**. Por ahora solo tiene `propuesta-de-valor.md`.
+- La decisión que bloquea todo lo demás es el posicionamiento: mujeres +30 en general, o especialización en salud hormonal femenina. Define precio, canal y mensaje. Hasta que no se resuelva, no tiene sentido escribir misión/visión, Business Model Canvas ni FODA.
+- **El business case (precios, rentabilidad por plan, proyección de ingresos) no va en este repositorio.** El repo es público y el README prohíbe información financiera. Ese documento lo tiene Gastón aparte. Acá solo se registran las decisiones que quedaron abiertas.
+
 ## Pendientes
+
+**Bloqueantes de captación** (hoy la web no puede convertir una sola visita):
 
 - [ ] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real.
 - [ ] Agregar el enlace real de Instagram en el footer.
 - [ ] Sumar testimonios reales de alumnas a la sección "Testimonios" (requiere autorización explícita de cada alumna para uso público).
+
+**Decisiones abiertas de negocio:**
+
+- [ ] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. Bloquea el precio, el canal y el mensaje de toda la web. Ver `estrategia/propuesta-de-valor.md`.
+- [ ] Corregir el footer de `docs/index.html`: dice "mujeres +40" y el resto del sitio dice +30. Se resuelve solo cuando se cierre el posicionamiento.
+- [ ] Definir el valor de la Asesoría nutricional. Es el único de los tres servicios de la web sin precio asignado.
+- [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
+
+**Producto y operación:**
+
 - [ ] Definir si se contrata dominio/hosting propio o se usa GitHub Pages.
 - [ ] Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`.
+- [ ] Usar las planillas de `herramientas/` como argumento comercial en la web. Hoy son el activo de retención del proyecto y no se mencionan en ningún lado.
