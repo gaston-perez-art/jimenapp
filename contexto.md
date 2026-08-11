@@ -23,7 +23,7 @@ Jimena Ibañez es Profesora Nacional de Educación Física (Argentina), con expe
 
 Construir la presencia profesional online de Jimena y las herramientas de trabajo que usa con sus alumnas:
 
-1. **Página web** (`web/index.html`) — sitio de una sola página pensado para conseguir clientas nuevas: presentación profesional, servicios, proceso de trabajo, testimonios y contacto por WhatsApp.
+1. **Página web** (`docs/index.html`) — sitio de una sola página pensado para conseguir clientas nuevas: presentación profesional, servicios, proceso de trabajo, testimonios y contacto por WhatsApp.
 2. **Plantillas y sistemas de trabajo** (fuera de este repositorio por ahora, en documentos de Word/Excel): fichas de ingreso para alumnas nuevas, planificación de mesociclos de entrenamiento, calculadora de necesidades calóricas y macronutrientes, planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza).
 3. **Casos de éxito y contenido educativo**: documentación de resultados reales de alumnas (con su autorización) para portfolio profesional, y guías de referencia sobre entrenamiento y nutrición aplicados a condiciones hormonales específicas.
 

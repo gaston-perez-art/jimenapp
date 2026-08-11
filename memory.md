@@ -40,7 +40,7 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 
 ## Pendientes
 
-- [ ] Reemplazar el número de WhatsApp de ejemplo en `web/index.html` por el real.
+- [ ] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real.
 - [ ] Agregar el enlace real de Instagram en el footer.
 - [ ] Sumar testimonios reales de alumnas a la sección "Testimonios" (requiere autorización explícita de cada alumna para uso público).
 - [ ] Definir si se contrata dominio/hosting propio o se usa GitHub Pages.

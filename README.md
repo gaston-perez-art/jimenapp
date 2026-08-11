@@ -10,16 +10,21 @@ Colaboran en este proyecto: **Jimena Ibañez** y **Gastón**.
 |---|---|---|
 | `contexto.md` | Contexto de negocio: quién es Jimena, a quién apunta el proyecto, objetivos | Constante |
 | `memory.md` | Decisiones tomadas, preferencias de trabajo, estado actual y pendientes | Constante |
-| `web/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
+| `docs/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
 
 ## Cómo ver la página web
 
-**Opción rápida:** descargá `web/index.html` y abrilo directo en el navegador.
+**Opción rápida (sin publicar nada):** abrí `docs/index.html` directo en el navegador. Es instantáneo y sirve para ir viendo cambios mientras se trabaja.
 
 **Publicarla gratis con GitHub Pages:**
 1. Andá a **Settings → Pages** en este repositorio.
-2. En "Source", elegí la rama `main` y la carpeta `/web`.
-3. Guardá — GitHub te va a dar una URL pública (algo como `gaston-perez-art.github.io/jimenapp`) en unos minutos.
+2. En "Source", elegí **Deploy from a branch**.
+3. Elegí la rama `main` y la carpeta `/docs`. Guardá.
+4. En un par de minutos la página queda en **https://gaston-perez-art.github.io/jimenapp/**
+
+> La carpeta se llama `docs` y no `web` por una restricción de GitHub Pages: publicando desde una rama, las únicas carpetas posibles son la raíz del repo (`/`) o `/docs`. No se puede elegir una carpeta con otro nombre.
+
+Una vez configurado, cada vez que se pushea a `main` la página publicada se actualiza sola en aproximadamente un minuto. Si no ves el cambio, probá recargar con caché limpia (Cmd+Shift+R).
 
 ## Cómo seguir trabajando este proyecto
 
