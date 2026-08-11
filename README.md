@@ -12,7 +12,7 @@ Colaboran en este proyecto: **Jimena Ibañez** y **Gastón**.
 | `memory.md` | Decisiones tomadas, preferencias de trabajo, estado actual y pendientes | Constante |
 | `docs/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
 | `herramientas/` | Planillas Excel de uso interno con Jimena y sus alumnas (ficha de ingreso, planificador de mesociclos, calculadora nutricional) | Según cambios |
-| `estrategia/` | Documentos de posicionamiento y propuesta de valor. **En curso**, nada cerrado todavía | En discusión |
+| `estrategia/` | Posicionamiento, propuesta de valor y business case. **En curso**, nada cerrado todavía | En discusión |
 
 ## Herramientas internas (`herramientas/`)
 
@@ -46,4 +46,8 @@ Este repo está pensado para que cualquiera de los dos (Jimena o Gastón) pueda 
 
 ## Privacidad
 
-Este repositorio es **público**. No se suben datos personales de alumnas (nombres completos, condiciones de salud, mediciones, contacto) ni información financiera. Los ejemplos de trabajo con alumnas que aparecen en `contexto.md` están descritos en términos generales, sin identificar a nadie.
+Este repositorio es **público**.
+
+**No se suben datos personales de alumnas**: nombres completos, condiciones de salud, mediciones ni datos de contacto. Los ejemplos de trabajo con alumnas que aparecen en `contexto.md` están descritos en términos generales, sin identificar a nadie. Esta regla no se toca, porque son datos de terceros y no nos corresponde publicarlos.
+
+**La información de negocio sí va en el repo**, por decisión de Gastón del 11/08/2026: precios, análisis de rentabilidad y proyecciones viven en `estrategia/business-case.md`. Tener todo en un solo lugar compartido vale más que mantenerlo reservado. Vale tener presente que el historial de Git conserva todo lo que se sube, incluso si después se borra el archivo.

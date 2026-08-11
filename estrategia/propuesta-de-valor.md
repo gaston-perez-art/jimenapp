@@ -40,8 +40,8 @@ Este documento cubre la propuesta de valor. Todavía no existen, y conviene arma
 • Business Model Canvas
 • FODA con lectura de la competencia directa
 
-## Nota sobre el análisis económico
+## Análisis económico
 
-El business case del proyecto, con precios, rentabilidad por plan y proyección de ingresos, **se mantiene fuera de este repositorio** porque el repo es público y el README prohíbe subir información financiera. Gastón tiene el documento aparte.
+El business case está en [`business-case.md`](business-case.md), en esta misma carpeta: precios de cada plan, rentabilidad por hora, techo del negocio y la secuencia recomendada para moverse.
 
-Lo único que corresponde registrar acá son las decisiones que ese análisis dejó abiertas, y están en los pendientes de `memory.md`.
+Los dos documentos se leen juntos. El business case muestra que el precio es la palanca más fuerte del negocio, y este documento explica qué hace falta para poder subirlo.

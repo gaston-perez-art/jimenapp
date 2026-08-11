@@ -72,9 +72,10 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 
 ## Estrategia (`estrategia/`)
 
-- Carpeta abierta el 11/08/2026, **en curso**. Por ahora solo tiene `propuesta-de-valor.md`.
+- Carpeta abierta el 11/08/2026, **en curso**. Tiene `propuesta-de-valor.md` y `business-case.md`, que se leen juntos.
 - La decisión que bloquea todo lo demás es el posicionamiento: mujeres +30 en general, o especialización en salud hormonal femenina. Define precio, canal y mensaje. Hasta que no se resuelva, no tiene sentido escribir misión/visión, Business Model Canvas ni FODA.
-- **El business case (precios, rentabilidad por plan, proyección de ingresos) no va en este repositorio.** El repo es público y el README prohíbe información financiera. Ese documento lo tiene Gastón aparte. Acá solo se registran las decisiones que quedaron abiertas.
+- **Decisión de Gastón del 11/08/2026: todo va en el repo público, incluido el análisis financiero.** Se evaluó separarlo en un repo privado y se descartó: tener todo en un solo lugar compartido con Jimena vale más que mantener reservados los precios. La única regla de privacidad que se mantiene firme es la de datos de alumnas, porque son datos de terceros.
+- Hallazgo central del business case: el techo del negocio lo fija el precio, no la capacidad. El plan más caro es el que peor rinde por hora de trabajo.
 
 ## Pendientes
 
