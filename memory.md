@@ -122,6 +122,18 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 ## Pendientes
 
+**Mejoras pedidas por Jimena (12/08/2026), en curso:**
+
+- [x] Hero: ampliar el lead y el `<title>` para no limitarlo a "reducir grasa y ganar masa muscular" — incluir mantenimiento y ganancia muscular sin pérdida de grasa.
+- [ ] "Sobre mí": reescribir con más foco en Jimena como persona. Bloqueado — falta que Jimena cuente su historia real (no se inventa biografía).
+- [x] Plan Entrenamiento: agregado "Videollamada cada 2 semanas" a `plan-feats` (y actualizada su lista de excluidos para que coincida con el vocabulario de Integral).
+- [x] Plan Integral: sumado "Reordenamiento alimenticio", "Plan de alimentación a medida" y "Medición cada 2 semanas" a `plan-feats`.
+- [ ] Decidir dónde va la foto real de Jimena en el hero: ¿reemplaza el gráfico de barras "signature", o va en otro lugar? Requiere decisión de diseño.
+- [ ] Poner la foto real de Jimena en el placeholder `.foto-ph` de "Sobre mí".
+- [ ] Repensar el tercer plan como "Asesoría 1 a 1 sobre entrenamiento y nutrición" (reemplaza al plan "Nutrición" actual) — a definir junto con Jimena: qué incluye, diferencia con Integral, precio.
+- [ ] Decidir si los Planes muestran precios públicamente o no.
+- [ ] Revisar si la nueva cadencia (videollamada cada 2 semanas en Entrenamiento) cambia el análisis de capacidad de `estrategia/business-case.md`.
+
 **Bloqueantes de captación** (hoy la web no puede convertir una sola visita):
 
 - [ ] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real.
