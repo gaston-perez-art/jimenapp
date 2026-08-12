@@ -95,6 +95,15 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 - [ ] Definir el valor de la Asesoría nutricional. Es el único de los tres servicios de la web sin precio asignado.
 - [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
 
+**Ideas del benchmark de sitios** (ver `product-discovery/02-benchmark-sitios/`, ninguna decidida todavía):
+
+- [ ] Ponerle nombre al método de Jimena. Hoy la metodología está documentada y no tiene nombre; la referencia principal llama a la suya "Método Reset". Un método con nombre sostiene precio.
+- [ ] Reemplazar el CTA "Escribime por WhatsApp" por una sesión de valoración gratuita por videollamada.
+- [ ] Reordenar la web para arrancar por el problema de la clienta y no por la oferta.
+- [ ] Sumar una sección de descalificación: "esto no es para vos si...".
+- [ ] Capturar emails con una guía descargable de perimenopausia.
+- [ ] Mostrar las planillas de `herramientas/` como argumento de venta en la web.
+
 **Producto y operación:**
 
 - [ ] Definir si se contrata dominio/hosting propio o se usa GitHub Pages.

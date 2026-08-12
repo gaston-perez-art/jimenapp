@@ -17,6 +17,7 @@ Una carpeta numerada por cada discovery, en orden cronológico:
 | Carpeta | Qué se investigó | Estado |
 |---|---|---|
 | `01-tipografia/` | Qué tipografía usan los sitios de entrenamiento de referencia y cuál conviene adoptar | **Cerrado**, decisión tomada el 11/08/2026 |
+| `02-benchmark-sitios/` | Cómo estructuran su página los sitios de referencia: secciones, conversión, prueba social y oferta | **Abierto**, con ideas sin decidir |
 
 ## Qué entra acá y qué no
 
