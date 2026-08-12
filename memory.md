@@ -6,6 +6,8 @@ Registro vivo de decisiones ya tomadas, para no repetir trabajo ni contradecir c
 
 **Siempre hacer `git pull` antes de tocar cualquier archivo.** Vale también para un asistente de IA que esté leyendo este archivo: si estás por editar algo de este repo, hacé el pull primero.
 
+La misma regla está en **`CLAUDE.md`**, en la raíz del repositorio, que Claude Code carga solo cada vez que se abre el proyecto. Es el mecanismo que hace que la regla se cumpla sin que nadie tenga que acordarse de pedirla.
+
 No es solo por la web. Cambian también `contexto.md`, este mismo `memory.md` y el `README.md`, y trabajar sobre una versión vieja de cualquiera de ellos significa reescribir decisiones que el otro ya tomó.
 
 ## Cómo trabajamos los dos
@@ -44,6 +46,10 @@ git config pull.rebase true
 
 Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de referencia relevados, 11 usan grotesca sans en los títulos, y Fraunces empujaba la lectura hacia *wellness artesanal* cuando el contenido habla de periodización y RPE. El proceso completo, con el benchmark y las opciones descartadas, está en `product-discovery/01-tipografia/`.
 
+**Header:** 66px de alto, sticky. Achicado desde los 78px originales para que el hero y las secciones entren en una pantalla. Si se toca, hay que actualizar también el `top` del menú desplegable de mobile y el `top` del panel fijo del proceso, que dependen de ese número.
+
+**Hero:** tiene `min-height` igual a la pantalla útil (`100svh` menos el header), para que la sección siguiente no asome en el primer scroll. Se usa `svh` y no `vh` porque en mobile `vh` no descuenta la barra de direcciones.
+
 **Radios y profundidad (decisión de Gastón, 11/08/2026):** el sitio pasó de esquinas casi rectas (`--radius: 2px`) a un sistema redondeado y más suave, en la línea de Airbnb sin exagerar. Escala de tres valores:
 
 • `--r-sm: 10px` — botones y CTA del nav
@@ -76,7 +82,15 @@ La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no
 
 ## Estructura de la página web
 
-Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios → Cómo trabajo (proceso de 4 pasos) → Contacto (WhatsApp) → Footer.
+Hero → Sobre mí → Testimonios (placeholders, a completar) → **Cómo trabajo** → **Planes** → Contacto (WhatsApp) → Footer.
+
+El orden es deliberado: **el método va antes que el precio**. Explicar cómo se trabaja antes de mostrar cuánto sale es lo que hace que el precio se entienda. Antes estaba al revés.
+
+**Sobre mí:** foto a la izquierda (placeholder hasta tener la real), con la cita y la credencial debajo; título y párrafos a la derecha. Las especialidades son una banda a todo el ancho que cruza las dos columnas, separada por una línea fina, sin caja. Se probó como tarjeta con borde y sombra y competía visualmente con la foto.
+
+**Cómo trabajo:** panel fijo con `position: sticky` que cambia mientras se scrollea, al estilo de Equinox. La izquierda dice la idea de cada paso, la derecha el mecanismo concreto. Nunca lo mismo dicho dos veces. En mobile el panel se oculta y los cuatro pasos se leen como lista.
+
+**Planes:** tres cards (Entrenamiento, Integral, Nutrición) con un toggle de duración (Mensual, Semestral, Anual) hecho con radios y `:checked`, sin JavaScript. Un solo toggle para las tres cards, no uno por card: si cada una tuviera el suyo, se podrían comparar precios de duraciones distintas. Toda la sección entra en una pantalla a 1440x900.
 
 ## Metodología de entrenamiento (referencia para las herramientas del proyecto)
 
@@ -118,7 +132,7 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 
 - [ ] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. Bloquea el precio, el canal y el mensaje de toda la web. Ver `estrategia/propuesta-de-valor.md`.
 - [ ] Corregir el footer de `docs/index.html`: dice "mujeres +40" y el resto del sitio dice +30. Se resuelve solo cuando se cierre el posicionamiento.
-- [ ] Definir el valor de la Asesoría nutricional. Es el único de los tres servicios de la web sin precio asignado.
+- [ ] **Confirmar los precios publicados.** Los mensuales de Entrenamiento (USD 20) e Integral (USD 32) son reales. **El de Nutrición (USD 25) y todos los semestrales y anuales son provisorios**, los estimó Claude para poder maquetar. Están en vivo en la web: revisarlos es prioritario.
 - [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
 
 **Ideas del benchmark de sitios** (ver `product-discovery/02-benchmark-sitios/`, ninguna decidida todavía):

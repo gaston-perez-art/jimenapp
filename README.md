@@ -8,6 +8,7 @@ Colaboran en este proyecto: **Jimena Ibañez** y **Gastón**.
 
 | Archivo / carpeta | Qué es | Actualización |
 |---|---|---|
+| `CLAUDE.md` | Instrucciones para Claude Code y para cualquiera que retome el proyecto. **Lo primero que se lee** | Constante |
 | `contexto.md` | Contexto de negocio: quién es Jimena, a quién apunta el proyecto, objetivos | Constante |
 | `memory.md` | Decisiones tomadas, preferencias de trabajo, estado actual y pendientes | Constante |
 | `docs/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
@@ -43,7 +44,34 @@ Una vez configurado, cada vez que se pushea a `main` la página publicada se act
 
 Este repo está pensado para que cualquiera de los dos (Jimena o Gastón) pueda retomarlo con contexto completo, incluso usando un asistente de IA: `contexto.md` explica el negocio y `memory.md` explica las decisiones de diseño y contenido ya tomadas, para no repetir trabajo ni contradecir cosas ya definidas.
 
-**Empezá siempre con `git pull`.** El flujo de trabajo acordado entre los dos está al principio de `memory.md` — leelo antes de la primera sesión.
+**Empezá siempre con `git pull`.** El flujo acordado entre los dos está al principio de `memory.md`, y la misma regla vive en `CLAUDE.md`, que Claude Code carga solo cada vez que se abre el repositorio.
+
+## Puesta al día — sesión del 11 y 12 de agosto de 2026
+
+Si volvés después de unos días, esto es lo que cambió. El detalle de cada decisión está en `memory.md`.
+
+**El sitio**
+
+• **Tipografía nueva: Archivo** en lugar de Fraunces y Work Sans. Salió de relevar 12 sitios de referencia: 11 usan grotesca sans en los títulos. Ver `product-discovery/01-tipografia/`.
+• **Todo redondeado y más suave**, con una escala de radios y sombras muy bajas. Antes las esquinas eran casi rectas.
+• **El claim del hero se anima**: "Más" queda fijo y la palabra rota entre fuerte, segura y vos, en cursiva y con un rodillo vertical.
+• **Sección nueva de Planes** con las tres modalidades y un toggle de duración (mensual, semestral, anual) que cambia los precios sin recargar.
+• **"Cómo trabajo" ahora tiene un panel fijo** que va cambiando mientras scrolleás, al estilo de Equinox.
+• **El orden de la página cambió**: el método va antes que el precio.
+• **Sobre mí se rehizo**: foto a la izquierda, texto a la derecha, y las especialidades como una banda al pie.
+• **Pasada completa de mobile**, verificada desde 360px de ancho.
+
+**Documentos nuevos**
+
+• `estrategia/` — propuesta de valor y business case con el modelo económico.
+• `product-discovery/` — cómo se llegó a cada decisión, con los benchmarks de tipografía y de sitios de referencia.
+
+**Lo que necesita tu revisión**
+
+1. **Los precios están publicados y algunos son provisorios.** Entrenamiento (USD 20) e Integral (USD 32) mensuales son reales. El de Nutrición y todos los semestrales y anuales los estimó Claude para poder maquetar.
+2. **La foto de Sobre mí es un placeholder.** Hace falta una foto tuya.
+3. **El WhatsApp de la web sigue siendo un número de ejemplo**, así que hoy nadie puede contactarte. Es lo más urgente.
+4. **Falta el enlace de Instagram** y los testimonios reales.
 
 ## Privacidad
 
