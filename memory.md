@@ -44,6 +44,15 @@ git config pull.rebase true
 
 Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de referencia relevados, 11 usan grotesca sans en los títulos, y Fraunces empujaba la lectura hacia *wellness artesanal* cuando el contenido habla de periodización y RPE. El proceso completo, con el benchmark y las opciones descartadas, está en `product-discovery/01-tipografia/`.
 
+**Radios y profundidad (decisión de Gastón, 11/08/2026):** el sitio pasó de esquinas casi rectas (`--radius: 2px`) a un sistema redondeado y más suave, en la línea de Airbnb sin exagerar. Escala de tres valores:
+
+• `--r-sm: 10px` — botones y CTA del nav
+• `--r-md: 14px` — tarjetas y cajas, y todas las superficies en mobile
+• `--r-lg: 20px` — superficies grandes en desktop (gráfico de progresión, caja de contacto)
+• Chips y etiquetas van en pastilla completa (`999px`)
+
+La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no bordes más gruesos ni colores más claros. La sombra grande aparece solo en hover de tarjeta.
+
 **Elemento distintivo (signature):** gráfico de barras ascendente en el hero, mostrando una progresión real de carga en sentadilla semana a semana. Refuerza el mensaje de progreso sostenido en vez de una foto de stock genérica.
 
 **Principio técnico importante:** todo el contenido de la página es visible por defecto en el HTML/CSS. Las animaciones (aparición al hacer scroll, barras que crecen) son una mejora progresiva que se agrega solo si el JavaScript corre correctamente, con un timeout de seguridad — así un fallo de JavaScript nunca deja la página en blanco.
@@ -58,6 +67,12 @@ Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de re
 **Animaciones vigentes:** claim del hero rotando (fuerte → segura → vos, CSS puro, ciclo de 8,4s), entrada escalonada del hero al cargar, `.stagger` para que los hijos de una grilla entren uno detrás de otro, reveals al hacer scroll y barras del gráfico que crecen.
 
 **Claim del hero, detalle de diseño.** "Más" queda recto y fijo; la palabra que cambia va en **cursiva**, para separar tipográficamente lo constante de lo variable. La salida es un **rodillo vertical**: la palabra sube y se va, la siguiente entra desde abajo. Se evaluaron y descartaron el borrado letra por letra (con `steps()` corta los glifos al medio porque Archivo es proporcional, y lee "terminal" en vez de "entrenadora") y el barrido horizontal. Se eligió el rodillo porque empuja hacia arriba igual que el gráfico de progresión que está al lado.
+
+**Mobile.** Hay un bloque dedicado en el breakpoint de 720px, con tres reglas que conviene sostener al agregar secciones nuevas:
+
+• Nada tocable por debajo de 44px de alto. Los links del nav y del footer llevan padding propio para llegar ahí.
+• Los botones van a lo ancho completo y centrados. Con el ancho natural, "Escribime por WhatsApp" se partía en dos líneas.
+• Los radios bajan de `--r-lg` a `--r-md` en pantallas chicas: en 390px un radio de 20px se come demasiado la esquina.
 
 ## Estructura de la página web
 

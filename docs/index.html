@@ -23,7 +23,12 @@
     --wine-100:#F3E4E9;
     --bronze:#A9824A;
     --bronze-soft:#EFE3CD;
-    --radius:2px;
+    --r-sm:10px;              /* botones, chips, etiquetas */
+    --r-md:14px;              /* tarjetas y cajas */
+    --r-lg:20px;              /* superficies grandes */
+    --radius:var(--r-sm);     /* alias por compatibilidad */
+    --shadow-sm:0 1px 2px rgba(36,31,38,.05), 0 6px 16px -10px rgba(36,31,38,.14);
+    --shadow-md:0 2px 4px rgba(36,31,38,.05), 0 16px 32px -18px rgba(36,31,38,.22);
     --maxw:1180px;
   }
   *{box-sizing:border-box;}
@@ -232,6 +237,8 @@
   .signature{
     background:var(--card);
     border:1px solid var(--line);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
     padding:30px 28px 24px;
     position:relative;
   }
@@ -253,7 +260,7 @@
   .bar{
     width:100%;
     background:linear-gradient(180deg, var(--wine-500), var(--wine-600));
-    border-radius:1px 1px 0 0;
+    border-radius:6px 6px 0 0;
   }
   .bar-col:last-child .bar{background:linear-gradient(180deg, var(--bronze), #8E6A34);}
   .bar-kg{
@@ -295,7 +302,7 @@
     padding:9px 16px;
     font-size:13.5px;
     font-weight:500;
-    border-radius:20px;
+    border-radius:999px;
   }
   .chips-label{
     font-family:'IBM Plex Mono', monospace;
@@ -311,11 +318,13 @@
   .card{
     background:var(--card);
     border:1px solid var(--line);
+    border-radius:var(--r-md);
+    box-shadow:var(--shadow-sm);
     padding:34px 28px;
     display:flex; flex-direction:column;
     transition:border-color .2s ease, transform .2s ease;
   }
-  .card:hover{border-color:var(--wine-600); transform:translateY(-3px);}
+  .card:hover{border-color:var(--wine-600); transform:translateY(-3px); box-shadow:var(--shadow-md);}
   .card .num{
     font-family:'IBM Plex Mono', monospace;
     font-size:12px;
@@ -335,7 +344,7 @@
 
   /* ---------- Testimonios (placeholder cards) ---------- */
   #testimonios{background:var(--paper-dim); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .testimonial-card{border-style:dashed; border-color:var(--line); border-radius:16px;}
+  .testimonial-card{border-style:dashed; border-color:var(--line); border-radius:var(--r-md); box-shadow:none;}
   .testimonial-card .num{
     font-family:'Archivo', sans-serif;
     font-weight:700;
@@ -372,6 +381,8 @@
   #contacto .section-head{margin-left:auto; margin-right:auto; text-align:center;}
   .contact-box{
     max-width:560px; margin:0 auto;
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
     background:var(--card);
     border:1px solid var(--line);
     padding:48px 40px;
@@ -457,7 +468,39 @@
     .steps{grid-template-columns:1fr 1fr; row-gap:36px;}
     .step{border-left:none; padding-left:0;}
   }
+  /* ---------- Mobile ---------- */
   @media (max-width:720px){
+    .wrap{padding:0 20px;}
+    section{padding:64px 0;}
+    .section-head{margin-bottom:36px;}
+    .hero{padding:40px 0 56px; gap:36px;}
+    .hero p.lead{font-size:16.5px; margin:20px 0 28px;}
+
+    /* la linea del eyebrow no debe partir el texto al envolver */
+    .eyebrow{align-items:flex-start; gap:8px;}
+    .eyebrow::before{margin-top:.62em; flex:0 0 auto; width:18px;}
+
+    /* areas tactiles: minimo 44px de alto en todo lo que se toca */
+    .navlinks a{display:block; padding:11px 0; font-size:16px;}
+    .navcta{padding:14px 22px; text-align:center;}
+    .logo{padding:8px 0;}
+    .navtoggle{padding:12px; margin-right:-12px;}
+
+    /* botones a lo ancho: entran comodos y no parten el texto en dos lineas */
+    .btn-primary{width:100%; justify-content:center; padding:17px 22px; font-size:16px;}
+    .herobtns{gap:14px;}
+    .microcopy{font-size:12px;}
+
+    .signature{padding:22px 18px 18px; border-radius:var(--r-md);}
+    .bars{gap:8px; height:150px;}
+    .card{padding:26px 22px; border-radius:var(--r-md);}
+    .cards{gap:16px;}
+    .contact-box{padding:30px 22px; border-radius:var(--r-md);}
+    .step .stepnum{font-size:26px;}
+
+    /* enlaces del footer: area tactil comoda */
+    footer .fsocial a{display:inline-block; padding:12px 0;}
+
     .navlinks{
       position:fixed; top:78px; left:0; right:0;
       background:var(--paper);
