@@ -13,6 +13,7 @@ Colaboran en este proyecto: **Jimena Ibañez** y **Gastón**.
 | `docs/` | Código de la página web del negocio (HTML/CSS/JS, un solo archivo autocontenido) | Según cambios |
 | `herramientas/` | Planillas Excel de uso interno con Jimena y sus alumnas (ficha de ingreso, planificador de mesociclos, calculadora nutricional) | Según cambios |
 | `estrategia/` | Posicionamiento, propuesta de valor y business case. **En curso**, nada cerrado todavía | En discusión |
+| `product-discovery/` | Cómo se llegó a cada decisión de producto: investigaciones, benchmarks y opciones descartadas | Por decisión |
 
 ## Herramientas internas (`herramientas/`)
 

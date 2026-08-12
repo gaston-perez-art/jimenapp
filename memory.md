@@ -36,10 +36,13 @@ git config pull.rebase true
 - `--ink: #241F26` — texto de cuerpo
 - `--paper: #FAF6F2` / `--paper-dim: #F1E9E1` — fondos alternados por sección
 
-**Tipografía:**
-- Display (títulos): Fraunces (serif con carácter, Google Fonts)
-- Cuerpo: Work Sans
-- Detalles/datos (eyebrows, labels): IBM Plex Mono — refuerza el posicionamiento "basado en evidencia"
+**Tipografía:** decidida el 11/08/2026, **pendiente de aplicar en `docs/index.html`**.
+
+- Display (títulos): **Archivo** (grotesca ancha, Google Fonts)
+- Cuerpo: **Archivo**
+- Detalles/datos (eyebrows, labels): IBM Plex Mono. Se mantiene sin cambios: refuerza el posicionamiento "basado en evidencia" y es lo que hacen Equinox y Stripe.
+
+Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de referencia relevados, 11 usan grotesca sans en los títulos, y Fraunces empujaba la lectura hacia *wellness artesanal* cuando el contenido habla de periodización y RPE. El proceso completo, con el benchmark y las opciones descartadas, está en `product-discovery/01-tipografia/`.
 
 **Elemento distintivo (signature):** gráfico de barras ascendente en el hero, mostrando una progresión real de carga en sentadilla semana a semana. Refuerza el mensaje de progreso sostenido en vez de una foto de stock genérica.
 
@@ -90,6 +93,7 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 - [ ] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. Bloquea el precio, el canal y el mensaje de toda la web. Ver `estrategia/propuesta-de-valor.md`.
 - [ ] Corregir el footer de `docs/index.html`: dice "mujeres +40" y el resto del sitio dice +30. Se resuelve solo cuando se cierre el posicionamiento.
 - [ ] Definir el valor de la Asesoría nutricional. Es el único de los tres servicios de la web sin precio asignado.
+- [ ] Aplicar Archivo en `docs/index.html`. La decisión está tomada, falta el cambio de código: el `link` de Google Fonts y tres declaraciones de `font-family`.
 - [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
 
 **Producto y operación:**
