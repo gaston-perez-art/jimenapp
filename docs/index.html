@@ -162,8 +162,18 @@
     position:relative;
     display:inline-block;
     vertical-align:baseline;
-    overflow:hidden;          /* recorta la palabra que entra y sale por arriba y abajo */
-    padding:.06em 0;          /* aire para que no se corte la 'g' de segura */
+    /* Recorta arriba y abajo para el rodillo, SIN overflow:hidden ni padding.
+       Dos trampas que costaron desalineacion y conviene no repetir:
+       1) overflow distinto de visible convierte esto en contenedor de scroll,
+          y el navegador pasa a sintetizar la linea base desde el borde inferior
+          en vez de tomar la real, asi que la palabra queda mas alta que "Mas".
+       2) un padding vertical desalinea igual, porque los .rot-w son absolutos
+          con top:0, que se mide contra la caja de padding, mientras el sizer
+          arranca despues del padding.
+       clip-path recorta lo visible sin tocar el layout ni la linea base. Los
+       valores negativos dan aire a la 'g' de segura arriba y abajo, y dejan
+       pasar la inclinacion de la cursiva a los costados. */
+    clip-path:inset(-.08em -.18em);
   }
   .rot-sizer{visibility:hidden;}          /* reserva el ancho de la palabra mas larga */
   .rot-w{
