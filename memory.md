@@ -48,6 +48,15 @@ Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de re
 
 **Principio técnico importante:** todo el contenido de la página es visible por defecto en el HTML/CSS. Las animaciones (aparición al hacer scroll, barras que crecen) son una mejora progresiva que se agrega solo si el JavaScript corre correctamente, con un timeout de seguridad — así un fallo de JavaScript nunca deja la página en blanco.
 
+**Animación: criterio del proyecto (decisión de Gastón, 11/08/2026).** Se anima sin timidez, la animación es parte de la identidad del sitio y no un adorno opcional. Lo que se mantiene firme, porque es correctitud y no cautela:
+
+• Preferir CSS puro sobre JavaScript. Una animación CSS no tiene el modo de falla que tiene el JS.
+• El `opacity:0` nunca va en una regla base, solo dentro de un `@keyframe` con `fill-mode: both`. Si las animaciones no corren, el contenido queda visible igual.
+• Todo lo que se anima respeta `prefers-reduced-motion`.
+• Si un texto rota o se reemplaza, el texto completo vive en un `.sr-only` y la parte animada va con `aria-hidden`. Sin eso se rompen el SEO y los lectores de pantalla.
+
+**Animaciones vigentes:** claim del hero rotando (fuerte → segura → vos, CSS puro, ciclo de 8,4s), entrada escalonada del hero al cargar, `.stagger` para que los hijos de una grilla entren uno detrás de otro, reveals al hacer scroll y barras del gráfico que crecen.
+
 ## Estructura de la página web
 
 Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios → Cómo trabajo (proceso de 4 pasos) → Contacto (WhatsApp) → Footer.
