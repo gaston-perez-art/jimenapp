@@ -1,27 +1,67 @@
 # Business case
 
-> **Estado: EN CURSO** al 11/08/2026. Los precios son datos reales confirmados por Gastón. Las horas por plan, la permanencia y las tasas de conversión son estimaciones señaladas como tales, pendientes de validación.
+> **Estado: EN CURSO**, segunda versión al 11/08/2026. Los precios son datos reales. Las horas por plan, la permanencia y las tasas de captación son estimaciones señaladas como tales.
+>
+> **Qué cambió respecto de la primera versión:** el benchmark de sitios (`product-discovery/02-benchmark-sitios/`) mostró que una competidora directa publica 18 meses de permanencia promedio, contra los 4 a 6 que asumía este documento. Eso obligó a rehacer el modelo, y al rehacerlo apareció un error de planteo más grave que el número.
 
-## Conclusión, antes que el razonamiento
+## El error de la primera versión
 
-**El techo del negocio tal como está hoy es de unos USD 15.000 al año.** Sale de una agenda completamente llena: 33 alumnas en plan integral más 2 personalizadas, unas 80 horas de trabajo al mes. Es el techo, no la meta, y llegar ahí toma años de captación sostenida.
+La primera versión calculaba cuánto rinde la agenda llena. La pregunta correcta es **si la agenda se llena alguna vez**.
 
-La lectura importante no es que el número sea bajo. Es **por qué** es bajo. No es por falta de horas, ni de proceso, ni de herramientas: esas tres cosas están razonablemente resueltas. Es porque a USD 20 y USD 32 por mes, incluso una agenda llena de gente satisfecha no acumula.
+No es lo mismo. Un negocio de acompañamiento pierde alumnas todos los meses, y crece solo mientras las altas superen a las bajas. Cuando se igualan, el negocio deja de crecer, sin importar cuánta capacidad quede sin usar.
 
-Subir el plan integral de USD 32 a USD 60, con el mismo trabajo y la misma cantidad de alumnas, lleva el techo a **USD 25.200 al año**. Ninguna otra palanca del negocio se le acerca.
+Esa es la fórmula que gobierna todo:
 
-## Los planes
+```
+alumnas en equilibrio = altas por mes × meses de permanencia
+```
 
-| Plan | Precio | Qué incluye |
+Con 2 altas por mes y una permanencia de 5 meses, el negocio se estabiliza en **10 alumnas**. No en 35. Y se queda ahí para siempre, con la agenda a un tercio, por más horas libres que haya.
+
+## Los tres números
+
+| Escenario | Qué supone | Ingreso anual |
 |---|---|---|
-| Entrenamiento | USD 20/mes | Seguimiento personalizado por WhatsApp, entrevistas cada tanto. No es entrenamiento en vivo, es acompañamiento asincrónico. |
-| Integral | USD 30 a 35/mes | Entrenamiento más hábitos alimenticios: control de calorías e ingesta según objetivos. |
-| Personalizado | ~USD 100/mes | Alcance ampliado. Consume mucho tiempo, por eso solo entrarían 1 o 2 alumnas. |
-| Asesoría nutricional | **Sin definir** | Figura como servicio independiente en la web y no tiene precio asignado. |
+| **Si nada cambia** | 2 altas/mes, 5 meses de permanencia, USD 32 | **USD 3.840** |
+| **Techo del 1 a 1 bien hecho** | 4 altas/mes, 12 meses, USD 60, agenda llena | **USD 25.200** |
+| **Con escalera de producto** | Lo anterior más programa grupal y ebook | **USD 31.920** |
 
-## Rentabilidad por hora
+El primero es el escenario por defecto: lo que pasa si el proyecto sigue como está. No es pesimista, es inercial.
 
-Un plan no se mide por lo que factura sino por lo que factura **por hora de Jimena**, porque las horas son el recurso escaso. Con esa vara, el orden se invierte por completo.
+La distancia entre el primero y el segundo no se cubre trabajando más horas. Se cubre moviendo tres variables que se multiplican entre sí.
+
+## La tabla que importa
+
+Alumnas en equilibrio según altas mensuales y permanencia. El asterisco marca dónde se llena la agenda.
+
+| Altas/mes | 4 meses | 6 meses | 9 meses | 12 meses | 18 meses |
+|---|---|---|---|---|---|
+| 2 | 8 | 12 | 18 | 24 | 35* |
+| 3 | 12 | 18 | 27 | 35* | 35* |
+| 4 | 16 | 24 | 35* | 35* | 35* |
+| 5 | 20 | 30 | 35* | 35* | 35* |
+| 6 | 24 | 35* | 35* | 35* | 35* |
+
+**Con 4 meses de permanencia hay que captar 6 alumnas por mes para llegar a 24.** Con 12 meses, alcanzan 3 para superar el tope. La retención no sube el techo: decide si el techo es alcanzable.
+
+## La retención libera capacidad, no solo ingreso
+
+Dar de alta a una alumna consume entre 3 y 4 horas: ficha de ingreso, evaluación, armado del mesociclo y del plan nutricional. Con la agenda llena en 35 alumnas, la reposición cuesta:
+
+| Permanencia | Altas necesarias/mes | Horas solo en altas | Horas totales |
+|---|---|---|---|
+| 4 meses | 8,8 | 30,6 | 100,6 |
+| 6 meses | 5,8 | 20,4 | 90,4 |
+| 12 meses | 2,9 | 10,2 | 80,2 |
+| 18 meses | 1,9 | 6,8 | 76,8 |
+
+Pasar de 4 a 12 meses de permanencia devuelve **20 horas mensuales**, que es cerca de un tercio de la capacidad productiva. Esas horas hoy se gastan reponiendo alumnas que se fueron.
+
+Y hay un punto de rendimientos decrecientes. Entre 12 y 18 meses el ingreso ya no sube, porque la agenda está llena en los dos casos. Lo que se gana es tiempo libre. **Pasado cierto umbral, la retención se convierte en capacidad, no en plata**, y esa capacidad recién vale algo si se usa para construir producto grupal o digital.
+
+## Rentabilidad por hora de cada plan
+
+Esta parte no cambió respecto de la primera versión y sigue siendo el hallazgo más contraintuitivo.
 
 | Plan | USD/mes | Horas/mes (estimadas) | **USD por hora** |
 |---|---|---|---|
@@ -29,67 +69,63 @@ Un plan no se mide por lo que factura sino por lo que factura **por hora de Jime
 | Integral | 32 | 2,0 | 16,0 |
 | Personalizado | 100 | 7,0 o más | **14,3 o menos** |
 
-El plan de USD 20 es el más rentable de los tres. El de USD 100, el peor. Cobra cinco veces más y deja menos por cada hora invertida.
+El plan de USD 20 es el más rentable por hora. El de USD 100, el peor.
 
-### Umbral del plan personalizado
+**Umbral del plan personalizado:** a USD 20 la hora, un plan de USD 100 se justifica solo si consume menos de 5 horas al mes. Si requiere 10, rinde USD 10 por hora, la mitad que el plan más barato. Sigue pendiente medirlo: una alumna, un mes, las horas anotadas.
 
-A la tarifa implícita del plan básico, USD 20 por hora, un plan de USD 100 se justifica solo si consume **menos de 5 horas al mes**. Si requiere 10 horas, está rindiendo USD 10 por hora, la mitad que el plan más barato del catálogo.
+Hay un caso donde conviene sostenerlo aunque rinda poco: si esas alumnas producen los testimonios que hoy faltan, el retorno está en la conversión de todas las demás.
 
-No es un argumento para eliminarlo, es un argumento para **medirlo antes de expandirlo**. Una alumna, un mes, las horas anotadas de verdad.
+## Los planes
 
-Hay un caso donde conviene sostenerlo aunque rinda poco por hora: si esas alumnas producen los testimonios y casos de éxito que hoy faltan, el retorno está en la conversión de todas las demás. Pero eso se decide a propósito, no por inercia.
+| Plan | Precio | Qué incluye |
+|---|---|---|
+| Entrenamiento | USD 20/mes | Seguimiento personalizado por WhatsApp, entrevistas cada tanto. Asincrónico. |
+| Integral | USD 30 a 35/mes | Entrenamiento más hábitos alimenticios: control de calorías e ingesta. |
+| Personalizado | ~USD 100/mes | Alcance ampliado. Consume mucho tiempo, entrarían 1 o 2 alumnas. |
+| Asesoría nutricional | **Sin definir** | Figura en la web como servicio independiente y no tiene precio. |
 
-## El techo
+Ninguno de los cinco sitios del benchmark publica precios. No publicarlos es la norma de la categoría, no un error de la web.
 
-Con dedicación completa las horas dejan de ser el límite. A 40 horas semanales quedan unas 140 horas mensuales facturables después de descontar contenido, administración y respuesta a prospectos. Treinta y cinco alumnas integrales consumen 70. Sobra la mitad del tiempo.
+## Romper el techo: el modelo mixto
 
-El límite real es humano: **cuántas personas se pueden acompañar bien al mismo tiempo.** Por encima de 35 o 40 alumnas el seguimiento se vuelve superficial, y en un servicio que se vende como "no es una plantilla genérica", eso destruye justamente lo prometido.
+El 1 a 1 tiene un tope duro porque consume horas. La escalera que valida el benchmark (la referencia principal vende asesorías, ebooks y una membresía) permite crecer sin tocar ese tope.
 
-| Precio del plan integral | Ingreso mensual | Ingreso anual | Horas/mes |
-|---|---|---|---|
-| **USD 32 (hoy)** | 1.120 | **13.440** | 70 |
-| USD 50 | 1.750 | 21.000 | 70 |
-| USD 60 | 2.100 | 25.200 | 70 |
-| USD 80 | 2.800 | 33.600 | 70 |
+| Componente | Unidades | USD c/u | USD/mes | Horas/mes |
+|---|---|---|---|---|
+| 1 a 1 integral | 30 | 60 | 1.800 | 60 |
+| Programa grupal, 2 grupos de 10 | 20 | 25 | 500 | 12 |
+| Ebook, ventas mensuales | 20 | 18 | 360 | 0 |
+| Altas 1 a 1 | | | | 9 |
+| **Total** | | | **2.660** | **81** |
 
-La columna de la derecha es la que hay que mirar. Es idéntica en las cuatro filas. Duplicar el precio duplica el ingreso sin agregar una hora de trabajo, sin captar una alumna más y sin construir un producto nuevo.
+**USD 31.920 al año, con 81 de las 140 horas mensuales disponibles.** Quedan 59 horas libres, que es el margen para seguir creciendo.
 
-Sobre la duda de USD 30 contra USD 35: son USD 105 mensuales de diferencia con la agenda llena. No cambia nada estructural. La conversación que vale es el salto a USD 50 o USD 60.
+El programa grupal es lo que quiebra la relación lineal entre horas e ingreso: diez alumnas comparten mesociclo y un encuentro semanal, así que el precio por alumna baja pero las horas por alumna caen entre cuatro y cinco veces. El ebook tiene margen cercano al 100% y cero horas marginales, y además funciona como puerta de entrada barata al 1 a 1.
 
 ## Qué habilita cobrar más
 
-Un precio no se sube por decisión, se sube por posicionamiento. El diagnóstico completo está en [`propuesta-de-valor.md`](propuesta-de-valor.md).
+Un precio no se sube por decisión, se sube por posicionamiento. El diagnóstico está en [`propuesta-de-valor.md`](propuesta-de-valor.md) y el benchmark aportó las herramientas concretas: ponerle nombre al método, reemplazar el CTA por una sesión de valoración, sumar testimonios con edad y plazo.
 
-En resumen: a USD 32 el plan integral compite con las decenas de entrenadoras que ofrecen rutina más pauta alimentaria por WhatsApp, y ahí el precio lo fija el mercado. El diferencial que sostiene otro precio es la especialización en salud hormonal femenina, hoy enterrada como cuarto punto de una lista en `contexto.md`.
+De todas ellas, la más directa sobre el precio es **ponerle nombre al método**. Jimena ya tiene una metodología documentada y sin nombre. Un método con nombre convierte un servicio en producto, y un producto sostiene un precio que un servicio genérico no sostiene.
 
-## Retención
+## Captación: el embudo sigue roto
 
-El ingreso mensual engaña. Lo que importa es cuántos meses se queda una alumna.
+Sigue siendo cierto y sigue siendo lo primero. El botón de WhatsApp de la web apunta a un número de ejemplo, no hay Instagram y los testimonios son placeholders. La conversión no es baja, es cero.
 
-En acompañamiento online la permanencia promedio se ubica entre 4 y 6 meses. Una alumna del plan integral vale entre USD 128 y USD 192 a lo largo de toda su relación con el negocio. La diferencia entre los dos extremos es del 50% de facturación sobre el mismo esfuerzo de captación.
+Todo este modelo empieza a correr recién cuando ese embudo funciona. Las 2 a 4 altas mensuales que necesita el escenario intermedio no salen de ningún lado si la web no puede convertir una sola visita.
 
-La deserción tiene un costo escondido: dar de alta a una alumna nueva consume de 3 a 4 horas entre ficha de ingreso, evaluación y armado del plan. Con 35 alumnas y permanencia de 4 meses hay que captar y dar de alta unas 9 por mes solo para no perder terreno. Son 30 horas mensuales dedicadas a correr en el lugar, sobre las 70 que ocupa el acompañamiento.
+## Secuencia
 
-**Las tres planillas de `herramientas/` son, sin que estuviera declarado, la maquinaria de retención del negocio.** Una alumna que ve su progresión de carga registrada semana a semana no abandona igual que una que recibe un PDF y silencio. Ese activo ya está construido y no se está usando como argumento comercial.
-
-## Captación
-
-El embudo hoy pierde el 100% de lo que entra, y esto no es proyección sino estado actual. El botón de WhatsApp de la web apunta a un número de ejemplo, no hay enlace de Instagram y los testimonios son placeholders. Una visitante convencida por el texto no tiene forma de contactar a Jimena.
-
-Como referencia de mercado, con esas tres cosas resueltas: de cada 100 visitas bien segmentadas entre 2 y 5 escriben por WhatsApp, y de cada 10 que escriben entre 2 y 4 se convierten en alumnas. Para sumar 9 alumnas por mes hacen falta del orden de 900 a 2.000 visitas mensuales. **Son rangos de referencia, no datos medidos.**
-
-## Secuencia recomendada
-
-El orden importa más que la lista.
-
-1. **Destrabar el embudo.** WhatsApp real, Instagram y los primeros testimonios. Cuesta una tarde y sin esto el negocio no tiene entrada.
-2. **Medir el plan personalizado.** Una alumna, un mes, las horas anotadas.
-3. **Decidir el posicionamiento.** Es lo que habilita el precio.
-4. **Subir el precio del plan integral.** Vale entre USD 8.000 y USD 12.000 anuales sin trabajo adicional.
-5. **Recién ahí, escalar.** Programa grupal de 8 a 12 alumnas, o producto digital sobre perimenopausia. Antes de llenar la agenda, dispersa el esfuerzo.
+1. **Destrabar el embudo.** WhatsApp real, Instagram, primeros testimonios. Cuesta una tarde.
+2. **Medir permanencia y horas.** Cuánto se quedan las alumnas actuales y cuánto consume el plan personalizado. Son los dos números que más mueven el modelo.
+3. **Trabajar retención antes que captación.** Es más barato y libera horas. Las planillas de `herramientas/` ya son la maquinaria, falta usarlas como argumento.
+4. **Decidir posicionamiento y ponerle nombre al método.** Habilita el precio.
+5. **Subir el precio del integral.** De USD 32 a USD 60 duplica el ingreso sin una hora más de trabajo.
+6. **Recién ahí, la escalera.** Grupal y ebook, cuando la agenda esté llena y el proceso probado.
 
 ## Datos que faltan
 
-- [ ] **Alumnas activas hoy y antigüedad de la más antigua.** Es el punto de partida real y la única medición de permanencia obtenible sin esperar seis meses.
-- [ ] **Horas semanales que Jimena le puede dedicar hoy.** El techo de 35 alumnas asume dedicación completa.
-- [ ] **Horas reales que consume una alumna del plan personalizado.** Es el supuesto más frágil del modelo. Estimadas en 7 mensuales, el número real puede ser el doble.
+- [ ] **Alumnas activas hoy y antigüedad de la más antigua.** Es la única medición de permanencia obtenible sin esperar seis meses, y la permanencia es ahora la variable central del modelo.
+- [ ] **Altas reales por mes de los últimos meses.** Junto con la permanencia, determina en qué número se estabiliza el negocio.
+- [ ] **Horas semanales que Jimena le puede dedicar.** El tope de 35 alumnas asume dedicación completa.
+- [ ] **Horas reales del plan personalizado.** El supuesto más frágil que queda.
