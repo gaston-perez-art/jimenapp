@@ -8,7 +8,7 @@
 <script>document.documentElement.classList.add('has-js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#241F26;
@@ -23,7 +23,12 @@
     --wine-100:#F3E4E9;
     --bronze:#A9824A;
     --bronze-soft:#EFE3CD;
-    --radius:2px;
+    --r-sm:10px;              /* botones, chips, etiquetas */
+    --r-md:14px;              /* tarjetas y cajas */
+    --r-lg:20px;              /* superficies grandes */
+    --radius:var(--r-sm);     /* alias por compatibilidad */
+    --shadow-sm:0 1px 2px rgba(36,31,38,.05), 0 6px 16px -10px rgba(36,31,38,.14);
+    --shadow-md:0 2px 4px rgba(36,31,38,.05), 0 16px 32px -18px rgba(36,31,38,.22);
     --maxw:1180px;
   }
   *{box-sizing:border-box;}
@@ -83,7 +88,7 @@
   }
   nav.wrap{
     display:flex; align-items:center; justify-content:space-between;
-    height:78px;
+    height:66px;
   }
   .logo{
     font-family:'Archivo', sans-serif;
@@ -128,7 +133,11 @@
 
   /* ---------- Hero ---------- */
   .hero{
-    padding:96px 0 88px;
+    /* llena el alto util para que no asome la seccion siguiente en el primer scroll.
+       svh contempla la barra de direcciones en mobile; vh queda de reserva. */
+    min-height:calc(100vh - 67px);
+    min-height:calc(100svh - 67px);
+    padding:72px 0 76px;
     display:grid;
     grid-template-columns:1.05fr .95fr;
     gap:56px;
@@ -162,6 +171,18 @@
     position:relative;
     display:inline-block;
     vertical-align:baseline;
+    /* Recorta arriba y abajo para el rodillo, SIN overflow:hidden ni padding.
+       Dos trampas que costaron desalineacion y conviene no repetir:
+       1) overflow distinto de visible convierte esto en contenedor de scroll,
+          y el navegador pasa a sintetizar la linea base desde el borde inferior
+          en vez de tomar la real, asi que la palabra queda mas alta que "Mas".
+       2) un padding vertical desalinea igual, porque los .rot-w son absolutos
+          con top:0, que se mide contra la caja de padding, mientras el sizer
+          arranca despues del padding.
+       clip-path recorta lo visible sin tocar el layout ni la linea base. Los
+       valores negativos dan aire a la 'g' de segura arriba y abajo, y dejan
+       pasar la inclinacion de la cursiva a los costados. */
+    clip-path:inset(-.08em -.18em);
   }
   .rot-sizer{visibility:hidden;}          /* reserva el ancho de la palabra mas larga */
   .rot-w{
@@ -171,14 +192,18 @@
     will-change:opacity, transform;
   }
   .rot-1{opacity:1;}                      /* estado por defecto sin animacion */
-  .rot-w em{font-style:normal; color:var(--wine-600);}
+  .rot-w{font-style:italic;}              /* lo que cambia va en cursiva, lo fijo queda recto */
+  /* selector con la especificidad suficiente para ganarle a .hero h1 em, que fija normal */
+  .hero h1 .rot-w em{font-style:italic; color:var(--wine-600);}
 
+  /* Rodillo vertical: la palabra sube y se va, la siguiente entra desde abajo.
+     Empuja hacia arriba igual que el grafico de progresion que esta al lado. */
   @keyframes rotWord{
-    0%              {opacity:0; transform:translateY(.20em);}
-    5%, 33%         {opacity:1; transform:translateY(0);}
-    38%, 100%       {opacity:0; transform:translateY(-.14em);}
+    0%              {opacity:0; transform:translateY(105%);}
+    6%, 31%         {opacity:1; transform:translateY(0);}
+    37%, 100%       {opacity:0; transform:translateY(-105%);}
   }
-  .rot-w{animation:rotWord 8.4s cubic-bezier(.22,.61,.36,1) infinite;}
+  .rot-w{animation:rotWord 8.4s cubic-bezier(.33,1,.68,1) infinite;}
   .rot-1{animation-delay:0s;}
   .rot-2{animation-delay:2.8s;}
   .rot-3{animation-delay:5.6s;}
@@ -216,6 +241,8 @@
   .signature{
     background:var(--card);
     border:1px solid var(--line);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
     padding:30px 28px 24px;
     position:relative;
   }
@@ -237,7 +264,7 @@
   .bar{
     width:100%;
     background:linear-gradient(180deg, var(--wine-500), var(--wine-600));
-    border-radius:1px 1px 0 0;
+    border-radius:6px 6px 0 0;
   }
   .bar-col:last-child .bar{background:linear-gradient(180deg, var(--bronze), #8E6A34);}
   .bar-kg{
@@ -261,45 +288,79 @@
 
   /* ---------- Sobre mi ---------- */
   #sobre{border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .sobre-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;}
-  .sobre-grid h2{font-size:clamp(24px,2.6vw,32px); max-width:14ch;}
-  .sobre-grid p{margin-top:20px; color:var(--ink-soft); font-size:16.5px; max-width:48ch;}
-  .credential{
-    margin-top:26px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
+  #sobre{padding:62px 0;}
+  .sobre-grid{display:grid; grid-template-columns:.72fr 1.28fr; gap:48px;
+              align-items:start; max-width:1020px;}
+  .sobre-texto h2{font-size:clamp(23px,2.3vw,29px); max-width:24ch; margin-top:2px;}
+  .sobre-texto p{margin-top:16px; color:var(--ink-soft); font-size:16px; max-width:54ch;}
+
+  /* ---- columna de la foto ---- */
+  .sobre-foto{display:flex; flex-direction:column;}
+  .foto-ph{
+    aspect-ratio:1/1; width:100%;
+    border-radius:var(--r-lg);
+    background:linear-gradient(160deg, var(--wine-100), var(--bronze-soft));
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-sm);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
     color:var(--wine-600);
-    letter-spacing:.03em;
   }
-  .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;}
-  .chip{
-    border:1px solid var(--wine-600);
-    color:var(--wine-900);
-    background:var(--wine-100);
-    padding:9px 16px;
-    font-size:13.5px;
-    font-weight:500;
-    border-radius:20px;
+  .foto-ph svg{width:56px; height:56px; opacity:.5;}
+  .foto-ph span{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; opacity:.75;
   }
-  .chips-label{
+  .sobre-quote{
+    margin:20px 0 0; padding:0 0 0 16px;
+    border-left:2px solid var(--bronze);
+    font-size:15.5px; font-style:italic; color:var(--wine-900); line-height:1.5;
+  }
+  .credential{
+    margin-top:14px;
     font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
+    font-size:12px;
     color:var(--ink-soft);
-    margin-bottom:14px;
+    letter-spacing:.03em;
+    line-height:1.5;
   }
 
+  /* ---- especialidades: lista pareja en dos columnas, no pastillas sueltas ---- */
+  .especialidades{
+    grid-column:1 / -1;          /* cruza las dos columnas: equilibra el bloque */
+    margin-top:30px; padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .esp-label{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--bronze); margin-bottom:16px;
+  }
+  .esp-lista{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:12px 26px;
+  }
+  .esp-lista li{
+    font-size:14px; color:var(--ink); display:flex; gap:10px; align-items:flex-start; line-height:1.4;
+  }
+  .esp-lista li::before{
+    content:""; flex:0 0 auto; width:6px; height:6px; margin-top:8px;
+    border-radius:50%; background:var(--wine-600);
+  }
+
+  #servicios{background:var(--paper-dim); border-bottom:1px solid var(--line); padding:30px 0 32px;}
+  #servicios .section-head{margin-bottom:20px;}
+  #servicios .section-head p{font-size:15.8px; margin-top:12px;}
   /* ---------- Servicios ---------- */
   .cards{display:grid; grid-template-columns:repeat(3, 1fr); gap:26px;}
   .card{
     background:var(--card);
     border:1px solid var(--line);
+    border-radius:var(--r-md);
+    box-shadow:var(--shadow-sm);
     padding:34px 28px;
     display:flex; flex-direction:column;
     transition:border-color .2s ease, transform .2s ease;
   }
-  .card:hover{border-color:var(--wine-600); transform:translateY(-3px);}
+  .card:hover{border-color:var(--wine-600); transform:translateY(-3px); box-shadow:var(--shadow-md);}
   .card .num{
     font-family:'IBM Plex Mono', monospace;
     font-size:12px;
@@ -319,7 +380,7 @@
 
   /* ---------- Testimonios (placeholder cards) ---------- */
   #testimonios{background:var(--paper-dim); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .testimonial-card{border-style:dashed; border-color:var(--line); border-radius:16px;}
+  .testimonial-card{border-style:dashed; border-color:var(--line); border-radius:var(--r-md); box-shadow:none;}
   .testimonial-card .num{
     font-family:'Archivo', sans-serif;
     font-weight:700;
@@ -331,7 +392,7 @@
   .testimonial-quote{color:var(--ink-soft); font-style:italic; font-size:15px; flex:1;}
 
   /* ---------- Como trabajo ---------- */
-  #proceso{background:var(--paper-dim); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  #proceso{border-bottom:1px solid var(--line);}
   .steps{display:grid; grid-template-columns:repeat(4, 1fr); gap:0;}
   .step{
     padding:0 22px 0 0;
@@ -356,6 +417,8 @@
   #contacto .section-head{margin-left:auto; margin-right:auto; text-align:center;}
   .contact-box{
     max-width:560px; margin:0 auto;
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
     background:var(--card);
     border:1px solid var(--line);
     padding:48px 40px;
@@ -436,14 +499,212 @@
   /* ---------- Responsive ---------- */
   @media (max-width:960px){
     .hero{grid-template-columns:1fr; padding-top:52px;}
-    .sobre-grid{grid-template-columns:1fr; gap:40px;}
+    .sobre-grid{grid-template-columns:1fr; gap:30px;}
+    .foto-ph{aspect-ratio:4/3;}
+    .esp-lista{grid-template-columns:1fr 1fr; gap:10px 18px;}
+    .especialidades{margin-top:30px; padding-top:22px;}
     .cards{grid-template-columns:1fr; }
     .steps{grid-template-columns:1fr 1fr; row-gap:36px;}
     .step{border-left:none; padding-left:0;}
   }
+
+  /* ================= PLANES con toggle mensual/anual =================
+     El toggle son dos radios ocultos. Todo el cambio de precio lo hace CSS
+     con :checked, sin una linea de JavaScript, asi que funciona siempre. */
+  .ciclo{display:flex; flex-direction:column; align-items:center;}
+  .ciclo-in{position:absolute; opacity:0; width:0; height:0; pointer-events:none;}
+  .ciclo-sw{
+    display:inline-flex; align-items:center; gap:4px;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:999px; padding:5px; margin-bottom:18px;
+  }
+  .ciclo-sw label{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:10px 20px; border-radius:999px; cursor:pointer;
+    font-size:14.5px; font-weight:600; color:var(--ink-soft);
+    transition:background .25s ease, color .25s ease;
+    white-space:nowrap;
+  }
+  .ciclo-sw label b{font-weight:600; color:var(--bronze);}
+  #ciclo-mes:checked ~ .ciclo-sw label[for="ciclo-mes"],
+  #ciclo-sem:checked ~ .ciclo-sw label[for="ciclo-sem"],
+  #ciclo-ano:checked ~ .ciclo-sw label[for="ciclo-ano"]{
+    background:var(--card); color:var(--wine-900); box-shadow:var(--shadow-sm);
+  }
+  #ciclo-mes:focus-visible ~ .ciclo-sw label[for="ciclo-mes"],
+  #ciclo-sem:focus-visible ~ .ciclo-sw label[for="ciclo-sem"],
+  #ciclo-ano:focus-visible ~ .ciclo-sw label[for="ciclo-ano"]{
+    outline:2px solid var(--wine-600); outline-offset:2px;
+  }
+  /* por defecto se ve el mensual; si el CSS de :checked no corriera,
+     igual queda un precio visible y no una card vacia */
+  .p-sem, .p-ano{display:none;}
+  #ciclo-sem:checked ~ .planes-grid .p-mes{display:none;}
+  #ciclo-sem:checked ~ .planes-grid .p-sem{display:block;}
+  #ciclo-ano:checked ~ .planes-grid .p-mes{display:none;}
+  #ciclo-ano:checked ~ .planes-grid .p-ano{display:block;}
+
+  .planes-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:start; width:100%;}
+  .plan{
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--r-lg); box-shadow:var(--shadow-sm);
+    display:flex; flex-direction:column; overflow:hidden;
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .plan:hover{transform:translateY(-3px); box-shadow:var(--shadow-md);}
+  .plan.destacado{border-color:var(--wine-600); box-shadow:var(--shadow-md);}
+  /* la destacada ya arranca con shadow-md, asi que necesita un hover propio
+     o el movimiento no se percibe */
+  .plan.destacado:hover{box-shadow:0 4px 10px rgba(36,31,38,.07), 0 26px 50px -22px rgba(92,31,50,.34);}
+  .plan-top{padding:20px 22px 0; display:flex; flex-direction:column; gap:5px;}
+  .plan-badge{
+    align-self:flex-start; background:var(--wine-100); color:var(--wine-900);
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em;
+    padding:5px 12px; border-radius:999px; margin-bottom:6px;
+  }
+  /* Las cards sin badge reservan su lugar, para que los tres precios queden a
+     la misma altura y se puedan comparar de un vistazo: 27px del badge, 6 de su
+     margen y 6 del gap de la columna. */
+  .plan:not(.destacado) .plan-top::before{content:""; display:block; height:27px; margin-bottom:6px;}
+  .plan h3{font-size:20px;}
+  .plan .plan-sub{font-size:14.5px; color:var(--ink-soft);}
+  .plan-precio{padding:16px 22px 18px; display:flex; flex-direction:column; justify-content:center;
+               min-height:91px;}   /* alto del estado con detalle: iguala las tres opciones y evita el salto */
+  .plan-precio .monto{display:flex; align-items:baseline; gap:9px;}
+  .plan-precio .n{font-size:34px; font-weight:700; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
+  .plan-precio .u{font-size:14px; color:var(--ink-soft);}
+  .plan-precio .detalle{font-size:13.5px; color:var(--ink-soft);}
+  .plan-precio .ahorro{color:var(--bronze); font-weight:600;}
+  .plan-cta{
+    margin:0 22px 18px; display:block; text-align:center;
+    padding:13px; border-radius:var(--r-sm); text-decoration:none;
+    font-weight:600; font-size:15px;
+    border:1px solid var(--wine-600); color:var(--wine-600);
+    transition:background .2s ease, color .2s ease;
+  }
+  .plan-cta:hover{background:var(--wine-100);}
+  .plan.destacado .plan-cta{background:var(--wine-600); color:#fff;}
+  .plan.destacado .plan-cta:hover{background:var(--wine-900); border-color:var(--wine-900);}
+  .plan-feats{
+    list-style:none; margin:0; padding:18px 22px 20px; border-top:1px solid var(--line);
+    display:flex; flex-direction:column; gap:6px; background:var(--paper);
+  }
+  .plan-feats li{font-size:14px; line-height:1.45; color:var(--ink-soft); display:flex; gap:11px; align-items:flex-start;}
+  .plan-feats li::before{
+    content:""; flex:0 0 auto; width:15px; height:15px; margin-top:4px;
+    border-radius:50%; background:var(--wine-100); border:1.5px solid var(--wine-600);
+  }
+  .plan-feats li.no{opacity:.42;}
+  .plan-feats li.no::before{background:transparent; border-color:var(--line);}
+  .planes-nota{margin-top:14px; text-align:center; font-size:14px; color:var(--ink-soft);}
+
+  /* ================= PROCESO con panel fijo =================
+     position:sticky puro. El JS solo sincroniza que diapositiva se ve; si
+     falla queda la primera y la columna de texto se lee entera igual. */
+  .proceso-grid{display:grid; grid-template-columns:.92fr 1.08fr; gap:56px; align-items:start;}
+  .pin{position:sticky; top:104px; height:min(500px,68vh); display:flex; align-items:center;}
+  .pin-inner{position:relative; width:100%; height:100%;}
+  .pin-slide{
+    position:absolute; inset:0; opacity:0; transform:translateY(12px);
+    transition:opacity .5s cubic-bezier(.22,.61,.36,1), transform .5s cubic-bezier(.22,.61,.36,1);
+    display:flex; flex-direction:column; justify-content:center; gap:18px;
+  }
+  .pin-slide.on{opacity:1; transform:none;}
+  .pin-slide h3{font-size:clamp(27px,3.2vw,42px); max-width:15ch;}
+  .pin-prog{display:flex; gap:7px; align-items:center;}
+  .pin-prog i{width:24px; height:3px; border-radius:2px; background:var(--line); display:block;}
+  .pin-prog i.on{background:var(--wine-600);}
+  .pin-prog em{font-family:'IBM Plex Mono',monospace; font-style:normal; font-size:11.5px;
+               letter-spacing:.12em; color:var(--ink-soft); margin-left:8px;}
+  .pin-viz{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm); padding:22px; height:210px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pasos{display:flex; flex-direction:column;}
+  .paso{
+    min-height:70vh; display:flex; flex-direction:column; justify-content:center; gap:11px;
+    border-left:2px solid var(--line); padding-left:28px; transition:border-color .4s ease;
+  }
+  .paso.on{border-color:var(--wine-600);}
+  .paso .pn{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--bronze); letter-spacing:.1em;}
+  .paso .pn{opacity:.45; transition:opacity .4s ease; color:var(--wine-600); font-weight:500;}
+  .paso p{margin:0; color:var(--ink-soft); font-size:16px; max-width:44ch; opacity:.45; transition:opacity .4s ease;}
+  .paso.on .pn, .paso.on p{opacity:1;}
+
+  @media (max-width:960px){
+    .planes-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Mobile ---------- */
   @media (max-width:720px){
+    .wrap{padding:0 20px;}
+    section{padding:64px 0;}
+    .section-head{margin-bottom:36px;}
+    .hero{padding:36px 0 48px; gap:32px; min-height:0;}
+    .hero p.lead{font-size:16.5px; margin:20px 0 28px;}
+
+    /* la linea del eyebrow no debe partir el texto al envolver */
+    .eyebrow{align-items:flex-start; gap:8px;}
+    .eyebrow::before{margin-top:.62em; flex:0 0 auto; width:18px;}
+
+    /* areas tactiles: minimo 44px de alto en todo lo que se toca */
+    .navlinks a{display:block; padding:11px 0; font-size:16px;}
+    .navcta{padding:14px 22px; text-align:center;}
+    .logo{padding:8px 0;}
+    .navtoggle{padding:12px; margin-right:-12px;}
+
+    /* botones a lo ancho: entran comodos y no parten el texto en dos lineas */
+    .btn-primary{width:100%; justify-content:center; padding:17px 22px; font-size:16px;}
+    .herobtns{gap:14px;}
+    .microcopy{font-size:12px;}
+
+    .signature{padding:22px 18px 18px; border-radius:var(--r-md);}
+    .bars{gap:8px; height:150px;}
+    .card{padding:26px 22px; border-radius:var(--r-md);}
+    .cards{gap:16px;}
+    .contact-box{padding:30px 22px; border-radius:var(--r-md);}
+    .step .stepnum{font-size:26px;}
+
+    /* El panel fijo es una mejora de escritorio. En mobile se oculta y la
+       columna de pasos se lee como lista normal, sin depender de JavaScript. */
+    .pin{display:none;}
+    .proceso-grid{grid-template-columns:1fr; gap:0;}
+    .paso{min-height:auto; padding:20px 0 20px 18px;}
+    .paso .pn, .paso p{opacity:1;}
+    .ciclo-sw{margin-bottom:28px; width:100%; justify-content:center;}
+    .ciclo-sw label{padding:12px 14px; font-size:14px;}
+    .plan{border-radius:var(--r-md);}
+    .plan-cta{padding:16px;}
+
+    /* enlaces del footer: area tactil comoda */
+    footer .fsocial a{display:inline-block; padding:12px 0;}
+  }
+
+  /* ---------- Pantallas chicas: 360px y menos ---------- */
+  @media (max-width:400px){
+    .wrap{padding:0 16px;}
+    .hero h1.hero-claim{font-size:40px;}
+    .ciclo-sw{padding:4px; gap:2px;}
+    .ciclo-sw label{padding:13px 10px; font-size:13px;}  /* 44px minimo tactil */
+    .plan-top{padding:22px 18px 0;}
+    .plan-precio{padding:16px 18px 20px; min-height:96px;}
+    .plan-precio .n{font-size:34px;}
+    .plan-cta{margin:0 18px 18px;}
+    .plan-feats{padding:20px 18px;}
+    .plan-feats li{font-size:14px;}
+    .section-head h2{font-size:26px;}
+    .paso{padding-left:14px;}
+    .paso p{font-size:15px;}
+    .signature{padding:18px 14px 14px;}
+    .foto-ph{aspect-ratio:16/11;}
+    .esp-lista{grid-template-columns:1fr;}
+    .especialidades{padding:18px;}
+    .sobre-texto h2{font-size:24px;}
+    .bars{gap:6px; height:130px;}
+
     .navlinks{
-      position:fixed; top:78px; left:0; right:0;
+      position:fixed; top:66px; left:0; right:0;
       background:var(--paper);
       flex-direction:column; align-items:flex-start;
       padding:22px 28px 30px;
@@ -466,8 +727,8 @@
     <ul class="navlinks" id="navlinks">
       <li><a href="#sobre">Sobre mí</a></li>
       <li><a href="#testimonios">Testimonios</a></li>
-      <li><a href="#servicios">Servicios</a></li>
       <li><a href="#proceso">Cómo trabajo</a></li>
+      <li><a href="#servicios">Planes</a></li>
       <li><a href="#contacto" class="navcta">Escribime</a></li>
     </ul>
     <button class="navtoggle" id="navtoggle" aria-label="Abrir menú" aria-expanded="false">
@@ -517,25 +778,41 @@
   <!-- SOBRE MI -->
   <section id="sobre">
     <div class="wrap sobre-grid reveal">
-      <div>
-        <div class="eyebrow">Sobre mí</div>
-        <h2>Profesora Nacional de Educación Física, especializada en fuerza femenina</h2>
+
+      <div class="sobre-foto">
+        <div class="foto-ph" role="img" aria-label="Espacio reservado para la foto de Jimena">
+          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+            <circle cx="32" cy="23" r="11" stroke="currentColor" stroke-width="2.2"/>
+            <path d="M11 57c0-11.6 9.4-21 21-21s21 9.4 21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+          <span>Foto de Jimena</span>
+        </div>
+        <blockquote class="sobre-quote">“El objetivo nunca es solo bajar de peso. Es que te sientas fuerte, y que eso se sostenga.”</blockquote>
         <div class="credential">Prof. Jimena Ibañez · Entrenadora de fuerza y coach funcional</div>
       </div>
-      <div>
-        <p>Hace años que trabajo como entrenadora de fuerza, y hoy oriento toda mi carrera a un objetivo puntual: ayudar a mujeres reales —con trabajo, con hijos, con agendas que no dan abasto— a dejar atrás las dietas restrictivas y construir hábitos que sí se sostienen. Nada de rutinas genéricas ni promesas mágicas: programas a medida, con rutinas que se adaptan a tu casa o a tu gimnasio, desde 2 días por semana.</p>
-        <p>Creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida. El objetivo nunca es solo bajar de peso: es reducir grasa, ganar músculo, y salir del estancamiento en el que te dejaron los métodos tradicionales.</p>
-        <div class="chips-label">Cómo puedo ayudarte</div>
-        <div class="chips">
-          <span class="chip">Pérdida de grasa</span>
-          <span class="chip">Ganancia muscular</span>
-          <span class="chip">Hábitos sostenibles</span>
-          <span class="chip">Entrenás en casa o en el gym</span>
-          <span class="chip">Para mamás y profesionales con poco tiempo</span>
-          <span class="chip">Recomposición corporal</span>
-          <span class="chip">Perimenopausia y menopausia</span>
-        </div>
+
+      <div class="sobre-texto">
+        <div class="eyebrow">Sobre mí</div>
+        <h2>Profesora Nacional de Educación Física, especializada en fuerza femenina</h2>
+        <p>Hace años que trabajo como entrenadora de fuerza, y hoy oriento toda mi carrera a un objetivo puntual: ayudar a mujeres reales, con trabajo, con hijos y con agendas que no dan abasto, a dejar atrás las dietas restrictivas y construir hábitos que sí se sostienen.</p>
+        <p>Nada de rutinas genéricas ni promesas mágicas. Creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida, y que el camino es salir del estancamiento en el que te dejaron los métodos tradicionales.</p>
+
       </div>
+
+        <div class="especialidades">
+          <div class="esp-label">En qué me especializo</div>
+          <ul class="esp-lista">
+            <li>Pérdida de grasa</li>
+            <li>Recomposición corporal</li>
+            <li>Ganancia muscular</li>
+            <li>Perimenopausia y menopausia</li>
+            <li>Hábitos sostenibles</li>
+            <li>En casa o en el gimnasio</li>
+            <li>Agendas con poco tiempo</li>
+            <li>Resistencia a la insulina y SOP</li>
+          </ul>
+        </div>
+
     </div>
   </section>
 
@@ -568,36 +845,6 @@
   </section>
 
   <!-- SERVICIOS -->
-  <section id="servicios">
-    <div class="wrap">
-      <div class="section-head reveal">
-        <div class="eyebrow">Servicios</div>
-        <h2>Cómo podemos trabajar juntas</h2>
-        <p>Todos los planes parten de una evaluación inicial — no hay plantillas genéricas, cada programa se arma a partir de tu rutina real, desde 2 días por semana en adelante.</p>
-      </div>
-      <div class="cards reveal stagger">
-        <div class="card">
-          <div class="num">01</div>
-          <h3>Entrenamiento personalizado</h3>
-          <p>Rutinas a medida para hacer en tu casa o en el gimnasio, con progresión real semana a semana — pensadas para agendas apretadas, no para atletas de tiempo completo.</p>
-          <div class="tag">Consultar planes y valores</div>
-        </div>
-        <div class="card">
-          <div class="num">02</div>
-          <h3>Asesoría nutricional</h3>
-          <p>Planes de alimentación reales y sostenibles, para dejar atrás las dietas restrictivas sin resignar resultados.</p>
-          <div class="tag">Consultar planes y valores</div>
-        </div>
-        <div class="card">
-          <div class="num">03</div>
-          <h3>Programa integral</h3>
-          <p>Entrenamiento + nutrición + seguimiento mensual, todo coordinado en un solo plan pensado para salir del estancamiento de una vez.</p>
-          <div class="tag">Consultar planes y valores</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- COMO TRABAJO -->
   <section id="proceso">
     <div class="wrap">
@@ -605,28 +852,201 @@
         <div class="eyebrow">Cómo trabajo</div>
         <h2>El proceso, paso a paso</h2>
       </div>
-      <div class="steps reveal stagger">
-        <div class="step">
-          <div class="stepnum">01</div>
-          <h3>Ficha de ingreso</h3>
-          <p>Contame tu historia, tus objetivos y tu situación de salud actual.</p>
-        </div>
-        <div class="step">
-          <div class="stepnum">02</div>
-          <h3>Evaluación inicial</h3>
-          <p>Medimos tu punto de partida: fuerza, hábitos y composición corporal.</p>
-        </div>
-        <div class="step">
-          <div class="stepnum">03</div>
-          <h3>Plan a medida</h3>
-          <p>Armamos tu mesociclo de entrenamiento y tu plan de alimentación.</p>
-        </div>
-        <div class="step">
-          <div class="stepnum">04</div>
-          <h3>Seguimiento real</h3>
-          <p>Ajustamos mes a mes según tu progreso real, no según un molde genérico.</p>
+
+      <div class="proceso-grid">
+        <div class="pin"><div class="pin-inner" id="pinProceso">
+
+          <div class="pin-slide on">
+            <div class="pin-prog"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><em>01 DE 04</em></div>
+            <h3>Primero escuchar,<br>después entrenar.</h3>
+            <div class="pin-viz"><svg width="200" height="150" viewBox="0 0 200 150" fill="none" aria-hidden="true">
+              <rect x="20" y="10" width="160" height="130" rx="8" fill="#fff" stroke="#E3D7C9"/>
+              <rect x="38" y="32" width="70" height="8" rx="4" fill="#9D3A57"/>
+              <rect x="38" y="54" width="124" height="6" rx="3" fill="#E3D7C9"/>
+              <rect x="38" y="72" width="104" height="6" rx="3" fill="#E3D7C9"/>
+              <rect x="38" y="90" width="118" height="6" rx="3" fill="#E3D7C9"/>
+              <rect x="38" y="112" width="46" height="14" rx="7" fill="#F3E4E9" stroke="#9D3A57"/>
+            </svg></div>
+          </div>
+
+          <div class="pin-slide">
+            <div class="pin-prog"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><em>02 DE 04</em></div>
+            <h3>Sin medir,<br>estamos adivinando.</h3>
+            <div class="pin-viz"><svg width="200" height="150" viewBox="0 0 200 150" fill="none" aria-hidden="true">
+              <circle cx="100" cy="75" r="52" stroke="#E3D7C9" stroke-width="10"/>
+              <circle cx="100" cy="75" r="52" stroke="#9D3A57" stroke-width="10" stroke-linecap="round"
+                      stroke-dasharray="327" stroke-dashoffset="196" transform="rotate(-90 100 75)"/>
+              <text x="100" y="72" text-anchor="middle" font-family="monospace" font-size="21" fill="#5C1F32">41%</text>
+              <text x="100" y="91" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#8C838F">PUNTO DE PARTIDA</text>
+            </svg></div>
+          </div>
+
+          <div class="pin-slide">
+            <div class="pin-prog"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><em>03 DE 04</em></div>
+            <h3>Tu plan no sale<br>de una plantilla.</h3>
+            <div class="pin-viz"><svg width="220" height="150" viewBox="0 0 220 150" fill="none" aria-hidden="true">
+              <rect x="14" y="26" width="58" height="34" rx="6" fill="#F3E4E9" stroke="#9D3A57"/>
+              <rect x="82" y="26" width="58" height="34" rx="6" fill="#F3E4E9" stroke="#9D3A57"/>
+              <rect x="150" y="26" width="58" height="34" rx="6" fill="#EFE3CD" stroke="#A9824A"/>
+              <rect x="14" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#E3D7C9"/>
+              <rect x="82" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#E3D7C9"/>
+              <rect x="150" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#E3D7C9"/>
+              <text x="43" y="48" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#5C1F32">ACUM</text>
+              <text x="111" y="48" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#5C1F32">INTENS</text>
+              <text x="179" y="48" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#6B4E22">DESC</text>
+              <text x="110" y="128" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#8C838F">MESOCICLO · 6 SEMANAS</text>
+            </svg></div>
+          </div>
+
+          <div class="pin-slide">
+            <div class="pin-prog"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><em>04 DE 04</em></div>
+            <h3>El plan cambia<br>cuando vos cambiás.</h3>
+            <div class="pin-viz"><svg width="220" height="150" viewBox="0 0 220 150" fill="none" aria-hidden="true">
+              <rect x="18" y="98" width="24" height="30" rx="4" fill="#B14A67"/>
+              <rect x="54" y="84" width="24" height="44" rx="4" fill="#B14A67"/>
+              <rect x="90" y="68" width="24" height="60" rx="4" fill="#9D3A57"/>
+              <rect x="126" y="48" width="24" height="80" rx="4" fill="#9D3A57"/>
+              <rect x="162" y="26" width="24" height="102" rx="4" fill="#A9824A"/>
+              <text x="102" y="146" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#8C838F">S1 → S12 · CARGA REAL</text>
+            </svg></div>
+          </div>
+
+        </div></div>
+
+        <div class="pasos" id="pasosProceso">
+          <div class="paso on">
+            <span class="pn">01 · FICHA DE INGRESO</span>
+            <p>Qué probaste antes, qué te funcionó y qué no, tu historial de entrenamiento y tu situación de salud, incluidas las condiciones hormonales que cambian la forma de entrenar.</p>
+          </div>
+          <div class="paso">
+            <span class="pn">02 · EVALUACIÓN INICIAL</span>
+            <p>Medimos fuerza, antropometría y hábitos. Ese punto de partida es lo que después permite saber si el programa está funcionando, en vez de discutir con la balanza.</p>
+          </div>
+          <div class="paso">
+            <span class="pn">03 · PLAN A MEDIDA</span>
+            <p>Mesociclo por bloques con autorregulación por esfuerzo percibido, y una pauta de alimentación calculada sobre tu gasto real. Entra en la semana que tenés, no en una ideal.</p>
+          </div>
+          <div class="paso">
+            <span class="pn">04 · SEGUIMIENTO REAL</span>
+            <p>Cada mes revisamos cargas, medidas y hábitos, y ajustamos el plan con esos datos. Es la diferencia entre un acompañamiento y un PDF con ejercicios.</p>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- PLANES -->
+  <section id="servicios">
+    <div class="wrap">
+      <div class="section-head reveal" style="text-align:center; margin-left:auto; margin-right:auto;">
+        <div class="eyebrow" style="justify-content:center;">Planes</div>
+        <h2>Cómo podemos trabajar juntas</h2>
+        <p>Los tres parten de una evaluación inicial. Nada de plantillas: tu programa se arma sobre tu rutina real, desde 2 días por semana.</p>
+      </div>
+
+      <div class="ciclo">
+        <input class="ciclo-in" type="radio" name="ciclo" id="ciclo-mes" checked>
+        <input class="ciclo-in" type="radio" name="ciclo" id="ciclo-sem">
+        <input class="ciclo-in" type="radio" name="ciclo" id="ciclo-ano">
+        <div class="ciclo-sw" role="radiogroup" aria-label="Elegí la duración del plan">
+          <label for="ciclo-mes">Mensual</label>
+          <label for="ciclo-sem">Semestral</label>
+          <label for="ciclo-ano">Anual</label>
+        </div>
+
+        <div class="planes-grid reveal stagger">
+
+          <div class="plan">
+            <div class="plan-top">
+              <h3>Entrenamiento</h3>
+              <div class="plan-sub">Solo fuerza, con seguimiento</div>
+            </div>
+            <div class="plan-precio">
+              <div class="p p-mes">
+                <div class="monto"><span class="n">USD 20</span><span class="u">/ mes</span></div>
+              </div>
+              <div class="p p-sem">
+                <div class="monto"><span class="n">USD 18</span><span class="u">/ mes</span></div>
+                <div class="detalle">USD 108 por 6 meses · <span class="ahorro">ahorrás USD 12</span></div>
+              </div>
+              <div class="p p-ano">
+                <div class="monto"><span class="n">USD 17</span><span class="u">/ mes</span></div>
+                <div class="detalle">USD 204 por 12 meses · <span class="ahorro">ahorrás USD 36</span></div>
+              </div>
+            </div>
+            <a class="plan-cta" href="#contacto">Quiero este plan</a>
+            <ul class="plan-feats">
+              <li>Rutina a medida, casa o gimnasio</li>
+              <li>Progresión real semana a semana</li>
+              <li>Seguimiento por WhatsApp</li>
+              <li>Ajuste del plan cada mes</li>
+              <li class="no">Control de calorías e ingesta</li>
+              <li class="no">Plan de alimentación a medida</li>
+            </ul>
+          </div>
+
+          <div class="plan destacado">
+            <div class="plan-top">
+              <span class="plan-badge">EL MÁS ELEGIDO</span>
+              <h3>Integral</h3>
+              <div class="plan-sub">Fuerza y alimentación, coordinadas</div>
+            </div>
+            <div class="plan-precio">
+              <div class="p p-mes">
+                <div class="monto"><span class="n">USD 32</span><span class="u">/ mes</span></div>
+              </div>
+              <div class="p p-sem">
+                <div class="monto"><span class="n">USD 29</span><span class="u">/ mes</span></div>
+                <div class="detalle">USD 174 por 6 meses · <span class="ahorro">ahorrás USD 18</span></div>
+              </div>
+              <div class="p p-ano">
+                <div class="monto"><span class="n">USD 27</span><span class="u">/ mes</span></div>
+                <div class="detalle">USD 324 por 12 meses · <span class="ahorro">ahorrás USD 60</span></div>
+              </div>
+            </div>
+            <a class="plan-cta" href="#contacto">Quiero este plan</a>
+            <ul class="plan-feats">
+              <li>Rutina a medida, casa o gimnasio</li>
+              <li>Progresión real semana a semana</li>
+              <li>Seguimiento por WhatsApp</li>
+              <li>Ajuste del plan cada mes</li>
+              <li>Control de calorías e ingesta</li>
+              <li>Plan de alimentación a medida</li>
+            </ul>
+          </div>
+
+          <div class="plan">
+            <div class="plan-top">
+              <h3>Nutrición</h3>
+              <div class="plan-sub">Solo alimentación</div>
+            </div>
+            <div class="plan-precio">
+              <div class="p p-mes">
+                <div class="monto"><span class="n">USD 25</span><span class="u">/ mes</span></div>
+              </div>
+              <div class="p p-sem">
+                <div class="monto"><span class="n">USD 23</span><span class="u">/ mes</span></div>
+                <div class="detalle">USD 138 por 6 meses · <span class="ahorro">ahorrás USD 12</span></div>
+              </div>
+              <div class="p p-ano">
+                <div class="monto"><span class="n">USD 21</span><span class="u">/ mes</span></div>
+                <div class="detalle">USD 252 por 12 meses · <span class="ahorro">ahorrás USD 48</span></div>
+              </div>
+            </div>
+            <a class="plan-cta" href="#contacto">Quiero este plan</a>
+            <ul class="plan-feats">
+              <li>Plan de alimentación a medida</li>
+              <li>Control de calorías e ingesta</li>
+              <li>Seguimiento por WhatsApp</li>
+              <li>Ajuste del plan cada mes</li>
+              <li class="no">Rutina a medida, casa o gimnasio</li>
+              <li class="no">Progresión real semana a semana</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <p class="planes-nota reveal">¿No sabés cuál te conviene? Escribime y lo vemos juntas, sin compromiso.</p>
     </div>
   </section>
 
@@ -634,7 +1054,6 @@
   <section id="contacto">
     <div class="wrap">
       <div class="section-head reveal">
-        <div class="eyebrow">Contacto</div>
         <h2>¿Empezamos?</h2>
         <p>Contame un poco de tu situación y tus objetivos, y te respondo personalmente.</p>
       </div>
@@ -706,6 +1125,29 @@
       barIo.observe(sig);
     }
   } catch (err) { /* safety-net timeouts above already cover this */ }
+
+  // Proceso con panel fijo: sincroniza que diapositiva se muestra segun el paso
+  // que este en pantalla. El sticky es CSS puro; esto solo cambia una clase.
+  // Si falla, queda visible la primera diapositiva y los cuatro pasos se leen
+  // enteros igual, que es exactamente lo que se ve en mobile.
+  try {
+    const pin = document.getElementById('pinProceso');
+    const col = document.getElementById('pasosProceso');
+    if (pin && col && 'IntersectionObserver' in window) {
+      const slides = Array.from(pin.querySelectorAll('.pin-slide'));
+      const pasos  = Array.from(col.querySelectorAll('.paso'));
+      const pio = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const i = pasos.indexOf(e.target);
+          if (i < 0) return;
+          slides.forEach((s, k) => s.classList.toggle('on', k === i));
+          pasos.forEach((b, k) => b.classList.toggle('on', k === i));
+        });
+      }, { rootMargin: '-45% 0px -45% 0px' });
+      pasos.forEach(b => pio.observe(b));
+    }
+  } catch (err) { /* la primera diapositiva queda visible por CSS */ }
 </script>
 
 </body>
