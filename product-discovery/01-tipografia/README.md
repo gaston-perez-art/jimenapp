@@ -1,6 +1,6 @@
 # Discovery 01 — Tipografía
 
-> **Estado: cerrado.** Decisión tomada el 11/08/2026 por Gastón. Pendiente de implementación en `docs/index.html`.
+> **Estado: cerrado e implementado.** Decisión tomada el 11/08/2026 por Gastón, aplicada en `docs/index.html` el mismo día.
 
 ## Problema
 
@@ -71,6 +71,12 @@ Sobre el riesgo de frialdad: la paleta vino y bronce ya definida en `memory.md` 
 • **No se validó con usuarias.** La decisión se apoya en el patrón de la categoría y en coherencia con el posicionamiento, no en preferencia medida de mujeres de más de 30. Un test con 5 o 10 alumnas actuales sería barato y podría contradecir esto.
 • **Depende de una decisión que sigue abierta.** Archivo es la respuesta correcta si el posicionamiento va hacia la especialización hormonal. Si se opta por el público general de más de 30, la elección es bastante más libre y las tres opciones sirven.
 
-## Pendiente
+## Implementación
 
-- [ ] Aplicar Archivo en `docs/index.html`: reemplazar el `link` de Google Fonts y las tres declaraciones de `font-family`. No se hizo junto con este documento para no editar `index.html` mientras Jimena trabajaba en el repo.
+Aplicado en `docs/index.html` el 11/08/2026:
+
+• Se reemplazó el `link` de Google Fonts: salieron Fraunces y Work Sans, entró Archivo en pesos 400, 500, 600 y 700. IBM Plex Mono quedó igual.
+• Las 7 declaraciones de `font-family` que usaban Fraunces o Work Sans pasaron a Archivo.
+• Se subió el peso de los títulos de 600 a 700 y se agregó `letter-spacing:-.025em`. Una grotesca necesita más peso y tracking más ajustado que un serif para sostener el mismo tamaño de display, y el patrón relevado es de sans anchas y pesadas.
+
+Verificado renderizando la página en el navegador antes de publicar.

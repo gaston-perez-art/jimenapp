@@ -36,7 +36,7 @@ git config pull.rebase true
 - `--ink: #241F26` — texto de cuerpo
 - `--paper: #FAF6F2` / `--paper-dim: #F1E9E1` — fondos alternados por sección
 
-**Tipografía:** decidida el 11/08/2026, **pendiente de aplicar en `docs/index.html`**.
+**Tipografía:** decidida y aplicada el 11/08/2026.
 
 - Display (títulos): **Archivo** (grotesca ancha, Google Fonts)
 - Cuerpo: **Archivo**
@@ -93,7 +93,6 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 - [ ] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. Bloquea el precio, el canal y el mensaje de toda la web. Ver `estrategia/propuesta-de-valor.md`.
 - [ ] Corregir el footer de `docs/index.html`: dice "mujeres +40" y el resto del sitio dice +30. Se resuelve solo cuando se cierre el posicionamiento.
 - [ ] Definir el valor de la Asesoría nutricional. Es el único de los tres servicios de la web sin precio asignado.
-- [ ] Aplicar Archivo en `docs/index.html`. La decisión está tomada, falta el cambio de código: el `link` de Google Fonts y tres declaraciones de `font-family`.
 - [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
 
 **Producto y operación:**
