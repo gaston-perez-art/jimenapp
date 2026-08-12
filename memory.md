@@ -103,6 +103,8 @@ Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios →
 - [ ] Corregir el footer de `docs/index.html`: dice "mujeres +40" y el resto del sitio dice +30. Se resuelve solo cuando se cierre el posicionamiento.
 - [ ] Definir el valor de la Asesoría nutricional. Es el único de los tres servicios de la web sin precio asignado.
 - [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
+- [ ] **Idea de Jimena (11/08/2026): descuento del 10% para docentes.** Sin definir todavía: a qué planes aplica, si es para docentes en general o solo de Educación Física, y si es permanente o de lanzamiento.
+- [ ] **Comunidad (dirección acordada el 11/08/2026, sin implementar):** grupo de WhatsApp para alumnas activas (retención + testimonios orgánicos, aprovecha el canal que ya se usa para seguimiento 1 a 1) e Instagram como canal público de captación, no como comunidad cerrada — mezclar los dos diluye tanto el mensaje de venta como la intimidad del grupo. Requiere moderación activa de Jimena por ser temas de salud hormonal. Falta definir: cuándo se abre el grupo (¿desde el alta o a partir de cierta antigüedad?) y quién modera si el grupo crece.
 
 **Ideas del benchmark de sitios** (ver `product-discovery/02-benchmark-sitios/`, ninguna decidida todavía):
 
