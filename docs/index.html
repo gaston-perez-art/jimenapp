@@ -8,7 +8,7 @@
 <script>document.documentElement.classList.add('has-js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#241F26;
@@ -162,6 +162,8 @@
     position:relative;
     display:inline-block;
     vertical-align:baseline;
+    overflow:hidden;          /* recorta la palabra que entra y sale por arriba y abajo */
+    padding:.06em 0;          /* aire para que no se corte la 'g' de segura */
   }
   .rot-sizer{visibility:hidden;}          /* reserva el ancho de la palabra mas larga */
   .rot-w{
@@ -171,14 +173,18 @@
     will-change:opacity, transform;
   }
   .rot-1{opacity:1;}                      /* estado por defecto sin animacion */
-  .rot-w em{font-style:normal; color:var(--wine-600);}
+  .rot-w{font-style:italic;}              /* lo que cambia va en cursiva, lo fijo queda recto */
+  /* selector con la especificidad suficiente para ganarle a .hero h1 em, que fija normal */
+  .hero h1 .rot-w em{font-style:italic; color:var(--wine-600);}
 
+  /* Rodillo vertical: la palabra sube y se va, la siguiente entra desde abajo.
+     Empuja hacia arriba igual que el grafico de progresion que esta al lado. */
   @keyframes rotWord{
-    0%              {opacity:0; transform:translateY(.20em);}
-    5%, 33%         {opacity:1; transform:translateY(0);}
-    38%, 100%       {opacity:0; transform:translateY(-.14em);}
+    0%              {opacity:0; transform:translateY(105%);}
+    6%, 31%         {opacity:1; transform:translateY(0);}
+    37%, 100%       {opacity:0; transform:translateY(-105%);}
   }
-  .rot-w{animation:rotWord 8.4s cubic-bezier(.22,.61,.36,1) infinite;}
+  .rot-w{animation:rotWord 8.4s cubic-bezier(.33,1,.68,1) infinite;}
   .rot-1{animation-delay:0s;}
   .rot-2{animation-delay:2.8s;}
   .rot-3{animation-delay:5.6s;}

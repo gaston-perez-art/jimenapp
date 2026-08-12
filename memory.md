@@ -57,6 +57,8 @@ Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de re
 
 **Animaciones vigentes:** claim del hero rotando (fuerte → segura → vos, CSS puro, ciclo de 8,4s), entrada escalonada del hero al cargar, `.stagger` para que los hijos de una grilla entren uno detrás de otro, reveals al hacer scroll y barras del gráfico que crecen.
 
+**Claim del hero, detalle de diseño.** "Más" queda recto y fijo; la palabra que cambia va en **cursiva**, para separar tipográficamente lo constante de lo variable. La salida es un **rodillo vertical**: la palabra sube y se va, la siguiente entra desde abajo. Se evaluaron y descartaron el borrado letra por letra (con `steps()` corta los glifos al medio porque Archivo es proporcional, y lee "terminal" en vez de "entrenadora") y el barrido horizontal. Se eligió el rodillo porque empuja hacia arriba igual que el gráfico de progresión que está al lado.
+
 ## Estructura de la página web
 
 Hero → Sobre mí → Testimonios (placeholders, a completar) → Servicios → Cómo trabajo (proceso de 4 pasos) → Contacto (WhatsApp) → Footer.
