@@ -84,7 +84,7 @@ La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no
 
 ## Estructura de la página web
 
-Hero → Sobre mí → Testimonios (placeholders, a completar) → **Cómo trabajo** → **Planes** → Contacto (WhatsApp) → Footer.
+Hero → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
 
 El orden es deliberado: **el método va antes que el precio**. Explicar cómo se trabaja antes de mostrar cuánto sale es lo que hace que el precio se entienda. Antes estaba al revés.
 
@@ -92,7 +92,7 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Cómo trabajo:** panel fijo con `position: sticky` que cambia mientras se scrollea, al estilo de Equinox. La izquierda dice la idea de cada paso, la derecha el mecanismo concreto. Nunca lo mismo dicho dos veces. En mobile el panel se oculta y los cuatro pasos se leen como lista.
 
-**Planes:** tres cards (Entrenamiento, Integral, Nutrición) con un toggle de duración (Mensual, Semestral, Anual) hecho con radios y `:checked`, sin JavaScript. Un solo toggle para las tres cards, no uno por card: si cada una tuviera el suyo, se podrían comparar precios de duraciones distintas. Toda la sección entra en una pantalla a 1440x900.
+**Programa (13/08/2026, reemplaza a "Planes"):** Jimena decidió pasar de tres planes (Entrenamiento, Integral, Nutrición) a un solo programa con precio único — USD 35/mes, confirmado real por ella. Se sacó el toggle de duración (Mensual/Semestral/Anual) porque ya no hay nada que comparar. La sección es una sola card (`.programa-card`) con el precio y el CTA arriba, y debajo una lista de 6 features numeradas (entrenamiento adaptado a gimnasio o casa, alimentación flexible, WhatsApp, revisión con datos cada 2 semanas, videollamada mensual 1 a 1, comunidad de mujeres). El copy de las features lo pasó Jimena copiado de otra página como referencia de estructura — se reescribió con palabras propias, mismo criterio que ya está anotado en `contexto.md`/memoria de la IA sobre no copiar texto de ejemplo literal.
 
 ## Metodología de entrenamiento (referencia para las herramientas del proyecto)
 
@@ -128,13 +128,12 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 - [x] Hero: ampliar el lead y el `<title>` para no limitarlo a "reducir grasa y ganar masa muscular" — incluir mantenimiento y ganancia muscular sin pérdida de grasa.
 - [x] "Sobre mí": reescrito (13/08/2026) con la historia real que contó Jimena — mamá de dos hijos, entrenó durante embarazo y posparto, aprendió a adaptar el movimiento a cada etapa de vida. Reemplaza el texto anterior, que era solo credenciales.
-- [x] Plan Entrenamiento: agregado "Videollamada cada 2 semanas" a `plan-feats` (y actualizada su lista de excluidos para que coincida con el vocabulario de Integral).
-- [x] Plan Integral: sumado "Reordenamiento alimenticio", "Plan de alimentación a medida" y "Medición cada 2 semanas" a `plan-feats`.
+- [x] Plan Entrenamiento: agregado "Videollamada cada 2 semanas" a `plan-feats` (y actualizada su lista de excluidos para que coincida con el vocabulario de Integral). *Superado el 13/08/2026: los tres planes se reemplazaron por un solo programa, ver "Programa" en Decisiones de diseño.*
+- [x] Plan Integral: sumado "Reordenamiento alimenticio", "Plan de alimentación a medida" y "Medición cada 2 semanas" a `plan-feats`. *Superado el 13/08/2026, ídem anterior.*
 - [ ] Decidir dónde va la foto real de Jimena en el hero: ¿reemplaza el gráfico de barras "signature", o va en otro lugar? Requiere decisión de diseño.
 - [x] Poner la foto real de Jimena en el placeholder `.foto-ph` de "Sobre mí" (13/08/2026): `docs/img/jimena-sobre-mi.jpg`, recortada con `object-fit:cover; object-position:50% 18%` para priorizar cara/hombros ya que la foto original es vertical de cuerpo entero y el contenedor es cuadrado/horizontal según el breakpoint. Se descartó una primera foto (selfie de espejo en ropa deportiva) por no encajar con la línea editorial del sitio.
-- [ ] Repensar el tercer plan como "Asesoría 1 a 1 sobre entrenamiento y nutrición" (reemplaza al plan "Nutrición" actual) — a definir junto con Jimena: qué incluye, diferencia con Integral, precio.
-- [ ] Decidir si los Planes muestran precios públicamente o no.
-- [ ] Revisar si la nueva cadencia (videollamada cada 2 semanas en Entrenamiento) cambia el análisis de capacidad de `estrategia/business-case.md`.
+- [x] **Reemplazar los tres planes por un solo programa (13/08/2026, decisión de Jimena)** — resuelve de paso el pendiente de "repensar el tercer plan" y el de precios públicos: ahora hay un precio único y visible. Ver "Programa" en Decisiones de diseño.
+- [ ] Revisar si la nueva cadencia (videollamada mensual 1 a 1 del programa único) cambia el análisis de capacidad de `estrategia/business-case.md` — el business case todavía está escrito sobre la estructura de tres planes.
 
 **Bloqueantes de captación** (hoy la web no puede convertir una sola visita):
 
@@ -147,10 +146,10 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - [x] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. **Decidido por Jimena el 12/08/2026: especialización en salud hormonal femenina** — recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Aplicado en `docs/index.html` (title, meta description, hero, "Sobre mí", especialidades, footer), `contexto.md` y `estrategia/propuesta-de-valor.md`. Ver `estrategia/propuesta-de-valor.md`.
 - [x] Corregir el footer de `docs/index.html`: decía "mujeres +40" mientras el resto del sitio decía +30. Resuelto: todo el sitio dice ahora +35, consistente con el posicionamiento decidido.
 - [x] Reescribir el hero (12/08/2026, pedido directo de Jimena): eyebrow, lead y una lista de tres bullets nuevos (`.hero-bullets`) con copy más directo — "sin pasar hambre", "sin entrenar todos los días", "adaptado a tus hormonas, tu edad y tu tiempo real". Reemplaza la primera versión del lead, que a Jimena no le convenció. **Corrección importante:** un primer intento puso "30 a 60 años" (tomado literal de un ejemplo de Jimena que era solo de estilo) y afirmaba "el programa que ya ayudó a mujeres..." — Jimena aclaró que el nicho es +35 y que **todavía no tiene alumnas ni resultados propios, recién empieza**. El lead final no afirma experiencia previa ni resultados; describe el método (sin dietas restrictivas, sin entrenar todos los días, adaptado a hormonas). No inventar trayectoria ni testimonios hasta que existan de verdad.
-- [ ] **Confirmar los precios publicados.** Los mensuales de Entrenamiento (USD 20) e Integral (USD 32) son reales. **El de Nutrición (USD 25) y todos los semestrales y anuales son provisorios**, los estimó Claude para poder maquetar. Están en vivo en la web: revisarlos es prioritario.
-- [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
-- [ ] **Idea de Jimena (11/08/2026): descuento del 10% para docentes.** Sin definir todavía: a qué planes aplica, si es para docentes en general o solo de Educación Física, y si es permanente o de lanzamiento.
-- [ ] **Comunidad (dirección acordada el 11/08/2026, sin implementar):** grupo de WhatsApp para alumnas activas (retención + testimonios orgánicos, aprovecha el canal que ya se usa para seguimiento 1 a 1) e Instagram como canal público de captación, no como comunidad cerrada — mezclar los dos diluye tanto el mensaje de venta como la intimidad del grupo. Requiere moderación activa de Jimena por ser temas de salud hormonal. Falta definir: cuándo se abre el grupo (¿desde el alta o a partir de cierta antigüedad?) y quién modera si el grupo crece.
+- [x] **Confirmar el precio publicado.** Resuelto el 13/08/2026 al pasar a un solo programa: Jimena confirmó USD 35/mes como precio único y real. Ya no aplican los precios viejos de Entrenamiento/Integral/Nutrición ni los semestrales/anuales provisorios — se sacaron del sitio.
+- [ ] Medir las horas reales que consume al mes una alumna del programa. Una alumna, un mes, las horas anotadas. Define si el precio único (USD 35/mes) conviene sostenerlo como está.
+- [ ] **Idea de Jimena (11/08/2026): descuento del 10% para docentes.** Sin definir todavía: si es para docentes en general o solo de Educación Física, y si es permanente o de lanzamiento. (Ya no hace falta definir "a qué planes aplica" — desde el 13/08/2026 hay un solo programa.)
+- [ ] **Comunidad (dirección acordada el 11/08/2026, sin implementar):** grupo de WhatsApp para alumnas activas (retención + testimonios orgánicos, aprovecha el canal que ya se usa para seguimiento 1 a 1) e Instagram como canal público de captación, no como comunidad cerrada — mezclar los dos diluye tanto el mensaje de venta como la intimidad del grupo. Requiere moderación activa de Jimena por ser temas de salud hormonal. Falta definir: cuándo se abre el grupo (¿desde el alta o a partir de cierta antigüedad?) y quién modera si el grupo crece. **Atención:** desde el 13/08/2026 "Comunidad de mujeres" ya se promociona como feature 06 del programa en `docs/index.html`, pero operativamente sigue sin implementarse — hay que resolver esto antes de que alguien se anote esperando algo que todavía no existe.
 
 **Ideas del benchmark de sitios** (ver `product-discovery/02-benchmark-sitios/`, ninguna decidida todavía):
 

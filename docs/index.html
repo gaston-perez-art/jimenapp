@@ -527,94 +527,39 @@
     .step{border-left:none; padding-left:0;}
   }
 
-  /* ================= PLANES con toggle mensual/anual =================
-     El toggle son dos radios ocultos. Todo el cambio de precio lo hace CSS
-     con :checked, sin una linea de JavaScript, asi que funciona siempre. */
-  .ciclo{display:flex; flex-direction:column; align-items:center;}
-  .ciclo-in{position:absolute; opacity:0; width:0; height:0; pointer-events:none;}
-  .ciclo-sw{
-    display:inline-flex; align-items:center; gap:4px;
-    background:var(--card); border:1px solid var(--line);
-    border-radius:999px; padding:5px; margin-bottom:18px;
+  /* ================= PROGRAMA (precio unico) ================= */
+  .programa-card{
+    background:var(--card); border:1px solid var(--wine-600);
+    border-radius:var(--r-lg); box-shadow:var(--shadow-md);
+    max-width:900px; margin:0 auto; overflow:hidden;
   }
-  .ciclo-sw label{
-    display:inline-flex; align-items:center; gap:6px;
-    padding:10px 20px; border-radius:999px; cursor:pointer;
-    font-size:14.5px; font-weight:600; color:var(--ink-soft);
-    transition:background .25s ease, color .25s ease;
-    white-space:nowrap;
+  .programa-top{
+    padding:34px 32px; text-align:center;
+    background:linear-gradient(160deg, var(--wine-100), var(--bronze-soft));
+    border-bottom:1px solid var(--line);
   }
-  .ciclo-sw label b{font-weight:600; color:var(--bronze);}
-  #ciclo-mes:checked ~ .ciclo-sw label[for="ciclo-mes"],
-  #ciclo-sem:checked ~ .ciclo-sw label[for="ciclo-sem"],
-  #ciclo-ano:checked ~ .ciclo-sw label[for="ciclo-ano"]{
-    background:var(--card); color:var(--wine-900); box-shadow:var(--shadow-sm);
-  }
-  #ciclo-mes:focus-visible ~ .ciclo-sw label[for="ciclo-mes"],
-  #ciclo-sem:focus-visible ~ .ciclo-sw label[for="ciclo-sem"],
-  #ciclo-ano:focus-visible ~ .ciclo-sw label[for="ciclo-ano"]{
-    outline:2px solid var(--wine-600); outline-offset:2px;
-  }
-  /* por defecto se ve el mensual; si el CSS de :checked no corriera,
-     igual queda un precio visible y no una card vacia */
-  .p-sem, .p-ano{display:none;}
-  #ciclo-sem:checked ~ .planes-grid .p-mes{display:none;}
-  #ciclo-sem:checked ~ .planes-grid .p-sem{display:block;}
-  #ciclo-ano:checked ~ .planes-grid .p-mes{display:none;}
-  #ciclo-ano:checked ~ .planes-grid .p-ano{display:block;}
-
-  .planes-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:start; width:100%;}
-  .plan{
-    background:var(--card); border:1px solid var(--line);
-    border-radius:var(--r-lg); box-shadow:var(--shadow-sm);
-    display:flex; flex-direction:column; overflow:hidden;
-    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  }
-  .plan:hover{transform:translateY(-3px); box-shadow:var(--shadow-md);}
-  .plan.destacado{border-color:var(--wine-600); box-shadow:var(--shadow-md);}
-  /* la destacada ya arranca con shadow-md, asi que necesita un hover propio
-     o el movimiento no se percibe */
-  .plan.destacado:hover{box-shadow:0 4px 10px rgba(36,31,38,.07), 0 26px 50px -22px rgba(92,31,50,.34);}
-  .plan-top{padding:20px 22px 0; display:flex; flex-direction:column; gap:5px;}
-  .plan-badge{
-    align-self:flex-start; background:var(--wine-100); color:var(--wine-900);
-    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.12em;
-    padding:5px 12px; border-radius:999px; margin-bottom:6px;
-  }
-  /* Las cards sin badge reservan su lugar, para que los tres precios queden a
-     la misma altura y se puedan comparar de un vistazo: 27px del badge, 6 de su
-     margen y 6 del gap de la columna. */
-  .plan:not(.destacado) .plan-top::before{content:""; display:block; height:27px; margin-bottom:6px;}
-  .plan h3{font-size:20px;}
-  .plan .plan-sub{font-size:14.5px; color:var(--ink-soft);}
-  .plan-precio{padding:16px 22px 18px; display:flex; flex-direction:column; justify-content:center;
-               min-height:91px;}   /* alto del estado con detalle: iguala las tres opciones y evita el salto */
-  .plan-precio .monto{display:flex; align-items:baseline; gap:9px;}
-  .plan-precio .n{font-size:34px; font-weight:700; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
-  .plan-precio .u{font-size:14px; color:var(--ink-soft);}
-  .plan-precio .detalle{font-size:13.5px; color:var(--ink-soft);}
-  .plan-precio .ahorro{color:var(--bronze); font-weight:600;}
-  .plan-cta{
-    margin:0 22px 18px; display:block; text-align:center;
-    padding:13px; border-radius:var(--r-sm); text-decoration:none;
+  .programa-top .monto{display:flex; align-items:baseline; justify-content:center; gap:9px;}
+  .programa-top .n{font-size:42px; font-weight:700; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
+  .programa-top .u{font-size:15px; color:var(--ink-soft);}
+  .programa-cta{
+    display:inline-block; margin-top:20px;
+    padding:14px 32px; border-radius:var(--r-sm); text-decoration:none;
     font-weight:600; font-size:15px;
-    border:1px solid var(--wine-600); color:var(--wine-600);
-    transition:background .2s ease, color .2s ease;
+    background:var(--wine-600); color:#fff; border:1px solid var(--wine-600);
+    transition:background .2s ease, border-color .2s ease;
   }
-  .plan-cta:hover{background:var(--wine-100);}
-  .plan.destacado .plan-cta{background:var(--wine-600); color:#fff;}
-  .plan.destacado .plan-cta:hover{background:var(--wine-900); border-color:var(--wine-900);}
-  .plan-feats{
-    list-style:none; margin:0; padding:18px 22px 20px; border-top:1px solid var(--line);
-    display:flex; flex-direction:column; gap:6px; background:var(--paper);
+  .programa-cta:hover{background:var(--wine-900); border-color:var(--wine-900);}
+  .programa-feats{
+    list-style:none; margin:0; padding:28px 32px 32px;
+    display:grid; grid-template-columns:1fr 1fr; gap:22px 28px;
   }
-  .plan-feats li{font-size:14px; line-height:1.45; color:var(--ink-soft); display:flex; gap:11px; align-items:flex-start;}
-  .plan-feats li::before{
-    content:""; flex:0 0 auto; width:15px; height:15px; margin-top:4px;
-    border-radius:50%; background:var(--wine-100); border:1.5px solid var(--wine-600);
+  .programa-feats li{display:flex; gap:14px; align-items:flex-start;}
+  .programa-feats .pf-n{
+    flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:12px;
+    color:var(--bronze); font-weight:600; letter-spacing:.06em; margin-top:2px;
   }
-  .plan-feats li.no{opacity:.42;}
-  .plan-feats li.no::before{background:transparent; border-color:var(--line);}
+  .programa-feats h4{font-size:15.5px; margin:0 0 4px;}
+  .programa-feats p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}
   .planes-nota{margin-top:14px; text-align:center; font-size:14px; color:var(--ink-soft);}
 
   /* ================= PROCESO con panel fijo =================
@@ -652,7 +597,7 @@
   .paso.on .pn, .paso.on p{opacity:1;}
 
   @media (max-width:960px){
-    .planes-grid{grid-template-columns:1fr;}
+    .programa-feats{grid-template-columns:1fr;}
   }
 
   /* ---------- Mobile ---------- */
@@ -693,10 +638,9 @@
     .proceso-grid{grid-template-columns:1fr; gap:0;}
     .paso{min-height:auto; padding:20px 0 20px 18px;}
     .paso .pn, .paso p{opacity:1;}
-    .ciclo-sw{margin-bottom:28px; width:100%; justify-content:center;}
-    .ciclo-sw label{padding:12px 14px; font-size:14px;}
-    .plan{border-radius:var(--r-md);}
-    .plan-cta{padding:16px;}
+    .programa-card{border-radius:var(--r-md);}
+    .programa-top{padding:28px 22px;}
+    .programa-feats{padding:24px 22px 26px;}
 
     /* enlaces del footer: area tactil comoda */
     footer .fsocial a{display:inline-block; padding:12px 0;}
@@ -706,14 +650,8 @@
   @media (max-width:400px){
     .wrap{padding:0 16px;}
     .hero h1.hero-claim{font-size:40px;}
-    .ciclo-sw{padding:4px; gap:2px;}
-    .ciclo-sw label{padding:13px 10px; font-size:13px;}  /* 44px minimo tactil */
-    .plan-top{padding:22px 18px 0;}
-    .plan-precio{padding:16px 18px 20px; min-height:96px;}
-    .plan-precio .n{font-size:34px;}
-    .plan-cta{margin:0 18px 18px;}
-    .plan-feats{padding:20px 18px;}
-    .plan-feats li{font-size:14px;}
+    .programa-top .n{font-size:34px;}
+    .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
     .section-head h2{font-size:26px;}
     .paso{padding-left:14px;}
     .paso p{font-size:15px;}
@@ -749,7 +687,7 @@
       <li><a href="#sobre">Sobre mí</a></li>
       <li><a href="#testimonios">Testimonios</a></li>
       <li><a href="#proceso">Cómo trabajo</a></li>
-      <li><a href="#servicios">Planes</a></li>
+      <li><a href="#servicios">Programa</a></li>
       <li><a href="#contacto" class="navcta">Escribime</a></li>
     </ul>
     <button class="navtoggle" id="navtoggle" aria-label="Abrir menú" aria-expanded="false">
@@ -947,7 +885,7 @@
           </div>
           <div class="paso">
             <span class="pn">03 · PLAN A MEDIDA</span>
-            <p>Mesociclo por bloques con autorregulación por esfuerzo percibido, y una pauta de alimentación calculada sobre tu gasto real. Entra en la semana que tenés, no en una ideal.</p>
+            <p>Mesociclo por bloques con autorregulación por esfuerzo percibido, y educación alimentaria flexible y adaptada a tu gasto real — para que aprendas a comer, no para que sigas una dieta cerrada. Pensado para la semana que realmente tenés, no para una semana ideal que no existe.</p>
           </div>
           <div class="paso">
             <span class="pn">04 · SEGUIMIENTO REAL</span>
@@ -958,122 +896,66 @@
     </div>
   </section>
 
-  <!-- PLANES -->
+  <!-- PROGRAMA -->
   <section id="servicios">
     <div class="wrap">
       <div class="section-head reveal" style="text-align:center; margin-left:auto; margin-right:auto;">
-        <div class="eyebrow" style="justify-content:center;">Planes</div>
-        <h2>Cómo podemos trabajar juntas</h2>
-        <p>Los tres parten de una evaluación inicial. Nada de plantillas: tu programa se arma sobre tu rutina real, desde 2 días por semana.</p>
+        <div class="eyebrow" style="justify-content:center;">Programa</div>
+        <h2>Un solo programa, hecho a tu medida</h2>
+        <p>Parte de una evaluación inicial. Nada de plantillas: se arma sobre tu rutina real.</p>
       </div>
 
-      <div class="ciclo">
-        <input class="ciclo-in" type="radio" name="ciclo" id="ciclo-mes" checked>
-        <input class="ciclo-in" type="radio" name="ciclo" id="ciclo-sem">
-        <input class="ciclo-in" type="radio" name="ciclo" id="ciclo-ano">
-        <div class="ciclo-sw" role="radiogroup" aria-label="Elegí la duración del plan">
-          <label for="ciclo-mes">Mensual</label>
-          <label for="ciclo-sem">Semestral</label>
-          <label for="ciclo-ano">Anual</label>
+      <div class="programa-card reveal">
+        <div class="programa-top">
+          <div class="monto"><span class="n">USD 35</span><span class="u">/ mes</span></div>
+          <a class="programa-cta" href="#contacto">Quiero empezar</a>
         </div>
-
-        <div class="planes-grid reveal stagger">
-
-          <div class="plan">
-            <div class="plan-top">
-              <h3>Entrenamiento</h3>
-              <div class="plan-sub">Solo fuerza, con seguimiento</div>
+        <ul class="programa-feats">
+          <li>
+            <span class="pf-n">01</span>
+            <div>
+              <h4>Entrenamiento adaptado a gimnasio o en casa</h4>
+              <p>Tu rutina se arma sobre tu día a día real, entrenes donde entrenes.</p>
             </div>
-            <div class="plan-precio">
-              <div class="p p-mes">
-                <div class="monto"><span class="n">USD 20</span><span class="u">/ mes</span></div>
-              </div>
-              <div class="p p-sem">
-                <div class="monto"><span class="n">USD 18</span><span class="u">/ mes</span></div>
-                <div class="detalle">USD 108 por 6 meses · <span class="ahorro">ahorrás USD 12</span></div>
-              </div>
-              <div class="p p-ano">
-                <div class="monto"><span class="n">USD 17</span><span class="u">/ mes</span></div>
-                <div class="detalle">USD 204 por 12 meses · <span class="ahorro">ahorrás USD 36</span></div>
-              </div>
+          </li>
+          <li>
+            <span class="pf-n">02</span>
+            <div>
+              <h4>Alimentación flexible</h4>
+              <p>Ajustada a tus horarios, tus gustos y tus alergias o intolerancias. Comidas simples, que resuelven en minutos.</p>
             </div>
-            <a class="plan-cta" href="#contacto">Quiero este plan</a>
-            <ul class="plan-feats">
-              <li>Rutina a medida, casa o gimnasio</li>
-              <li>Progresión real semana a semana</li>
-              <li>Seguimiento por WhatsApp cuando lo necesites</li>
-              <li>Videollamada cada 2 semanas</li>
-              <li>Ajuste del plan cada mes</li>
-              <li class="no">Reordenamiento alimenticio</li>
-              <li class="no">Plan de alimentación a medida</li>
-              <li class="no">Medición cada 2 semanas</li>
-            </ul>
-          </div>
-
-          <div class="plan destacado">
-            <div class="plan-top">
-              <span class="plan-badge">EL MÁS ELEGIDO</span>
-              <h3>Integral</h3>
-              <div class="plan-sub">Fuerza y alimentación, coordinadas</div>
+          </li>
+          <li>
+            <span class="pf-n">03</span>
+            <div>
+              <h4>Tu entrenadora en WhatsApp</h4>
+              <p>Escribime cuando lo necesites. Estoy del otro lado para responderte y sostenerte en el día a día.</p>
             </div>
-            <div class="plan-precio">
-              <div class="p p-mes">
-                <div class="monto"><span class="n">USD 32</span><span class="u">/ mes</span></div>
-              </div>
-              <div class="p p-sem">
-                <div class="monto"><span class="n">USD 29</span><span class="u">/ mes</span></div>
-                <div class="detalle">USD 174 por 6 meses · <span class="ahorro">ahorrás USD 18</span></div>
-              </div>
-              <div class="p p-ano">
-                <div class="monto"><span class="n">USD 27</span><span class="u">/ mes</span></div>
-                <div class="detalle">USD 324 por 12 meses · <span class="ahorro">ahorrás USD 60</span></div>
-              </div>
+          </li>
+          <li>
+            <span class="pf-n">04</span>
+            <div>
+              <h4>Revisión con datos reales</h4>
+              <p>Cada dos semanas reviso tus fotos, medidas, peso y un video tuyo. Ajusto el plan con esos datos, no a ojo.</p>
             </div>
-            <a class="plan-cta" href="#contacto">Quiero este plan</a>
-            <ul class="plan-feats">
-              <li>Rutina a medida, casa o gimnasio</li>
-              <li>Progresión real semana a semana</li>
-              <li>Seguimiento por WhatsApp cuando lo necesites</li>
-              <li>Videollamada cada 2 semanas</li>
-              <li>Ajuste del plan cada mes</li>
-              <li>Reordenamiento alimenticio</li>
-              <li>Plan de alimentación a medida</li>
-              <li>Medición cada 2 semanas</li>
-            </ul>
-          </div>
-
-          <div class="plan">
-            <div class="plan-top">
-              <h3>Nutrición</h3>
-              <div class="plan-sub">Solo alimentación</div>
+          </li>
+          <li>
+            <span class="pf-n">05</span>
+            <div>
+              <h4>Videollamada mensual 1 a 1</h4>
+              <p>Para entender el porqué de cada ajuste. No busco que me obedezcas: busco que aprendas el proceso.</p>
             </div>
-            <div class="plan-precio">
-              <div class="p p-mes">
-                <div class="monto"><span class="n">USD 25</span><span class="u">/ mes</span></div>
-              </div>
-              <div class="p p-sem">
-                <div class="monto"><span class="n">USD 23</span><span class="u">/ mes</span></div>
-                <div class="detalle">USD 138 por 6 meses · <span class="ahorro">ahorrás USD 12</span></div>
-              </div>
-              <div class="p p-ano">
-                <div class="monto"><span class="n">USD 21</span><span class="u">/ mes</span></div>
-                <div class="detalle">USD 252 por 12 meses · <span class="ahorro">ahorrás USD 48</span></div>
-              </div>
+          </li>
+          <li>
+            <span class="pf-n">06</span>
+            <div>
+              <h4>Comunidad de mujeres</h4>
+              <p>Compartir el camino con otras mujeres que van en la misma dirección es lo que sostiene el compromiso en el tiempo.</p>
             </div>
-            <a class="plan-cta" href="#contacto">Quiero este plan</a>
-            <ul class="plan-feats">
-              <li>Plan de alimentación a medida</li>
-              <li>Control de calorías e ingesta</li>
-              <li>Seguimiento por WhatsApp</li>
-              <li>Ajuste del plan cada mes</li>
-              <li class="no">Rutina a medida, casa o gimnasio</li>
-              <li class="no">Progresión real semana a semana</li>
-            </ul>
-          </div>
-
-        </div>
+          </li>
+        </ul>
       </div>
-      <p class="planes-nota reveal">¿No sabés cuál te conviene? Escribime y lo vemos juntas, sin compromiso.</p>
+      <p class="planes-nota reveal">¿Tenés dudas si es para vos? Escribime y lo vemos juntas, sin compromiso.</p>
     </div>
   </section>
 

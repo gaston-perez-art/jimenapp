@@ -2,6 +2,8 @@
 
 > **Estado: EN CURSO**, segunda versión al 11/08/2026. Los precios son datos reales. Las horas por plan, la permanencia y las tasas de captación son estimaciones señaladas como tales.
 >
+> **Desactualizado desde el 13/08/2026:** este documento analiza la estructura vieja de tres planes (Entrenamiento USD 20, Integral USD 32, Nutrición USD 25). Jimena la reemplazó por un solo programa a USD 35/mes — ver `memory.md`. El análisis de rendimiento por hora y los escenarios de abajo siguen siendo útiles como referencia de método, pero los números de esta versión ya no describen lo que se vende hoy. Pendiente rehacerlo sobre el programa único.
+>
 > **Qué cambió respecto de la primera versión:** el benchmark de sitios (`product-discovery/02-benchmark-sitios/`) mostró que una competidora directa publica 18 meses de permanencia promedio, contra los 4 a 6 que asumía este documento. Eso obligó a rehacer el modelo, y al rehacerlo apareció un error de planteo más grave que el número.
 
 ## El error de la primera versión

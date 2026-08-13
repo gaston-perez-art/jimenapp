@@ -44,6 +44,6 @@ Este documento cubre la propuesta de valor. Todavía no existen, y conviene arma
 
 ## Análisis económico
 
-El business case está en [`business-case.md`](business-case.md), en esta misma carpeta: precios de cada plan, rentabilidad por hora, techo del negocio y la secuencia recomendada para moverse.
+El business case está en [`business-case.md`](business-case.md), en esta misma carpeta: rentabilidad por hora, techo del negocio y la secuencia recomendada para moverse. **Nota:** ese análisis todavía está escrito sobre la estructura vieja de tres planes — desde el 13/08/2026 se vende un solo programa a USD 35/mes (ver `memory.md`), pendiente de reflejar ahí.
 
 Los dos documentos se leen juntos. El business case muestra que el precio es la palanca más fuerte del negocio, y este documento explica qué hace falta para poder subirlo.
