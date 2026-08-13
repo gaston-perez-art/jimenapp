@@ -127,11 +127,11 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 **Mejoras pedidas por Jimena (12/08/2026), en curso:**
 
 - [x] Hero: ampliar el lead y el `<title>` para no limitarlo a "reducir grasa y ganar masa muscular" — incluir mantenimiento y ganancia muscular sin pérdida de grasa.
-- [ ] "Sobre mí": reescribir con más foco en Jimena como persona. Bloqueado — falta que Jimena cuente su historia real (no se inventa biografía).
+- [x] "Sobre mí": reescrito (13/08/2026) con la historia real que contó Jimena — mamá de dos hijos, entrenó durante embarazo y posparto, aprendió a adaptar el movimiento a cada etapa de vida. Reemplaza el texto anterior, que era solo credenciales.
 - [x] Plan Entrenamiento: agregado "Videollamada cada 2 semanas" a `plan-feats` (y actualizada su lista de excluidos para que coincida con el vocabulario de Integral).
 - [x] Plan Integral: sumado "Reordenamiento alimenticio", "Plan de alimentación a medida" y "Medición cada 2 semanas" a `plan-feats`.
 - [ ] Decidir dónde va la foto real de Jimena en el hero: ¿reemplaza el gráfico de barras "signature", o va en otro lugar? Requiere decisión de diseño.
-- [ ] Poner la foto real de Jimena en el placeholder `.foto-ph` de "Sobre mí".
+- [x] Poner la foto real de Jimena en el placeholder `.foto-ph` de "Sobre mí" (13/08/2026): `docs/img/jimena-sobre-mi.jpg`, recortada con `object-fit:cover; object-position:50% 18%` para priorizar cara/hombros ya que la foto original es vertical de cuerpo entero y el contenedor es cuadrado/horizontal según el breakpoint. Se descartó una primera foto (selfie de espejo en ropa deportiva) por no encajar con la línea editorial del sitio.
 - [ ] Repensar el tercer plan como "Asesoría 1 a 1 sobre entrenamiento y nutrición" (reemplaza al plan "Nutrición" actual) — a definir junto con Jimena: qué incluye, diferencia con Integral, precio.
 - [ ] Decidir si los Planes muestran precios públicamente o no.
 - [ ] Revisar si la nueva cadencia (videollamada cada 2 semanas en Entrenamiento) cambia el análisis de capacidad de `estrategia/business-case.md`.
@@ -140,7 +140,7 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 - [ ] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real.
 - [ ] Agregar el enlace real de Instagram en el footer.
-- [ ] Sumar testimonios reales de alumnas a la sección "Testimonios" (requiere autorización explícita de cada alumna para uso público).
+- [x] Sumar testimonios reales de alumnas a la sección "Testimonios" (13/08/2026): Silvia Rodríguez y Verónica Vázquez, con autorización confirmada por Jimena. Las citas son textuales (Silvia, transcripta tal cual, cortada donde cortaba el mensaje original — no se completó la frase; Verónica, extraída de un posteo más largo, sacando solo la mención dirigida a Jimena). Sin fotos de ellas todavía. La tercera tarjeta del grid quedó como invitación abierta ("Tu lugar está reservado acá") en vez de un tercer testimonio inventado — no inventar testimonios hasta que exista uno real.
 
 **Decisiones abiertas de negocio:**
 
