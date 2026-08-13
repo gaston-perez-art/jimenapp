@@ -316,11 +316,17 @@
     box-shadow:var(--shadow-sm);
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
     color:var(--wine-600);
+    overflow:hidden;
   }
   .foto-ph svg{width:56px; height:56px; opacity:.5;}
   .foto-ph span{
     font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em;
     text-transform:uppercase; opacity:.75;
+  }
+  .foto-ph img{
+    width:100%; height:100%;
+    object-fit:cover; object-position:50% 18%;
+    display:block;
   }
   .sobre-quote{
     margin:20px 0 0; padding:0 0 0 16px;
@@ -800,22 +806,19 @@
     <div class="wrap sobre-grid reveal">
 
       <div class="sobre-foto">
-        <div class="foto-ph" role="img" aria-label="Espacio reservado para la foto de Jimena">
-          <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-            <circle cx="32" cy="23" r="11" stroke="currentColor" stroke-width="2.2"/>
-            <path d="M11 57c0-11.6 9.4-21 21-21s21 9.4 21 21" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          <span>Foto de Jimena</span>
+        <div class="foto-ph">
+          <img src="img/jimena-sobre-mi.jpg" alt="Jimena Ibañez, entrenadora de fuerza">
         </div>
-        <blockquote class="sobre-quote">“El objetivo nunca es solo bajar de peso. Es que te sientas fuerte, y que eso se sostenga.”</blockquote>
-        <div class="credential">Prof. Jimena Ibañez · Entrenadora de fuerza y coach funcional</div>
+        <blockquote class="sobre-quote">“El verdadero cambio empieza cuando una mujer se siente fuerte, capaz y segura de sí misma.”</blockquote>
+        <div class="credential">Prof. Jimena Ibañez · Entrenadora de fuerza</div>
       </div>
 
       <div class="sobre-texto">
         <div class="eyebrow">Sobre mí</div>
         <h2>Profesora Nacional de Educación Física, especializada en fuerza femenina</h2>
-        <p>Hace años que trabajo como entrenadora de fuerza, y hoy oriento toda mi carrera a un objetivo puntual: ayudar a mujeres +35 a lograr recomposición corporal teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — y a dejar atrás las dietas restrictivas para construir hábitos que sí se sostienen.</p>
-        <p>Nada de rutinas genéricas ni promesas mágicas. Creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida, y que el camino es salir del estancamiento en el que te dejaron los métodos tradicionales.</p>
+        <p>El entrenamiento se convirtió en mucho más que una profesión para mí: es mi forma de sentirme fuerte, segura y conectada conmigo misma. Soy mamá de dos hijos y nunca dejé de entrenar — en el embarazo y el posparto aprendí, desde mi propia experiencia, que no se trata de entrenar perfecto, sino de adaptar el movimiento a cada etapa de la vida.</p>
+        <p>Hoy oriento mi trabajo a un objetivo puntual: acompañar a mujeres +35 a lograr recomposición corporal teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — sin vivir a dieta ni tener que dejar de disfrutar su vida. Nada de rutinas genéricas: creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida.</p>
+        <p>Cada mujer es distinta, así que trabajo de forma personalizada, teniendo en cuenta sus objetivos, su contexto y la etapa de vida en la que está.</p>
 
       </div>
 
@@ -842,23 +845,23 @@
       <div class="section-head reveal">
         <div class="eyebrow">Testimonios</div>
         <h2>Mujeres reales, cambios reales</h2>
-        <p>Esta sección está lista para sumar testimonios a medida que tus alumnas los compartan — con su autorización, nombre real y foto si ellas quieren.</p>
+        <p>Lo que cuentan las alumnas que ya entrenan conmigo.</p>
       </div>
       <div class="cards reveal stagger">
         <div class="card testimonial-card">
           <div class="num">“</div>
-          <p class="testimonial-quote">Espacio reservado para tu próximo testimonio.</p>
-          <div class="tag">Nombre de la alumna — completar</div>
+          <p class="testimonial-quote">Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+          <div class="tag">Silvia Rodríguez</div>
         </div>
         <div class="card testimonial-card">
           <div class="num">“</div>
-          <p class="testimonial-quote">Espacio reservado para tu próximo testimonio.</p>
-          <div class="tag">Nombre de la alumna — completar</div>
+          <p class="testimonial-quote">Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+          <div class="tag">Verónica Vázquez</div>
         </div>
         <div class="card testimonial-card">
           <div class="num">“</div>
-          <p class="testimonial-quote">Espacio reservado para tu próximo testimonio.</p>
-          <div class="tag">Nombre de la alumna — completar</div>
+          <p class="testimonial-quote">Tu lugar está reservado acá.</p>
+          <div class="tag">Próxima alumna — ¿arrancamos?</div>
         </div>
       </div>
     </div>
