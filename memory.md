@@ -50,6 +50,8 @@ Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de re
 
 **Hero:** tiene `min-height` igual a la pantalla útil (`100svh` menos el header), para que la sección siguiente no asome en el primer scroll. Se usa `svh` y no `vh` porque en mobile `vh` no descuenta la barra de direcciones.
 
+**Hero, lista de bullets (12/08/2026):** debajo del `p.lead` hay un `ul.hero-bullets` de tres ítems cortos ("Sin pasar hambre...", "Sin entrenar todos los días", "Adaptado a tus hormonas..."), con el mismo punto redondo que `esp-lista`. Entra en la secuencia de animación del hero entre el lead (`.30s`) y los botones (`.42s`), en `.36s`. Si se agregan o sacan bullets, no hace falta tocar la animación — es una sola regla para toda la lista, no una por ítem.
+
 **Radios y profundidad (decisión de Gastón, 11/08/2026):** el sitio pasó de esquinas casi rectas (`--radius: 2px`) a un sistema redondeado y más suave, en la línea de Airbnb sin exagerar. Escala de tres valores:
 
 • `--r-sm: 10px` — botones y CTA del nav
@@ -142,8 +144,9 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Decisiones abiertas de negocio:**
 
-- [x] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. **Decidido por Jimena el 12/08/2026: especialización en salud hormonal femenina** — recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Aplicado en `docs/index.html` (title, meta description, hero, "Sobre mí", especialidades, footer), `contexto.md` y `estrategia/propuesta-de-valor.md`. Ver `estrategia/propuesta-de-valor.md`.
-- [x] Corregir el footer de `docs/index.html`: decía "mujeres +40" mientras el resto del sitio decía +30. Resuelto: todo el sitio dice ahora +35, consistente con el posicionamiento decidido.
+- [x] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. **Decidido por Jimena el 12/08/2026: especialización en salud hormonal femenina** — recomposición corporal para mujeres de 30 a 60 años con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Aplicado en `docs/index.html` (title, meta description, hero, "Sobre mí", especialidades, footer), `contexto.md` y `estrategia/propuesta-de-valor.md`. Ver `estrategia/propuesta-de-valor.md`.
+- [x] Corregir el footer de `docs/index.html`: decía "mujeres +40" mientras el resto del sitio decía +30. Resuelto: todo el sitio dice ahora "mujeres de 30 a 60 años", consistente con el posicionamiento decidido.
+- [x] Reescribir el hero (12/08/2026, pedido directo de Jimena): eyebrow, lead y una lista de tres bullets nuevos (`.hero-bullets`) con copy más directo — "sin pasar hambre", "sin entrenar todos los días", "adaptado a tus hormonas, tu edad y tu tiempo real". Reemplaza la primera versión del lead, que a Jimena no le convenció.
 - [ ] **Confirmar los precios publicados.** Los mensuales de Entrenamiento (USD 20) e Integral (USD 32) son reales. **El de Nutrición (USD 25) y todos los semestrales y anuales son provisorios**, los estimó Claude para poder maquetar. Están en vivo en la web: revisarlos es prioritario.
 - [ ] Medir las horas reales que consume al mes una alumna del plan personalizado. Una alumna, un mes, las horas anotadas. Define si ese plan conviene sostenerlo como está.
 - [ ] **Idea de Jimena (11/08/2026): descuento del 10% para docentes.** Sin definir todavía: a qué planes aplica, si es para docentes en general o solo de Educación Física, y si es permanente o de lanzamiento.

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jimena Ibañez — Recomposición corporal para mujeres +35 con cambios hormonales</title>
-<meta name="description" content="Programas de fuerza y recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Entrenamiento y nutrición que tienen en cuenta tus cambios hormonales.">
+<title>Jimena Ibañez — Recomposición corporal para mujeres de 30 a 60 años</title>
+<meta name="description" content="El programa de recomposición corporal para mujeres de 30 a 60 años con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Sin pasar hambre, sin entrenar todos los días, adaptado a tus hormonas.">
 <script>document.documentElement.classList.add('has-js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -213,10 +213,22 @@
     .rot-3{opacity:1;}                    /* sin movimiento, queda el remate */
   }
   .hero p.lead{
-    margin:26px 0 34px;
+    margin:26px 0 20px;
     font-size:17.5px;
     color:var(--ink-soft);
     max-width:46ch;
+  }
+  .hero-bullets{
+    list-style:none; margin:0 0 34px; padding:0;
+    display:flex; flex-direction:column; gap:9px;
+    max-width:46ch;
+  }
+  .hero-bullets li{
+    font-size:15.5px; color:var(--ink); display:flex; gap:10px; align-items:flex-start; line-height:1.4;
+  }
+  .hero-bullets li::before{
+    content:""; flex:0 0 auto; width:6px; height:6px; margin-top:8px;
+    border-radius:50%; background:var(--wine-600);
   }
   .herobtns{display:flex; align-items:center; gap:20px; flex-wrap:wrap;}
   .btn-primary{
@@ -485,6 +497,7 @@
   .has-js .hero .eyebrow  {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .05s both;}
   .has-js .hero h1        {animation:heroIn .85s cubic-bezier(.22,.61,.36,1) .15s both;}
   .has-js .hero p.lead    {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .30s both;}
+  .has-js .hero .hero-bullets{animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .36s both;}
   .has-js .hero .herobtns {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .42s both;}
   .has-js .hero .signature{animation:heroIn .90s cubic-bezier(.22,.61,.36,1) .34s both;}
 
@@ -492,7 +505,7 @@
     html{scroll-behavior:auto;}
     .has-js .reveal, .has-js .bar, .has-js .bar-kg,
     .has-js .reveal.stagger > *{transition:none !important; opacity:1 !important; transform:none !important; height:var(--h) !important;}
-    .has-js .hero .eyebrow, .has-js .hero h1, .has-js .hero p.lead,
+    .has-js .hero .eyebrow, .has-js .hero h1, .has-js .hero p.lead, .has-js .hero .hero-bullets,
     .has-js .hero .herobtns, .has-js .hero .signature{animation:none !important;}
   }
 
@@ -642,7 +655,9 @@
     section{padding:64px 0;}
     .section-head{margin-bottom:36px;}
     .hero{padding:36px 0 48px; gap:32px; min-height:0;}
-    .hero p.lead{font-size:16.5px; margin:20px 0 28px;}
+    .hero p.lead{font-size:16.5px; margin:20px 0 16px;}
+    .hero-bullets{font-size:14.5px; margin:0 0 28px;}
+    .hero-bullets li{font-size:14.5px;}
 
     /* la linea del eyebrow no debe partir el texto al envolver */
     .eyebrow{align-items:flex-start; gap:8px;}
@@ -741,7 +756,7 @@
   <!-- HERO -->
   <section class="hero wrap">
     <div>
-      <div class="eyebrow">Recomposición corporal para mujeres +35</div>
+      <div class="eyebrow">Mujeres de 30 a 60 años</div>
       <h1 class="hero-claim">
         <span class="sr-only">Más fuerte. Más segura. Más vos.</span>
         <span class="claim" aria-hidden="true">
@@ -754,7 +769,12 @@
           </span>
         </span>
       </h1>
-      <p class="lead">Programas de fuerza y recomposición corporal pensados para mujeres de +35. Si atravesás resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia, entreno teniendo en cuenta esos cambios hormonales — no con una rutina genérica que los ignora. Rutinas que se adaptan a tu casa, tu gimnasio y tu agenda real.</p>
+      <p class="lead">El programa de recomposición corporal (pérdida de grasa y ganancia de masa muscular/tonificación) que ya ayudó a mujeres de 30 a 60 años que habían intentado de todo, y que por fin lo consiguieron sin dietas que te amargan la existencia.</p>
+      <ul class="hero-bullets">
+        <li>Sin pasar hambre ni tener alimentos prohibidos</li>
+        <li>Sin entrenar todos los días</li>
+        <li>Adaptado a tus hormonas, tu edad y tu tiempo real</li>
+      </ul>
       <div class="herobtns">
         <a class="btn-primary" href="#contacto">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7s-.4-.1-.5.1-.5.7-.6.8-.2.1-.4 0a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.3-.4.2-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c1.5.6 1.5.4 1.8.4a1.5 1.5 0 0 0 1-.7 1.3 1.3 0 0 0 .1-.7c-.1-.1-.2-.2-.4-.3z"/></svg>
@@ -794,7 +814,7 @@
       <div class="sobre-texto">
         <div class="eyebrow">Sobre mí</div>
         <h2>Profesora Nacional de Educación Física, especializada en fuerza femenina</h2>
-        <p>Hace años que trabajo como entrenadora de fuerza, y hoy oriento toda mi carrera a un objetivo puntual: ayudar a mujeres de +35 a lograr recomposición corporal teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — y a dejar atrás las dietas restrictivas para construir hábitos que sí se sostienen.</p>
+        <p>Hace años que trabajo como entrenadora de fuerza, y hoy oriento toda mi carrera a un objetivo puntual: ayudar a mujeres de 30 a 60 años a lograr recomposición corporal teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — y a dejar atrás las dietas restrictivas para construir hábitos que sí se sostienen.</p>
         <p>Nada de rutinas genéricas ni promesas mágicas. Creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida, y que el camino es salir del estancamiento en el que te dejaron los métodos tradicionales.</p>
 
       </div>
@@ -1079,7 +1099,7 @@
   <div class="wrap">
     <div>
       <div class="fname">Jimena Ibañez</div>
-      <div class="fmeta">Recomposición corporal para mujeres +35 con cambios hormonales</div>
+      <div class="fmeta">Recomposición corporal para mujeres de 30 a 60 años</div>
     </div>
     <div class="fsocial">
       <a href="#">Instagram</a>

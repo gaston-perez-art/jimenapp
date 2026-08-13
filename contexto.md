@@ -6,7 +6,7 @@
 
 Jimena Ibañez es Profesora Nacional de Educación Física (Argentina), con experiencia como entrenadora personal y coach funcional. Se especializa en entrenamiento de fuerza femenino basado en evidencia científica, con foco en:
 
-- Recomposición corporal (pérdida de grasa + ganancia de masa muscular) en mujeres de +35, teniendo en cuenta los cambios hormonales propios de esa etapa
+- Recomposición corporal (pérdida de grasa + ganancia de masa muscular) en mujeres de 30 a 60 años, teniendo en cuenta los cambios hormonales propios de esa etapa
 - Salud hormonal femenina aplicada al entrenamiento y la nutrición: resistencia a la insulina, SOP, hipotiroidismo, perimenopausia y menopausia
 - Hábitos sostenibles, sin dietas extremas ni promesas mágicas
 - Mujeres adultas con poco tiempo (mamás, profesionales) que buscan salir de métodos tradicionales que no les funcionaron
@@ -29,7 +29,7 @@ Construir la presencia profesional online de Jimena y las herramientas de trabaj
 
 ## Público objetivo de la página web
 
-Mujeres de +35 que atraviesan cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — y buscan recomposición corporal (pérdida de grasa + ganancia de masa muscular) teniendo en cuenta esos cambios, no una rutina genérica que los ignora. Ya probaron dietas restrictivas o métodos tradicionales sin resultados sostenidos, muchas veces porque nadie les entrenó considerando su situación hormonal. Buscan un programa realista — entrenable en casa o en el gimnasio, desde 2 sesiones semanales — no un cambio de vida de tiempo completo.
+Mujeres de 30 a 60 años que atraviesan cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — y buscan recomposición corporal (pérdida de grasa + ganancia de masa muscular) teniendo en cuenta esos cambios, no una rutina genérica que los ignora. Ya probaron dietas restrictivas o métodos tradicionales sin resultados sostenidos, muchas veces porque nadie les entrenó considerando su situación hormonal. Buscan un programa realista — entrenable en casa o en el gimnasio, desde 2 sesiones semanales — no un cambio de vida de tiempo completo.
 
 ## Identidad de marca
 
@@ -39,5 +39,5 @@ Mujeres de +35 que atraviesan cambios hormonales — resistencia a la insulina, 
 
 ## Estado actual
 
-- Sitio web: primera versión completa, con contenido orientado a mujeres +35 con especialización en salud hormonal (posicionamiento decidido el 12/08/2026). Pendiente: número de WhatsApp real, enlace de Instagram, y testimonios reales de alumnas (con autorización).
+- Sitio web: primera versión completa, con contenido orientado a mujeres de 30 a 60 años con especialización en salud hormonal (posicionamiento decidido el 12/08/2026). Pendiente: número de WhatsApp real, enlace de Instagram, y testimonios reales de alumnas (con autorización).
 - Sin dominio ni hosting contratado todavía — evaluándose GitHub Pages como opción gratuita mientras tanto.
