@@ -1,6 +1,6 @@
 # Propuesta de valor
 
-> **Estado: EN CURSO.** Documento abierto, en discusión entre Jimena y Gastón al 11/08/2026. Nada de lo que sigue está cerrado.
+> **Estado: posicionamiento decidido.** Abierto el 11/08/2026, en discusión entre Jimena y Gastón. Jimena resolvió la decisión abierta el 12/08/2026 (ver sección correspondiente más abajo). Lo que queda pendiente de este documento es lo que lista la sección "Qué falta".
 
 ## Lo que ofrecemos hoy
 
@@ -24,13 +24,13 @@ Eso sí es defendible, por tres razones:
 • **La disposición a pagar es más alta.** No se compra estética. Se compra resolver un problema que ya se intentó resolver sin éxito y que afecta el descanso, la energía y el ánimo.
 • **Es difícil de copiar.** Requiere formación específica. "Entreno mujeres" lo dice cualquiera mañana. "Trabajo con mujeres en perimenopausia y sé cuándo derivarte a un endocrinólogo" no.
 
-## La decisión abierta
+## La decisión tomada
 
 **¿A quién le hablamos: mujeres +30 en general, o especialización hormonal?**
 
-Es la decisión que bloquea a las demás, porque define el precio, el canal y todo el mensaje de la web. Hoy está sin tomar, y se nota: el footer de `docs/index.html` dice "mujeres +40" mientras el resto del sitio y `contexto.md` dicen +30. Esa contradicción no es un typo, es la decisión asomándose.
+Era la decisión que bloqueaba a las demás, porque define el precio, el canal y todo el mensaje de la web. **Jimena la resolvió el 12/08/2026: especialización hormonal.** El público es mujeres de +35 que buscan recomposición corporal (pérdida de grasa + ganancia de masa muscular) teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia.
 
-Las dos opciones son legítimas. La general capta más volumen y compite por precio. La especializada capta menos gente, la convierte mejor y sostiene otro valor. No se pueden sostener las dos a la vez sin diluir las dos.
+Las dos opciones eran legítimas. La general captaba más volumen y competía por precio. La especializada capta menos gente, la convierte mejor y sostiene otro valor — que es la apuesta que se hizo, alineada con el diferencial descrito arriba. La contradicción que delataba la indecisión (footer en +40, resto del sitio en +30) ya está resuelta: todo el sitio dice +35.
 
 ## Qué falta
 
