@@ -28,9 +28,11 @@ Eso sí es defendible, por tres razones:
 
 **¿A quién le hablamos: mujeres +30 en general, o especialización hormonal?**
 
-Era la decisión que bloqueaba a las demás, porque define el precio, el canal y todo el mensaje de la web. **Jimena la resolvió el 12/08/2026: especialización hormonal.** El público es mujeres de 30 a 60 años que buscan recomposición corporal (pérdida de grasa + ganancia de masa muscular) teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia.
+Era la decisión que bloqueaba a las demás, porque define el precio, el canal y todo el mensaje de la web. **Jimena la resolvió el 12/08/2026: especialización hormonal.** El público es mujeres +35 que buscan recomposición corporal (pérdida de grasa + ganancia de masa muscular) teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia.
 
-Las dos opciones eran legítimas. La general captaba más volumen y competía por precio. La especializada capta menos gente, la convierte mejor y sostiene otro valor — que es la apuesta que se hizo, alineada con el diferencial descrito arriba. La contradicción que delataba la indecisión (footer en +40, resto del sitio en +30) ya está resuelta: todo el sitio dice "de 30 a 60 años".
+Las dos opciones eran legítimas. La general captaba más volumen y competía por precio. La especializada capta menos gente, la convierte mejor y sostiene otro valor — que es la apuesta que se hizo, alineada con el diferencial descrito arriba. La contradicción que delataba la indecisión (footer en +40, resto del sitio en +30) ya está resuelta: todo el sitio dice +35.
+
+**Nota importante:** Jimena recién empieza — no tiene todavía alumnas ni resultados propios documentados. La web no debe afirmar experiencia previa ni resultados conseguidos hasta que existan de verdad; el mensaje se apoya en el método (especialización, evaluación real, cambios hormonales considerados), no en un historial que todavía no existe.
 
 ## Qué falta
 
