@@ -187,6 +187,22 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - [ ] Capturar emails con una guía descargable de perimenopausia.
 - [ ] Mostrar las planillas de `herramientas/` como argumento de venta en la web.
 
+**Ideas del benchmark world class** (14/08/2026, ver `product-discovery/03-benchmark-world-class/`, ninguna decidida todavía). Se relevaron 18 sitios nuevos de primer nivel, dentro y fuera del entrenamiento, para responder qué techo existe. Ordenadas por relación entre impacto y esfuerzo:
+
+- [ ] **Sumar un número con plazo en la parte alta de la página.** Ninguna de las mejores páginas dice "resultados reales": todas dicen una cifra, una unidad y una ventana de tiempo (Alloy: 95% de alivio en 2 semanas; Eight Sleep: hasta 44%; Wild.AI: 6× de riesgo de lesión). Jimena no tiene ninguno y todavía no tiene datos propios de alumnas, así que el camino honesto es el dato fisiológico publicado y citado como tal, no uno inventado. Empezar por la sarcopenia que se acelera 1-2% al año después de los 50.
+- [ ] **Reemplazar el botón de WhatsApp por un quiz de tres preguntas.** Es la conversión de fricción más baja del relevamiento (Sohee, ZOE, Stronger by the Day). Baja el costo de la clienta, que hoy tiene que redactar el primer mensaje sin saber qué decir, y de paso segmenta. Encaja con el diferencial ya declarado en `contexto.md`: evaluar antes de armar el plan. Se cruza con el pendiente del 02 de la sesión de valoración — hay que elegir uno de los dos como primer paso, no poner los dos.
+- [ ] **Escribir la ventaja de ser una sola persona.** En los 18 sitios, quien atiende nunca es quien está en la portada. Jimena arma el plan y responde el mensaje. Es verificable, no lo puede copiar ninguno de los 18, y hoy no está dicho en ninguna parte del sitio.
+- [ ] **Definir la frase de posicionamiento propia.** Referencia del relevamiento: "La madurez no es tu declive. Es tu momento más poderoso" (Noelia Rodríguez Fit, misma clienta y también negocio de una sola persona). Jimena tiene el contenido y no tiene la frase.
+- [ ] **Cambiar la guía descargable por un plan gratuito de 5 días** (ver el pendiente del 02, arriba). Ninguna de las mejores páginas regala "una guía": regalan algo con nombre, formato y plazo (Girls Gone Strong: cursos de 5 días; Stronger by the Day: 3 entrenamientos gratis sin descarga ni tarjeta). Mismo esfuerzo de producción, más valor percibido.
+- [ ] **Nombrar al adversario.** ZOE se define contra "los mitos gritados por influencers no cualificados". Jimena compite contra el consejo de Instagram y contra el entrenador que da la misma rutina a todo el mundo, y decirlo ordena el resto del argumento.
+- [ ] **Evaluar la certificación de coaching en menopausia de Girls Gone Strong** como credencial concreta y verificable para el posicionamiento hormonal ya decidido.
+
+**Confirmaciones que salieron del mismo benchmark** (no requieren acción, sirven para no revisar decisiones ya tomadas):
+
+- **El precio publicado estaba bien.** El discovery 02 había concluido que en la categoría nadie publica precios. Con 18 sitios más, ocho sí lo hacen, y el patrón real es que lo publica quien vende un producto cerrado y no lo publica quien vende horas uno a uno. El paso a un solo programa de USD 35/mes del 13/08/2026 puso a la web del lado correcto. Lo que queda abierto no es si publicar el precio, es cuál, y eso depende del pendiente de medir horas reales por alumna.
+- **La cursiva del claim del hero tiene respaldo.** Oura usa el mismo recurso en sus titulares ("Get the best sleep of *your life*"): una sola palabra en cursiva marcando dónde está el sentido de la frase. Es la misma solución a la que llegó este proyecto, tomada por un equipo con otro presupuesto.
+- **El método con nombre dejó de ser una idea.** El 02 lo proponía con dos ejemplos. Ahora son cinco de cinco entre quienes venden bien, y cero entre quienes no. Sigue como pendiente arriba, pero ya no está en discusión si conviene.
+
 **Producto y operación:**
 
 - [ ] Definir si se contrata dominio/hosting propio o se usa GitHub Pages.

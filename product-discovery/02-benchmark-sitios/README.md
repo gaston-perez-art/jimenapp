@@ -57,6 +57,8 @@ La clienta llega a la oferta ya convencida de que la entienden. Es la diferencia
 
 Ninguno de los cinco publica precios. La consulta previa es la norma de la categoría, así que no publicarlos no es un error de la web de Jimena.
 
+> **Corregido el 14/08/2026.** El [discovery 03](../03-benchmark-world-class/) relevó 18 sitios más y ocho sí publican precio. El patrón real no es que en salud no se publique: es que lo publica quien vende un producto cerrado y no lo publica quien vende horas uno a uno. Ver [el punto 2 de los patrones](../03-benchmark-world-class/README.md#2-el-precio-a-la-vista-es-más-común-de-lo-que-concluyó-el-discovery-02).
+
 ## Ideas concretas para llevarse
 
 Ordenadas por relación entre impacto y esfuerzo.
