@@ -180,10 +180,18 @@
   .hero h1 .rot-w em{font-style:italic; color:var(--wine-600);}
 
   /* Rodillo vertical: la palabra sube y se va, la siguiente entra desde abajo.
-     Empuja hacia arriba igual que el grafico de progresion que esta al lado. */
+     Empuja hacia arriba igual que el grafico de progresion que esta al lado.
+     La opacidad y el desplazamiento van desfasados a proposito: si se mueven
+     juntos (como antes), a mitad de camino la palabra queda medio transparente
+     y medio desplazada, y ese "fantasma" se filtra por el borde del clip-path
+     y pisa el texto de arriba. Por eso el tramo largo del recorrido (hasta
+     28%/-28%) pasa siempre en opacity 0, y el fade solo cubre el tramo corto
+     cerca del centro, donde la palabra todavia esta casi en su lugar. */
   @keyframes rotWord{
     0%              {opacity:0; transform:translateY(105%);}
+    4%              {opacity:0; transform:translateY(28%);}
     6%, 31%         {opacity:1; transform:translateY(0);}
+    33%             {opacity:0; transform:translateY(-28%);}
     37%, 100%       {opacity:0; transform:translateY(-105%);}
   }
   .rot-w{animation:rotWord 8.4s cubic-bezier(.33,1,.68,1) infinite;}
