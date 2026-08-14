@@ -249,47 +249,35 @@
     color:var(--ink-soft);
   }
 
-  /* signature: progression bars */
-  .signature{
-    background:var(--card);
+  /* signature: video de alumnas entrenando (reemplaza el grafico de barras) */
+  .hero-video{
     border:1px solid var(--line);
     border-radius:var(--r-lg);
     box-shadow:var(--shadow-sm);
-    padding:30px 28px 24px;
+    overflow:hidden;
     position:relative;
+    aspect-ratio:3/4;
+    max-width:340px;
+    margin:0 auto;
+    background:linear-gradient(160deg, var(--wine-100), var(--bronze-soft));
   }
-  .signature::before{
-    content:"PROGRESIÓN REAL DE UNA ALUMNA · SENTADILLA";
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:.1em;
-    color:var(--ink-soft);
+  .hero-video video{
+    width:100%; height:100%;
+    object-fit:cover;
     display:block;
-    margin-bottom:22px;
   }
-  .bars{
-    display:flex; align-items:flex-end; gap:14px; height:190px;
+  /* placeholder visible hasta que el <video> cargue un archivo real (ver script) */
+  .video-ph{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+    color:var(--wine-600);
+    text-align:center;
+    padding:0 24px;
   }
-  .bar-col{
-    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;
-  }
-  .bar{
-    width:100%;
-    background:linear-gradient(180deg, var(--wine-500), var(--wine-600));
-    border-radius:6px 6px 0 0;
-  }
-  .bar-col:last-child .bar{background:linear-gradient(180deg, var(--bronze), #8E6A34);}
-  .bar-kg{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    color:var(--wine-900);
-    margin-bottom:8px;
-  }
-  .bar-wk{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    color:var(--ink-soft);
-    margin-top:8px;
+  .video-ph svg{width:48px; height:48px; opacity:.5;}
+  .video-ph span{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; opacity:.75;
   }
 
   /* ---------- Section shared ---------- */
@@ -471,12 +459,6 @@
   .has-js .reveal{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease;}
   .has-js .reveal.in-view{opacity:1; transform:none;}
 
-  .bar{height:var(--h);}
-  .has-js .bar{height:0; transition:height 1.1s cubic-bezier(.16,.84,.44,1);}
-  .bar-kg{opacity:1;}
-  .has-js .bar-kg{opacity:0; transition:opacity .5s ease .9s;}
-  .has-js .signature.in-view .bar-kg{opacity:1;}
-
   /* ---------- stagger: los hijos entran uno detras de otro, no el bloque entero ----------
      El contenedor deja de desvanecerse y la entrada la hacen sus hijos, escalonada.
      Se cuelga del mismo .in-view que ya pone el observador, asi que la red de
@@ -505,14 +487,14 @@
   .has-js .hero p.lead    {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .30s both;}
   .has-js .hero .hero-bullets{animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .36s both;}
   .has-js .hero .herobtns {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .42s both;}
-  .has-js .hero .signature{animation:heroIn .90s cubic-bezier(.22,.61,.36,1) .34s both;}
+  .has-js .hero .hero-video{animation:heroIn .90s cubic-bezier(.22,.61,.36,1) .34s both;}
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
-    .has-js .reveal, .has-js .bar, .has-js .bar-kg,
-    .has-js .reveal.stagger > *{transition:none !important; opacity:1 !important; transform:none !important; height:var(--h) !important;}
+    .has-js .reveal,
+    .has-js .reveal.stagger > *{transition:none !important; opacity:1 !important; transform:none !important;}
     .has-js .hero .eyebrow, .has-js .hero h1, .has-js .hero p.lead, .has-js .hero .hero-bullets,
-    .has-js .hero .herobtns, .has-js .hero .signature{animation:none !important;}
+    .has-js .hero .herobtns, .has-js .hero .hero-video{animation:none !important;}
   }
 
   /* ---------- Responsive ---------- */
@@ -625,8 +607,7 @@
     .herobtns{gap:14px;}
     .microcopy{font-size:12px;}
 
-    .signature{padding:22px 18px 18px; border-radius:var(--r-md);}
-    .bars{gap:8px; height:150px;}
+    .hero-video{border-radius:var(--r-md);}
     .card{padding:26px 22px; border-radius:var(--r-md);}
     .cards{gap:16px;}
     .contact-box{padding:30px 22px; border-radius:var(--r-md);}
@@ -655,12 +636,11 @@
     .section-head h2{font-size:26px;}
     .paso{padding-left:14px;}
     .paso p{font-size:15px;}
-    .signature{padding:18px 14px 14px;}
+    .hero-video{aspect-ratio:1/1;}
     .foto-ph{aspect-ratio:16/11;}
     .esp-lista{grid-template-columns:1fr;}
     .especialidades{padding:18px;}
     .sobre-texto h2{font-size:24px;}
-    .bars{gap:6px; height:130px;}
 
     .navlinks{
       position:fixed; top:66px; left:0; right:0;
@@ -727,14 +707,21 @@
         <span class="microcopy">Respondo personalmente cada consulta</span>
       </div>
     </div>
-    <div class="signature" id="signature">
-      <div class="bars" id="bars">
-        <div class="bar-col"><span class="bar-kg">20 kg</span><div class="bar" style="--h:18%"></div><span class="bar-wk">S1</span></div>
-        <div class="bar-col"><span class="bar-kg">28 kg</span><div class="bar" style="--h:29%"></div><span class="bar-wk">S3</span></div>
-        <div class="bar-col"><span class="bar-kg">36 kg</span><div class="bar" style="--h:40%"></div><span class="bar-wk">S5</span></div>
-        <div class="bar-col"><span class="bar-kg">45 kg</span><div class="bar" style="--h:54%"></div><span class="bar-wk">S7</span></div>
-        <div class="bar-col"><span class="bar-kg">52 kg</span><div class="bar" style="--h:65%"></div><span class="bar-wk">S9</span></div>
-        <div class="bar-col"><span class="bar-kg">60 kg</span><div class="bar" style="--h:100%"></div><span class="bar-wk">S12</span></div>
+    <div class="hero-video" id="heroVideo" aria-hidden="true">
+      <!-- Compilacion de tres alumnas reales entrenando (autorizado por ellas), 13/08/2026.
+           Editado con ffmpeg a partir de los 3 clips que paso Jimena: press de banca,
+           press con mancuernas y elevaciones de rodilla con disco. Este ultimo se grabo
+           con la camara en mano y se sacude bastante por el salto, asi que se uso solo
+           una ventana estable de ~1.5s al inicio del clip (antes de que arranque el salto),
+           que es donde la cara entra bien en el recorte 3:4. Recorte vertical 3:4 (720x960),
+           sin audio, tramos cortos con una transicion breve entre cada uno (~9s de loop). -->
+      <video id="heroVideoEl" muted loop playsinline preload="metadata"
+             poster="img/alumnas-entrenando-poster.jpg">
+        <source src="video/alumnas-entrenando.mp4" type="video/mp4">
+      </video>
+      <div class="video-ph" id="videoPh">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5z" fill="currentColor" stroke="none"/></svg>
+        <span>Video próximamente</span>
       </div>
     </div>
   </section>
@@ -1005,21 +992,11 @@
     navtoggle.setAttribute('aria-expanded', 'false');
   }));
 
-  // scroll reveal + hero bars — safety net scheduled FIRST so nothing can stay hidden
+  // scroll reveal — safety net scheduled FIRST so nothing can stay hidden
   // even if IntersectionObserver is unsupported or throws in an older browser.
   const revealEls = document.querySelectorAll('.reveal');
-  const sig = document.getElementById('signature');
-  const bars = document.querySelectorAll('.bar');
-  let barsPlayed = false;
   function revealAll(){ revealEls.forEach(el => el.classList.add('in-view')); }
-  function playBars(){
-    if (barsPlayed) return;
-    barsPlayed = true;
-    sig.classList.add('in-view');
-    bars.forEach(b => { b.style.height = b.style.getPropertyValue('--h'); });
-  }
   setTimeout(revealAll, 2000);
-  setTimeout(playBars, 2000);
 
   try {
     if ('IntersectionObserver' in window) {
@@ -1027,13 +1004,23 @@
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
       }, { threshold: 0.15 });
       revealEls.forEach(el => io.observe(el));
-
-      const barIo = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if (e.isIntersecting) { playBars(); barIo.disconnect(); } });
-      }, { threshold: 0.4 });
-      barIo.observe(sig);
     }
-  } catch (err) { /* safety-net timeouts above already cover this */ }
+  } catch (err) { /* safety-net timeout above already covers this */ }
+
+  // hero video: el placeholder "Video próximamente" queda visible por defecto (no
+  // depende de JS) y solo se oculta si el <video> logra cargar un archivo real.
+  // El autoplay respeta prefers-reduced-motion: si el usuario lo pidio, el video
+  // se deja pausado en el poster en vez de reproducirse en loop.
+  const heroVideoEl = document.getElementById('heroVideoEl');
+  const videoPh = document.getElementById('videoPh');
+  if (heroVideoEl) {
+    heroVideoEl.addEventListener('loadeddata', () => {
+      videoPh.style.display = 'none';
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        heroVideoEl.play().catch(() => {});
+      }
+    });
+  }
 
   // Proceso con panel fijo: sincroniza que diapositiva se muestra segun el paso
   // que este en pantalla. El sticky es CSS puro; esto solo cambia una clase.
