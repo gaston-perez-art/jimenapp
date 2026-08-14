@@ -61,6 +61,10 @@ Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de re
 
 La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no bordes más gruesos ni colores más claros. La sombra grande aparece solo en hover de tarjeta.
 
+**Botón "Quiero mi cambio" del hero (cambiado 14/08/2026, pedido de Jimena):** antes scrolleaba a `#contacto` (funcionaba, pero era un paso de más). Ahora abre WhatsApp directo, igual que el botón de la sección de contacto — mismo número de ejemplo, mismo `target="_blank"`.
+
+**Bug arreglado (14/08/2026): ícono de WhatsApp roto en el botón de "Escribime y arrancamos".** El `path` del SVG estaba cortado a la mitad — le faltaba el tramo que dibuja el detalle del teléfono adentro de la burbuja, así que se veía como una burbuja vacía. El botón del hero tenía el `path` completo; se copió de ahí.
+
 **Elemento distintivo (signature), actualizado 13/08/2026 por pedido de Jimena:** antes era un gráfico de barras ascendente mostrando una progresión de carga en sentadilla semana a semana. Se descartó porque la etiqueta ("PROGRESIÓN REAL DE UNA ALUMNA") afirmaba un resultado real que todavía no existía — Jimena está pre-lanzamiento, sin alumnas en ese momento (ver más abajo, ahora sí las tiene y dio autorización). Se reemplazó por un `<video>` (clase `.hero-video`, formato vertical 3:4, 720x960, `max-width:340px` — pedido explícito de Jimena de que la caja sea chica, no ocupa toda la columna) con tres alumnas reales entrenando, autorizadas por ellas a aparecer en el sitio. Archivo final: `docs/video/alumnas-entrenando.mp4` + poster `docs/img/alumnas-entrenando-poster.jpg` — ver el pendiente resuelto más abajo para el detalle de edición. Hasta que un video cargue, se ve un placeholder "Video próximamente" (`#videoPh`) que se oculta solo por script en cuanto el `<video>` dispara `loadeddata`. Autoplay respeta `prefers-reduced-motion` (si el usuario lo pidió, el video queda pausado en el poster).
 
 **Principio técnico importante:** todo el contenido de la página es visible por defecto en el HTML/CSS. Las animaciones (aparición al hacer scroll, barras que crecen) son una mejora progresiva que se agrega solo si el JavaScript corre correctamente, con un timeout de seguridad — así un fallo de JavaScript nunca deja la página en blanco.
@@ -76,11 +80,17 @@ La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no
 
 **Claim del hero, detalle de diseño.** "Más" queda recto y fijo; la palabra que cambia va en **cursiva**, para separar tipográficamente lo constante de lo variable. La salida es un **rodillo vertical**: la palabra sube y se va, la siguiente entra desde abajo. Se evaluaron y descartaron el borrado letra por letra (con `steps()` corta los glifos al medio porque Archivo es proporcional, y lee "terminal" en vez de "entrenadora") y el barrido horizontal. Se eligió el rodillo porque empuja hacia arriba igual que el gráfico de progresión que está al lado.
 
+**Bug conocido, sin arreglar (encontrado 14/08/2026, a pedido de Jimena de "la animación quedó media rara").** El `.rot` que contiene la palabra rotando tiene `clip-path:inset(-.08em -.18em)` — solo ~3-4px de margen — pero `.rot-w` se desplaza el 105% de su propia altura (~45px) al entrar y salir. El clip no alcanza a contenerla: durante la transición la palabra saliente se filtra por arriba y pisa el texto de encima. Reproducido y confirmado en el navegador. Jimena pidió mantener la animación pero resolver esto y mejorar la estética — ver pendientes.
+
+**Eyebrows sacados del sitio (14/08/2026, pedido de Jimena).** Las etiquetas superiores ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") no aportaban valor y se sacaron de las cinco secciones que las tenían. Se limpió también el CSS que quedó sin uso (`.eyebrow`, su animación de entrada en el hero, el override de mobile). Los `<h2>` de cada sección quedan como único encabezado.
+
 **Mobile.** Hay un bloque dedicado en el breakpoint de 720px, con tres reglas que conviene sostener al agregar secciones nuevas:
 
 • Nada tocable por debajo de 44px de alto. Los links del nav y del footer llevan padding propio para llegar ahí.
 • Los botones van a lo ancho completo y centrados. Con el ancho natural, "Escribime por WhatsApp" se partía en dos líneas.
 • Los radios bajan de `--r-lg` a `--r-md` en pantallas chicas: en 390px un radio de 20px se come demasiado la esquina.
+
+**Bug arreglado (14/08/2026): el menú hamburguesa no aparecía entre 401px y 720px de ancho.** Las reglas del hamburguesa (`.navtoggle{display:block}` y el dropdown de `.navlinks`) estaban en el breakpoint de `max-width:400px` en vez del de `max-width:720px`, que es el que usa el resto del sitio para mobile. En ese rango (celulares grandes, iPhone Pro Max incluido) no había hamburguesa pero tampoco entraba el nav de escritorio: el logo y los links se pisaban. Se movieron esas reglas al breakpoint de 720px.
 
 ## Estructura de la página web
 
@@ -123,6 +133,22 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - Hallazgo central del business case: el techo del negocio lo fija el precio, no la capacidad. El plan más caro es el que peor rinde por hora de trabajo.
 
 ## Pendientes
+
+**Mejoras pedidas por Jimena (14/08/2026), en curso — ver `backlog.md` para la vista por área:**
+
+- [x] Sacar los eyebrows que no aportaban valor (ver Decisiones de diseño).
+- [x] Bug: botón "Quiero mi cambio" ahora abre WhatsApp directo (ver Decisiones de diseño).
+- [x] Bug: ícono de WhatsApp roto en el botón de contacto (ver Decisiones de diseño).
+- [x] Bug encontrado sin pedirlo: menú hamburguesa no aparecía entre 401-720px (ver Decisiones de diseño, sección Mobile).
+- [ ] Animación del claim del hero: mantenerla pero arreglar el desborde del `clip-path` y mejorar la estética (diagnosticado, ver Decisiones de diseño).
+- [ ] Hacer más armónica la sección "Sobre mí" — ajustar layout o imagen.
+- [ ] Nueva sección antes de "En qué me especializo" con logos animados (marquee) de empresas de prestigio donde trabajó Jimena. **Bloqueada: falta que Jimena pase los logos y la autorización de uso.**
+- [ ] Reescribir "En qué me especializo" — hoy es una lista de tags que no cuenta nada.
+- [ ] Testimonios: sumar fotos de Silvia y Verónica y hacerlos menos genéricos. Benchmark pasado por Jimena: Coderhouse, reseñas de Airbnb, sariadnapascual.com. **Bloqueada: falta la autorización y el archivo de las fotos.**
+- [ ] Sumar más animación en general (que no parezca landing "de juguete") y jugar más con contraste de color — Jimena sugiere empezar por el botón de WhatsApp.
+- [ ] Mejorar todos los gráficos del sitio — falta definir con Jimena cuáles y qué espera de cada uno.
+- [ ] Mejorar la sección de contacto "Escribime y arrancamos".
+- [ ] Pasada completa de mobile, foco especial pedido por Jimena — ya resuelto el bug del hamburguesa, falta revisar el resto (animación, Sobre mí, testimonios) en viewport chico.
 
 **Mejoras pedidas por Jimena (12/08/2026), en curso:**
 

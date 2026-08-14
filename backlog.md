@@ -4,7 +4,7 @@
 >
 > Criterio de agrupación: "ajustar la web" es una tarea de producto (cambiar algo que ya existe en `docs/index.html`). Growth y Negocio son decisiones que después *se reflejan* en la web, pero no son en sí mismas un cambio de código — son la razón por la que el código va a cambiar.
 >
-> Última actualización: 13/08/2026.
+> Última actualización: 14/08/2026.
 
 ## Producto — Web
 
@@ -12,7 +12,20 @@ Ajustes directos sobre `docs/index.html`, sin decisión de negocio pendiente det
 
 - [ ] 🔴 Reemplazar el número de WhatsApp de ejemplo por el real
 - [ ] 🔴 Agregar el enlace real de Instagram en el footer
+- [x] Sacar los eyebrows ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") que no aportaban valor — pedido de Jimena (14/08/2026). Se limpió también el CSS asociado (`.eyebrow`, animación de entrada del hero, override mobile) que quedó sin uso.
+- [x] **Bug: botón "Quiero mi cambio" del hero.** Funcionaba (scrolleaba a la sección de contacto), pero eso era un paso de más para convertir — ahora abre WhatsApp directo, igual que el botón de la sección de contacto (14/08/2026, decisión de Gastón).
+- [x] **Bug: ícono de WhatsApp roto en el botón de "Escribime y arrancamos".** El `path` del SVG estaba cortado a la mitad, faltaba el detalle del teléfono adentro de la burbuja. Se corrigió copiando el `path` completo que ya se usaba en el botón del hero (14/08/2026).
+- [x] **Bug encontrado sin estar pedido: el menú hamburguesa de mobile no aparecía entre 401px y 720px de ancho** (celulares grandes, iPhone Pro Max incluido) — el nav de escritorio se pisaba con el logo en ese rango. El breakpoint del hamburguesa estaba mal alineado (max-width:400px) contra el resto de las reglas de mobile (max-width:720px). Corregido moviendo las reglas al breakpoint de 720px (14/08/2026).
+- [ ] 🔴 **Animación del claim del hero rota, diagnosticada (14/08/2026), falta arreglar.** La palabra que rota (`.rot-w`) se desplaza el 105% de su propia altura al entrar/salir, pero el `clip-path` que la debería contener (`.rot { clip-path: inset(-.08em -.18em) }`) sólo da un margen de ~3-4px — insuficiente para una palabra de ~45px de alto. Resultado: durante la transición, la palabra saliente se filtra por arriba y pisa el texto de encima. Reproducido y confirmado en el navegador. Pedido de Jimena: mantener la animación, pero resolver el desborde y mejorar la estética.
 - [ ] 🟡 Decidir dónde va la foto real de Jimena en el hero (el espacio "signature" ya lo ocupa el video de alumnas)
+- [ ] 🟡 Hacer más armónica la sección "Sobre mí" — ajustar layout o imagen (pedido de Jimena, 14/08/2026, ver captura)
+- [ ] 🟢 Nueva sección antes de "En qué me especializo" con logos animados (marquee) de las empresas de prestigio donde trabajó Jimena — **necesita que Jimena pase los logos/autorización**
+- [ ] 🟡 Reescribir "En qué me especializo" — hoy es una lista de tags que no cuenta nada (pedido de Jimena, 14/08/2026)
+- [ ] 🟡 Testimonios: sumar fotos de las alumnas y hacerlos menos genéricos — benchmark pasado por Jimena: Coderhouse, reseñas de Airbnb, sariadnapascual.com. **Necesita las fotos de Silvia y Verónica (autorización ya la dieron para el texto, falta para foto).**
+- [ ] 🟡 Sumar más animación en general (que no parezca landing "de juguete") y jugar más con contraste de color — Jimena sugiere empezar por el botón de WhatsApp
+- [ ] 🟡 Mejorar todos los gráficos del sitio (pedido de Jimena, 14/08/2026 — sin especificar cuáles; a definir con ella qué gráficos hay hoy y qué se espera)
+- [ ] 🟡 Mejorar la sección de contacto "Escribime y arrancamos"
+- [ ] 🔴 Pasada completa de mobile — Jimena lo pide como foco especial. Ya se corrigió el bug del hamburguesa; falta revisar el resto (animación, layout de Sobre mí, testimonios) específicamente en viewport chico
 - [ ] 🟢 Sección de descalificación: "esto no es para vos si..." (idea del benchmark)
 - [ ] 🟢 Reordenar la web para arrancar por el problema de la clienta, no por la oferta (idea del benchmark)
 - [ ] 🟢 Reemplazar el CTA "Escribime por WhatsApp" por una sesión de valoración gratuita por videollamada (idea del benchmark)

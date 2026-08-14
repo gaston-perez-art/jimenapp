@@ -52,23 +52,6 @@
   }
   a{color:inherit;}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:var(--wine-600);
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:18px;
-  }
-  .eyebrow::before{
-    content:"";
-    width:26px; height:1px;
-    background:var(--bronze);
-    display:inline-block;
-  }
   img,svg{display:block; max-width:100%;}
   button, .btn{
     font-family:'Archivo', sans-serif;
@@ -482,7 +465,6 @@
     from{opacity:0; transform:translateY(22px);}
     to  {opacity:1; transform:none;}
   }
-  .has-js .hero .eyebrow  {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .05s both;}
   .has-js .hero h1        {animation:heroIn .85s cubic-bezier(.22,.61,.36,1) .15s both;}
   .has-js .hero p.lead    {animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .30s both;}
   .has-js .hero .hero-bullets{animation:heroIn .70s cubic-bezier(.22,.61,.36,1) .36s both;}
@@ -493,7 +475,7 @@
     html{scroll-behavior:auto;}
     .has-js .reveal,
     .has-js .reveal.stagger > *{transition:none !important; opacity:1 !important; transform:none !important;}
-    .has-js .hero .eyebrow, .has-js .hero h1, .has-js .hero p.lead, .has-js .hero .hero-bullets,
+    .has-js .hero h1, .has-js .hero p.lead, .has-js .hero .hero-bullets,
     .has-js .hero .herobtns, .has-js .hero .hero-video{animation:none !important;}
   }
 
@@ -592,15 +574,28 @@
     .hero-bullets{font-size:14.5px; margin:0 0 28px;}
     .hero-bullets li{font-size:14.5px;}
 
-    /* la linea del eyebrow no debe partir el texto al envolver */
-    .eyebrow{align-items:flex-start; gap:8px;}
-    .eyebrow::before{margin-top:.62em; flex:0 0 auto; width:18px;}
 
     /* areas tactiles: minimo 44px de alto en todo lo que se toca */
     .navlinks a{display:block; padding:11px 0; font-size:16px;}
     .navcta{padding:14px 22px; text-align:center;}
     .logo{padding:8px 0;}
     .navtoggle{padding:12px; margin-right:-12px;}
+
+    /* Menu hamburguesa: antes arrancaba recien en max-width:400px, dejando un
+       rango de 401 a 720px (celulares grandes, iPhone Pro Max incluido) sin
+       hamburguesa pero con el nav de escritorio, que se pisaba con el logo. */
+    .navlinks{
+      position:fixed; top:66px; left:0; right:0;
+      background:var(--paper);
+      flex-direction:column; align-items:flex-start;
+      padding:22px 28px 30px;
+      border-bottom:1px solid var(--line);
+      gap:20px;
+      transform:translateY(-130%);
+      transition:transform .3s ease;
+    }
+    .navlinks.open{transform:translateY(0);}
+    .navtoggle{display:block;}
 
     /* botones a lo ancho: entran comodos y no parten el texto en dos lineas */
     .btn-primary{width:100%; justify-content:center; padding:17px 22px; font-size:16px;}
@@ -641,19 +636,6 @@
     .esp-lista{grid-template-columns:1fr;}
     .especialidades{padding:18px;}
     .sobre-texto h2{font-size:24px;}
-
-    .navlinks{
-      position:fixed; top:66px; left:0; right:0;
-      background:var(--paper);
-      flex-direction:column; align-items:flex-start;
-      padding:22px 28px 30px;
-      border-bottom:1px solid var(--line);
-      gap:20px;
-      transform:translateY(-130%);
-      transition:transform .3s ease;
-    }
-    .navlinks.open{transform:translateY(0);}
-    .navtoggle{display:block;}
     .steps{grid-template-columns:1fr;}
   }
 </style>
@@ -680,7 +662,6 @@
   <!-- HERO -->
   <section class="hero wrap">
     <div>
-      <div class="eyebrow">Mujeres +35</div>
       <h1 class="hero-claim">
         <span class="sr-only">Más fuerte. Más segura. Más vos.</span>
         <span class="claim" aria-hidden="true">
@@ -700,7 +681,7 @@
         <li>Adaptado a tus hormonas, tu edad y tu tiempo real</li>
       </ul>
       <div class="herobtns">
-        <a class="btn-primary" href="#contacto">
+        <a class="btn-primary" href="https://wa.me/5490000000000" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7s-.4-.1-.5.1-.5.7-.6.8-.2.1-.4 0a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.3-.4.2-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c1.5.6 1.5.4 1.8.4a1.5 1.5 0 0 0 1-.7 1.3 1.3 0 0 0 .1-.7c-.1-.1-.2-.2-.4-.3z"/></svg>
           Quiero mi cambio
         </a>
@@ -739,7 +720,6 @@
       </div>
 
       <div class="sobre-texto">
-        <div class="eyebrow">Sobre mí</div>
         <h2>Profesora Nacional de Educación Física, especializada en fuerza femenina</h2>
         <p>El entrenamiento se convirtió en mucho más que una profesión para mí: es mi forma de sentirme fuerte, segura y conectada conmigo misma. Soy mamá de dos hijos y nunca dejé de entrenar — en el embarazo y el posparto aprendí, desde mi propia experiencia, que no se trata de entrenar perfecto, sino de adaptar el movimiento a cada etapa de la vida.</p>
         <p>Hoy oriento mi trabajo a un objetivo puntual: acompañar a mujeres +35 a lograr recomposición corporal teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — sin vivir a dieta ni tener que dejar de disfrutar su vida. Nada de rutinas genéricas: creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida.</p>
@@ -768,7 +748,6 @@
   <section id="testimonios">
     <div class="wrap">
       <div class="section-head reveal">
-        <div class="eyebrow">Testimonios</div>
         <h2>Mujeres reales, cambios reales</h2>
         <p>Lo que cuentan las alumnas que ya entrenan conmigo.</p>
       </div>
@@ -797,7 +776,6 @@
   <section id="proceso">
     <div class="wrap">
       <div class="section-head reveal">
-        <div class="eyebrow">Cómo trabajo</div>
         <h2>El proceso, paso a paso</h2>
       </div>
 
@@ -887,7 +865,6 @@
   <section id="servicios">
     <div class="wrap">
       <div class="section-head reveal" style="text-align:center; margin-left:auto; margin-right:auto;">
-        <div class="eyebrow" style="justify-content:center;">Programa</div>
         <h2>Un solo programa, hecho a tu medida</h2>
         <p>Parte de una evaluación inicial. Nada de plantillas: se arma sobre tu rutina real.</p>
       </div>
@@ -957,7 +934,7 @@
         <h3 style="font-size:20px;">Escribime y arrancamos</h3>
         <p style="color:var(--ink-soft); margin-top:10px; font-size:15px;">La forma más rápida de empezar es por WhatsApp.</p>
         <a class="btn-primary" href="https://wa.me/5490000000000" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7s-.4-.1-.5.1-.5.7-.6.8-.2.1-.4 0a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.3-.4.2-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c1.5.6 1.5.4 1.8.4a1.5 1.5 0 0 0 1-.7 1.3 1.3 0 0 0 .1-.7c-.1-.1-.2-.2-.4-.3z"/></svg>
           Escribime por WhatsApp
         </a>
         <div><span class="placeholder-flag">Reemplazar por tu número real de WhatsApp</span></div>
