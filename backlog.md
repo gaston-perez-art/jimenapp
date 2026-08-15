@@ -10,8 +10,11 @@
 
 Ajustes directos sobre `docs/index.html`, sin decisión de negocio pendiente detrás.
 
-- [ ] 🔴 Reemplazar el número de WhatsApp de ejemplo por el real
-- [ ] 🔴 Agregar el enlace real de Instagram en el footer
+- [x] 🔴 **Reemplazar el número de WhatsApp de ejemplo por el real** (15/08/2026). Link con mensaje pre-cargado, en los dos botones (hero y contacto). Ver `memory.md`.
+- [x] 🔴 **Agregar el enlace real de Instagram** (15/08/2026): `instagram.com/pf.jimenaibanez`, en el footer y en la nota de contacto.
+- [x] **Ícono de WhatsApp roto (de nuevo, 15/08/2026).** No era el mismo bug del 14/08: esta vez el `path` completo igual se deformaba a 18px porque era un dibujo hecho a mano. Reemplazado por el glifo estándar de la marca.
+- [x] **Microcopy del hero desencajado** (pedido de Gastón, 15/08/2026): estaba al lado del botón y en mono, así que flotaba y leía como etiqueta técnica. Ahora va debajo del CTA, en Archivo, con un check en bronce.
+- [ ] 🟡 Decidir si el CTA del nav ("Escribime") va directo a WhatsApp o sigue scrolleando a `#contacto` — hoy es lo único que agrega un paso, contra el criterio del 14/08
 - [x] Sacar los eyebrows ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") que no aportaban valor — pedido de Jimena (14/08/2026). Se limpió también el CSS asociado (`.eyebrow`, animación de entrada del hero, override mobile) que quedó sin uso.
 - [x] **Bug: botón "Quiero mi cambio" del hero.** Funcionaba (scrolleaba a la sección de contacto), pero eso era un paso de más para convertir — ahora abre WhatsApp directo, igual que el botón de la sección de contacto (14/08/2026, decisión de Gastón).
 - [x] **Bug: ícono de WhatsApp roto en el botón de "Escribime y arrancamos".** El `path` del SVG estaba cortado a la mitad, faltaba el detalle del teléfono adentro de la burbuja. Se corrigió copiando el `path` completo que ya se usaba en el botón del hero (14/08/2026).

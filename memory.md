@@ -89,6 +89,19 @@ La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no
 - Ningún cambio toca layout, `width`, `padding` ni las reglas del breakpoint de 720px — solo `background`, `color` y `box-shadow`, así que el mobile queda intacto sin necesidad de retocarlo.
 - Pendiente para continuar esta misma línea: el resto de las secciones (`#servicios`, `#testimonios`, `#proceso`) siguen en paper/paper-dim; evaluar si conviene sumar un segundo bloque de color fuerte en otra sección para no dejar el contraste concentrado solo en el CTA final.
 
+**Datos de contacto reales puestos en el sitio (15/08/2026) — se cierran los dos bloqueantes de captación.** Los pasó Gastón:
+- WhatsApp: `https://api.whatsapp.com/send?phone=541135863879&text=...`, con mensaje pre-cargado "🏋️‍♀️ Hola, me interesa entrenar con vos...". Va en los dos botones (hero y contacto). Ojo al editar: el `&` va escrito como `&amp;` en el HTML, y el texto va URL-encodeado.
+- Instagram: `https://www.instagram.com/pf.jimenaibanez/`, en el footer y en la nota de la sección de contacto.
+- Se sacó el cartel `placeholder-flag` ("Reemplazar por tu número real") y su CSS, que quedó sin uso.
+- **Queda una decisión abierta:** el CTA del nav ("Escribime") sigue apuntando a `#contacto` en vez de a WhatsApp directo. Es deliberado por ahora (es un link de navegación), pero contradice en parte el criterio del 14/08 de que el CTA no debe agregar un paso. Revisar si conviene unificarlo.
+
+**Ícono de WhatsApp: se reemplaza el `path` dibujado a mano por el glifo estándar (15/08/2026).** El `path` que había era una aproximación hecha a mano que a 18px se deformaba: la burbuja quedaba con trazo finito y el auricular de adentro mal resuelto, y se leía como una burbuja vacía y rota. Se reemplazó por el glifo estándar de la marca (viewBox 0 0 24 24, `fill="currentColor"`, sólido), que es el mismo que usa todo el mundo y aguanta bien el tamaño chico. Está en los dos botones. Nota: hereda `currentColor`, así que funciona igual en el botón con gradiente (blanco) y en el botón invertido de la caja de contacto (wine-900), sin reglas extra.
+
+**Microcopy del hero ("Respondo personalmente cada consulta"), reacomodado (15/08/2026, pedido de Gastón: "quedó medio raro, desencajado").** Eran dos problemas juntos:
+- Estaba **al lado** del botón en un flex horizontal con `gap:20px`. Al no tener relación visual con el CTA ni con nada más, quedaba flotando en el aire a media altura.
+- Estaba en **IBM Plex Mono**. El mono en el proyecto es para datos y labels (`.pn`, `.esp-label`, `.credential`) y ahí refuerza el posicionamiento "basado en evidencia"; pero aplicado a una frase corrida la hacía leer como etiqueta técnica o texto de placeholder, no como la promesa humana que es.
+Solución: `.herobtns` pasa a `flex-direction:column`, el microcopy va **debajo** del botón, en Archivo 13.5px, con un check chico en `--bronze` que lo ancla visualmente al CTA. En mobile se centra (`align-items:center`) para acompañar al botón, que ahí va a ancho completo. Verificado en desktop y en viewport chico.
+
 **"Cómo trabajo" pasa a ser la única sección oscura del sitio (15/08/2026).** Es el cambio de mayor impacto visual de esta sesión y ataca la causa de fondo del "parece de juguete": hasta ahora **todas** las secciones alternaban entre `--paper` (#FAF6F2) y `--paper-dim` (#F1E9E1), dos crema casi idénticos, así que por más animación que se sumara la página se leía plana. Ahora el recorrido tiene ritmo real: crema → crema-dim → **oscuro** → crema-dim → crema con el bloque oscuro del CTA final.
 - `#proceso` va con `linear-gradient(170deg, var(--wine-950), var(--wine-900))`. Token nuevo `--wine-950:#3E1422`.
 - Token nuevo `--bronze-light:#DCBA84`, que es el acento sobre fondo oscuro. `--bronze` (#A9824A) no tiene contraste suficiente contra el wine oscuro; se usa el claro para el paso activo, el indicador de progreso y las etiquetas `.pn`.

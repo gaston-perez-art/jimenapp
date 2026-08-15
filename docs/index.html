@@ -223,7 +223,9 @@
     content:""; flex:0 0 auto; width:6px; height:6px; margin-top:8px;
     border-radius:50%; background:var(--wine-600);
   }
-  .herobtns{display:flex; align-items:center; gap:20px; flex-wrap:wrap;}
+  /* En columna, no al lado del boton: el microcopy compitiendo horizontalmente
+     con el CTA quedaba flotando en el aire, sin relacion visual con el. */
+  .herobtns{display:flex; flex-direction:column; align-items:flex-start; gap:14px;}
   .btn-primary{
     display:inline-flex; align-items:center; gap:10px;
     background:linear-gradient(135deg, var(--wine-600), var(--bronze));
@@ -252,11 +254,16 @@
   .has-js .hero .herobtns .btn-primary{
     animation:ctaPulse 1.5s ease-in-out 1.5s 2;
   }
+  /* Sale IBM Plex Mono: en una frase corrida leia como etiqueta de dato o
+     placeholder tecnico, no como la promesa humana que es. El mono se sigue
+     usando para datos y labels (.pn, .esp-label, .credential), que es su rol. */
   .microcopy{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12.5px;
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Archivo', sans-serif;
+    font-size:13.5px;
     color:var(--ink-soft);
   }
+  .microcopy svg{width:15px; height:15px; flex:0 0 auto; color:var(--bronze);}
 
   /* signature: video de alumnas entrenando (reemplaza el grafico de barras) */
   .hero-video{
@@ -473,15 +480,11 @@
   }
   .contact-note{margin-top:20px; font-size:13.5px; color:var(--ink-soft);}
   .contact-box .contact-note{color:rgba(255,255,255,.72);}
-  .placeholder-flag{
-    display:inline-block; margin-top:14px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11px;
-    color:var(--bronze);
-    background:var(--bronze-soft);
-    padding:5px 10px;
+  .contact-box .contact-note a{
+    color:#fff; text-decoration:underline; text-underline-offset:3px;
+    text-decoration-color:rgba(255,255,255,.45);
   }
-  .contact-box .placeholder-flag{color:#fff; background:rgba(255,255,255,.18);}
+  .contact-box .contact-note a:hover{text-decoration-color:#fff;}
 
   /* ---------- Footer ---------- */
   footer{
@@ -674,8 +677,10 @@
 
     /* botones a lo ancho: entran comodos y no parten el texto en dos lineas */
     .btn-primary{width:100%; justify-content:center; padding:17px 22px; font-size:16px;}
-    .herobtns{gap:14px;}
-    .microcopy{font-size:12px;}
+    /* el boton va a ancho completo, asi que el microcopy se centra debajo
+       en vez de quedar alineado a la izquierda contra un boton centrado */
+    .herobtns{gap:13px; align-items:center;}
+    .microcopy{font-size:13px;}
 
     .hero-video{border-radius:var(--r-md);}
     .card{padding:26px 22px; border-radius:var(--r-md);}
@@ -756,11 +761,15 @@
         <li>Adaptado a tus hormonas, tu edad y tu tiempo real</li>
       </ul>
       <div class="herobtns">
-        <a class="btn-primary" href="https://wa.me/5490000000000" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7s-.4-.1-.5.1-.5.7-.6.8-.2.1-.4 0a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.3-.4.2-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c1.5.6 1.5.4 1.8.4a1.5 1.5 0 0 0 1-.7 1.3 1.3 0 0 0 .1-.7c-.1-.1-.2-.2-.4-.3z"/></svg>
+        <a class="btn-primary" href="https://api.whatsapp.com/send?phone=541135863879&amp;text=%F0%9F%8F%8B%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F%20Hola%2C%20me%20interesa%20entrenar%20con%20vos..." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/></svg>
           Quiero mi cambio
         </a>
-        <span class="microcopy">Respondo personalmente cada consulta</span>
+        <span class="microcopy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Respondo personalmente cada consulta
+        </span>
       </div>
     </div>
     <div class="hero-video" id="heroVideo" aria-hidden="true">
@@ -1008,12 +1017,11 @@
       <div class="contact-box reveal">
         <h3 style="font-size:20px;">Escribime y arrancamos</h3>
         <p style="margin-top:10px; font-size:15px;">La forma más rápida de empezar es por WhatsApp.</p>
-        <a class="btn-primary" href="https://wa.me/5490000000000" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7s-.4-.1-.5.1-.5.7-.6.8-.2.1-.4 0a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.3-.4.2-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c1.5.6 1.5.4 1.8.4a1.5 1.5 0 0 0 1-.7 1.3 1.3 0 0 0 .1-.7c-.1-.1-.2-.2-.4-.3z"/></svg>
+        <a class="btn-primary" href="https://api.whatsapp.com/send?phone=541135863879&amp;text=%F0%9F%8F%8B%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F%20Hola%2C%20me%20interesa%20entrenar%20con%20vos..." target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/></svg>
           Escribime por WhatsApp
         </a>
-        <div><span class="placeholder-flag">Reemplazar por tu número real de WhatsApp</span></div>
-        <p class="contact-note">También podés seguirme en Instagram — enlace a agregar.</p>
+        <p class="contact-note">También podés seguirme en <a href="https://www.instagram.com/pf.jimenaibanez/" target="_blank" rel="noopener">Instagram</a>.</p>
       </div>
     </div>
   </section>
@@ -1026,7 +1034,7 @@
       <div class="fmeta">Recomposición corporal para mujeres +35</div>
     </div>
     <div class="fsocial">
-      <a href="#">Instagram</a>
+      <a href="https://www.instagram.com/pf.jimenaibanez/" target="_blank" rel="noopener">Instagram</a>
     </div>
   </div>
 </footer>
