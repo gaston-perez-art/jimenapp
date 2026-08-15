@@ -17,12 +17,14 @@
     --paper-dim:#F1E9E1;
     --card:#FFFFFF;
     --line:#E3D7C9;
+    --wine-950:#3E1422;       /* fondo de seccion oscura (Como trabajo) */
     --wine-900:#5C1F32;
     --wine-600:#9D3A57;
     --wine-500:#B14A67;
     --wine-100:#F3E4E9;
     --bronze:#A9824A;
     --bronze-soft:#EFE3CD;
+    --bronze-light:#DCBA84;   /* acento legible sobre fondo oscuro */
     --r-sm:10px;              /* botones, chips, etiquetas */
     --r-md:14px;              /* tarjetas y cajas */
     --r-lg:20px;              /* superficies grandes */
@@ -224,16 +226,32 @@
   .herobtns{display:flex; align-items:center; gap:20px; flex-wrap:wrap;}
   .btn-primary{
     display:inline-flex; align-items:center; gap:10px;
-    background:var(--wine-600); color:#fff;
+    background:linear-gradient(135deg, var(--wine-600), var(--bronze));
+    background-size:160% 160%; background-position:0% 50%;
+    color:#fff;
     padding:15px 26px;
     border-radius:var(--radius);
     text-decoration:none;
     font-weight:600; font-size:15px;
-    border:1px solid var(--wine-600);
-    transition:transform .2s ease, background .2s ease;
+    border:1px solid transparent;
+    box-shadow:var(--shadow-sm);
+    transition:transform .2s ease, box-shadow .25s ease, background-position .4s ease;
   }
-  .btn-primary:hover{background:var(--wine-900); border-color:var(--wine-900); transform:translateY(-1px);}
+  .btn-primary:hover{
+    background-position:100% 50%;
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px -8px rgba(157,58,87,.45), 0 4px 14px -6px rgba(169,130,74,.4);
+  }
   .btn-primary svg{width:18px; height:18px;}
+
+  /* pulso de entrada del CTA del hero: llama la atencion una sola vez, no en loop */
+  @keyframes ctaPulse{
+    0%,100%{box-shadow:var(--shadow-sm);}
+    50%{box-shadow:0 0 0 8px rgba(169,130,74,.22), var(--shadow-sm);}
+  }
+  .has-js .hero .herobtns .btn-primary{
+    animation:ctaPulse 1.5s ease-in-out 1.5s 2;
+  }
   .microcopy{
     font-family:'IBM Plex Mono', monospace;
     font-size:12.5px;
@@ -388,8 +406,29 @@
   }
   .testimonial-quote{color:var(--ink-soft); font-style:italic; font-size:15px; flex:1;}
 
-  /* ---------- Como trabajo ---------- */
-  #proceso{border-bottom:1px solid var(--line);}
+  /* ---------- Como trabajo ----------
+     Unica seccion oscura del recorrido. Antes toda la pagina alternaba entre
+     --paper y --paper-dim, dos crema casi identicos: por eso el sitio se leia
+     monocromatico aunque la paleta definida no lo fuera. El corte oscuro a
+     mitad de pagina es lo que le da ritmo al scroll. Las tarjetas blancas
+     (.pin-viz) y sus SVG no se tocan: sobre el fondo oscuro pasan a ser el
+     elemento de mas contraste de la seccion, que es justo lo que se busca. */
+  #proceso{
+    background:linear-gradient(170deg, var(--wine-950), var(--wine-900));
+    color:#fff;
+    border-top:1px solid var(--wine-900);
+    border-bottom:1px solid var(--wine-900);
+  }
+  #proceso h2, #proceso h3{color:#fff;}
+  #proceso .section-head p{color:rgba(255,255,255,.72);}
+  /* inversion de los detalles que asumian fondo claro */
+  #proceso .pin-prog i{background:rgba(255,255,255,.22);}
+  #proceso .pin-prog i.on{background:var(--bronze-light);}
+  #proceso .pin-prog em{color:rgba(255,255,255,.6);}
+  #proceso .paso{border-left-color:rgba(255,255,255,.18);}
+  #proceso .paso.on{border-left-color:var(--bronze-light);}
+  #proceso .paso .pn{color:var(--bronze-light);}
+  #proceso .paso p{color:rgba(255,255,255,.85);}
   .steps{display:grid; grid-template-columns:repeat(4, 1fr); gap:0;}
   .step{
     padding:0 22px 0 0;
@@ -415,13 +454,25 @@
   .contact-box{
     max-width:560px; margin:0 auto;
     border-radius:var(--r-lg);
-    box-shadow:var(--shadow-sm);
-    background:var(--card);
-    border:1px solid var(--line);
+    box-shadow:var(--shadow-md);
+    background:linear-gradient(155deg, var(--wine-900), var(--wine-600) 60%, var(--bronze));
+    border:none;
     padding:48px 40px;
+    color:#fff;
   }
-  .contact-box .btn-primary{margin-top:26px;}
+  .contact-box h3{color:#fff;}
+  .contact-box p{color:rgba(255,255,255,.82);}
+  .contact-box .btn-primary{
+    margin-top:26px;
+    background:#fff; background-size:auto; background-position:center;
+    color:var(--wine-900);
+  }
+  .contact-box .btn-primary:hover{
+    background:#fff;
+    box-shadow:0 10px 24px -8px rgba(0,0,0,.28);
+  }
   .contact-note{margin-top:20px; font-size:13.5px; color:var(--ink-soft);}
+  .contact-box .contact-note{color:rgba(255,255,255,.72);}
   .placeholder-flag{
     display:inline-block; margin-top:14px;
     font-family:'IBM Plex Mono', monospace;
@@ -430,6 +481,7 @@
     background:var(--bronze-soft);
     padding:5px 10px;
   }
+  .contact-box .placeholder-flag{color:#fff; background:rgba(255,255,255,.18);}
 
   /* ---------- Footer ---------- */
   footer{
@@ -447,7 +499,13 @@
 
   /* ---------- reveal (progressive enhancement: hidden only once JS+observer are confirmed working) ---------- */
   .reveal{opacity:1; transform:none;}
-  .has-js .reveal{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease;}
+  /* 16px con easing lineal era practicamente imperceptible: el elemento ya
+     estaba en su lugar antes de que el ojo registrara que se movio. 34px con
+     el mismo cubic-bezier que usa el resto del sitio se lee como entrada. */
+  .has-js .reveal{
+    opacity:0; transform:translateY(34px);
+    transition:opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
+  }
   .has-js .reveal.in-view{opacity:1; transform:none;}
 
   /* ---------- stagger: los hijos entran uno detras de otro, no el bloque entero ----------
@@ -465,6 +523,8 @@
   .has-js .reveal.stagger.in-view > *:nth-child(4){transition-delay:.27s;}
   .has-js .reveal.stagger.in-view > *:nth-child(5){transition-delay:.36s;}
   .has-js .reveal.stagger.in-view > *:nth-child(6){transition-delay:.45s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(7){transition-delay:.54s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(8){transition-delay:.63s;}
 
   /* ---------- entrada del hero ----------
      Animacion CSS pura. El opacity:0 vive solo dentro del keyframe, nunca en una
@@ -484,7 +544,8 @@
     .has-js .reveal,
     .has-js .reveal.stagger > *{transition:none !important; opacity:1 !important; transform:none !important;}
     .has-js .hero h1, .has-js .hero p.lead, .has-js .hero .hero-bullets,
-    .has-js .hero .herobtns, .has-js .hero .hero-video{animation:none !important;}
+    .has-js .hero .herobtns, .has-js .hero .hero-video,
+    .has-js .hero .herobtns .btn-primary{animation:none !important;}
   }
 
   /* ---------- Responsive ---------- */
@@ -517,10 +578,16 @@
     display:inline-block; margin-top:20px;
     padding:14px 32px; border-radius:var(--r-sm); text-decoration:none;
     font-weight:600; font-size:15px;
-    background:var(--wine-600); color:#fff; border:1px solid var(--wine-600);
-    transition:background .2s ease, border-color .2s ease;
+    background:linear-gradient(135deg, var(--wine-600), var(--bronze));
+    background-size:160% 160%; background-position:0% 50%;
+    color:#fff; border:1px solid transparent;
+    transition:background-position .4s ease, transform .2s ease, box-shadow .25s ease;
   }
-  .programa-cta:hover{background:var(--wine-900); border-color:var(--wine-900);}
+  .programa-cta:hover{
+    background-position:100% 50%;
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px -8px rgba(157,58,87,.4), 0 4px 14px -6px rgba(169,130,74,.35);
+  }
   .programa-feats{
     list-style:none; margin:0; padding:28px 32px 32px;
     display:grid; grid-template-columns:1fr 1fr; gap:22px 28px;
@@ -737,7 +804,7 @@
 
         <div class="especialidades">
           <div class="esp-label">En qué me especializo</div>
-          <ul class="esp-lista">
+          <ul class="esp-lista reveal stagger">
             <li>Recomposición corporal</li>
             <li>Resistencia a la insulina y SOP</li>
             <li>Hipotiroidismo</li>
@@ -882,7 +949,7 @@
           <div class="monto"><span class="n">USD 35</span><span class="u">/ mes</span></div>
           <a class="programa-cta" href="#contacto">Quiero empezar</a>
         </div>
-        <ul class="programa-feats">
+        <ul class="programa-feats reveal stagger">
           <li>
             <span class="pf-n">01</span>
             <div>
@@ -940,7 +1007,7 @@
       </div>
       <div class="contact-box reveal">
         <h3 style="font-size:20px;">Escribime y arrancamos</h3>
-        <p style="color:var(--ink-soft); margin-top:10px; font-size:15px;">La forma más rápida de empezar es por WhatsApp.</p>
+        <p style="margin-top:10px; font-size:15px;">La forma más rápida de empezar es por WhatsApp.</p>
         <a class="btn-primary" href="https://wa.me/5490000000000" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.3A8.9 8.9 0 0 0 12 4a8.96 8.96 0 0 0-7.8 13.4L3 21l3.7-1.2A8.9 8.9 0 0 0 12 21a9 9 0 0 0 5.6-14.7zm-5.6 13a7.4 7.4 0 0 1-3.8-1l-.3-.2-2.5.8.8-2.4-.2-.3A7.5 7.5 0 1 1 20 11.5 7.5 7.5 0 0 1 12 19.3zm4.1-5.6c-.2-.1-1.3-.7-1.5-.7s-.4-.1-.5.1-.5.7-.6.8-.2.1-.4 0a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.5c-.1-.2 0-.3.1-.4l.3-.4.2-.3a.5.5 0 0 0 0-.4c0-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.4a.9.9 0 0 0-.6.3 2.7 2.7 0 0 0-.8 2 4.7 4.7 0 0 0 1 2.5 10.8 10.8 0 0 0 4.1 3.6c1.5.6 1.5.4 1.8.4a1.5 1.5 0 0 0 1-.7 1.3 1.3 0 0 0 .1-.7c-.1-.1-.2-.2-.4-.3z"/></svg>
           Escribime por WhatsApp
@@ -981,7 +1048,12 @@
   // even if IntersectionObserver is unsupported or throws in an older browser.
   const revealEls = document.querySelectorAll('.reveal');
   function revealAll(){ revealEls.forEach(el => el.classList.add('in-view')); }
-  setTimeout(revealAll, 2000);
+  // 2000ms era mas corto que el tiempo real que tarda una persona en llegar
+  // scrolleando a una seccion de abajo: para cuando llegaba, esta red de
+  // seguridad ya habia revelado todo y no se veia ninguna transicion. 8s es
+  // un ultimo recurso de verdad (IntersectionObserver es universal hoy), no
+  // una carrera contra el scroll normal.
+  setTimeout(revealAll, 8000);
 
   try {
     if ('IntersectionObserver' in window) {
