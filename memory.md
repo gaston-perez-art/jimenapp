@@ -87,7 +87,7 @@ La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no
 - El CTA del hero suma un pulso de entrada (`ctaPulse`, dos iteraciones, arranca 1.5s después de que termina `heroIn`) para llamar la atención una sola vez, no en loop. Deshabilitado en el bloque de `prefers-reduced-motion` existente, mismo criterio que el resto del sitio.
 - `.contact-box` ("Escribime y arrancamos") pasa de tarjeta blanca a un bloque con gradiente `wine-900 → wine-600 → bronze`, texto blanco y el botón invertido (fondo blanco, texto wine-900) para que siga siendo el elemento de mayor contraste ahí adentro. Es el primer bloque de color fuerte de todo el sitio — hasta ahora todas las secciones alternaban entre `--paper` y `--paper-dim`, dos crema casi iguales, que es la raíz técnica de por qué el sitio se leía monocromático aunque la paleta definida no lo fuera.
 - Ningún cambio toca layout, `width`, `padding` ni las reglas del breakpoint de 720px — solo `background`, `color` y `box-shadow`, así que el mobile queda intacto sin necesidad de retocarlo.
-- Pendiente para continuar esta misma línea: el resto de las secciones (`#servicios`, `#testimonios`, `#proceso`) siguen en paper/paper-dim; evaluar si conviene sumar un segundo bloque de color fuerte en otra sección para no dejar el contraste concentrado solo en el CTA final.
+- Continuación de esta línea, resuelta más tarde el mismo día: `#proceso` pasó a ser la única sección oscura del sitio (ver más abajo), así que el contraste ya no queda concentrado solo en el CTA final. `#servicios` y `#testimonios` siguen en paper/paper-dim y se decidió dejarlos así.
 
 **Pasada completa de mobile (15/08/2026).** Se hizo con viewport real de 390px, no redimensionando la ventana: Chrome no baja de ~600px de ancho, así que se usó un harness temporal (`docs/_mobile-test.html`, un iframe de 390x844 apuntando a `index.html`, borrado al terminar). Al ser del mismo origen se puede medir por dentro con `contentWindow`, que es lo que permitió encontrar los bugs midiendo en vez de mirando. **Si hace falta repetir la pasada, conviene rearmar ese harness.** Ojo con el caché: el CSS va inline en el HTML, así que hay que recargar el iframe con un query string (`index.html?v=Date.now()`) o se siguen midiendo los estilos viejos.
 
@@ -136,13 +136,6 @@ Solución: `.herobtns` pasa a `flex-direction:column`, el microcopy va **debajo*
 **Bug real encontrado y arreglado (15/08/2026): las animaciones de aparición al scrollear casi nunca se veían.** Gastón reportó que el sitio "sigue pareciendo de juguete" y que no notaba ninguna animación al scrollear, a pesar de que el sistema `.reveal`/`.reveal.stagger` ya estaba implementado (ver "Principio técnico importante" y el bloque de reveal más abajo). La causa no era falta de animación: era que la red de seguridad del script (`setTimeout(revealAll, 2000)`, pensada para revelar todo si el `IntersectionObserver` fallaba) disparaba a los **2 segundos de cargar la página**, sin importar el scroll. Cualquier persona real tarda más de 2s en llegar scrolleando a una sección de abajo — para cuando llegaba, esa sección ya estaba marcada `in-view` de antemano por el timeout, y la transición ya había pasado sin que nadie la viera. El sitio nunca mostraba lo que sí tenía programado. Arreglado subiendo el timeout a 8000ms (verificado: el observer real dispara en ~400ms al entrar en viewport, muy por debajo de eso, así que ahora gana la transición real casi siempre).
 
 De paso se sumó `reveal stagger` a dos listas que hasta ahora aparecían de golpe sin ninguna animación, ninguna de las dos la tenía antes: `.esp-lista` (En qué me especializo, 8 ítems) y `.programa-feats` (las 6 features del programa, hoy aparecía como un solo bloque dentro de `.programa-card` en vez de cascada por ítem). Se extendió la tabla de `transition-delay` de `.reveal.stagger > *` de 6 a 8 hijos para cubrir `.esp-lista`. Nota técnica: ambas quedaron anidadas dentro de otro `.reveal` (`.sobre-grid` y `.programa-card` respectivamente) — funciona bien porque `opacity:0` del padre ya oculta visualmente al hijo aunque el hijo tenga su propio `opacity:1`, y el `IntersectionObserver` mide posición en el layout (no opacidad), así que ambos disparan casi al mismo tiempo sin conflicto.
-
-**Botones y bloque de contacto: sale el flat wine-600, entra gradiente wine→bronze (15/08/2026, sesión de "sitio muy estático y monocromático").** Benchmark de referencia: `entrenadoranoeliarodriguezfit.com` (bloque de color fuerte que corta la página, no solo variación de tono) y el AI Builders Program de Coderhouse (CTA en gradiente con desplazamiento en hover). Cambios:
-- `.btn-primary` y `.programa-cta` pasan de `background:var(--wine-600)` sólido a `linear-gradient(135deg, var(--wine-600), var(--bronze))` con `background-position` animado en hover (el gradiente se desplaza, no solo oscurece) y sombra de color en vez de solo oscurecer.
-- El CTA del hero suma un pulso de entrada (`ctaPulse`, dos iteraciones, arranca 1.5s después de que termina `heroIn`) para llamar la atención una sola vez, no en loop. Deshabilitado en el bloque de `prefers-reduced-motion` existente, mismo criterio que el resto del sitio.
-- `.contact-box` ("Escribime y arrancamos") pasa de tarjeta blanca a un bloque con gradiente `wine-900 → wine-600 → bronze`, texto blanco y el botón invertido (fondo blanco, texto wine-900) para que siga siendo el elemento de mayor contraste ahí adentro. Es el primer bloque de color fuerte de todo el sitio — hasta ahora todas las secciones alternaban entre `--paper` y `--paper-dim`, dos crema casi iguales, que es la raíz técnica de por qué el sitio se leía monocromático aunque la paleta definida no lo fuera.
-- Ningún cambio toca layout, `width`, `padding` ni las reglas del breakpoint de 720px — solo `background`, `color` y `box-shadow`, así que el mobile queda intacto sin necesidad de retocarlo.
-- Pendiente para continuar esta misma línea: el resto de las secciones (`#servicios`, `#testimonios`, `#proceso`) siguen en paper/paper-dim; evaluar si conviene sumar un segundo bloque de color fuerte en otra sección para no dejar el contraste concentrado solo en el CTA final.
 
 **Eyebrows sacados del sitio (14/08/2026, pedido de Jimena).** Las etiquetas superiores ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") no aportaban valor y se sacaron de las cinco secciones que las tenían. Se limpió también el CSS que quedó sin uso (`.eyebrow`, su animación de entrada en el hero, el override de mobile). Los `<h2>` de cada sección quedan como único encabezado.
 
@@ -196,21 +189,31 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 ## Pendientes
 
-**Mejoras pedidas por Jimena (14/08/2026), en curso — ver `backlog.md` para la vista por área:**
+### Fecha de lanzamiento: 23/08/2026, con dominio propio
+
+**Decisión de Gastón del 17/08/2026.** El sitio tiene que estar en vivo bajo un dominio propio el **23/08/2026**. Deja de ser una fecha abierta y pasa a ser el hito que ordena todo lo demás.
+
+Dos consecuencias sobre lo que ya estaba escrito acá:
+
+• **El dominio deja de ser una idea 🟢 de septiembre.** En `backlog.md` estaba en Operaciones como "definir si se contrata dominio/hosting propio o se sigue con GitHub Pages", sin fecha, y en el gantt figuraba recién el 20/09. Está decidido: dominio propio, y hay que comprarlo y apuntarlo. GitHub Pages puede seguir siendo el hosting — un dominio propio no obliga a cambiar de hosting, se apunta con un CNAME.
+• **Se abre un corte entre "lanzamiento" y "después".** Antes del 23 solo entra lo que bloquea publicar; todo lo que sea mejora del sitio ya publicado pasa a después. El criterio para decidir de qué lado cae cada pendiente: *¿esto hace que la página no se pueda mostrar, o solo que se pueda mostrar mejor?*
+
+**Mejoras pedidas por Jimena (14/08/2026) — ver `backlog.md` para la vista por área:**
 
 - [x] Sacar los eyebrows que no aportaban valor (ver Decisiones de diseño).
 - [x] Bug: botón "Quiero mi cambio" ahora abre WhatsApp directo (ver Decisiones de diseño).
 - [x] Bug: ícono de WhatsApp roto en el botón de contacto (ver Decisiones de diseño).
 - [x] Bug encontrado sin pedirlo: menú hamburguesa no aparecía entre 401-720px (ver Decisiones de diseño, sección Mobile).
-- [ ] Animación del claim del hero: mantenerla pero arreglar el desborde del `clip-path` y mejorar la estética (diagnosticado, ver Decisiones de diseño).
-- [ ] Hacer más armónica la sección "Sobre mí" — ajustar layout o imagen.
+- [x] Animación del claim del hero: arreglada en dos pasos — el fantasma semitransparente (14/08) y el hueco de ~0,4s por relevo que dejaba ese arreglo (15/08). Ver Decisiones de diseño.
+- [x] Hacer más armónica la sección "Sobre mí" (15/08/2026): retrato 4:5, título en dos líneas, cita con más presencia y corregido el recorte apaisado de tablet/mobile. Ver Decisiones de diseño. **Queda abierto lo que el CSS no arregla: la foto en sí.**
 - [ ] Nueva sección antes de "En qué me especializo" con logos animados (marquee) de empresas de prestigio donde trabajó Jimena. **Bloqueada: falta que Jimena pase los logos y la autorización de uso.**
 - [ ] Reescribir "En qué me especializo" — hoy es una lista de tags que no cuenta nada.
 - [ ] Testimonios: sumar fotos de Silvia y Verónica y hacerlos menos genéricos. Benchmark pasado por Jimena: Coderhouse, reseñas de Airbnb, sariadnapascual.com. **Bloqueada: falta la autorización y el archivo de las fotos.**
-- [ ] Sumar más animación en general (que no parezca landing "de juguete") y jugar más con contraste de color — Jimena sugiere empezar por el botón de WhatsApp.
+- [x] Sumar más animación en general (que no parezca landing "de juguete") y jugar más con contraste de color (15/08/2026, dos pasadas). Botones y CTAs a gradiente wine→bronze, "Cómo trabajo" como única sección oscura del sitio, recorrido de la animación de aparición de 16px a 34px, y el bug de fondo: la red de seguridad del script revelaba todo a los 2s y las animaciones de scroll nunca llegaban a verse. Ver Decisiones de diseño.
 - [ ] Mejorar todos los gráficos del sitio — falta definir con Jimena cuáles y qué espera de cada uno.
 - [ ] Mejorar la sección de contacto "Escribime y arrancamos".
-- [ ] Pasada completa de mobile, foco especial pedido por Jimena — ya resuelto el bug del hamburguesa, falta revisar el resto (animación, Sobre mí, testimonios) en viewport chico.
+- [x] Pasada completa de mobile (15/08/2026), con viewport real de 390px vía harness con iframe. Cinco bugs encontrados midiendo el DOM, no mirando. Verificado: cero overflow horizontal y cero áreas táctiles bajo 44px. Ver Decisiones de diseño.
+- [ ] Decidir si el CTA del nav ("Escribime") va directo a WhatsApp o sigue scrolleando a `#contacto` — es lo único que queda contra el criterio del 14/08 de no agregar pasos.
 
 **Mejoras pedidas por Jimena (12/08/2026), en curso:**
 
@@ -224,10 +227,11 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - [x] **Reemplazar los tres planes por un solo programa (13/08/2026, decisión de Jimena)** — resuelve de paso el pendiente de "repensar el tercer plan" y el de precios públicos: ahora hay un precio único y visible. Ver "Programa" en Decisiones de diseño.
 - [ ] Revisar si la nueva cadencia (videollamada mensual 1 a 1 del programa único) cambia el análisis de capacidad de `estrategia/business-case.md` — el business case todavía está escrito sobre la estructura de tres planes.
 
-**Bloqueantes de captación** (hoy la web no puede convertir una sola visita):
+**Bloqueantes de captación — cerrados el 15/08/2026.** Hasta esa fecha la web no podía convertir una sola visita.
 
-- [ ] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real.
-- [ ] Agregar el enlace real de Instagram en el footer.
+- [x] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real (15/08/2026): `541135863879`, con mensaje pre-cargado, en los dos botones. Ver "Datos de contacto reales" en Decisiones de diseño.
+- [x] Agregar el enlace real de Instagram (15/08/2026): `instagram.com/pf.jimenaibanez`, en el footer y como botón secundario en la caja de contacto.
+- [ ] **Foto nueva de Jimena para "Sobre mí" — pedírsela a ella.** La actual es una toma casual en la vereda, sin contexto de entrenamiento, y contradice el posicionamiento profesional del resto de la página. Ningún ajuste de CSS lo arregla. Al reemplazarla hay que recalibrar `transform:scale` y `object-position` de `.foto-ph img`, que están ajustados a mano para la foto actual.
 - [x] Sumar testimonios reales de alumnas a la sección "Testimonios" (13/08/2026): Silvia Rodríguez y Verónica Vázquez, con autorización confirmada por Jimena. Las citas son textuales (Silvia, transcripta tal cual, cortada donde cortaba el mensaje original — no se completó la frase; Verónica, extraída de un posteo más largo, sacando solo la mención dirigida a Jimena). Sin fotos de ellas todavía. La tercera tarjeta del grid quedó como invitación abierta ("Tu lugar está reservado acá") en vez de un tercer testimonio inventado — no inventar testimonios hasta que exista uno real.
 
 **Decisiones abiertas de negocio:**
@@ -267,6 +271,6 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Producto y operación:**
 
-- [ ] Definir si se contrata dominio/hosting propio o se usa GitHub Pages.
+- [ ] 🔴 **Comprar el dominio y apuntarlo, antes del 23/08/2026.** Ya no es "definir si se contrata": está decidido que va con dominio propio (17/08/2026). Falta elegir el nombre, comprarlo y configurar el `CNAME` en `docs/` más los registros DNS. El hosting puede seguir siendo GitHub Pages. Ojo con dos cosas: el certificado HTTPS de Pages tarda hasta 24h en emitirse después de apuntar el DNS — no dejarlo para el 22 — y el archivo `CNAME` tiene que estar versionado dentro de `docs/`, si no cada push lo borra.
 - [ ] Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`.
 - [ ] Usar las planillas de `herramientas/` como argumento comercial en la web. Hoy son el activo de retención del proyecto y no se mencionan en ningún lado.

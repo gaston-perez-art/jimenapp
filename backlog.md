@@ -4,7 +4,9 @@
 >
 > Criterio de agrupación: "ajustar la web" es una tarea de producto (cambiar algo que ya existe en `docs/index.html`). Growth y Negocio son decisiones que después *se reflejan* en la web, pero no son en sí mismas un cambio de código — son la razón por la que el código va a cambiar.
 >
-> Última actualización: 14/08/2026.
+> **Desde el 17/08/2026 hay una fecha de lanzamiento: el 23/08 el sitio tiene que estar en vivo con dominio propio.** Eso parte este backlog en dos sin cambiarlo de lugar: antes del 23 entra solo lo que impide publicar, el resto sale después sobre la página ya viva. Qué cae de cada lado está en `gantt.md`.
+>
+> Última actualización: 17/08/2026.
 
 ## Producto — Web
 
@@ -62,7 +64,7 @@ Decisiones económicas y de posicionamiento. Viven en `estrategia/`.
 
 Lo que sostiene el negocio por detrás, sin ser ni web pública ni estrategia.
 
-- [ ] 🟢 Definir si se contrata dominio/hosting propio o se sigue con GitHub Pages
+- [ ] 🔴 **Dominio propio, antes del 23/08/2026.** Ya no es "definir si conviene": está decidido (17/08/2026). Falta elegir el nombre, comprarlo, poner el `CNAME` versionado dentro de `docs/` y configurar los registros DNS. El hosting sigue siendo GitHub Pages. **Arrancar temprano en la semana:** el certificado HTTPS de Pages tarda hasta 24h en emitirse después de apuntar el DNS
 - [ ] 🟢 Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`
 
 ## Cómo leer las prioridades

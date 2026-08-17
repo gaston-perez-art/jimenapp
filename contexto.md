@@ -39,5 +39,5 @@ Mujeres +35 que atraviesan cambios hormonales — resistencia a la insulina, SOP
 
 ## Estado actual
 
-- Sitio web: primera versión completa, con contenido orientado a mujeres +35 con especialización en salud hormonal (posicionamiento decidido el 12/08/2026). Pendiente: número de WhatsApp real, enlace de Instagram, y testimonios reales de alumnas (con autorización).
-- Sin dominio ni hosting contratado todavía — evaluándose GitHub Pages como opción gratuita mientras tanto.
+- Sitio web: versión completa y funcional, con contenido orientado a mujeres +35 con especialización en salud hormonal (posicionamiento decidido el 12/08/2026). Ya tiene el WhatsApp real, el Instagram real y dos testimonios reales con autorización (15/08/2026), así que la página puede convertir una visita. Pendiente: foto profesional de Jimena para "Sobre mí", fotos de las alumnas para los testimonios, y reescribir "En qué me especializo".
+- **Fecha de lanzamiento: 23/08/2026, con dominio propio** (decisión de Gastón del 17/08/2026). El hosting sigue siendo GitHub Pages, que sirve `main/docs`; falta comprar el dominio y apuntarlo. Ver `memory.md` y `gantt.md`.
