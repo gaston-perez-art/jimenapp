@@ -139,6 +139,25 @@ De paso se sumó `reveal stagger` a dos listas que hasta ahora aparecían de gol
 
 **Eyebrows sacados del sitio (14/08/2026, pedido de Jimena).** Las etiquetas superiores ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") no aportaban valor y se sacaron de las cinco secciones que las tenían. Se limpió también el CSS que quedó sin uso (`.eyebrow`, su animación de entrada en el hero, el override de mobile). Los `<h2>` de cada sección quedan como único encabezado.
 
+**Testimonios: de grilla de tres tarjetas a cinta en movimiento (18/08/2026).** Gastón reportó que era la sección que menos le gustaba, que "no parece world class" y que no le hacía confiar en Jimena. El diagnóstico encontró tres problemas, ninguno estético de superficie:
+
+- **Las tarjetas tenían borde punteado.** La clase se llamaba `.testimonial-card` y el comentario del CSS decía literalmente "placeholder cards": los dos testimonios **reales** se mostraban con el recurso visual universal de "acá todavía no hay nada".
+- **La tercera tarjeta era un testimonio falso** ("Tu lugar está reservado acá") en el mismo contenedor que los dos verdaderos. Le decía a la visitante "solo tenemos dos" y contagiaba sospecha sobre los reales.
+- **El `<h2>` prometía lo que la sección no mostraba:** "Mujeres reales, cambios reales" y debajo no había un solo cambio. Ahora dice "Lo que dicen las que ya entrenan conmigo" y el subtítulo "Dos alumnas, sus palabras textuales", que es exactamente lo que hay.
+
+La forma nueva es una **cinta horizontal a todo el ancho de la pantalla** (`.t-mas` > `.t-cinta` > dos `.t-grupo`) que se desplaza sola hacia la izquierda. Detalles que hay que conocer antes de tocarla:
+
+- **El loop no tiene salto porque hay dos grupos idénticos** y el recorrido es exactamente el ancho de uno. El `calc(-50% - 13px)` del keyframe no es un ajuste a ojo: el 50% de la pista son (grupo + gap/2) y hay que correr (grupo + gap), así que falta medio gap. **Si se cambia el `gap`, hay que cambiar ese número.** En mobile el gap baja a 16px y por eso hay un keyframe aparte, `marqueeMobile`, con -8px.
+- **La velocidad depende de cuántas tarjetas hay**, porque la duración es fija y el recorrido es el ancho del grupo. Con las dos citas de hoy, 30s dan ~27 px/s. Con 62s daban 13 px/s y no se leía como movimiento. **Al sumar testimonios hay que subir la duración en proporción o la cinta se acelera sola.**
+- **Se frena con click o tap, no con hover.** Frenar al pasar el mouse convierte cualquier paso del cursor por la sección en un arranque y frenado que nadie pidió (decisión de Gastón, 18/08). Es la única interacción de la sección que necesita JavaScript: en CSS puro habría que abusar de un checkbox con un `<label>` tapando las tarjetas, y eso rompe la selección de texto de las citas. Si el JS no corre, la cinta sigue girando y no se pierde nada.
+- **La cinta sigue andando en mobile.** Se evaluó apagarla y se descartó: al no depender del scroll no pelea contra el dedo, y resuelve que varios testimonios apilados sean varias pantallas de alto.
+- **`prefers-reduced-motion` va último en la hoja de estilos, a propósito.** El marquee no depende de `animation-timeline`, así que queda fuera del bloque de reduced-motion de más arriba, y además se redefine en el breakpoint de 720px: si la regla fuera antes, cualquiera de las dos lo volvería a prender. Ahí no alcanza con frenar la cinta — una pista detenida deja la mitad de las tarjetas fuera de pantalla sin forma de llegar a ellas — así que además se esconde el grupo duplicado y las tarjetas se envuelven en varias filas.
+- Se borraron las reglas `.cards`, `.card`, `.card:hover`, `.card .num/h3/p/.tag`, `.testimonial-card*` y `.testimonial-quote`, más sus overrides de mobile: ninguna otra sección las usaba (`.programa-card` es otra clase y no matchea `.card`).
+
+**Límite conocido de la sección: con dos testimonios la cinta se ve repetida.** La pista mide 1614px contra 1280px de pantalla, así que a cualquier altura se ven las dos citas y el arranque de la repetición. No es un bug del loop (cierra exacto, medido) sino falta de contenido. Se resuelve solo cuando Jimena pase más citas: se agregan al primer `.t-grupo` y se copian idénticas al segundo.
+
+**Lo que quedó diseñado y NO se publicó:** un bloque destacado con foto en retrato 4:5, cita grande que aparece línea por línea ligada al scroll, y una franja de tres datos con la cifra-unidad-plazo que pide el patrón 1 del benchmark 03 (`0 → 40 kg`, `5 meses`, `3 dietas`). No se publicó porque **esos datos no existen**: harían falta la foto de la alumna y sus números reales. El diseño está resuelto y verificado en un archivo de preview local (`docs/_testimonios-preview.html`, sin commitear porque tiene datos inventados y el sitio está en vivo). **Es la mejora de mayor impacto disponible para la sección, y lo único que la bloquea es pedirle esos datos a Jimena.**
+
 **Mobile.** Hay un bloque dedicado en el breakpoint de 720px, con tres reglas que conviene sostener al agregar secciones nuevas:
 
 • Nada tocable por debajo de 44px de alto. Los links del nav y del footer llevan padding propio para llegar ahí.

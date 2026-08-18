@@ -401,51 +401,92 @@
   #servicios{background:var(--paper-dim); border-bottom:1px solid var(--line); padding:30px 0 32px;}
   #servicios .section-head{margin-bottom:20px;}
   #servicios .section-head p{font-size:15.8px; margin-top:12px;}
-  /* ---------- Servicios ---------- */
-  .cards{display:grid; grid-template-columns:repeat(3, 1fr); gap:26px;}
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:var(--r-md);
-    box-shadow:var(--shadow-sm);
-    padding:34px 28px;
-    display:flex; flex-direction:column;
-    transition:border-color .2s ease, transform .2s ease;
-  }
-  .card:hover{border-color:var(--wine-600); transform:translateY(-3px); box-shadow:var(--shadow-md);}
-  .card .num{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    color:var(--bronze);
-    margin-bottom:18px;
-  }
-  .card h3{font-size:21px; margin-bottom:12px;}
-  .card p{color:var(--ink-soft); font-size:15px; flex:1;}
-  .card .tag{
-    margin-top:20px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    color:var(--wine-600);
-    padding-top:16px;
-    border-top:1px solid var(--line);
+  /* ---------- Testimonios: cinta en movimiento ----------
+     Reemplaza (18/08/2026) a la grilla de tres tarjetas iguales que habia
+     antes. Se cambiaron tres cosas de fondo:
+     • El borde punteado. Las tarjetas se llamaban `.testimonial-card` y el
+       comentario del CSS decia "placeholder cards": los dos testimonios
+       REALES se estaban mostrando con el recurso visual universal de "aca
+       todavia no hay nada".
+     • La tercera tarjeta inventada ("Tu lugar esta reservado aca") ocupaba el
+       mismo contenedor que los reales, y eso contagia sospecha sobre los que
+       si lo son.
+     • Tres tarjetas iguales en fila es la forma que el benchmark 03 identifico
+       como el piso de la categoria.
+     Se borraron con esto las reglas .cards / .card / .testimonial-*, que no
+     las usaba ninguna otra seccion. */
+  #testimonios{
+    background:var(--paper-dim);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    /* `clip` y no `hidden`: los dos recortan igual, pero `hidden` convierte al
+       elemento en contenedor de scroll y `clip` no. Importa porque el sitio
+       usa position:sticky y animaciones ligadas al scroll en otras secciones,
+       y un scroller que nadie pidio es dificil de diagnosticar despues. */
+    overflow:clip;
   }
 
-  /* ---------- Testimonios (placeholder cards) ---------- */
-  #testimonios{background:var(--paper-dim); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-  .testimonial-card{border-style:dashed; border-color:var(--line); border-radius:var(--r-md); box-shadow:none;}
-  .testimonial-card .num{
-    font-family:'Archivo', sans-serif;
-    font-weight:700;
-    font-size:44px;
-    /* sin esto hereda el line-height 1.6 del body: la caja del glifo mide 70px
-       para una comilla que ocupa la mitad, y deja un hueco muerto antes de la
-       cita. Se nota sobre todo en mobile, donde las tarjetas van apiladas. */
-    line-height:1;
-    color:var(--wine-100);
-    -webkit-text-stroke:1.4px var(--wine-600);
-    margin-bottom:8px;
+  /* La cinta va a todo el ancho de la pantalla, fuera del .wrap: con margenes
+     a los costados no se lee como cinta, se lee como una fila cortada mal. */
+  .t-mas{
+    width:100vw; margin-left:calc(50% - 50vw);
   }
-  .testimonial-quote{color:var(--ink-soft); font-style:italic; font-size:15px; flex:1;}
+  /* El que se mueve es este, no el de arriba. Separarlos deja que la pista
+     mida lo que miden las tarjetas (width:max-content) sin pelear contra el
+     ancho de pantalla del contenedor. */
+  .t-cinta{
+    display:flex; gap:26px; width:max-content; align-items:stretch;
+    /* OJO al agregar testimonios: la duracion es fija y el recorrido es el
+       ancho de un grupo, asi que la VELOCIDAD depende de cuantas tarjetas hay.
+       Con las dos citas de hoy, 30s dan ~27 px/s, que es un desplazamiento
+       lento pero visible. Con 62s daba 13 px/s y no se leia como movimiento.
+       Si se suman testimonios, hay que SUBIR la duracion en proporcion o la
+       cinta se acelera sola. */
+    animation:marquee 30s linear infinite;
+    will-change:transform;
+    cursor:pointer;
+  }
+  /* Se frena con click o tap, NO al pasar el mouse por encima: frenar en hover
+     convierte cualquier paso del cursor por la seccion en un arranque y
+     frenado que nadie pidio. */
+  .t-cinta.pausada{animation-play-state:paused;}
+  .t-grupo{display:flex; gap:26px; margin:0; padding:0; list-style:none;}
+
+  /* El loop no tiene salto porque hay DOS grupos identicos y el recorrido es
+     exactamente el ancho de uno: al terminar, el segundo grupo esta donde
+     arrancó el primero.
+     El -13px no es un ajuste a ojo: el 50% de la pista son (grupo + gap/2) y
+     hay que correr (grupo + gap), asi que falta medio gap = 26/2 = 13.
+     SI SE CAMBIA EL GAP, HAY QUE CAMBIAR ESTE NUMERO. */
+  @keyframes marquee{
+    from{transform:translateX(0);}
+    to  {transform:translateX(calc(-50% - 13px));}
+  }
+
+  .t-mini{
+    flex:0 0 clamp(290px, 30vw, 420px);
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
+    box-shadow:var(--shadow-sm); padding:26px 28px 30px;
+    display:flex; flex-direction:column; gap:14px;
+    transition:border-color .2s ease, box-shadow .25s ease;
+  }
+  .t-mini:hover{border-color:var(--wine-600); box-shadow:var(--shadow-md);}
+  /* line-height:1 obligatorio. Con el 1.6 que hereda del body la caja del
+     glifo mide casi el doble que la comilla y deja un hueco muerto antes del
+     texto: es el mismo bug que ya se corrigio el 15/08 en las tarjetas viejas. */
+  .t-mini .comilla{
+    font-family:'Archivo', sans-serif; font-weight:700; font-size:42px; line-height:1;
+    color:var(--wine-100); -webkit-text-stroke:1.4px var(--wine-600);
+    height:30px;
+  }
+  .t-mini p{margin:0; font-size:15.5px; line-height:1.55; color:var(--ink); flex:1;}
+  .t-mini .pie{display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid var(--line);}
+  .t-mini .av{
+    width:40px; height:40px; border-radius:999px; flex:0 0 auto;
+    background:linear-gradient(140deg, var(--wine-600), var(--bronze));
+    color:#fff; font-size:14px; font-weight:600;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .t-mini .qn{font-weight:600; font-size:14.5px; line-height:1.25;}
 
   /* ---------- Como trabajo ----------
      Unica seccion oscura del recorrido. Antes toda la pagina alternaba entre
@@ -603,7 +644,6 @@
     .foto-ph{max-width:340px;}
     .esp-lista{grid-template-columns:1fr 1fr; gap:10px 18px;}
     .especialidades{margin-top:30px; padding-top:22px;}
-    .cards{grid-template-columns:1fr; }
     .steps{grid-template-columns:1fr 1fr; row-gap:36px;}
     .step{border-left:none; padding-left:0;}
   }
@@ -728,9 +768,19 @@
     .microcopy{font-size:13px;}
 
     .hero-video{border-radius:var(--r-md);}
-    .card{padding:26px 22px; border-radius:var(--r-md);}
-    .cards{gap:16px;}
     .contact-box{padding:30px 22px; border-radius:var(--r-md);}
+
+    /* La cinta SIGUE andando en mobile. Al no depender del scroll no pelea
+       contra el dedo, y resuelve que varios testimonios apilados sean varias
+       pantallas de alto. El gap baja de 26 a 16, asi que el keyframe tambien
+       cambia: medio gap es 8, no 13. */
+    .t-cinta, .t-grupo{gap:16px;}
+    .t-cinta{animation-name:marqueeMobile;}
+    @keyframes marqueeMobile{
+      from{transform:translateX(0);}
+      to  {transform:translateX(calc(-50% - 8px));}
+    }
+    .t-mini{padding:24px 22px 26px; border-radius:var(--r-md);}
     .step .stepnum{font-size:26px;}
 
     /* El panel fijo es una mejora de escritorio. En mobile se oculta y la
@@ -761,6 +811,24 @@
     .especialidades{padding:18px;}
     .sobre-texto h2{font-size:24px;}
     .steps{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Cinta de testimonios: menos movimiento ----------
+     Va ULTIMO en la hoja a proposito. El marquee no depende de
+     animation-timeline, asi que queda fuera del bloque de reduced-motion de
+     mas arriba, y ademas se redefine en el breakpoint de 720px: si esta regla
+     fuera antes, cualquiera de las dos la volveria a prender.
+
+     No alcanza con frenar la cinta: una pista detenida deja la mitad de las
+     tarjetas fuera de pantalla sin forma de llegar a ellas. Se apaga el
+     movimiento, se esconde el grupo duplicado (que solo existe para el loop)
+     y las tarjetas se envuelven en varias filas. */
+  @media (prefers-reduced-motion: reduce){
+    .t-mas{width:auto; margin-left:0;}
+    .t-cinta{animation:none; width:auto; flex-wrap:wrap; justify-content:center; cursor:auto;}
+    .t-cinta > .t-grupo[aria-hidden="true"]{display:none;}
+    .t-grupo{flex-wrap:wrap; justify-content:center;}
+    .t-mini{flex:1 1 300px;}
   }
 </style>
 </head>
@@ -876,25 +944,57 @@
   <section id="testimonios">
     <div class="wrap">
       <div class="section-head reveal">
-        <h2>Mujeres reales, cambios reales</h2>
-        <p>Lo que cuentan las alumnas que ya entrenan conmigo.</p>
+        <h2>Lo que dicen las que ya entrenan conmigo</h2>
+        <p>Dos alumnas, sus palabras textuales.</p>
       </div>
-      <div class="cards reveal stagger">
-        <div class="card testimonial-card">
-          <div class="num">“</div>
-          <p class="testimonial-quote">Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
-          <div class="tag">Silvia Rodríguez</div>
+      <!-- Solo testimonios REALES y autorizados. La regla del proyecto es no
+           inventar ninguno hasta que exista: la tercera tarjeta que habia acá
+           ("Tu lugar está reservado acá") ocupaba el mismo contenedor que los
+           dos verdaderos y contagiaba sospecha sobre ellos.
+           Cuando Jimena pase mas citas, se agregan al primer .t-grupo y se
+           copian identicas al segundo, que existe solo para cerrar el loop. -->
+      <div class="t-mas">
+       <div class="t-cinta" id="tCinta">
+        <div class="t-grupo">
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="pie">
+              <span class="av">SR</span>
+              <span class="qn">Silvia Rodríguez</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="av">VV</span>
+              <span class="qn">Verónica Vázquez</span>
+            </div>
+          </div>
         </div>
-        <div class="card testimonial-card">
-          <div class="num">“</div>
-          <p class="testimonial-quote">Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
-          <div class="tag">Verónica Vázquez</div>
+        <!-- Copia exacta del grupo de arriba: es lo que hace que el loop no
+             tenga salto. aria-hidden para que un lector de pantalla no lea los
+             mismos testimonios dos veces. -->
+        <div class="t-grupo" aria-hidden="true">
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="pie">
+              <span class="av">SR</span>
+              <span class="qn">Silvia Rodríguez</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="av">VV</span>
+              <span class="qn">Verónica Vázquez</span>
+            </div>
+          </div>
         </div>
-        <div class="card testimonial-card">
-          <div class="num">“</div>
-          <p class="testimonial-quote">Tu lugar está reservado acá.</p>
-          <div class="tag">Próxima alumna — ¿arrancamos?</div>
-        </div>
+       </div>
       </div>
     </div>
   </section>
@@ -1156,6 +1256,18 @@
       pasos.forEach(b => pio.observe(b));
     }
   } catch (err) { /* la primera diapositiva queda visible por CSS */ }
+
+  // ---------- cinta de testimonios: frenar con click o tap ----------
+  // Es la unica interaccion de la seccion que no se puede hacer en CSS sin
+  // abusar de un checkbox con un <label> tapando las tarjetas, y eso rompe la
+  // seleccion de texto de las citas. Si el JS no corre, la cinta simplemente
+  // sigue girando: no se pierde contenido ni queda nada oculto.
+  try {
+    const cinta = document.getElementById('tCinta');
+    if (cinta) {
+      cinta.addEventListener('click', () => cinta.classList.toggle('pausada'));
+    }
+  } catch (err) { /* la cinta sigue girando */ }
 </script>
 
 </body>
