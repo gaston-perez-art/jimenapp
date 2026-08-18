@@ -425,20 +425,49 @@
     overflow:clip;
   }
 
-  /* ---------- destacado: la cita grande + la franja de datos ---------- */
-  .t-destacado{max-width:900px; margin:0 auto 66px;}
+  /* ---------- destacado: panel oscuro con la cita ----------
+     Antes esto era texto suelto sobre el fondo crema y la seccion quedaba
+     siendo la unica de todo el sitio sin una sola masa visual: el resto tiene
+     tarjetas, video o fondo oscuro, y esta era texto flotando.
+     Ademas estaba centrado con `margin:0 auto` sobre un bloque de 900px
+     dentro de un contenedor de 1180, resto del layout de dos columnas que
+     existia cuando habia una foto al lado: el titulo arrancaba en un lado y
+     la cita 140px mas adentro, sin ningun motivo.
+     Ahora es un panel oscuro alineado al mismo borde que el h2. */
+  .t-destacado{
+    position:relative;
+    background:linear-gradient(150deg, var(--wine-950), var(--wine-900));
+    border-radius:var(--r-lg);
+    padding:54px 60px 48px;
+    margin:0 0 56px;
+    box-shadow:var(--shadow-md);
+    overflow:hidden;
+  }
+  /* comilla grande de fondo. Es decorativa: va aria-hidden y no se selecciona,
+     asi que no ensucia el texto que se copia ni lo que lee un lector de
+     pantalla. line-height:1 por el mismo motivo de siempre. */
+  .t-destacado .comillon{
+    position:absolute; top:-26px; right:26px;
+    font-family:'Archivo', sans-serif; font-weight:700; font-size:190px; line-height:1;
+    color:var(--bronze-light); opacity:.14; pointer-events:none; user-select:none;
+  }
   .t-quote{
-    font-size:clamp(23px,2.7vw,35px); line-height:1.24; font-weight:500;
-    letter-spacing:-.02em; color:var(--wine-900); margin:0 0 28px;
+    position:relative;
+    font-size:clamp(23px,2.7vw,35px); line-height:1.26; font-weight:500;
+    letter-spacing:-.02em; color:#fff; margin:0 0 28px;
+    /* sin max-width: los cortes de linea los define cada <span class="ln">.
+       Con un max-width en ch, cada span se partia ADEMAS por su cuenta y la
+       cita quedaba en cinco lineas cortas contra el borde izquierdo, con
+       media caja vacia a la derecha. */
   }
   /* cada linea es su propio span para que el descubrimiento sea POR LINEA y
      no del bloque entero: es el gesto que separa una pagina cuidada de una
      plantilla. El texto de la cita es textual, solo esta cortado en lineas. */
   .t-quote .ln{display:block;}
-  .t-quote .em{font-style:italic; color:var(--wine-600);}
-  .t-autor{display:flex; align-items:center; gap:14px; margin-bottom:38px;}
+  .t-quote .em{font-style:italic; color:var(--bronze-light);}
+  .t-autor{position:relative; display:flex; align-items:center; gap:14px; margin:0;}
   .t-autor .barra{width:34px; height:2px; background:var(--bronze); flex:0 0 auto;}
-  .t-autor .nom{font-weight:600; font-size:16.5px; color:var(--ink);}
+  .t-autor .nom{font-weight:600; font-size:16.5px; color:#fff;}
 
   /* La franja de datos usa la estructura cifra + unidad + plazo del patron 1
      del benchmark 03. Los tres datos son HECHOS DEL PROGRAMA, verificables y
@@ -446,18 +475,23 @@
      todavia no existen. El tercero ademas dice por primera vez en el sitio la
      ventaja de que atiende una sola persona, que el benchmark marco como lo
      unico que ninguno de los 18 sitios relevados puede copiar. */
+  /* La franja va DENTRO del panel oscuro, asi que se invierte entera. El
+     acento sobre fondo oscuro es --bronze-light: el --bronze normal no tiene
+     contraste suficiente contra el wine (mismo criterio que #proceso). */
   .t-datos{
+    position:relative;
     display:grid; grid-template-columns:repeat(3,1fr);
-    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    margin-top:40px; padding-top:30px;
+    border-top:1px solid rgba(255,255,255,.16);
   }
-  .t-dato{padding:20px 22px 20px 0;}
-  .t-dato + .t-dato{border-left:1px solid var(--line); padding-left:22px;}
+  .t-dato{padding:0 22px 0 0;}
+  .t-dato + .t-dato{border-left:1px solid rgba(255,255,255,.16); padding-left:22px;}
   .t-dato .k{
     font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--bronze); display:block; margin-bottom:8px;
+    text-transform:uppercase; color:var(--bronze-light); display:block; margin-bottom:8px;
   }
-  .t-dato .v{font-size:19px; font-weight:600; color:var(--wine-900); line-height:1.2; display:block;}
-  .t-dato .v small{display:block; font-size:13px; font-weight:400; color:var(--ink-soft); margin-top:4px; letter-spacing:0;}
+  .t-dato .v{font-size:19px; font-weight:600; color:#fff; line-height:1.2; display:block;}
+  .t-dato .v small{display:block; font-size:13px; font-weight:400; color:rgba(255,255,255,.62); margin-top:4px; letter-spacing:0;}
 
   /* La cinta va a todo el ancho de la pantalla, fuera del .wrap: con margenes
      a los costados no se lee como cinta, se lee como una fila cortada mal. */
@@ -832,12 +866,12 @@
 
     /* la franja de tres en fila se aprieta abajo de 400px: pasa a columna, y
        el separador vertical se convierte en horizontal */
-    .t-destacado{margin-bottom:44px;}
-    .t-quote{margin-bottom:22px;}
-    .t-autor{margin-bottom:26px;}
-    .t-datos{grid-template-columns:1fr;}
-    .t-dato{padding:18px 0;}
-    .t-dato + .t-dato{border-left:0; border-top:1px solid var(--line); padding-left:0;}
+    .t-destacado{padding:34px 24px 30px; border-radius:var(--r-md); margin-bottom:40px;}
+    .t-destacado .comillon{font-size:120px; top:-16px; right:12px;}
+    .t-quote{margin-bottom:22px; max-width:none;}
+    .t-datos{grid-template-columns:1fr; margin-top:28px; padding-top:22px;}
+    .t-dato{padding:14px 0;}
+    .t-dato + .t-dato{border-left:0; border-top:1px solid rgba(255,255,255,.16); padding-left:0;}
     .step .stepnum{font-size:26px;}
 
     /* El panel fijo es una mejora de escritorio. En mobile se oculta y la
@@ -1023,10 +1057,11 @@
       <!-- Destacado. La cita es TEXTUAL, solo esta cortada en lineas para que
            el descubrimiento sea por linea. -->
       <div class="t-destacado">
+        <div class="comillon" aria-hidden="true">“</div>
         <p class="t-quote reveal stagger">
           <span class="ln">Gracias a Jimena, que desde Argentina</span>
-          <span class="ln em">me manda videos y me exige mandarle todo</span>
-          <span class="ln">para revisar que esté haciéndolo bien.</span>
+          <span class="ln">me manda videos y me exige mandarle todo</span>
+          <span class="ln em">para revisar que esté haciéndolo bien.</span>
         </p>
         <div class="t-autor reveal">
           <span class="barra"></span>
