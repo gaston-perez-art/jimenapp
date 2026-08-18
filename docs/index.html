@@ -870,59 +870,23 @@
     .steps{grid-template-columns:1fr;}
   }
 
-  /* ---------- Testimonios: descubrimiento ligado al scroll ----------
-     A diferencia del resto del sitio, que usa .reveal (animacion DISPARADA:
-     entra, se ejecuta, termino, siempre el mismo translateY de 34px), esto va
-     LIGADO a la posicion del scroll: el avance lo maneja la mano de quien lee
-     y no un temporizador. Es CSS puro, sin una linea de JS.
+  /* ---------- Testimonios: revelacion de UNA SOLA DIRECCION ----------
+     Esto estuvo ligado al scroll (animation-timeline:view()) durante unas
+     horas del 18/08/2026 y se revirtio por un motivo concreto que reporto
+     Gaston: "cuando subo parece borrada".
 
-     Todo va dentro de @supports: donde no exista animation-timeline, no se
-     declara ninguna animacion y la seccion se ve entera y quieta. Ningun
-     opacity:0 vive en una regla base, que es la regla del proyecto. */
-  @supports (animation-timeline: view()){
-    @media (prefers-reduced-motion: no-preference){
-      .t-quote .ln{
-        animation:tLineaIn linear both;
-        animation-timeline:view();
-      }
-      /* cada linea tiene su propio tramo, corrido respecto de la anterior: no
-         es un stagger por delay, es un stagger por posicion de scroll */
-      .t-quote .ln:nth-child(1){animation-range:entry 12% cover 30%;}
-      .t-quote .ln:nth-child(2){animation-range:entry 18% cover 36%;}
-      .t-quote .ln:nth-child(3){animation-range:entry 24% cover 42%;}
-      .t-quote .ln:nth-child(4){animation-range:entry 30% cover 48%;}
-      @keyframes tLineaIn{
-        from{opacity:0; transform:translateY(26px);}
-        to  {opacity:1; transform:none;}
-      }
+     No era una impresion, es como funciona el recurso. Si el avance lo maneja
+     la posicion del scroll, al subir la animacion RETROCEDE y el texto se
+     desvanece. Para una decoracion da igual; para una cita que hay que leer
+     esta mal, porque el contenido desaparece cuando la persona vuelve sobre
+     el para releerlo.
 
-      .t-autor{
-        animation:tLineaIn linear both;
-        animation-timeline:view();
-        animation-range:entry 34% cover 52%;
-      }
-
-      /* la franja se abre desde el centro */
-      .t-datos{
-        animation:tDatosIn linear both;
-        animation-timeline:view();
-        animation-range:entry 38% cover 60%;
-      }
-      @keyframes tDatosIn{
-        from{opacity:0; clip-path:inset(0 42% 0 42%);}
-        to  {opacity:1; clip-path:inset(0 0 0 0);}
-      }
-      /* y cada dato entra en su propio tramo, no los tres de golpe */
-      .t-dato{
-        animation:tLineaIn linear both;
-        animation-timeline:view();
-      }
-      .t-dato:nth-child(1){animation-range:entry 42% cover 58%;}
-      .t-dato:nth-child(2){animation-range:entry 47% cover 63%;}
-      .t-dato:nth-child(3){animation-range:entry 52% cover 68%;}
-    }
-  }
-
+     Asi que la cita usa el mismo .reveal.stagger que el resto del sitio, que
+     va con IntersectionObserver y es de ida: entra una vez y se queda. Se
+     conserva lo que importaba, que es que aparezca LINEA POR LINEA y no el
+     bloque entero de golpe, porque .reveal.stagger escalona a los hijos.
+     Ventaja extra: hereda la red de seguridad de 8s del script, asi que si el
+     observador falla igual se ve todo. */
   /* ---------- Cinta de testimonios: menos movimiento ----------
      Va ULTIMO en la hoja a proposito. El marquee no depende de
      animation-timeline, asi que queda fuera del bloque de reduced-motion de
@@ -1055,31 +1019,34 @@
     <div class="wrap">
       <div class="section-head reveal">
         <h2>Lo que dicen las que ya entrenan conmigo</h2>
-        <p>Dos alumnas, sus palabras textuales.</p>
       </div>
       <!-- Destacado. La cita es TEXTUAL, solo esta cortada en lineas para que
            el descubrimiento sea por linea. -->
       <div class="t-destacado">
-        <p class="t-quote">
+        <p class="t-quote reveal stagger">
           <span class="ln">Gracias a Jimena, que desde Argentina</span>
           <span class="ln em">me manda videos y me exige mandarle todo</span>
           <span class="ln">para revisar que esté haciéndolo bien.</span>
         </p>
-        <div class="t-autor">
+        <div class="t-autor reveal">
           <span class="barra"></span>
           <span class="nom">Verónica Vázquez</span>
         </div>
-        <!-- Los tres datos son hechos del programa, ya publicados en la seccion
-             Programa. NO son resultados de alumnas: esos todavia no existen y
-             no se inventan. Cuando Jimena pase los reales, se reemplazan aca. -->
-        <div class="t-datos">
+        <!-- NINGUNO de estos tres es un resultado de alumna: Jimena tiene dos
+             alumnas y todavia no tiene resultados propios medidos.
+             El primero es el dato fisiologico publicado que el benchmark 03
+             recomienda usar como "numero con plazo" mientras no haya datos
+             propios: da urgencia sin prometer nada que dependa de Jimena.
+             PENDIENTE: que Jimena confirme y cite la fuente de ese 1-2%.
+             Los otros dos son hechos del programa, ya publicados mas abajo. -->
+        <div class="t-datos reveal stagger">
           <div class="t-dato">
-            <span class="k">Entrenamientos</span>
-            <span class="v">2 por semana<small>en casa o en el gimnasio</small></span>
+            <span class="k">Después de los 50</span>
+            <span class="v">1 a 2% por año<small>de masa muscular, si no entrenás fuerza</small></span>
           </div>
           <div class="t-dato">
-            <span class="k">Revisión</span>
-            <span class="v">Cada 2 semanas<small>con tus datos, no a ojo</small></span>
+            <span class="k">Lo que pide el programa</span>
+            <span class="v">2 sesiones<small>por semana, en casa o en el gimnasio</small></span>
           </div>
           <div class="t-dato">
             <span class="k">Quién te atiende</span>
