@@ -425,6 +425,40 @@
     overflow:clip;
   }
 
+  /* ---------- destacado: la cita grande + la franja de datos ---------- */
+  .t-destacado{max-width:900px; margin:0 auto 66px;}
+  .t-quote{
+    font-size:clamp(23px,2.7vw,35px); line-height:1.24; font-weight:500;
+    letter-spacing:-.02em; color:var(--wine-900); margin:0 0 28px;
+  }
+  /* cada linea es su propio span para que el descubrimiento sea POR LINEA y
+     no del bloque entero: es el gesto que separa una pagina cuidada de una
+     plantilla. El texto de la cita es textual, solo esta cortado en lineas. */
+  .t-quote .ln{display:block;}
+  .t-quote .em{font-style:italic; color:var(--wine-600);}
+  .t-autor{display:flex; align-items:center; gap:14px; margin-bottom:38px;}
+  .t-autor .barra{width:34px; height:2px; background:var(--bronze); flex:0 0 auto;}
+  .t-autor .nom{font-weight:600; font-size:16.5px; color:var(--ink);}
+
+  /* La franja de datos usa la estructura cifra + unidad + plazo del patron 1
+     del benchmark 03. Los tres datos son HECHOS DEL PROGRAMA, verificables y
+     ya publicados en la seccion Programa — no resultados de alumnas, que
+     todavia no existen. El tercero ademas dice por primera vez en el sitio la
+     ventaja de que atiende una sola persona, que el benchmark marco como lo
+     unico que ninguno de los 18 sitios relevados puede copiar. */
+  .t-datos{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .t-dato{padding:20px 22px 20px 0;}
+  .t-dato + .t-dato{border-left:1px solid var(--line); padding-left:22px;}
+  .t-dato .k{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--bronze); display:block; margin-bottom:8px;
+  }
+  .t-dato .v{font-size:19px; font-weight:600; color:var(--wine-900); line-height:1.2; display:block;}
+  .t-dato .v small{display:block; font-size:13px; font-weight:400; color:var(--ink-soft); margin-top:4px; letter-spacing:0;}
+
   /* La cinta va a todo el ancho de la pantalla, fuera del .wrap: con margenes
      a los costados no se lee como cinta, se lee como una fila cortada mal. */
   .t-mas{
@@ -434,13 +468,14 @@
      mida lo que miden las tarjetas (width:max-content) sin pelear contra el
      ancho de pantalla del contenedor. */
   .t-cinta{
-    display:flex; gap:26px; width:max-content; align-items:stretch;
-    /* OJO al agregar testimonios: la duracion es fija y el recorrido es el
-       ancho de un grupo, asi que la VELOCIDAD depende de cuantas tarjetas hay.
-       Con las dos citas de hoy, 30s dan ~27 px/s, que es un desplazamiento
-       lento pero visible. Con 62s daba 13 px/s y no se leia como movimiento.
-       Si se suman testimonios, hay que SUBIR la duracion en proporcion o la
-       cinta se acelera sola. */
+    /* gap:0 a proposito, la separacion la pone cada grupo con su margin-right.
+       Ver el comentario del keyframe: es lo que hace que el recorrido sea un
+       porcentaje exacto y no un numero magico en pixeles. */
+    display:flex; gap:0; width:max-content; align-items:stretch;
+    /* La duracion es fija y el recorrido es el ancho de un grupo, asi que la
+       VELOCIDAD depende de cuantas tarjetas tenga cada grupo. Con las dos
+       citas de hoy, 30s dan ~30 px/s. Si se suman testimonios hay que SUBIR
+       la duracion en proporcion o la cinta se acelera sola. */
     animation:marquee 30s linear infinite;
     will-change:transform;
     cursor:pointer;
@@ -449,17 +484,32 @@
      convierte cualquier paso del cursor por la seccion en un arranque y
      frenado que nadie pidio. */
   .t-cinta.pausada{animation-play-state:paused;}
-  .t-grupo{display:flex; gap:26px; margin:0; padding:0; list-style:none;}
+  /* El gap entre tarjetas va adentro del grupo; la separacion ENTRE grupos la
+     pone el margin-right. Asi cada grupo ocupa siempre (ancho + separacion) y
+     la pista mide exactamente 5 veces eso, sin sobrantes ni faltantes. */
+  .t-grupo{display:flex; gap:26px; margin:0 26px 0 0; padding:0; list-style:none;}
 
-  /* El loop no tiene salto porque hay DOS grupos identicos y el recorrido es
-     exactamente el ancho de uno: al terminar, el segundo grupo esta donde
-     arrancó el primero.
-     El -13px no es un ajuste a ojo: el 50% de la pista son (grupo + gap/2) y
-     hay que correr (grupo + gap), asi que falta medio gap = 26/2 = 13.
-     SI SE CAMBIA EL GAP, HAY QUE CAMBIAR ESTE NUMERO. */
+  /* ---- Por que 5 grupos y por que -20% ----
+     El loop cierra sin salto si el recorrido es exactamente el ancho de UN
+     grupo. Como los 5 grupos son identicos y ocupan lo mismo, ese ancho es
+     justo el 20% de la pista: no hace falta ningun ajuste en pixeles.
+     La version anterior usaba 2 grupos y `calc(-50% - 13px)`, y ese -13px
+     (medio gap) era fragil: dependia del valor del gap, que en mobile es
+     otro, y obligaba a un segundo keyframe solo para mobile.
+
+     Y son 6 y no 2 por un motivo concreto y medido. Con 2 grupos la pista
+     medía 1614px: en cualquier monitor mas ancho que eso la cinta terminaba
+     antes que la pantalla y dejaba un hueco vacio a la derecha.
+
+     REGLA, y hay que respetarla si se cambia la cantidad de tarjetas:
+        (grupos - 1) x ancho_de_grupo  >=  la pantalla mas ancha donde se vea.
+     Al correrse un grupo entero, lo que queda tiene que seguir tapando toda
+     la pantalla. Con 6 grupos de dos citas eso da 4460px, que cubre 4K
+     (3840). Con 5 daba 3568 y volvia a fallar en 4K por 272px.
+     Si se cambia la cantidad de grupos, el recorrido es 100%/N. */
   @keyframes marquee{
     from{transform:translateX(0);}
-    to  {transform:translateX(calc(-50% - 13px));}
+    to  {transform:translateX(calc(-100% / 6));}
   }
 
   .t-mini{
@@ -772,15 +822,22 @@
 
     /* La cinta SIGUE andando en mobile. Al no depender del scroll no pelea
        contra el dedo, y resuelve que varios testimonios apilados sean varias
-       pantallas de alto. El gap baja de 26 a 16, asi que el keyframe tambien
-       cambia: medio gap es 8, no 13. */
-    .t-cinta, .t-grupo{gap:16px;}
-    .t-cinta{animation-name:marqueeMobile;}
-    @keyframes marqueeMobile{
-      from{transform:translateX(0);}
-      to  {transform:translateX(calc(-50% - 8px));}
-    }
+       pantallas de alto.
+       El gap baja de 26 a 16 y NO hace falta tocar el keyframe: el recorrido
+       es el 20% de la pista, y la pista sigue siendo 5 grupos iguales midan
+       lo que midan. Antes esto obligaba a un keyframe aparte solo por el
+       ajuste en pixeles. */
+    .t-grupo{gap:16px; margin-right:16px;}
     .t-mini{padding:24px 22px 26px; border-radius:var(--r-md);}
+
+    /* la franja de tres en fila se aprieta abajo de 400px: pasa a columna, y
+       el separador vertical se convierte en horizontal */
+    .t-destacado{margin-bottom:44px;}
+    .t-quote{margin-bottom:22px;}
+    .t-autor{margin-bottom:26px;}
+    .t-datos{grid-template-columns:1fr;}
+    .t-dato{padding:18px 0;}
+    .t-dato + .t-dato{border-left:0; border-top:1px solid var(--line); padding-left:0;}
     .step .stepnum{font-size:26px;}
 
     /* El panel fijo es una mejora de escritorio. En mobile se oculta y la
@@ -811,6 +868,59 @@
     .especialidades{padding:18px;}
     .sobre-texto h2{font-size:24px;}
     .steps{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Testimonios: descubrimiento ligado al scroll ----------
+     A diferencia del resto del sitio, que usa .reveal (animacion DISPARADA:
+     entra, se ejecuta, termino, siempre el mismo translateY de 34px), esto va
+     LIGADO a la posicion del scroll: el avance lo maneja la mano de quien lee
+     y no un temporizador. Es CSS puro, sin una linea de JS.
+
+     Todo va dentro de @supports: donde no exista animation-timeline, no se
+     declara ninguna animacion y la seccion se ve entera y quieta. Ningun
+     opacity:0 vive en una regla base, que es la regla del proyecto. */
+  @supports (animation-timeline: view()){
+    @media (prefers-reduced-motion: no-preference){
+      .t-quote .ln{
+        animation:tLineaIn linear both;
+        animation-timeline:view();
+      }
+      /* cada linea tiene su propio tramo, corrido respecto de la anterior: no
+         es un stagger por delay, es un stagger por posicion de scroll */
+      .t-quote .ln:nth-child(1){animation-range:entry 12% cover 30%;}
+      .t-quote .ln:nth-child(2){animation-range:entry 18% cover 36%;}
+      .t-quote .ln:nth-child(3){animation-range:entry 24% cover 42%;}
+      .t-quote .ln:nth-child(4){animation-range:entry 30% cover 48%;}
+      @keyframes tLineaIn{
+        from{opacity:0; transform:translateY(26px);}
+        to  {opacity:1; transform:none;}
+      }
+
+      .t-autor{
+        animation:tLineaIn linear both;
+        animation-timeline:view();
+        animation-range:entry 34% cover 52%;
+      }
+
+      /* la franja se abre desde el centro */
+      .t-datos{
+        animation:tDatosIn linear both;
+        animation-timeline:view();
+        animation-range:entry 38% cover 60%;
+      }
+      @keyframes tDatosIn{
+        from{opacity:0; clip-path:inset(0 42% 0 42%);}
+        to  {opacity:1; clip-path:inset(0 0 0 0);}
+      }
+      /* y cada dato entra en su propio tramo, no los tres de golpe */
+      .t-dato{
+        animation:tLineaIn linear both;
+        animation-timeline:view();
+      }
+      .t-dato:nth-child(1){animation-range:entry 42% cover 58%;}
+      .t-dato:nth-child(2){animation-range:entry 47% cover 63%;}
+      .t-dato:nth-child(3){animation-range:entry 52% cover 68%;}
+    }
   }
 
   /* ---------- Cinta de testimonios: menos movimiento ----------
@@ -947,12 +1057,40 @@
         <h2>Lo que dicen las que ya entrenan conmigo</h2>
         <p>Dos alumnas, sus palabras textuales.</p>
       </div>
-      <!-- Solo testimonios REALES y autorizados. La regla del proyecto es no
-           inventar ninguno hasta que exista: la tercera tarjeta que habia acá
-           ("Tu lugar está reservado acá") ocupaba el mismo contenedor que los
-           dos verdaderos y contagiaba sospecha sobre ellos.
-           Cuando Jimena pase mas citas, se agregan al primer .t-grupo y se
-           copian identicas al segundo, que existe solo para cerrar el loop. -->
+      <!-- Destacado. La cita es TEXTUAL, solo esta cortada en lineas para que
+           el descubrimiento sea por linea. -->
+      <div class="t-destacado">
+        <p class="t-quote">
+          <span class="ln">Gracias a Jimena, que desde Argentina</span>
+          <span class="ln em">me manda videos y me exige mandarle todo</span>
+          <span class="ln">para revisar que esté haciéndolo bien.</span>
+        </p>
+        <div class="t-autor">
+          <span class="barra"></span>
+          <span class="nom">Verónica Vázquez</span>
+        </div>
+        <!-- Los tres datos son hechos del programa, ya publicados en la seccion
+             Programa. NO son resultados de alumnas: esos todavia no existen y
+             no se inventan. Cuando Jimena pase los reales, se reemplazan aca. -->
+        <div class="t-datos">
+          <div class="t-dato">
+            <span class="k">Entrenamientos</span>
+            <span class="v">2 por semana<small>en casa o en el gimnasio</small></span>
+          </div>
+          <div class="t-dato">
+            <span class="k">Revisión</span>
+            <span class="v">Cada 2 semanas<small>con tus datos, no a ojo</small></span>
+          </div>
+          <div class="t-dato">
+            <span class="k">Quién te atiende</span>
+            <span class="v">Jimena, siempre<small>no hay un equipo detrás</small></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seis grupos identicos. Ver el comentario del @keyframes marquee:
+           con dos, la pista medía 1614px y en un monitor mas ancho la cinta
+           terminaba antes que la pantalla y dejaba un hueco a la derecha. -->
       <div class="t-mas">
        <div class="t-cinta" id="tCinta">
         <div class="t-grupo">
@@ -973,9 +1111,78 @@
             </div>
           </div>
         </div>
-        <!-- Copia exacta del grupo de arriba: es lo que hace que el loop no
-             tenga salto. aria-hidden para que un lector de pantalla no lea los
-             mismos testimonios dos veces. -->
+        <div class="t-grupo" aria-hidden="true">
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="pie">
+              <span class="av">SR</span>
+              <span class="qn">Silvia Rodríguez</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="av">VV</span>
+              <span class="qn">Verónica Vázquez</span>
+            </div>
+          </div>
+        </div>
+        <div class="t-grupo" aria-hidden="true">
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="pie">
+              <span class="av">SR</span>
+              <span class="qn">Silvia Rodríguez</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="av">VV</span>
+              <span class="qn">Verónica Vázquez</span>
+            </div>
+          </div>
+        </div>
+        <div class="t-grupo" aria-hidden="true">
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="pie">
+              <span class="av">SR</span>
+              <span class="qn">Silvia Rodríguez</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="av">VV</span>
+              <span class="qn">Verónica Vázquez</span>
+            </div>
+          </div>
+        </div>
+        <div class="t-grupo" aria-hidden="true">
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="pie">
+              <span class="av">SR</span>
+              <span class="qn">Silvia Rodríguez</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="comilla" aria-hidden="true">“</div>
+            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="av">VV</span>
+              <span class="qn">Verónica Vázquez</span>
+            </div>
+          </div>
+        </div>
         <div class="t-grupo" aria-hidden="true">
           <div class="t-mini">
             <div class="comilla" aria-hidden="true">“</div>
