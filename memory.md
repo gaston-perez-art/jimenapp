@@ -76,6 +76,13 @@ Se relevaron **de verdad** (mirando el diseño, no leyendo el contenido) las dos
 • **Botones en píldora**: token nuevo `--r-pill:999px` en `.navcta`, `.btn-primary`, `.btn-ghost` y `.programa-cta`.
 • Easing único `cubic-bezier(.16,1,.3,1)` (expo-out) reemplazando las 11 apariciones de `cubic-bezier(.22,.61,.36,1)`, e interlineado del cuerpo de 1.6 a 1.5.
 
+**Restos de la paleta crema, encontrados despues (18/08/2026).** Cambiar los tokens `--paper` y `--paper-dim` no alcanzo: habia **tres superficies con el degrade viejo hardcodeado**, `linear-gradient(160deg, var(--wine-100), var(--bronze-soft))`, o sea rosa a beige. Sobre el sitio ya blanco se leian como una mancha de otro color.
+
+• **`.programa-top`** (la franja del precio) era la unica que se veia, y quedaba como una banda crema en el medio de una tarjeta blanca. Ahora es `var(--card)` y la separacion la hace la linea de abajo, no un fondo: es como resuelven el bloque de precio las dos referencias.
+• **`.hero-video`** y **`.foto-ph`** solo asoman mientras carga el video y la foto. Pasaron a `var(--paper-dim)`.
+
+**Como quedo el mapa de superficies, medido en el DOM:** body/hero, `#sobre` y `#contacto` en **blanco puro**; `#testimonios` y `#servicios` en `#FAF8F6`; todas las tarjetas y la franja del precio en blanco; el header en blanco al 93%. Las dos unicas superficies de color son el panel oscuro de la cita y `#proceso`. **Leccion: al cambiar tokens de color hay que buscar ademas los valores hardcodeados y los degrades, que no se mueven solos.**
+
 **Dos bugs de esa misma pasada, encontrados al revisar despues de pushear (y corregidos):**
 
 • **El header se volvia una banda malva sobre `#proceso`, con el logo casi ilegible.** A `rgba(255,255,255,.72)` con `saturate(180%)`, el vidrio **toma el color de lo que tiene detras**: sobre la unica seccion oscura del sitio, el blanco se teñia de vino y el logo en `--wine-900` perdia contraste. El header anterior no tenia el problema porque estaba al 92% de opacidad. Corregido a `.93` y sin `saturate`. **Si alguna vez se baja de `.9`, hay que revisar SIEMPRE el header sobre `#proceso`.**
