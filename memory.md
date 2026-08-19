@@ -46,6 +46,40 @@ git config pull.rebase true
 
 Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de referencia relevados, 11 usan grotesca sans en los títulos, y Fraunces empujaba la lectura hacia *wellness artesanal* cuando el contenido habla de periodización y RPE. El proceso completo, con el benchmark y las opciones descartadas, está en `product-discovery/01-tipografia/`.
 
+**Pasada de sistema visual: "clean, premium, salud" (18/08/2026, decisión de Gastón).** Después de cuatro iteraciones sobre la sección de testimonios que Gastón siguió rechazando, quedó claro que **el problema nunca fue la sección: era el sistema de tokens.** Cualquier sección construida sobre crema cálido con títulos en peso 700 a 36px se lee igual de genérica por más que se reordene.
+
+Se relevaron **de verdad** (mirando el diseño, no leyendo el contenido) las dos referencias que marcó Gastón, `joinmidi.com` y `superpower.com`, extrayendo los tokens computados del DOM. Lo que se midió:
+
+| | Midi | Superpower | jimenapp antes |
+|---|---|---|---|
+| Display | 154px | 56px | 36px |
+| Peso del display | 900 condensada | **400** | **700** |
+| line-height display | 0.78 | 1.00 | 1.08 |
+| Familias | 4 con roles | **1 sola** | 2 |
+| Superficie dominante | blanco + `#F7F7F1` | blanco + `#FAFAFA` | crema `#FAF6F2`/`#F1E9E1` |
+| Cuerpo | 19px / 1.5 | 15-17px / 1.4 | 16px / 1.6 |
+| Botones | píldora 999px | píldora 999px | 10px |
+| Easing | — | `cubic-bezier(.16,1,.3,1)` | `cubic-bezier(.22,.61,.36,1)` |
+
+**Tres hallazgos que cambian criterios ya escritos acá:**
+
+1. **Superpower no usa una sola animación ligada al scroll.** Cero: 26 animaciones, todas en `DocumentTimeline`, y el navegador soporta `view()`. Lo premium ahí no viene de más movimiento sino de restricción — una sola curva de easing, y solo `opacity` y `transform`. Esto respalda haber revertido el scroll-driven de testimonios.
+2. **El peso 700 era el enemigo.** Los dos caminos premium son opuestos y ninguno pasaba por donde estábamos: Superpower usa **peso 400 a 56px**, Midi **900 condensada a 154px**. El 700 a 36px es el default de cualquier landing. **Se eligió el camino Superpower** (decisión de Gastón): liviano y grande. El contraste lo da el tamaño, no la negrita. Ventaja práctica: Archivo ya está cargada en 400/500/600/700, así que no costó una familia nueva.
+3. **El blanco no era un detalle, era la base.** Las dos referencias son blanco-dominante con un segundo neutro casi indistinguible. El sitio no tenía **ninguna** superficie blanca salvo las tarjetas: alternaba dos cremas cálidos y cercanos. Es la misma causa raíz que ya se había diagnosticado el 15/08 ("el sitio se lee monocromático") y que en su momento se atacó solo con la sección oscura, dejando el crema intacto.
+
+**Los seis cambios aplicados, todos de token:**
+
+• `--paper` de `#FAF6F2` a **`#FFFFFF`**, `--paper-dim` de `#F1E9E1` a **`#FAF8F6`**. El calor de la marca ahora lo aportan el vino y el bronce, no el fondo.
+• `--line` de `#E3D7C9` a `#E9E4DE`: sobre blanco el anterior tiraba a amarillo. Los SVG del panel de "Cómo trabajo" tenían ese color hardcodeado y se actualizaron también.
+• `h1,h2,h3` de peso **700 a 500**, `letter-spacing` de `-.025em` a `-.02em`, `line-height` de `1.08` a `1.02`.
+• Escala más agresiva: `.section-head h2` de `clamp(26,3vw,36)` a `clamp(32,4.4vw,60)`; hero `h1` a `clamp(38,5vw,68)`; `.sobre-texto h2` a `clamp(27,3vw,40)`; `.pin-slide h3` a `clamp(30,3.6vw,50)`; la cita del destacado a `clamp(26,3vw,42)` en peso 400.
+• **Botones en píldora**: token nuevo `--r-pill:999px` en `.navcta`, `.btn-primary`, `.btn-ghost` y `.programa-cta`.
+• Easing único `cubic-bezier(.16,1,.3,1)` (expo-out) reemplazando las 11 apariciones de `cubic-bezier(.22,.61,.36,1)`, e interlineado del cuerpo de 1.6 a 1.5.
+
+**El header pasó a vidrio esmerilado:** era `rgba(250,246,242,.92)` hardcodeado, o sea una banda de crema opaco sobre un sitio ya blanco. Ahora es `rgba(255,255,255,.72)` con `backdrop-filter:blur(24px) saturate(180%)`, que es como lo resuelven las dos referencias.
+
+Verificado a 390px después de la pasada: cero overflow horizontal, nada se sale del viewport y ningún área táctil por debajo de 44px.
+
 **Header:** 66px de alto, sticky. Achicado desde los 78px originales para que el hero y las secciones entren en una pantalla. Si se toca, hay que actualizar también el `top` del menú desplegable de mobile y el `top` del panel fijo del proceso, que dependen de ese número.
 
 **Hero:** tiene `min-height` igual a la pantalla útil (`100svh` menos el header), para que la sección siguiente no asome en el primer scroll. Se usa `svh` y no `vh` porque en mobile `vh` no descuenta la barra de direcciones.
