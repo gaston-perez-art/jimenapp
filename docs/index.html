@@ -539,16 +539,24 @@
     display:flex; gap:0; width:max-content; align-items:stretch;
     /* La duracion es fija y el recorrido es el ancho de un grupo, asi que la
        VELOCIDAD depende de cuantas tarjetas tenga cada grupo. Con las dos
-       citas de hoy, 30s dan ~30 px/s. Si se suman testimonios hay que SUBIR
-       la duracion en proporcion o la cinta se acelera sola. */
-    animation:marquee 30s linear infinite;
+       citas de hoy, 22s dan ~40 px/s en desktop y ~28 en mobile, donde el
+       grupo es mas angosto. Se probaron 62s (13 px/s, no se leia como
+       movimiento) y 30s (30 px/s, quedaba lento contra la referencia).
+       Si se suman testimonios hay que SUBIR la duracion en proporcion o la
+       cinta se acelera sola. */
+    animation:marquee 22s linear infinite;
     will-change:transform;
-    cursor:pointer;
+    /* Cursor de flecha, NO `grab` ni `pointer`. La manito sugiere "esto se
+       toca" y convierte la seccion en algo para jugar; la flecha la deja como
+       algo para leer, que es lo que hace coderhouse. Se puede arrastrar igual:
+       el que quiere arrastrar, arrastra. */
+    /* pan-y deja pasar el scroll vertical del dedo y reserva el horizontal
+       para el arrastre. Sin esto, en mobile arrastrar la cinta scrollea la
+       pagina y la cinta no se mueve. */
+    touch-action:pan-y;
   }
-  /* Se frena con click o tap, NO al pasar el mouse por encima: frenar en hover
-     convierte cualquier paso del cursor por la seccion en un arranque y
-     frenado que nadie pidio. */
-  .t-cinta.pausada{animation-play-state:paused;}
+  /* mientras se arrastra, que no se seleccione el texto de las citas */
+  .t-cinta.arrastrando, .t-cinta.arrastrando *{user-select:none;}
   /* El gap entre tarjetas va adentro del grupo; la separacion ENTRE grupos la
      pone el margin-right. Asi cada grupo ocupa siempre (ancho + separacion) y
      la pista mide exactamente 5 veces eso, sin sobrantes ni faltantes. */
@@ -582,9 +590,11 @@
     background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
     box-shadow:var(--shadow-sm); padding:26px 28px 30px;
     display:flex; flex-direction:column; gap:14px;
-    transition:border-color .2s ease, box-shadow .25s ease;
   }
-  .t-mini:hover{border-color:var(--wine-600); box-shadow:var(--shadow-md);}
+  /* Sin resaltado de color al pasar el mouse. La cinta entera ya responde al
+     hover relentandose: subrayar ademas la tarjeta de abajo del cursor es un
+     segundo feedback para el mismo gesto, y encima sugiere que la tarjeta es
+     clickeable, que no lo es. */
   /* line-height:1 obligatorio. Con el 1.6 que hereda del body la caja del
      glifo mide casi el doble que la comilla y deja un hueco muerto antes del
      texto: es el mismo bug que ya se corrigio el 15/08 en las tarjetas viejas. */
@@ -969,7 +979,7 @@
      y las tarjetas se envuelven en varias filas. */
   @media (prefers-reduced-motion: reduce){
     .t-mas{width:auto; margin-left:0;}
-    .t-cinta{animation:none; width:auto; flex-wrap:wrap; justify-content:center; cursor:auto;}
+    .t-cinta{animation:none; width:auto; flex-wrap:wrap; justify-content:center;}
     .t-cinta > .t-grupo[aria-hidden="true"]{display:none;}
     .t-grupo{flex-wrap:wrap; justify-content:center;}
     .t-mini{flex:1 1 300px;}
@@ -1502,17 +1512,111 @@
     }
   } catch (err) { /* la primera diapositiva queda visible por CSS */ }
 
-  // ---------- cinta de testimonios: frenar con click o tap ----------
-  // Es la unica interaccion de la seccion que no se puede hacer en CSS sin
-  // abusar de un checkbox con un <label> tapando las tarjetas, y eso rompe la
-  // seleccion de texto de las citas. Si el JS no corre, la cinta simplemente
-  // sigue girando: no se pierde contenido ni queda nada oculto.
+  // ---------- cinta de testimonios: hover la relentece, y se puede arrastrar ----------
+  // Referencia: la cinta de coderhouse.com. Dos cosas:
+  //   • al pasar el mouse por encima NO se detiene, se pone lenta;
+  //   • se puede arrastrar con el mouse o con el dedo, como cualquier carrusel.
+  //
+  // Por que el hover no se hace en CSS: cambiar `animation-duration` en :hover
+  // produce un SALTO. El progreso de una animacion es currentTime/duration, asi
+  // que al cambiar la duracion el mismo currentTime cae en otro punto del
+  // recorrido. Medido en esta cinta: 73% del recorrido de tiron.
+  // `updatePlaybackRate()` en cambio conserva la posicion.
+  //
+  // Y el truco del arrastre: la animacion es LINEAL y recorre exactamente el
+  // ancho de un grupo, asi que hay una equivalencia directa entre "donde esta
+  // la cinta" y "en que momento de la animacion esta". Al soltar se calcula el
+  // currentTime que corresponde a la posicion donde quedo y se reanuda desde
+  // ahi, sin salto. Por eso no hace falta reimplementar el desplazamiento a
+  // mano: se sigue usando la misma animacion CSS.
+  //
+  // Si el JS no corre, la cinta gira a velocidad constante y no se pierde nada.
   try {
     const cinta = document.getElementById('tCinta');
-    if (cinta) {
-      cinta.addEventListener('click', () => cinta.classList.toggle('pausada'));
+    const anim = cinta && cinta.getAnimations ? cinta.getAnimations()[0] : null;
+
+    // Sin animacion no hay nada que manejar: pasa con prefers-reduced-motion,
+    // donde la cinta se apaga a proposito y las citas se ven en varias filas.
+    if (cinta && anim) {
+      const DUR = anim.effect.getTiming().duration;
+      const LENTO = 0.28;
+      // Lo que recorre la animacion es un grupo, o sea 1/6 de la pista.
+      const unGrupo = () => cinta.getBoundingClientRect().width / 6;
+
+      // ---- hover: rampa de velocidad, no un cambio de golpe ----
+      let raf = null;
+      const rampa = (destino, ms) => {
+        const desde = anim.playbackRate;
+        if (desde === destino) return;
+        const t0 = performance.now();
+        cancelAnimationFrame(raf);
+        const paso = (t) => {
+          const p = Math.min(1, (t - t0) / ms);
+          const e = 1 - Math.pow(1 - p, 3);
+          anim.updatePlaybackRate(desde + (destino - desde) * e);
+          if (p < 1) raf = requestAnimationFrame(paso);
+        };
+        raf = requestAnimationFrame(paso);
+      };
+
+      let hoverEncima = false;
+      if (window.matchMedia('(hover: hover)').matches) {
+        cinta.addEventListener('mouseenter', () => { hoverEncima = true;  rampa(LENTO, 450); });
+        cinta.addEventListener('mouseleave', () => { hoverEncima = false; rampa(1, 450); });
+      }
+
+      // ---- arrastre ----
+      // OJO con la forma obvia de hacerlo, que es la que fallaba: pausar la
+      // animacion y mover la cinta con `style.transform`. No funciona, y el
+      // sintoma es enganoso — durante el arrastre no se mueve nada y recien al
+      // soltar aparece en la posicion nueva. El motivo es la cascada: una
+      // animacion CSS le GANA al estilo inline, tambien estando en pausa, asi
+      // que el transform de la animacion pisaba el que escribia el arrastre.
+      //
+      // La solucion es no tocar el transform. Como la animacion es lineal y
+      // recorre exactamente un grupo, mover la cinta N pixeles equivale a
+      // mover el reloj de la animacion: dt = -dx * DUR / G. Se arrastra el
+      // TIEMPO, no la posicion. Ventaja de fondo: al soltar no hay ninguna
+      // conversion ni reajuste, la animacion ya esta en el momento correcto y
+      // solo hay que reanudarla.
+      let arrastrando = false, tInicio = 0, xPunteroInicio = 0;
+
+      const alBajar = (e) => {
+        if (e.button !== undefined && e.button !== 0) return;   // solo boton principal
+        arrastrando = true;
+        anim.pause();
+        tInicio = anim.currentTime;
+        xPunteroInicio = e.clientX;
+        cinta.classList.add('arrastrando');
+        try { cinta.setPointerCapture(e.pointerId); } catch (_) {}
+      };
+
+      const alMover = (e) => {
+        if (!arrastrando) return;
+        const dx = e.clientX - xPunteroInicio;
+        const t = tInicio - (dx / unGrupo()) * DUR;
+        // la pista es ciclica: se envuelve para que arrastrar de mas nunca
+        // llegue a un tope ni deje un hueco
+        anim.currentTime = ((t % DUR) + DUR) % DUR;
+      };
+
+      const alSoltar = (e) => {
+        if (!arrastrando) return;
+        arrastrando = false;
+        cinta.classList.remove('arrastrando');
+        try { cinta.releasePointerCapture(e.pointerId); } catch (_) {}
+        anim.updatePlaybackRate(hoverEncima ? LENTO : 1);
+        anim.play();
+      };
+
+      cinta.addEventListener('pointerdown', alBajar);
+      cinta.addEventListener('pointermove', alMover);
+      cinta.addEventListener('pointerup', alSoltar);
+      cinta.addEventListener('pointercancel', alSoltar);
+      // si se arrastro, no dejar que el gesto termine seleccionando texto
+      cinta.addEventListener('dragstart', (e) => e.preventDefault());
     }
-  } catch (err) { /* la cinta sigue girando */ }
+  } catch (err) { /* la cinta sigue girando a velocidad constante */ }
 </script>
 
 </body>
