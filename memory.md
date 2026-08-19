@@ -28,6 +28,25 @@ Para que el pull no genere commits de merge innecesarios, conviene configurar un
 git config pull.rebase true
 ```
 
+## Ver los cambios antes de publicar: `qa-local.py`
+
+**Decisión de Gastón del 18/08/2026, y cambia cómo se trabaja.** Hasta ese día cada cambio se commiteaba y pusheaba para poder mirarlo, y como GitHub Pages sirve `main/docs`, eso significaba **publicar para revisar**. Varias iteraciones de diseño salieron en vivo a medio hacer por ese motivo.
+
+Ahora hay un servidor de QA local en la raíz del repo:
+
+```bash
+python3 qa-local.py          # http://localhost:8899/index.html
+```
+
+Hace dos cosas que `python3 -m http.server` no hace:
+
+• **Manda `Cache-Control: no-store`.** Sin esto el navegador se queda con la versión vieja — todo el CSS va inline en `index.html`, así que uno termina mirando estilos de hace dos ediciones sin enterarse. Es el mismo problema que ya estaba anotado para el harness de mobile.
+• **Recarga la pestaña sola** cuando cambia cualquier archivo de `docs/`. Inyecta un script chico en la respuesta HTML que consulta `/__cambios` una vez por segundo. **La inyección pasa solo en la respuesta del servidor: el archivo en disco no se toca**, así que no hay forma de que se cuele en lo que se publica (verificado: `grep "__cambios" docs/index.html` da 0).
+
+**El flujo acordado:** editar → Gastón mira en `localhost:8899` → recién cuando aprueba, commit y push.
+
+**Límite que hay que respetar:** `main` es compartido con Jimena y `docs/index.html` es un solo archivo con todo adentro. Guardarse cambios locales durante días y que ella pushee mientras tanto genera un conflicto feo. La regla práctica es **guardar local mientras se QA'ea, pushear el mismo día**, y `git pull --rebase` antes de retomar.
+
 ## Decisiones de diseño (página web)
 
 **Paleta de colores:**
@@ -206,6 +225,17 @@ La forma nueva es una **cinta horizontal a todo el ancho de la pantalla** (`.t-m
 - **`prefers-reduced-motion` va último en la hoja de estilos, a propósito.** El marquee no depende de `animation-timeline`, así que queda fuera del bloque de reduced-motion de más arriba, y además se redefine en el breakpoint de 720px: si la regla fuera antes, cualquiera de las dos lo volvería a prender. Ahí no alcanza con frenar la cinta — una pista detenida deja la mitad de las tarjetas fuera de pantalla sin forma de llegar a ellas — así que además se esconde el grupo duplicado y las tarjetas se envuelven en varias filas.
 - Se borraron las reglas `.cards`, `.card`, `.card:hover`, `.card .num/h3/p/.tag`, `.testimonial-card*` y `.testimonial-quote`, más sus overrides de mobile: ninguna otra sección las usaba (`.programa-card` es otra clase y no matchea `.card`).
 
+**Interacción de la cinta (18/08/2026, tres iteraciones con Gastón mirando en local).** Referencia: la cinta de `coderhouse.com`. Quedó así:
+
+• **El hover NO la frena, la relentece.** Baja a `0.28×` con una rampa de 450ms y vuelve a `1×` al salir. **No se puede hacer en CSS:** cambiar `animation-duration` en `:hover` produce un salto, porque el progreso es `currentTime / duration` y al cambiar la duración el mismo instante cae en otro punto del recorrido. Medido en esta cinta, el tirón habría sido del **73% del recorrido**. `updatePlaybackRate()` conserva la posición — medido: 0 ms y 0 px de salto.
+• **Se arrastra con el mouse y con el dedo.** La primera versión falló de una forma engañosa: durante el gesto no se movía nada y recién al soltar aparecía en la posición nueva. **La causa es la cascada: una animación CSS le gana al `style` inline, también estando en pausa**, así que el `transform` de la animación pisaba el que escribía el arrastre. La solución fue dejar de tocar el `transform`: como la animación es lineal y recorre exactamente un grupo, arrastrar N píxeles equivale a mover el reloj, `dt = -dx × DUR / G`. **Se arrastra el tiempo, no la posición**, y al soltar no hace falta ninguna conversión porque la animación ya está en el momento correcto. El tiempo se envuelve en `[0, DUR)` para que arrastrar de más nunca llegue a un tope.
+• **El cursor es flecha, no `grab` ni `pointer`** (pedido explícito de Gastón). La manito sugiere "esto se toca" y convierte la sección en algo para jugar; la flecha la deja como algo para leer. Se arrastra igual. Lo único que se mantiene es `user-select:none` mientras se arrastra, para que el gesto no termine pintando la cita de azul.
+• **No hay pausa por click.** Se implementó y se sacó: agregaba un estado que nadie iba a descubrir y dejaba la cinta detenida sin aviso.
+• **Las tarjetas no se resaltan en hover.** Se sacó el cambio de color del borde: la cinta entera ya responde al hover relentándose, y subrayar además la tarjeta de abajo del cursor es un segundo feedback para el mismo gesto, y sugiere que la tarjeta es clickeable cuando no lo es.
+• **`touch-action: pan-y`** en la pista: el dedo vertical scrollea la página y el horizontal queda para la cinta. Sin eso, en mobile arrastrar la cinta scrollea la página y la cinta no se mueve.
+
+**Velocidad: 22s por vuelta = ~41 px/s en desktop, ~28 en mobile** (el grupo es más angosto ahí). Se probaron 62s (13 px/s, no se leía como movimiento) y 30s (30 px/s, quedaba lento contra la referencia).
+
 **Límite conocido de la sección: con dos testimonios la cinta se ve repetida.** La pista mide 1614px contra 1280px de pantalla, así que a cualquier altura se ven las dos citas y el arranque de la repetición. No es un bug del loop (cierra exacto, medido) sino falta de contenido. Se resuelve solo cuando Jimena pase más citas: se agregan al primer `.t-grupo` y se copian idénticas al segundo.
 
 **Bloque destacado, publicado el 18/08/2026.** Arriba de la cinta va la cita de Verónica en grande, que aparece **línea por línea**, después la autoría, y después la franja de datos. La cita está cortada en líneas a mano pero es **textual**, no se editó.
@@ -280,6 +310,21 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - Hallazgo central del business case: el techo del negocio lo fija el precio, no la capacidad. El plan más caro es el que peor rinde por hora de trabajo.
 
 ## Pendientes
+
+### Estado al cerrar el 18/08/2026 — leer esto primero
+
+**Lo que pasó ese día, en orden:** se sincronizaron los cuatro archivos de documentación (estaban diciendo cuatro cosas distintas), se rediseñó Testimonios cuatro veces, y en el medio quedó claro que **el problema no era Testimonios sino el sistema de tokens** — de ahí salió la pasada de sistema visual (blanco, títulos livianos y grandes, botones en píldora), que es el cambio más grande que tuvo el sitio hasta ahora.
+
+**Lo que está pendiente y bloquea la fecha, en orden de urgencia:**
+
+1. 🔴 **El dominio no está comprado.** Es lo único con una espera que no depende de que alguien haga algo: el certificado HTTPS de GitHub Pages tarda **hasta 24h** después de apuntar el DNS. Se verificó disponibilidad el 17/08 y estaban libres `jimenaibanez.com`, `jimenaibanez.com.ar` y `pfjimenaibanez.com`. Gastón dijo que prefiere chequear disponibilidad él antes de decidir. **Al comprarlo:** `CNAME` versionado dentro de `docs/` (si no, cada push lo borra) más los registros DNS.
+2. 🔴 **Las reglas de la comunidad de WhatsApp** siguen sin definirse y la feature 06 se promociona en el sitio en vivo.
+3. 🔴 **Foto profesional de Jimena** para "Sobre mí". Con el sitio ahora blanco y limpio **la foto actual canta mucho más** que antes: sobre crema se disimulaba, sobre blanco y al lado de un título liviano de 40px es lo primero que rompe.
+4. 🟡 **Los datos de Silvia y Verónica** (hace cuánto entrenan, de dónde arrancaron, qué cambió medible) y fotos antes/después. Es lo que desbloquea el destacado de Testimonios, que ya está diseñado y verificado.
+
+**Lo que quedó sin commitear a propósito:** `docs/_testimonios-preview.html`, que tiene el bloque destacado con foto en retrato 4:5 y el antes/después armado. No se publica porque tiene datos inventados y el sitio está en vivo.
+
+**Advertencia sobre el proceso, que costó cara.** Se rediseñó Testimonios cuatro veces empujando la forma contra un contenido que no daba, y recién a la cuarta quedó claro que faltaban dos cosas distintas: un sistema visual (que se arregló) y contenido real (que sigue faltando). Antes de volver a iterar sobre una sección, conviene preguntarse si lo que falta es diseño o es material.
 
 ### Fecha de lanzamiento: 23/08/2026, con dominio propio
 

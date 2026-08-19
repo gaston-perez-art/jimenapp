@@ -4,7 +4,7 @@
 >
 > ⚠️ **Los owners y las fechas de después del lanzamiento son una propuesta de Gastón, no un acuerdo cerrado entre los dos.** Jimena: corregí lo que no te cierre, es para eso. Lo que sí está cerrado es la fecha de lanzamiento.
 >
-> Última actualización: 17/08/2026.
+> Última actualización: 18/08/2026.
 
 ## El hito que ordena todo: 23/08/2026
 
@@ -64,8 +64,8 @@ gantt
 
 | Owner | Tarea | Estado |
 |---|---|---|
-| @gaston | Elegir, comprar y apuntar el dominio | 🔴 Sin arrancar |
-| @gaston | Ajustes de web pre-lanzamiento | 🔴 A definir cuáles |
+| @gaston | Comprar el dominio y apuntarlo | 🔴 **Lo más urgente: 24h de espera por el certificado** |
+| @gaston | Ajustes de web pre-lanzamiento | 🟡 En curso — sistema visual y Testimonios ya hechos el 18/08 |
 | @gaston | QA final y pasada de mobile | 🔴 Sin arrancar |
 | @jimena | Foto profesional para "Sobre mí" | 🔴 Pendiente |
 | @jimena | Reglas de la comunidad | 🔴 Pendiente — feature ya publicada |
@@ -89,6 +89,9 @@ gantt
 | Los dos | CTA de sesión de valoración | 🟢 Idea del benchmark | — |
 
 ## Cerradas en los últimos días
+
+**18/08:** pasada de sistema visual (blanco dominante, títulos livianos y grandes, botones en píldora, header en vidrio) · Testimonios rediseñada como cinta arrastrable · servidor de QA local para dejar de publicar solo para revisar · sincronización de los cuatro archivos de documentación.
+
 
 **15/08:** WhatsApp e Instagram reales publicados (cierra los dos bloqueantes de captación) · animación del claim del hero, en dos pasos · "Sobre mí" reacomodada · contraste y ritmo del sitio, con "Cómo trabajo" como única sección oscura · el bug de que las animaciones de scroll nunca llegaban a verse · pasada completa de mobile, cinco bugs.
 

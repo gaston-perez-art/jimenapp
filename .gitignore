@@ -1,0 +1,5 @@
+# Archivos de preview y harnesses temporales.
+# Llevan datos inventados (nombres, fotos y metricas de alumnas que no
+# existen) y el sitio esta en vivo: GitHub Pages publica todo lo que hay en
+# docs/. Se ignoran para que no se cuelen en un `git add -A`.
+docs/_*.html
