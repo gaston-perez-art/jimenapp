@@ -496,16 +496,35 @@
      plantilla. El texto de la cita es textual, solo esta cortado en lineas. */
   .t-quote .ln{display:block;}
   .t-quote .em{font-style:italic; color:var(--bronze-light);}
-  .t-autor{position:relative; display:flex; align-items:center; gap:14px; margin:0;}
-  .t-autor .barra{width:34px; height:2px; background:var(--bronze); flex:0 0 auto;}
-  .t-autor .nom{font-weight:600; font-size:16.5px; color:#fff;}
+  /* La autoria pasa de "barra + nombre" a foto + nombre + edad y pais
+     (19/08/2026). La barrita de bronce era un adorno ocupando el lugar donde
+     tiene que estar la cara: una cita firmada por alguien con foto, edad y
+     pais pesa distinto que la misma cita firmada solo con un nombre. */
+  .t-autor{position:relative; display:flex; align-items:center; gap:16px; margin:0;}
+  .t-autor .t-av{
+    width:64px; height:64px; font-size:17px;
+    /* aro finito para despegar la foto del fondo vino */
+    box-shadow:0 0 0 1px rgba(255,255,255,.20);
+  }
+  .t-autor .nom{display:block; font-weight:600; font-size:17px; color:#fff;}
+  .t-autor .meta{
+    display:flex; align-items:center; gap:9px; margin-top:5px;
+    font-size:14.5px; color:rgba(255,255,255,.66);
+  }
+  /* sobre el panel oscuro la bandera necesita su propio borde: el inset del
+     chip claro no se ve contra el vino */
+  .t-autor .bandera{box-shadow:0 0 0 1px rgba(255,255,255,.22);}
 
-  /* La franja de datos usa la estructura cifra + unidad + plazo del patron 1
-     del benchmark 03. Los tres datos son HECHOS DEL PROGRAMA, verificables y
-     ya publicados en la seccion Programa — no resultados de alumnas, que
-     todavia no existen. El tercero ademas dice por primera vez en el sitio la
-     ventaja de que atiende una sola persona, que el benchmark marco como lo
-     unico que ninguno de los 18 sitios relevados puede copiar. */
+  /* La franja de abajo del panel cambio de contenido el 19/08/2026: eran tres
+     HECHOS DEL PROGRAMA (el 1-2% de masa muscular, las 2 sesiones semanales,
+     "Jimena siempre") puestos ahi mientras no hubiera datos reales de una
+     alumna. Ahora hay: Silvia conto su historia completa, asi que la franja
+     pasa a ser la LINEA DE TIEMPO de esa historia — 2020, 2023 y hoy.
+     Se conserva la estructura de tres columnas con etiqueta + valor del
+     patron 1 del benchmark 03; lo que cambia es que el plazo ahora es de
+     verdad y es de ella.
+     El dato fisiologico del 1-2% no se perdio, sigue disponible para la
+     seccion Programa: era el reemplazo honesto mientras faltaba esto. */
   /* La franja va DENTRO del panel oscuro, asi que se invierte entera. El
      acento sobre fondo oscuro es --bronze-light: el --bronze normal no tiene
      contraste suficiente contra el wine (mismo criterio que #proceso). */
@@ -523,6 +542,10 @@
   }
   .t-dato .v{font-size:19px; font-weight:600; color:#fff; line-height:1.2; display:block;}
   .t-dato .v small{display:block; font-size:13px; font-weight:400; color:rgba(255,255,255,.62); margin-top:4px; letter-spacing:0;}
+  /* los fragmentos de la linea de tiempo que son palabras textuales de Silvia
+     van en italica y entre comillas: hay que poder distinguir de un vistazo lo
+     que dijo ella de lo que escribimos nosotros */
+  .t-dato .v small.dicho{font-style:italic; color:rgba(255,255,255,.72);}
 
   /* La cinta va a todo el ancho de la pantalla, fuera del .wrap: con margenes
      a los costados no se lee como cinta, se lee como una fila cortada mal. */
@@ -538,13 +561,14 @@
        porcentaje exacto y no un numero magico en pixeles. */
     display:flex; gap:0; width:max-content; align-items:stretch;
     /* La duracion es fija y el recorrido es el ancho de un grupo, asi que la
-       VELOCIDAD depende de cuantas tarjetas tenga cada grupo. Con las dos
-       citas de hoy, 22s dan ~40 px/s en desktop y ~28 en mobile, donde el
-       grupo es mas angosto. Se probaron 62s (13 px/s, no se leia como
-       movimiento) y 30s (30 px/s, quedaba lento contra la referencia).
-       Si se suman testimonios hay que SUBIR la duracion en proporcion o la
-       cinta se acelera sola. */
-    animation:marquee 22s linear infinite;
+       VELOCIDAD depende de cuantas tarjetas tenga cada grupo. La referencia
+       util es ~40 px/s en desktop: con 62s daba 13 px/s y no se leia como
+       movimiento, con 30s daba 30 y quedaba lento contra coderhouse.
+       19/08/2026: el grupo paso de 2 citas a 4, o sea de ~810px a ~1784px,
+       asi que la duracion subio de 22s a 45s para sostener esos 40 px/s. Si
+       se suman testimonios hay que volver a subirla en proporcion (regla:
+       segundos ≈ ancho_de_grupo / 40) o la cinta se acelera sola. */
+    animation:marquee 45s linear infinite;
     will-change:transform;
     /* Cursor de flecha, NO `grab` ni `pointer`. La manito sugiere "esto se
        toca" y convierte la seccion en algo para jugar; la flecha la deja como
@@ -562,56 +586,88 @@
      la pista mide exactamente 5 veces eso, sin sobrantes ni faltantes. */
   .t-grupo{display:flex; gap:26px; margin:0 26px 0 0; padding:0; list-style:none;}
 
-  /* ---- Por que 5 grupos y por que -20% ----
+  /* ---- Por que 4 grupos y por que -25% ----
      El loop cierra sin salto si el recorrido es exactamente el ancho de UN
-     grupo. Como los 5 grupos son identicos y ocupan lo mismo, ese ancho es
-     justo el 20% de la pista: no hace falta ningun ajuste en pixeles.
-     La version anterior usaba 2 grupos y `calc(-50% - 13px)`, y ese -13px
+     grupo. Como los grupos son identicos y ocupan lo mismo, ese ancho es
+     justo el 100%/N de la pista: no hace falta ningun ajuste en pixeles.
+     La primera version usaba 2 grupos y `calc(-50% - 13px)`, y ese -13px
      (medio gap) era fragil: dependia del valor del gap, que en mobile es
      otro, y obligaba a un segundo keyframe solo para mobile.
 
-     Y son 6 y no 2 por un motivo concreto y medido. Con 2 grupos la pista
-     medía 1614px: en cualquier monitor mas ancho que eso la cinta terminaba
-     antes que la pantalla y dejaba un hueco vacio a la derecha.
-
-     REGLA, y hay que respetarla si se cambia la cantidad de tarjetas:
+     REGLA, y hay que respetarla cada vez que cambia la cantidad de tarjetas:
         (grupos - 1) x ancho_de_grupo  >=  la pantalla mas ancha donde se vea.
      Al correrse un grupo entero, lo que queda tiene que seguir tapando toda
-     la pantalla. Con 6 grupos de dos citas eso da 4460px, que cubre 4K
-     (3840). Con 5 daba 3568 y volvia a fallar en 4K por 272px.
-     Si se cambia la cantidad de grupos, el recorrido es 100%/N. */
+     la pantalla. Esto ya fallo una vez en produccion (18/08, hueco vacio a la
+     derecha en el monitor de Gaston) y se dio por bueno porque se habia
+     medido a 1280px, que era justo el ancho donde la condicion se cumplia.
+
+     Cuentas de hoy, con 4 citas por grupo: la tarjeta topea en 420px, asi que
+     el grupo mide 4x420 + 3x26 de gap + 26 de margin = 1784px. Con 4 grupos,
+     (4-1) x 1784 = 5352px, que cubre 4K (3840) con margen. Con 3 daba 3568 y
+     volvia a fallar en 4K por 272px, que es exactamente el error de la vez
+     pasada — por eso son 4 y no 3, aunque 3 "alcance" mirando a 1280.
+     Si se cambia la cantidad de grupos, el recorrido es 100%/N. Y OJO: el
+     mismo N esta en el script (`unGrupo`), que lo necesita para el arrastre. */
   @keyframes marquee{
     from{transform:translateX(0);}
-    to  {transform:translateX(calc(-100% / 6));}
+    to  {transform:translateX(calc(-100% / 4));}
   }
 
+  /* ---- La tarjeta de la cinta (19/08/2026) ----
+     Estructura tomada de la referencia que paso Gaston (tarjetas de
+     testimonio de coderhouse.com): foto redonda + nombre + una linea de
+     contexto ARRIBA, la cita en el medio, y un pie con un dato de la persona.
+     Es el orden que hace que la cara aparezca antes que el texto: quien
+     habla primero, que dijo despues.
+     Dos traducciones al caso de Jimena:
+     • Donde la referencia pone el curso, va la EDAD. Es lo que hace que la
+       visitante de 45 se reconozca, que es el nicho del sitio.
+     • Donde la referencia pone "Ver en LinkedIn", va el PAIS con su bandera.
+       No hay perfil publico que linkear, y el pais dice algo que el sitio
+       necesita decir: se entrena a distancia y ya hay alumnas en tres paises.
+     Se saco la comilla decorativa que tenian estas tarjetas: con foto, nombre
+     y pie, la cita ya se lee como cita, y el glifo competia con el comillon
+     del panel de arriba. */
   .t-mini{
     flex:0 0 clamp(290px, 30vw, 420px);
     background:var(--card); border:1px solid var(--line); border-radius:var(--r-md);
-    box-shadow:var(--shadow-sm); padding:26px 28px 30px;
-    display:flex; flex-direction:column; gap:14px;
+    box-shadow:var(--shadow-sm); padding:26px 28px 22px;
+    display:flex; flex-direction:column; gap:18px;
   }
   /* Sin resaltado de color al pasar el mouse. La cinta entera ya responde al
      hover relentandose: subrayar ademas la tarjeta de abajo del cursor es un
      segundo feedback para el mismo gesto, y encima sugiere que la tarjeta es
      clickeable, que no lo es. */
-  /* line-height:1 obligatorio. Con el 1.6 que hereda del body la caja del
-     glifo mide casi el doble que la comilla y deja un hueco muerto antes del
-     texto: es el mismo bug que ya se corrigio el 15/08 en las tarjetas viejas. */
-  .t-mini .comilla{
-    font-family:'Archivo', sans-serif; font-weight:700; font-size:42px; line-height:1;
-    color:var(--wine-100); -webkit-text-stroke:1.4px var(--wine-600);
-    height:30px;
-  }
-  .t-mini p{margin:0; font-size:15.5px; line-height:1.55; color:var(--ink); flex:1;}
-  .t-mini .pie{display:flex; align-items:center; gap:12px; padding-top:16px; border-top:1px solid var(--line);}
-  .t-mini .av{
-    width:40px; height:40px; border-radius:999px; flex:0 0 auto;
+  .t-mini .cab{display:flex; align-items:center; gap:14px;}
+  /* El degrade de marca con las iniciales NO es un placeholder que se saca
+     cuando llega la foto: es el fondo del avatar. La foto va encima como
+     <img> en position:absolute, asi que si el archivo todavia no esta (o
+     falla), la tarjeta se ve entera igual y nunca aparece el icono de imagen
+     rota. Por eso el <img> lleva alt="" y onerror. */
+  .t-av{
+    position:relative; overflow:hidden;
+    width:54px; height:54px; border-radius:999px; flex:0 0 auto;
     background:linear-gradient(140deg, var(--wine-600), var(--bronze));
-    color:#fff; font-size:14px; font-weight:600;
+    color:#fff; font-size:15px; font-weight:600; letter-spacing:.02em;
     display:flex; align-items:center; justify-content:center;
   }
-  .t-mini .qn{font-weight:600; font-size:14.5px; line-height:1.25;}
+  .t-av img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .t-mini .qn{display:block; font-weight:600; font-size:16.5px; line-height:1.2;}
+  .t-mini .edad{display:block; font-size:14.5px; color:var(--ink-soft); margin-top:4px; line-height:1.2;}
+  .t-mini p{margin:0; font-size:15.5px; line-height:1.55; color:var(--ink); flex:1;}
+  .t-mini .pie{display:flex; align-items:center; padding-top:16px; border-top:1px solid var(--line);}
+  /* pastilla de pais. Mismo lugar y mismo peso visual que el chip de la
+     referencia: es un dato, no un boton, asi que no lleva sombra ni hover. */
+  .t-pais{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:6px 14px 6px 8px; border-radius:var(--r-pill);
+    background:var(--paper-dim); border:1px solid var(--line);
+    font-size:13.5px; color:var(--ink-soft); line-height:1.3;
+  }
+  /* Banderas en SVG y no en emoji: Windows no dibuja los emoji de bandera
+     (muestra las dos letras del pais), y este sitio se mira mucho desde
+     desktop. El sprite esta al principio del <body>. */
+  .bandera{width:22px; height:15px; border-radius:2.5px; flex:0 0 auto; display:block;}
 
   /* ---------- Como trabajo ----------
      Unica seccion oscura del recorrido. Antes toda la pagina alternaba entre
@@ -904,11 +960,13 @@
        contra el dedo, y resuelve que varios testimonios apilados sean varias
        pantallas de alto.
        El gap baja de 26 a 16 y NO hace falta tocar el keyframe: el recorrido
-       es el 20% de la pista, y la pista sigue siendo 5 grupos iguales midan
+       es el 25% de la pista, y la pista sigue siendo 4 grupos iguales midan
        lo que midan. Antes esto obligaba a un keyframe aparte solo por el
        ajuste en pixeles. */
     .t-grupo{gap:16px; margin-right:16px;}
-    .t-mini{padding:24px 22px 26px; border-radius:var(--r-md);}
+    .t-mini{padding:24px 22px 20px; border-radius:var(--r-md);}
+    .t-av{width:48px; height:48px;}
+    .t-autor .t-av{width:56px; height:56px;}
 
     /* la franja de tres en fila se aprieta abajo de 400px: pasa a columna, y
        el separador vertical se convierte en horizontal */
@@ -987,6 +1045,41 @@
 </style>
 </head>
 <body>
+
+<!-- Sprite de banderas. Va una sola vez y cada tarjeta la referencia con
+     <use>, asi que las cuatro copias de la cinta no repiten los trazados.
+     Por que SVG y no emoji: Windows no dibuja los emoji de bandera, muestra
+     las dos letras del pais. Son versiones simplificadas a proposito — a
+     22x15px las estrellas exactas se convierten en ruido. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="fl-ar" viewBox="0 0 30 20">
+    <rect width="30" height="20" fill="#74ACDF"/>
+    <rect y="6.67" width="30" height="6.66" fill="#fff"/>
+    <circle cx="15" cy="10" r="2.1" fill="#F6B40E"/>
+  </symbol>
+  <symbol id="fl-us" viewBox="0 0 30 20">
+    <rect width="30" height="20" fill="#B22234"/>
+    <g fill="#fff">
+      <rect y="1.54" width="30" height="1.54"/><rect y="4.62" width="30" height="1.54"/>
+      <rect y="7.69" width="30" height="1.54"/><rect y="10.77" width="30" height="1.54"/>
+      <rect y="13.85" width="30" height="1.54"/><rect y="16.92" width="30" height="1.54"/>
+    </g>
+    <rect width="13" height="10.77" fill="#3C3B6E"/>
+    <g fill="#fff">
+      <circle cx="3" cy="2.6" r=".8"/><circle cx="6.5" cy="2.6" r=".8"/><circle cx="10" cy="2.6" r=".8"/>
+      <circle cx="4.75" cy="5.4" r=".8"/><circle cx="8.25" cy="5.4" r=".8"/>
+      <circle cx="3" cy="8.2" r=".8"/><circle cx="6.5" cy="8.2" r=".8"/><circle cx="10" cy="8.2" r=".8"/>
+    </g>
+  </symbol>
+  <symbol id="fl-pr" viewBox="0 0 30 20">
+    <rect width="30" height="20" fill="#fff"/>
+    <g fill="#ED0000">
+      <rect width="30" height="4"/><rect y="8" width="30" height="4"/><rect y="16" width="30" height="4"/>
+    </g>
+    <path d="M0 0 L15 10 L0 20 Z" fill="#0050F0"/>
+    <path d="M5 6.4 6.05 9.05 8.9 9.2 6.7 11 7.45 13.75 5 12.2 2.55 13.75 3.3 11 1.1 9.2 3.95 9.05 Z" fill="#fff"/>
+  </symbol>
+</svg>
 
 <header>
   <nav class="wrap">
@@ -1100,157 +1193,281 @@
       <div class="section-head reveal">
         <h2>Lo que dicen las que ya entrenan conmigo</h2>
       </div>
-      <!-- Destacado. La cita es TEXTUAL, solo esta cortada en lineas para que
-           el descubrimiento sea por linea. -->
+      <!-- Destacado: la historia de Silvia (19/08/2026).
+           Antes iba aca la cita corta de Veronica, que sigue estando en la
+           cinta. Se cambio por Silvia porque su testimonio es el unico que
+           tiene RECORRIDO: cuenta que arranco en 2020, que fracaso sola, que
+           en 2023 encontro las clases en vivo y que hace dos años entrena
+           una a una. Un destacado tiene que hacer eso — el resto de las
+           citas ya dicen que Jimena es atenta y corrige.
+           La cita es TEXTUAL, solo esta cortada en lineas para que el
+           descubrimiento sea por linea, y la franja de abajo son fragmentos
+           igual de textuales de ese mismo mensaje. -->
       <div class="t-destacado">
         <div class="comillon" aria-hidden="true">“</div>
         <p class="t-quote reveal stagger">
-          <span class="ln">Gracias a Jimena, que desde Argentina</span>
-          <span class="ln">me manda videos y me exige mandarle todo</span>
-          <span class="ln em">para revisar que esté haciéndolo bien.</span>
+          <span class="ln">Desde hace 2 años Jimena y yo trabajamos juntas,</span>
+          <span class="ln">me siento una persona disciplinada, más saludable,</span>
+          <span class="ln em">con más energía y consciente</span>
+          <span class="ln em">de mis capacidades físicas.</span>
         </p>
         <div class="t-autor reveal">
-          <span class="barra"></span>
-          <span class="nom">Verónica Vázquez</span>
+          <span class="t-av">SR<img src="img/testimonios/silvia.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+          <span>
+            <span class="nom">Silvia Rodríguez</span>
+            <span class="meta">41 años
+              <svg class="bandera" role="img" aria-label="Estados Unidos"><use href="#fl-us"/></svg>
+              Estados Unidos
+            </span>
+          </span>
         </div>
-        <!-- NINGUNO de estos tres es un resultado de alumna: Jimena tiene dos
-             alumnas y todavia no tiene resultados propios medidos.
-             El primero es el dato fisiologico publicado que el benchmark 03
-             recomienda usar como "numero con plazo" mientras no haya datos
-             propios: da urgencia sin prometer nada que dependa de Jimena.
-             PENDIENTE: que Jimena confirme y cite la fuente de ese 1-2%.
-             Los otros dos son hechos del programa, ya publicados mas abajo. -->
+        <!-- Los tres son de ella y estan en su mensaje: no hay ni un dato
+             inventado ni un numero de escala. Lo que estaba antes en este
+             lugar eran hechos del programa (1-2% de masa muscular, 2 sesiones
+             semanales, "Jimena siempre"), puestos ahi justamente hasta que
+             existiera esto. -->
         <div class="t-datos reveal stagger">
           <div class="t-dato">
-            <span class="k">Después de los 50</span>
-            <span class="v">1 a 2% por año<small>de masa muscular, si no entrenás fuerza</small></span>
+            <span class="k">2020</span>
+            <span class="v">Sola, con videos<small class="dicho">«a todo esto le ganaba la indisciplina»</small></span>
           </div>
           <div class="t-dato">
-            <span class="k">Lo que pide el programa</span>
-            <span class="v">2 sesiones<small>por semana, en casa o en el gimnasio</small></span>
+            <span class="k">2023</span>
+            <span class="v">Clases en vivo<small class="dicho">«aquí empezó mi verdadera disciplina»</small></span>
           </div>
           <div class="t-dato">
-            <span class="k">Quién te atiende</span>
-            <span class="v">Jimena, siempre<small>no hay un equipo detrás</small></span>
+            <span class="k">Hoy</span>
+            <span class="v">2 años con Jimena<small>entrenamiento personalizado, una a una</small></span>
           </div>
         </div>
       </div>
 
-      <!-- Seis grupos identicos. Ver el comentario del @keyframes marquee:
-           con dos, la pista medía 1614px y en un monitor mas ancho la cinta
-           terminaba antes que la pantalla y dejaba un hueco a la derecha. -->
+      <!-- BUILD:cinta — generado por herramientas/build-testimonios.py -->
+      <!-- 4 citas repetidas en 4 grupos idénticos. Los grupos 2 en
+           adelante existen SOLO para que el loop cierre sin salto, así que van
+           aria-hidden: un lector de pantalla las lee una sola vez.
+           NO editar a mano: correr herramientas/build-testimonios.py. -->
       <div class="t-mas">
        <div class="t-cinta" id="tCinta">
         <div class="t-grupo">
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="cab">
+              <span class="t-av">DG<img src="img/testimonios/daiana.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Daiana Gillese Urueña</span>
+                <span class="edad">34 años</span>
+              </span>
+            </div>
+            <p>A mí me encanta entrenar con vos porque siempre estás atenta a cada movimiento, ayudándome para que no me lastime. Sos muy dedicada y una excelente profesional.</p>
             <div class="pie">
-              <span class="av">SR</span>
-              <span class="qn">Silvia Rodríguez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
-            <div class="pie">
-              <span class="av">VV</span>
-              <span class="qn">Verónica Vázquez</span>
+            <div class="cab">
+              <span class="t-av">MI<img src="img/testimonios/margarita.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Margarita Izurieta López</span>
+                <span class="edad">49 años</span>
+              </span>
             </div>
-          </div>
-        </div>
-        <div class="t-grupo" aria-hidden="true">
-          <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <p>Después de dos años entrenando con vos me siento mucho más fuerte y pude lograr algo que me costaba muchísimo: ser constante. Siendo mamá, entrenar desde casa me facilitó un montón.</p>
             <div class="pie">
-              <span class="av">SR</span>
-              <span class="qn">Silvia Rodríguez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Puerto Rico"><use href="#fl-pr"/></svg>Puerto Rico</span>
             </div>
           </div>
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
-            <div class="pie">
-              <span class="av">VV</span>
-              <span class="qn">Verónica Vázquez</span>
+            <div class="cab">
+              <span class="t-av">VV<img src="img/testimonios/veronica.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Verónica Vázquez</span>
+                <span class="edad">39 años</span>
+              </span>
             </div>
-          </div>
-        </div>
-        <div class="t-grupo" aria-hidden="true">
-          <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <p>Gracias a Jimena, que cambió mi forma de entrenar y mi estilo de vida. Desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
             <div class="pie">
-              <span class="av">SR</span>
-              <span class="qn">Silvia Rodríguez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Estados Unidos"><use href="#fl-us"/></svg>Estados Unidos</span>
             </div>
           </div>
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
-            <div class="pie">
-              <span class="av">VV</span>
-              <span class="qn">Verónica Vázquez</span>
+            <div class="cab">
+              <span class="t-av">LA<img src="img/testimonios/lorena.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Lorena Mariel Agout</span>
+                <span class="edad">49 años</span>
+              </span>
             </div>
-          </div>
-        </div>
-        <div class="t-grupo" aria-hidden="true">
-          <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <p>Mi experiencia fue muy buena y muy eficiente, vi muchos resultados. Las planificaciones un 1000 y muy personalizadas. Realmente muy profesional en su trabajo.</p>
             <div class="pie">
-              <span class="av">SR</span>
-              <span class="qn">Silvia Rodríguez</span>
-            </div>
-          </div>
-          <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
-            <div class="pie">
-              <span class="av">VV</span>
-              <span class="qn">Verónica Vázquez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
         </div>
         <div class="t-grupo" aria-hidden="true">
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="cab">
+              <span class="t-av">DG<img src="img/testimonios/daiana.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Daiana Gillese Urueña</span>
+                <span class="edad">34 años</span>
+              </span>
+            </div>
+            <p>A mí me encanta entrenar con vos porque siempre estás atenta a cada movimiento, ayudándome para que no me lastime. Sos muy dedicada y una excelente profesional.</p>
             <div class="pie">
-              <span class="av">SR</span>
-              <span class="qn">Silvia Rodríguez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="cab">
+              <span class="t-av">MI<img src="img/testimonios/margarita.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Margarita Izurieta López</span>
+                <span class="edad">49 años</span>
+              </span>
+            </div>
+            <p>Después de dos años entrenando con vos me siento mucho más fuerte y pude lograr algo que me costaba muchísimo: ser constante. Siendo mamá, entrenar desde casa me facilitó un montón.</p>
             <div class="pie">
-              <span class="av">VV</span>
-              <span class="qn">Verónica Vázquez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Puerto Rico"><use href="#fl-pr"/></svg>Puerto Rico</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">VV<img src="img/testimonios/veronica.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Verónica Vázquez</span>
+                <span class="edad">39 años</span>
+              </span>
+            </div>
+            <p>Gracias a Jimena, que cambió mi forma de entrenar y mi estilo de vida. Desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Estados Unidos"><use href="#fl-us"/></svg>Estados Unidos</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">LA<img src="img/testimonios/lorena.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Lorena Mariel Agout</span>
+                <span class="edad">49 años</span>
+              </span>
+            </div>
+            <p>Mi experiencia fue muy buena y muy eficiente, vi muchos resultados. Las planificaciones un 1000 y muy personalizadas. Realmente muy profesional en su trabajo.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
         </div>
         <div class="t-grupo" aria-hidden="true">
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Estoy maravillada con usted. Estoy feliz, muy feliz.</p>
+            <div class="cab">
+              <span class="t-av">DG<img src="img/testimonios/daiana.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Daiana Gillese Urueña</span>
+                <span class="edad">34 años</span>
+              </span>
+            </div>
+            <p>A mí me encanta entrenar con vos porque siempre estás atenta a cada movimiento, ayudándome para que no me lastime. Sos muy dedicada y una excelente profesional.</p>
             <div class="pie">
-              <span class="av">SR</span>
-              <span class="qn">Silvia Rodríguez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
           <div class="t-mini">
-            <div class="comilla" aria-hidden="true">“</div>
-            <p>Gracias a Jimena, que desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="cab">
+              <span class="t-av">MI<img src="img/testimonios/margarita.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Margarita Izurieta López</span>
+                <span class="edad">49 años</span>
+              </span>
+            </div>
+            <p>Después de dos años entrenando con vos me siento mucho más fuerte y pude lograr algo que me costaba muchísimo: ser constante. Siendo mamá, entrenar desde casa me facilitó un montón.</p>
             <div class="pie">
-              <span class="av">VV</span>
-              <span class="qn">Verónica Vázquez</span>
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Puerto Rico"><use href="#fl-pr"/></svg>Puerto Rico</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">VV<img src="img/testimonios/veronica.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Verónica Vázquez</span>
+                <span class="edad">39 años</span>
+              </span>
+            </div>
+            <p>Gracias a Jimena, que cambió mi forma de entrenar y mi estilo de vida. Desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Estados Unidos"><use href="#fl-us"/></svg>Estados Unidos</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">LA<img src="img/testimonios/lorena.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Lorena Mariel Agout</span>
+                <span class="edad">49 años</span>
+              </span>
+            </div>
+            <p>Mi experiencia fue muy buena y muy eficiente, vi muchos resultados. Las planificaciones un 1000 y muy personalizadas. Realmente muy profesional en su trabajo.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
+            </div>
+          </div>
+        </div>
+        <div class="t-grupo" aria-hidden="true">
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">DG<img src="img/testimonios/daiana.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Daiana Gillese Urueña</span>
+                <span class="edad">34 años</span>
+              </span>
+            </div>
+            <p>A mí me encanta entrenar con vos porque siempre estás atenta a cada movimiento, ayudándome para que no me lastime. Sos muy dedicada y una excelente profesional.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">MI<img src="img/testimonios/margarita.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Margarita Izurieta López</span>
+                <span class="edad">49 años</span>
+              </span>
+            </div>
+            <p>Después de dos años entrenando con vos me siento mucho más fuerte y pude lograr algo que me costaba muchísimo: ser constante. Siendo mamá, entrenar desde casa me facilitó un montón.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Puerto Rico"><use href="#fl-pr"/></svg>Puerto Rico</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">VV<img src="img/testimonios/veronica.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Verónica Vázquez</span>
+                <span class="edad">39 años</span>
+              </span>
+            </div>
+            <p>Gracias a Jimena, que cambió mi forma de entrenar y mi estilo de vida. Desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Estados Unidos"><use href="#fl-us"/></svg>Estados Unidos</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">LA<img src="img/testimonios/lorena.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Lorena Mariel Agout</span>
+                <span class="edad">49 años</span>
+              </span>
+            </div>
+            <p>Mi experiencia fue muy buena y muy eficiente, vi muchos resultados. Las planificaciones un 1000 y muy personalizadas. Realmente muy profesional en su trabajo.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
         </div>
        </div>
       </div>
+      <!-- /BUILD:cinta -->
     </div>
   </section>
 
@@ -1540,8 +1757,9 @@
     if (cinta && anim) {
       const DUR = anim.effect.getTiming().duration;
       const LENTO = 0.28;
-      // Lo que recorre la animacion es un grupo, o sea 1/6 de la pista.
-      const unGrupo = () => cinta.getBoundingClientRect().width / 6;
+      // Lo que recorre la animacion es un grupo, o sea 1/4 de la pista.
+      // Este 4 es el mismo N del @keyframes marquee: si cambia alla, cambia aca.
+      const unGrupo = () => cinta.getBoundingClientRect().width / 4;
 
       // ---- hover: rampa de velocidad, no un cambio de golpe ----
       let raf = null;

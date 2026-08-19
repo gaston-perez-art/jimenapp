@@ -29,7 +29,9 @@ Buena parte de lo que parece una mejora obvia ya se evaluó y se descartó por u
 • **CSS antes que JavaScript** para cualquier animación o interacción. El toggle de planes, por ejemplo, son dos radios y `:checked`, sin una línea de JS.
 • **Respetar `prefers-reduced-motion`** en todo lo que se anime.
 • **Nada tocable por debajo de 44px de alto** en mobile, y probar desde 360px de ancho.
-• **No se publican datos de alumnas**: nombres completos, condiciones de salud, mediciones ni contacto. Son datos de terceros y el repositorio es público.
+• **No se publican datos de alumnas sin autorización de ellas.** Nunca, ni con autorización: condiciones de salud, mediciones y datos de contacto. Con autorización explícita pedida por Jimena, y solo eso: nombre, edad, país, foto y la cita. Son datos de terceros y el repositorio es público, así que la autorización queda registrada junto a cada cita (campo `autorizacion` en `herramientas/build-testimonios.py`).
+
+• **Un testimonio se carga siguiendo `testimonios.md`**, que está en la raíz. Lo primero es pedir los cinco campos —texto, nombre, edad, país, foto— y la autorización. La cinta se genera con `python3 herramientas/build-testimonios.py`: no se edita a mano, porque al sumar una tarjeta hay tres números que se recalculan y que ya rompieron la sección en producción.
 
 ## Cómo verificar un cambio
 
@@ -52,4 +54,4 @@ Ese script sirve `docs/` con `Cache-Control: no-store` y **recarga la pestaña s
 | `docs/` | El sitio. GitHub Pages publica desde acá, así que todo lo que se pushea está en vivo en un minuto |
 | `estrategia/` | Propuesta de valor y business case |
 | `product-discovery/` | Cómo se llegó a cada decisión: investigaciones, benchmarks y opciones descartadas |
-| `herramientas/` | Planillas Excel de uso interno con las alumnas |
+| `herramientas/` | Planillas Excel de uso interno con las alumnas, y el generador de la cinta de testimonios |
