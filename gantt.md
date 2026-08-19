@@ -20,8 +20,8 @@ gantt
     todayMarker stroke-width:3px,stroke:#9D3A57
 
     section Lanzamiento
-    Elegir y comprar el dominio          :crit, l1, 2026-08-17, 2d
-    Apuntar DNS y CNAME                  :crit, l2, after l1, 1d
+    Elegir y comprar el dominio          :done, l1, 2026-08-17, 3d
+    Apuntar DNS y CNAME                  :crit, l2, 2026-08-19, 1d
     Esperar certificado HTTPS            :l3, after l2, 1d
     Ajustes de web pre-lanzamiento       :crit, l4, 2026-08-18, 4d
     QA final y pasada de mobile          :crit, l5, 2026-08-22, 1d
@@ -51,7 +51,7 @@ gantt
 
 ## Por qué este orden
 
-1. **El dominio va primero y no puede esperar al 22.** Es la única tarea de la semana con un tiempo de espera que no depende de nadie: después de apuntar el DNS, GitHub Pages tarda **hasta 24 horas** en emitir el certificado HTTPS. Comprarlo el 22 significa lanzar el 23 sin candado en el navegador, que en una página que pide escribir por WhatsApp es exactamente el tipo de detalle que hace dudar a una clienta. Comprado el 18-19, sobra margen.
+1. **El dominio va primero y no puede esperar al 22.** Es la única tarea de la semana con un tiempo de espera que no depende de nadie: después de apuntar el DNS, GitHub Pages tarda **hasta 24 horas** en emitir el certificado HTTPS. Lanzar el 23 sin candado en el navegador, en una página que pide escribir por WhatsApp, es exactamente el tipo de detalle que hace dudar a una clienta. **Comprado el 19/08: `entrenaconjime.com`, en Cloudflare.** Con eso la mitad lenta está resuelta y queda la configuración —`CNAME` en `docs/` y DNS— que conviene hacer el mismo 19 o el 20 para que las 24h de espera caigan holgadas.
 2. **Los ajustes de web van en paralelo, no después.** No dependen del dominio: se trabaja sobre `docs/index.html` igual que hasta ahora y el dominio solo cambia por dónde se entra.
 3. **La foto de Jimena es lo más urgente del lado de ella.** Es lo único pendiente que se ve en la primera pantalla de scroll y que ninguna cantidad de CSS puede arreglar — ya está diagnosticado en `memory.md`. Si no llega para el 21, se lanza con la actual y se cambia después; no vale correr la fecha por eso.
 4. **La comunidad sigue siendo el riesgo real del lanzamiento.** Se promociona como feature 06 del programa, y lanzar con dominio propio significa empezar a mandar tráfico de verdad a esa promesa. Es la única tarea de la semana que no es cosmética: es algo ofrecido que todavía no existe.
@@ -64,7 +64,8 @@ gantt
 
 | Owner | Tarea | Estado |
 |---|---|---|
-| @gaston | Comprar el dominio y apuntarlo | 🔴 **Lo más urgente: 24h de espera por el certificado** |
+| @gaston | Comprar el dominio | ✅ `entrenaconjime.com`, en Cloudflare (19/08) |
+| @gaston | Apuntar DNS y `CNAME` | 🔴 **Lo más urgente: arranca las 24h de espera por el certificado** |
 | @gaston | Ajustes de web pre-lanzamiento | 🟡 En curso — sistema visual y Testimonios ya hechos el 18/08 |
 | @gaston | QA final y pasada de mobile | 🔴 Sin arrancar |
 | @jimena | Foto profesional para "Sobre mí" | 🔴 Pendiente |

@@ -356,7 +356,7 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Lo que está pendiente y bloquea la fecha, en orden de urgencia:**
 
-1. 🔴 **El dominio no está comprado.** Es lo único con una espera que no depende de que alguien haga algo: el certificado HTTPS de GitHub Pages tarda **hasta 24h** después de apuntar el DNS. Se verificó disponibilidad el 17/08 y estaban libres `jimenaibanez.com`, `jimenaibanez.com.ar` y `pfjimenaibanez.com`. Gastón dijo que prefiere chequear disponibilidad él antes de decidir. **Al comprarlo:** `CNAME` versionado dentro de `docs/` (si no, cada push lo borra) más los registros DNS.
+1. 🟡 **El dominio ya está comprado: `entrenaconjime.com`** (Gastón, 19/08/2026, registrado en **Cloudflare**). Ver la sección de abajo. Falta la parte técnica —`CNAME` en `docs/` y los registros DNS— y ahí empieza la espera de **hasta 24h** por el certificado HTTPS de GitHub Pages, que es lo único del lanzamiento que no depende de que alguien haga algo.
 2. 🔴 **Las reglas de la comunidad de WhatsApp** siguen sin definirse y la feature 06 se promociona en el sitio en vivo.
 3. 🔴 **Foto profesional de Jimena** para "Sobre mí". Con el sitio ahora blanco y limpio **la foto actual canta mucho más** que antes: sobre crema se disimulaba, sobre blanco y al lado de un título liviano de 40px es lo primero que rompe.
 4. ✅ **Testimonios: cerrado el 19/08/2026.** Llegaron cinco citas con edad y país, la historia completa de Silvia, cuatro de las cinco fotos y las autorizaciones. La sección dejó de ser un diseño esperando contenido. Queda solo 🟢 `daiana.jpg`, que no bloquea nada. La carga de los próximos testimonios tiene proceso escrito en `testimonios.md`.
@@ -372,6 +372,15 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 Dos consecuencias sobre lo que ya estaba escrito acá:
 
 • **El dominio deja de ser una idea 🟢 de septiembre.** En `backlog.md` estaba en Operaciones como "definir si se contrata dominio/hosting propio o se sigue con GitHub Pages", sin fecha, y en el gantt figuraba recién el 20/09. Está decidido: dominio propio, y hay que comprarlo y apuntarlo. GitHub Pages puede seguir siendo el hosting — un dominio propio no obliga a cambiar de hosting, se apunta con un CNAME.
+**El dominio es `entrenaconjime.com`, comprado el 19/08/2026 en Cloudflare.** Lo eligió y lo registró Gastón. No está entre los tres que se habían chequeado el 17/08 (`jimenaibanez.com`, `jimenaibanez.com.ar`, `pfjimenaibanez.com`) y el cambio de criterio importa: el nombre no es la persona sino **lo que se hace con ella** — se lee como una frase ("entrená con Jime"), usa el diminutivo con el que la conocen las alumnas y funciona dicho en voz alta en un audio de WhatsApp o en una story, que es por donde va a llegar la mayoría del tráfico. Un dominio con nombre y apellido obliga a deletrear.
+
+Consecuencias técnicas, todas todavía pendientes:
+
+• **`CNAME` versionado dentro de `docs/`**, con `entrenaconjime.com` y nada más. Si no está adentro de `docs/`, cada push lo borra, porque GitHub Pages publica esa carpeta entera.
+• **DNS en Cloudflare.** Registros de Pages para el apex más un `CNAME` de `www` a `gaston-perez-art.github.io`. Ojo con lo propio de Cloudflare: el proxy naranja tiene que estar en **DNS only** hasta que GitHub emita el certificado, o la validación del apex falla; y el modo SSL/TLS tiene que ser **Full**, nunca *Flexible* (con Flexible se entra en un bucle de redirecciones contra Pages, que ya sirve HTTPS).
+• **Hasta 24h de espera** por el certificado. Con lanzamiento el 23/08, hacer esto el 19 o el 20 deja margen; el 22 no.
+• **Al quedar en vivo**, revisar las URLs absolutas del sitio (`og:url`, `canonical`, el `sitemap` si se suma) y actualizar el link del `README.md`, que hoy apunta a `gaston-perez-art.github.io/jimenapp/`. Esa URL vieja sigue funcionando y redirige.
+
 • **Se abre un corte entre "lanzamiento" y "después".** Antes del 23 solo entra lo que bloquea publicar; todo lo que sea mejora del sitio ya publicado pasa a después. El criterio para decidir de qué lado cae cada pendiente: *¿esto hace que la página no se pueda mostrar, o solo que se pueda mostrar mejor?*
 
 **Mejoras pedidas por Jimena (14/08/2026) — ver `backlog.md` para la vista por área:**
@@ -447,6 +456,7 @@ Dos consecuencias sobre lo que ya estaba escrito acá:
 
 **Producto y operación:**
 
-- [ ] 🔴 **Comprar el dominio y apuntarlo, antes del 23/08/2026.** Ya no es "definir si se contrata": está decidido que va con dominio propio (17/08/2026). Falta elegir el nombre, comprarlo y configurar el `CNAME` en `docs/` más los registros DNS. El hosting puede seguir siendo GitHub Pages. Ojo con dos cosas: el certificado HTTPS de Pages tarda hasta 24h en emitirse después de apuntar el DNS — no dejarlo para el 22 — y el archivo `CNAME` tiene que estar versionado dentro de `docs/`, si no cada push lo borra.
+- [x] **Comprar el dominio: hecho el 19/08/2026.** Es `entrenaconjime.com`, registrado en Cloudflare por Gastón.
+- [ ] 🔴 **Apuntar el dominio, antes del 23/08/2026.** Falta el `CNAME` versionado dentro de `docs/` (si no, cada push lo borra) y los registros DNS en Cloudflare, con el proxy en *DNS only* y SSL/TLS en *Full*. El hosting sigue siendo GitHub Pages. El certificado HTTPS tarda hasta 24h en emitirse después de apuntar el DNS: no dejarlo para el 22. Detalle completo en "Fecha de lanzamiento" más arriba.
 - [ ] Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`.
 - [ ] Usar las planillas de `herramientas/` como argumento comercial en la web. Hoy son el activo de retención del proyecto y no se mencionan en ningún lado.

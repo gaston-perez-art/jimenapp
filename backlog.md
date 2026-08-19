@@ -72,7 +72,7 @@ Decisiones económicas y de posicionamiento. Viven en `estrategia/`.
 
 Lo que sostiene el negocio por detrás, sin ser ni web pública ni estrategia.
 
-- [ ] 🔴 **Dominio propio, antes del 23/08/2026.** Ya no es "definir si conviene": está decidido (17/08/2026). Falta elegir el nombre, comprarlo, poner el `CNAME` versionado dentro de `docs/` y configurar los registros DNS. El hosting sigue siendo GitHub Pages. **Arrancar temprano en la semana:** el certificado HTTPS de Pages tarda hasta 24h en emitirse después de apuntar el DNS
+- [ ] 🔴 **Apuntar el dominio propio, antes del 23/08/2026.** **Comprado el 19/08/2026: `entrenaconjime.com`, registrado en Cloudflare.** Falta poner el `CNAME` versionado dentro de `docs/` —si no, cada push lo borra— y configurar los registros DNS en Cloudflare, con el proxy en *DNS only* hasta que el certificado se emita y SSL/TLS en *Full*. El hosting sigue siendo GitHub Pages. **Arrancar temprano en la semana:** el certificado HTTPS de Pages tarda hasta 24h en emitirse después de apuntar el DNS
 - [ ] 🟢 Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`
 
 ## Cómo leer las prioridades

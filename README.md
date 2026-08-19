@@ -36,6 +36,8 @@ Cada `.xlsx` tiene un script `build-*.ps1` homónimo que lo genera desde cero (u
 3. Elegí la rama `main` y la carpeta `/docs`. Guardá.
 4. En un par de minutos la página queda en **https://gaston-perez-art.github.io/jimenapp/**
 
+**El dominio propio es `entrenaconjime.com`** (comprado el 19/08/2026 en Cloudflare). Todavía no está apuntando: falta el archivo `CNAME` dentro de `docs/` y los registros DNS. Cuando esté, esa va a ser la dirección del sitio y la de `github.io` sigue funcionando redirigiendo. El detalle de la configuración está en `memory.md`.
+
 > La carpeta se llama `docs` y no `web` por una restricción de GitHub Pages: publicando desde una rama, las únicas carpetas posibles son la raíz del repo (`/`) o `/docs`. No se puede elegir una carpeta con otro nombre.
 
 Una vez configurado, cada vez que se pushea a `main` la página publicada se actualiza sola en aproximadamente un minuto. Si no ves el cambio, probá recargar con caché limpia (Cmd+Shift+R).
