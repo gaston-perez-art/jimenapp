@@ -32,6 +32,12 @@
     --bronze:#A9824A;
     --bronze-soft:#EFE3CD;
     --bronze-light:#DCBA84;   /* acento legible sobre fondo oscuro */
+    /* El --bronze (#A9824A) sobre fondo claro da 3.5:1 de contraste, debajo
+       del minimo de 4.5 para texto chico. Se usaba en labels en mono de 11 a
+       13px, que es justo el peor caso. Este tono da 4.9:1 y se ve igual de
+       bronce. El --bronze normal se sigue usando para lo que NO es texto:
+       iconos, lineas, el punto del logo. */
+    --bronze-text:#8A6636;    /* bronce para texto chico sobre fondo claro */
     --r-sm:10px;              /* botones, chips, etiquetas */
     --r-md:14px;              /* tarjetas y cajas */
     --r-lg:20px;              /* superficies grandes */
@@ -89,9 +95,15 @@
        veia como una banda de otro color sobre el sitio ya blanco. Superpower
        y Midi resuelven el header asi: casi transparente y con un blur fuerte,
        para que el contenido se insinue debajo en vez de quedar tapado. */
-    background:rgba(255,255,255,.72);
-    backdrop-filter:blur(24px) saturate(180%);
-    -webkit-backdrop-filter:blur(24px) saturate(180%);
+    /* OJO con la opacidad: a .72 y con saturate(180%) el vidrio TOMA EL COLOR
+       de lo que tiene detras. Sobre #proceso, que es la unica seccion oscura,
+       el header se volvia una banda malva y el logo en wine-900 quedaba casi
+       ilegible. Se subio a .93 y se saco el saturate: sigue habiendo vidrio
+       (el contenido se difumina detras) pero el color no se corre.
+       Si se baja de .9, revisar SIEMPRE el header sobre #proceso. */
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
     border-bottom:1px solid var(--line);
   }
   nav.wrap{
@@ -401,7 +413,7 @@
   }
   .esp-label{
     font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.12em;
-    text-transform:uppercase; color:var(--bronze); margin-bottom:16px;
+    text-transform:uppercase; color:var(--bronze-text); margin-bottom:16px;
   }
   .esp-lista{
     list-style:none; margin:0; padding:0;
@@ -761,7 +773,7 @@
     border-bottom:1px solid var(--line);
   }
   .programa-top .monto{display:flex; align-items:baseline; justify-content:center; gap:9px;}
-  .programa-top .n{font-size:42px; font-weight:700; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
+  .programa-top .n{font-size:52px; font-weight:500; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
   .programa-top .u{font-size:15px; color:var(--ink-soft);}
   .programa-cta{
     display:inline-block; margin-top:20px;
@@ -784,7 +796,7 @@
   .programa-feats li{display:flex; gap:14px; align-items:flex-start;}
   .programa-feats .pf-n{
     flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:12px;
-    color:var(--bronze); font-weight:600; letter-spacing:.06em; margin-top:2px;
+    color:var(--bronze-text); font-weight:600; letter-spacing:.06em; margin-top:2px;
   }
   .programa-feats h4{font-size:15.5px; margin:0 0 4px;}
   .programa-feats p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}

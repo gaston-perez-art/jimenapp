@@ -76,6 +76,15 @@ Se relevaron **de verdad** (mirando el diseño, no leyendo el contenido) las dos
 • **Botones en píldora**: token nuevo `--r-pill:999px` en `.navcta`, `.btn-primary`, `.btn-ghost` y `.programa-cta`.
 • Easing único `cubic-bezier(.16,1,.3,1)` (expo-out) reemplazando las 11 apariciones de `cubic-bezier(.22,.61,.36,1)`, e interlineado del cuerpo de 1.6 a 1.5.
 
+**Dos bugs de esa misma pasada, encontrados al revisar despues de pushear (y corregidos):**
+
+• **El header se volvia una banda malva sobre `#proceso`, con el logo casi ilegible.** A `rgba(255,255,255,.72)` con `saturate(180%)`, el vidrio **toma el color de lo que tiene detras**: sobre la unica seccion oscura del sitio, el blanco se teñia de vino y el logo en `--wine-900` perdia contraste. El header anterior no tenia el problema porque estaba al 92% de opacidad. Corregido a `.93` y sin `saturate`. **Si alguna vez se baja de `.9`, hay que revisar SIEMPRE el header sobre `#proceso`.**
+• **Los labels en mono daban 3.51:1 de contraste**, debajo del minimo de 4.5 para texto chico, y estan a 11-13px que es el peor caso. No lo introdujo la pasada — `--bronze` (#A9824A) sobre fondo claro ya fallaba antes, sobre crema tambien — pero se arreglo ahora: token nuevo **`--bronze-text:#8A6636`** (5.2:1) para texto chico sobre fondo claro. El `--bronze` normal se sigue usando para lo que no es texto: iconos, lineas, el punto del logo.
+
+Ademas el precio (`.programa-top .n`) era el unico peso 700 que quedaba desentonando con el sistema nuevo: paso a 500 y de 42 a 52px, que es como se compensa el peso con tamaño en todo el resto.
+
+**Verificacion de esta pasada (la que faltaba hacer antes de pushear):** contraste medido en 10 pares de texto/fondo, todos por encima del minimo; cero overflow horizontal y cero areas tactiles bajo 44px a 390px; ningun titulo desbordado; y la invariante de "contenido visible sin JS" chequeada estaticamente sobre el CSS — los unicos `opacity:0` fuera de `@keyframes` y fuera de `.has-js` son `.rot-w` y `.pin-slide`, y los dos tienen respaldo explicito (`.rot-3{opacity:1}` en reduced-motion, y la primera `.pin-slide` viene con `.on` en el HTML).
+
 **El header pasó a vidrio esmerilado:** era `rgba(250,246,242,.92)` hardcodeado, o sea una banda de crema opaco sobre un sitio ya blanco. Ahora es `rgba(255,255,255,.72)` con `backdrop-filter:blur(24px) saturate(180%)`, que es como lo resuelven las dos referencias.
 
 Verificado a 390px después de la pasada: cero overflow horizontal, nada se sale del viewport y ningún área táctil por debajo de 44px.
