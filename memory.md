@@ -164,8 +164,8 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Bloqueantes de captación** (hoy la web no puede convertir una sola visita):
 
-- [ ] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real.
-- [ ] Agregar el enlace real de Instagram en el footer.
+- [x] **Número real de WhatsApp cargado (14/08/2026).** Los dos botones ("Quiero mi cambio" del hero y "Escribime por WhatsApp" de contacto) apuntan a `https://wa.me/5491135863879`. Se sacó también el `.placeholder-flag` que marcaba el número de ejemplo, ya sin uso.
+- [x] **Enlace real de Instagram agregado (14/08/2026).** `@pf.jimenaibanez` — actualizado en el footer y en la nota de la sección de contacto (`https://instagram.com/pf.jimenaibanez`).
 - [x] Sumar testimonios reales de alumnas a la sección "Testimonios" (13/08/2026): Silvia Rodríguez y Verónica Vázquez, con autorización confirmada por Jimena. Las citas son textuales (Silvia, transcripta tal cual, cortada donde cortaba el mensaje original — no se completó la frase; Verónica, extraída de un posteo más largo, sacando solo la mención dirigida a Jimena). Sin fotos de ellas todavía. La tercera tarjeta del grid quedó como invitación abierta ("Tu lugar está reservado acá") en vez de un tercer testimonio inventado — no inventar testimonios hasta que exista uno real.
 
 **Decisiones abiertas de negocio:**
