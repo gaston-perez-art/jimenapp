@@ -34,7 +34,11 @@ Cada `.xlsx` tiene un script `build-*.ps1` homónimo que lo genera desde cero (u
 1. Andá a **Settings → Pages** en este repositorio.
 2. En "Source", elegí **Deploy from a branch**.
 3. Elegí la rama `main` y la carpeta `/docs`. Guardá.
-4. En un par de minutos la página queda en **https://gaston-perez-art.github.io/jimenapp/**
+4. En un par de minutos la página queda publicada.
+
+**El sitio está en vivo en https://entrenaconjime.com** — esa es la dirección oficial y la que hay que compartir. El dominio se compró el 19/08/2026 en Cloudflare y quedó apuntado el mismo día, con HTTPS. La dirección vieja `gaston-perez-art.github.io/jimenapp/` **sigue funcionando y redirige sola**, así que cualquier link que ya se haya mandado no se rompe. El detalle de la configuración está en `memory.md`.
+
+**El sitio mide visitas con Google Analytics 4** desde el 19/08/2026, incluidos los clics a WhatsApp y a Instagram. Si tocás alguno de los botones, mirá la nota de analytics en `memory.md` antes: hay un atributo `data-ga` que no hay que perder.
 
 > La carpeta se llama `docs` y no `web` por una restricción de GitHub Pages: publicando desde una rama, las únicas carpetas posibles son la raíz del repo (`/`) o `/docs`. No se puede elegir una carpeta con otro nombre.
 

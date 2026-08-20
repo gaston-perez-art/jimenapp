@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://entrenaconjime.com/sitemap.xml

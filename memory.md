@@ -28,6 +28,25 @@ Para que el pull no genere commits de merge innecesarios, conviene configurar un
 git config pull.rebase true
 ```
 
+## Ver los cambios antes de publicar: `qa-local.py`
+
+**Decisión de Gastón del 18/08/2026, y cambia cómo se trabaja.** Hasta ese día cada cambio se commiteaba y pusheaba para poder mirarlo, y como GitHub Pages sirve `main/docs`, eso significaba **publicar para revisar**. Varias iteraciones de diseño salieron en vivo a medio hacer por ese motivo.
+
+Ahora hay un servidor de QA local en la raíz del repo:
+
+```bash
+python3 qa-local.py          # http://localhost:8899/index.html
+```
+
+Hace dos cosas que `python3 -m http.server` no hace:
+
+• **Manda `Cache-Control: no-store`.** Sin esto el navegador se queda con la versión vieja — todo el CSS va inline en `index.html`, así que uno termina mirando estilos de hace dos ediciones sin enterarse. Es el mismo problema que ya estaba anotado para el harness de mobile.
+• **Recarga la pestaña sola** cuando cambia cualquier archivo de `docs/`. Inyecta un script chico en la respuesta HTML que consulta `/__cambios` una vez por segundo. **La inyección pasa solo en la respuesta del servidor: el archivo en disco no se toca**, así que no hay forma de que se cuele en lo que se publica (verificado: `grep "__cambios" docs/index.html` da 0).
+
+**El flujo acordado:** editar → Gastón mira en `localhost:8899` → recién cuando aprueba, commit y push.
+
+**Límite que hay que respetar:** `main` es compartido con Jimena y `docs/index.html` es un solo archivo con todo adentro. Guardarse cambios locales durante días y que ella pushee mientras tanto genera un conflicto feo. La regla práctica es **guardar local mientras se QA'ea, pushear el mismo día**, y `git pull --rebase` antes de retomar.
+
 ## Decisiones de diseño (página web)
 
 **Paleta de colores:**
@@ -45,6 +64,56 @@ git config pull.rebase true
 - Detalles/datos (eyebrows, labels): IBM Plex Mono. Se mantiene sin cambios: refuerza el posicionamiento "basado en evidencia" y es lo que hacen Equinox y Stripe.
 
 Reemplaza a Fraunces + Work Sans. El motivo no fue estético: de 12 sitios de referencia relevados, 11 usan grotesca sans en los títulos, y Fraunces empujaba la lectura hacia *wellness artesanal* cuando el contenido habla de periodización y RPE. El proceso completo, con el benchmark y las opciones descartadas, está en `product-discovery/01-tipografia/`.
+
+**Pasada de sistema visual: "clean, premium, salud" (18/08/2026, decisión de Gastón).** Después de cuatro iteraciones sobre la sección de testimonios que Gastón siguió rechazando, quedó claro que **el problema nunca fue la sección: era el sistema de tokens.** Cualquier sección construida sobre crema cálido con títulos en peso 700 a 36px se lee igual de genérica por más que se reordene.
+
+Se relevaron **de verdad** (mirando el diseño, no leyendo el contenido) las dos referencias que marcó Gastón, `joinmidi.com` y `superpower.com`, extrayendo los tokens computados del DOM. Lo que se midió:
+
+| | Midi | Superpower | jimenapp antes |
+|---|---|---|---|
+| Display | 154px | 56px | 36px |
+| Peso del display | 900 condensada | **400** | **700** |
+| line-height display | 0.78 | 1.00 | 1.08 |
+| Familias | 4 con roles | **1 sola** | 2 |
+| Superficie dominante | blanco + `#F7F7F1` | blanco + `#FAFAFA` | crema `#FAF6F2`/`#F1E9E1` |
+| Cuerpo | 19px / 1.5 | 15-17px / 1.4 | 16px / 1.6 |
+| Botones | píldora 999px | píldora 999px | 10px |
+| Easing | — | `cubic-bezier(.16,1,.3,1)` | `cubic-bezier(.22,.61,.36,1)` |
+
+**Tres hallazgos que cambian criterios ya escritos acá:**
+
+1. **Superpower no usa una sola animación ligada al scroll.** Cero: 26 animaciones, todas en `DocumentTimeline`, y el navegador soporta `view()`. Lo premium ahí no viene de más movimiento sino de restricción — una sola curva de easing, y solo `opacity` y `transform`. Esto respalda haber revertido el scroll-driven de testimonios.
+2. **El peso 700 era el enemigo.** Los dos caminos premium son opuestos y ninguno pasaba por donde estábamos: Superpower usa **peso 400 a 56px**, Midi **900 condensada a 154px**. El 700 a 36px es el default de cualquier landing. **Se eligió el camino Superpower** (decisión de Gastón): liviano y grande. El contraste lo da el tamaño, no la negrita. Ventaja práctica: Archivo ya está cargada en 400/500/600/700, así que no costó una familia nueva.
+3. **El blanco no era un detalle, era la base.** Las dos referencias son blanco-dominante con un segundo neutro casi indistinguible. El sitio no tenía **ninguna** superficie blanca salvo las tarjetas: alternaba dos cremas cálidos y cercanos. Es la misma causa raíz que ya se había diagnosticado el 15/08 ("el sitio se lee monocromático") y que en su momento se atacó solo con la sección oscura, dejando el crema intacto.
+
+**Los seis cambios aplicados, todos de token:**
+
+• `--paper` de `#FAF6F2` a **`#FFFFFF`**, `--paper-dim` de `#F1E9E1` a **`#FAF8F6`**. El calor de la marca ahora lo aportan el vino y el bronce, no el fondo.
+• `--line` de `#E3D7C9` a `#E9E4DE`: sobre blanco el anterior tiraba a amarillo. Los SVG del panel de "Cómo trabajo" tenían ese color hardcodeado y se actualizaron también.
+• `h1,h2,h3` de peso **700 a 500**, `letter-spacing` de `-.025em` a `-.02em`, `line-height` de `1.08` a `1.02`.
+• Escala más agresiva: `.section-head h2` de `clamp(26,3vw,36)` a `clamp(32,4.4vw,60)`; hero `h1` a `clamp(38,5vw,68)`; `.sobre-texto h2` a `clamp(27,3vw,40)`; `.pin-slide h3` a `clamp(30,3.6vw,50)`; la cita del destacado a `clamp(26,3vw,42)` en peso 400.
+• **Botones en píldora**: token nuevo `--r-pill:999px` en `.navcta`, `.btn-primary`, `.btn-ghost` y `.programa-cta`.
+• Easing único `cubic-bezier(.16,1,.3,1)` (expo-out) reemplazando las 11 apariciones de `cubic-bezier(.22,.61,.36,1)`, e interlineado del cuerpo de 1.6 a 1.5.
+
+**Restos de la paleta crema, encontrados despues (18/08/2026).** Cambiar los tokens `--paper` y `--paper-dim` no alcanzo: habia **tres superficies con el degrade viejo hardcodeado**, `linear-gradient(160deg, var(--wine-100), var(--bronze-soft))`, o sea rosa a beige. Sobre el sitio ya blanco se leian como una mancha de otro color.
+
+• **`.programa-top`** (la franja del precio) era la unica que se veia, y quedaba como una banda crema en el medio de una tarjeta blanca. Ahora es `var(--card)` y la separacion la hace la linea de abajo, no un fondo: es como resuelven el bloque de precio las dos referencias.
+• **`.hero-video`** y **`.foto-ph`** solo asoman mientras carga el video y la foto. Pasaron a `var(--paper-dim)`.
+
+**Como quedo el mapa de superficies, medido en el DOM:** body/hero, `#sobre` y `#contacto` en **blanco puro**; `#testimonios` y `#servicios` en `#FAF8F6`; todas las tarjetas y la franja del precio en blanco; el header en blanco al 93%. Las dos unicas superficies de color son el panel oscuro de la cita y `#proceso`. **Leccion: al cambiar tokens de color hay que buscar ademas los valores hardcodeados y los degrades, que no se mueven solos.**
+
+**Dos bugs de esa misma pasada, encontrados al revisar despues de pushear (y corregidos):**
+
+• **El header se volvia una banda malva sobre `#proceso`, con el logo casi ilegible.** A `rgba(255,255,255,.72)` con `saturate(180%)`, el vidrio **toma el color de lo que tiene detras**: sobre la unica seccion oscura del sitio, el blanco se teñia de vino y el logo en `--wine-900` perdia contraste. El header anterior no tenia el problema porque estaba al 92% de opacidad. Corregido a `.93` y sin `saturate`. **Si alguna vez se baja de `.9`, hay que revisar SIEMPRE el header sobre `#proceso`.**
+• **Los labels en mono daban 3.51:1 de contraste**, debajo del minimo de 4.5 para texto chico, y estan a 11-13px que es el peor caso. No lo introdujo la pasada — `--bronze` (#A9824A) sobre fondo claro ya fallaba antes, sobre crema tambien — pero se arreglo ahora: token nuevo **`--bronze-text:#8A6636`** (5.2:1) para texto chico sobre fondo claro. El `--bronze` normal se sigue usando para lo que no es texto: iconos, lineas, el punto del logo.
+
+Ademas el precio (`.programa-top .n`) era el unico peso 700 que quedaba desentonando con el sistema nuevo: paso a 500 y de 42 a 52px, que es como se compensa el peso con tamaño en todo el resto.
+
+**Verificacion de esta pasada (la que faltaba hacer antes de pushear):** contraste medido en 10 pares de texto/fondo, todos por encima del minimo; cero overflow horizontal y cero areas tactiles bajo 44px a 390px; ningun titulo desbordado; y la invariante de "contenido visible sin JS" chequeada estaticamente sobre el CSS — los unicos `opacity:0` fuera de `@keyframes` y fuera de `.has-js` son `.rot-w` y `.pin-slide`, y los dos tienen respaldo explicito (`.rot-3{opacity:1}` en reduced-motion, y la primera `.pin-slide` viene con `.on` en el HTML).
+
+**El header pasó a vidrio esmerilado:** era `rgba(250,246,242,.92)` hardcodeado, o sea una banda de crema opaco sobre un sitio ya blanco. Ahora es `rgba(255,255,255,.72)` con `backdrop-filter:blur(24px) saturate(180%)`, que es como lo resuelven las dos referencias.
+
+Verificado a 390px después de la pasada: cero overflow horizontal, nada se sale del viewport y ningún área táctil por debajo de 44px.
 
 **Header:** 66px de alto, sticky. Achicado desde los 78px originales para que el hero y las secciones entren en una pantalla. Si se toca, hay que actualizar también el `top` del menú desplegable de mobile y el `top` del panel fijo del proceso, que dependen de ese número.
 
@@ -82,7 +151,154 @@ La suavidad la aportan dos sombras muy bajas (`--shadow-sm` y `--shadow-md`), no
 
 **Bug arreglado (14/08/2026, a pedido de Jimena de "la animación quedó media rara").** La causa real no era el `clip-path` (ese margen de ~3-4px alcanza: a la posición final de salida, -105%, casi toda la palabra ya está clippeada). El problema era que `opacity` y `transform` cambiaban **al mismo tiempo** en el tramo de transición (31%→37% del ciclo): a mitad de camino la palabra quedaba medio transparente y medio desplazada, y ese "fantasma" semitransparente se veía pisando el texto de arriba durante ~0,3s de cada ciclo. Arreglado desacoplando los tiempos dentro del mismo `@keyframes rotWord`: se agregaron paradas intermedias (4% y 33%) para que el tramo largo del recorrido (de 28%/-28% a 105%/-105%) pase siempre en `opacity:0`, y el fundido solo cubra el tramo corto cerca del centro, donde la palabra todavía está casi en su lugar. Verificado programáticamente con la Web Animations API (`element.getAnimations()`, sampleando `currentTime` cada 50ms) y visualmente: ya no hay ningún instante con opacidad y desplazamiento grande a la vez. Se mantiene el mismo timing global (0/6/31/37/100%), la misma duración (8,4s) y el mismo `cubic-bezier`, así que el resto de la sincronización entre `rot-1/2/3` no cambió.
 
+**Botones y bloque de contacto: sale el flat wine-600, entra gradiente wine→bronze (15/08/2026, sesión de "sitio muy estático y monocromático").** Benchmark de referencia: `entrenadoranoeliarodriguezfit.com` (bloque de color fuerte que corta la página, no solo variación de tono) y el AI Builders Program de Coderhouse (CTA en gradiente con desplazamiento en hover). Cambios:
+- `.btn-primary` y `.programa-cta` pasan de `background:var(--wine-600)` sólido a `linear-gradient(135deg, var(--wine-600), var(--bronze))` con `background-position` animado en hover (el gradiente se desplaza, no solo oscurece) y sombra de color en vez de solo oscurecer.
+- El CTA del hero suma un pulso de entrada (`ctaPulse`, dos iteraciones, arranca 1.5s después de que termina `heroIn`) para llamar la atención una sola vez, no en loop. Deshabilitado en el bloque de `prefers-reduced-motion` existente, mismo criterio que el resto del sitio.
+- `.contact-box` ("Escribime y arrancamos") pasa de tarjeta blanca a un bloque con gradiente `wine-900 → wine-600 → bronze`, texto blanco y el botón invertido (fondo blanco, texto wine-900) para que siga siendo el elemento de mayor contraste ahí adentro. Es el primer bloque de color fuerte de todo el sitio — hasta ahora todas las secciones alternaban entre `--paper` y `--paper-dim`, dos crema casi iguales, que es la raíz técnica de por qué el sitio se leía monocromático aunque la paleta definida no lo fuera.
+- Ningún cambio toca layout, `width`, `padding` ni las reglas del breakpoint de 720px — solo `background`, `color` y `box-shadow`, así que el mobile queda intacto sin necesidad de retocarlo.
+- Continuación de esta línea, resuelta más tarde el mismo día: `#proceso` pasó a ser la única sección oscura del sitio (ver más abajo), así que el contraste ya no queda concentrado solo en el CTA final. `#servicios` y `#testimonios` siguen en paper/paper-dim y se decidió dejarlos así.
+
+**Pasada completa de mobile (15/08/2026).** Se hizo con viewport real de 390px, no redimensionando la ventana: Chrome no baja de ~600px de ancho, así que se usó un harness temporal (`docs/_mobile-test.html`, un iframe de 390x844 apuntando a `index.html`, borrado al terminar). Al ser del mismo origen se puede medir por dentro con `contentWindow`, que es lo que permitió encontrar los bugs midiendo en vez de mirando. **Si hace falta repetir la pasada, conviene rearmar ese harness.** Ojo con el caché: el CSS va inline en el HTML, así que hay que recargar el iframe con un query string (`index.html?v=Date.now()`) o se siguen midiendo los estilos viejos.
+
+**Bug importante encontrado en esa pasada: en pantallas ≤400px el hero se quedaba sin padding vertical.** El título terminaba pegado al header sticky, sin aire. La causa es de sistema, no del hero: `.wrap` definía su padding horizontal con el **shorthand** (`padding:0 16px`), y el hero es `<section class="hero wrap">` — lleva las dos clases. Como la regla de `.wrap` del breakpoint de 400px viene después en el archivo y tiene la misma especificidad, el shorthand pisaba el `padding:36px 0 48px` de `.hero` y le ponía el vertical en cero. **Arreglado pasando `.wrap` a longhand** (`padding-left`/`padding-right`) en los tres breakpoints, y `.hero` a longhand vertical (`padding-top`/`padding-bottom`). Ahora cada clase es dueña de un eje y no se pisan.
+- El mismo bug existía al revés en desktop: el shorthand de `.hero` le comía el padding horizontal de `.wrap`. No se veía a 1440px porque `.wrap` tiene `max-width:1180px` y sobra margen, pero entre 1180px y ~1236px de viewport el texto tocaba los bordes. Resuelto con el mismo cambio.
+- **Regla para el futuro: `.wrap` es dueña del eje horizontal y nunca debe usar el shorthand `padding`.** Hay al menos dos elementos que la combinan con otra clase (`section.hero.wrap` y `div.wrap.sobre-grid`).
+
+**Hueco en la animación del claim del hero, corregido (15/08/2026).** Medido escrubeando la animación con la Web Animations API (`getAnimations()`, `pause()` y `currentTime`, sin esperas reales). Las tres palabras entran cada 1/3 del ciclo (delays 0 / 2.8 / 5.6s sobre 8.4s = 33.33%), pero las paradas del keyframe estaban en 4% y 33%: la cuenta daba 29% en vez de 33.33%, así que **cada relevo dejaba ~0,4s en que ninguna palabra estaba visible y el título se leía solo "Más"** — tres veces por ciclo, ~19% del tiempo. Era un efecto colateral del arreglo del fantasma del 14/08, no un problema nuevo. Corregido moviendo las paradas a 1% y 34.33%, que es exactamente `33.33% + 1%`: el instante en que una termina de desaparecer coincide con el que arranca la siguiente. Verificado: el tiempo sin ninguna palabra visible bajó de ~400ms a ~75ms por relevo (un parpadeo de 3-4 frames, que es el pulso normal del rodillo) **y se comprobó que no volvió el fantasma** (cero instantes con opacidad intermedia y desplazamiento grande). Se mantiene el principio del 14/08: el desplazamiento grande siempre en `opacity:0`.
+
+**Otros arreglos de la misma pasada:**
+- **Instagram en la caja de contacto pasó de link suelto a botón secundario** (`.btn-ghost`, outline blanco sobre el gradiente). Como link inline dentro de una frase medía 15px de alto tocable, muy por debajo del mínimo de 44px del proyecto; ahora mide 51px. De paso deja de esconder el canal público principal de Jimena en medio de una oración.
+- **La comilla de las tarjetas de testimonio (`.testimonial-card .num`) heredaba el `line-height:1.6` del body.** Con `font-size:44px` la caja del glifo medía 70px para una comilla que ocupa la mitad, dejando un hueco muerto antes de la cita. Con `line-height:1` la caja bajó a 44px y cada tarjeta se acortó 27px. Se nota sobre todo en mobile, donde van apiladas.
+- Verificado además: **cero overflow horizontal** a 390px y **cero áreas táctiles por debajo de 44px** en toda la página.
+
+**"Sobre mí" reacomodada (15/08/2026, pedido de Jimena del 14/08 de hacerla "más armónica").** Se atacaron cuatro cosas concretas, todas medidas y no a ojo:
+- **La foto pasa de cuadrada a retrato 4:5.** El original es 3:4 vertical (960x1280) y el cuadrado descartaba el 25% del alto. Esto además emparejó las columnas: el desbalance entre la columna de foto y la de texto pasó de **124px a ~28px**, que era la causa técnica de que la sección se viera "desarmada" (la foto terminaba mucho antes que el texto y dejaba un hueco).
+- **El título pasa de 4 líneas a 2**, subiendo su `max-width` de 24ch a 32ch. Con 24ch, "Profesora Nacional de Educación Física, especializada en fuerza femenina" se partía en cuatro y leía como un muro de credencial en vez de como una frase.
+- **La cita gana presencia** (15.5px → 16.5px): es la línea emocional de la sección y estaba compitiendo hacia abajo con la credencial en mono.
+- **Se corrige el recorte en tablet y mobile.** La foto vertical se estaba aplastando a 4:3 (≤960px) y a 16:11 (≤720px) — para un retrato de cuerpo entero eso deja una banda horizontal con la persona cortada. Ahora mantiene el 4:5 en todos los breakpoints y se le pone techo de ancho (340px) para que al apilarse no ocupe todo el ancho de la columna (en tablet serían ~900px de alto).
+
+**Límite conocido: la foto de "Sobre mí" no acompaña el posicionamiento.** El recorte y el layout ya están resueltos, pero la foto en sí es una toma casual en la vereda/entrada de una casa — ropa de calle, pose de foto social, auto y portón de fondo, sin ningún contexto de entrenamiento. Al lado de un título que dice "Profesora Nacional de Educación Física, especializada en fuerza femenina" y de una página que habla de periodización, RPE y Mifflin-St Jeor, resta credibilidad en vez de sumarla. **Es el techo de esta sección: ningún ajuste de CSS lo arregla.** Es el mismo motivo por el que ya se descartó una primera foto (selfie de espejo) el 13/08. Lo que hay que pedirle a Jimena es una foto con contexto de entrenamiento (gimnasio o entrenando), vertical, con ella ocupando buena parte del cuadro. Mientras tanto, los valores de `transform:scale(1.14)` y `object-position:50% 6%` de `.foto-ph img` están calibrados a mano **para esta foto puntual** y hay que recalibrarlos (o sacarlos) cuando se cambie.
+
+**Datos de contacto reales puestos en el sitio (15/08/2026) — se cierran los dos bloqueantes de captación.** Los pasó Gastón:
+- WhatsApp: `https://api.whatsapp.com/send?phone=541135863879&text=...`, con mensaje pre-cargado "🏋️‍♀️ Hola, me interesa entrenar con vos...". Va en los dos botones (hero y contacto). Ojo al editar: el `&` va escrito como `&amp;` en el HTML, y el texto va URL-encodeado.
+- Instagram: `https://www.instagram.com/pf.jimenaibanez/`, en el footer y en la nota de la sección de contacto.
+- Se sacó el cartel `placeholder-flag` ("Reemplazar por tu número real") y su CSS, que quedó sin uso.
+- **Queda una decisión abierta:** el CTA del nav ("Escribime") sigue apuntando a `#contacto` en vez de a WhatsApp directo. Es deliberado por ahora (es un link de navegación), pero contradice en parte el criterio del 14/08 de que el CTA no debe agregar un paso. Revisar si conviene unificarlo.
+
+**Ícono de WhatsApp: se reemplaza el `path` dibujado a mano por el glifo estándar (15/08/2026).** El `path` que había era una aproximación hecha a mano que a 18px se deformaba: la burbuja quedaba con trazo finito y el auricular de adentro mal resuelto, y se leía como una burbuja vacía y rota. Se reemplazó por el glifo estándar de la marca (viewBox 0 0 24 24, `fill="currentColor"`, sólido), que es el mismo que usa todo el mundo y aguanta bien el tamaño chico. Está en los dos botones. Nota: hereda `currentColor`, así que funciona igual en el botón con gradiente (blanco) y en el botón invertido de la caja de contacto (wine-900), sin reglas extra.
+
+**Microcopy del hero ("Respondo personalmente cada consulta"), reacomodado (15/08/2026, pedido de Gastón: "quedó medio raro, desencajado").** Eran dos problemas juntos:
+- Estaba **al lado** del botón en un flex horizontal con `gap:20px`. Al no tener relación visual con el CTA ni con nada más, quedaba flotando en el aire a media altura.
+- Estaba en **IBM Plex Mono**. El mono en el proyecto es para datos y labels (`.pn`, `.esp-label`, `.credential`) y ahí refuerza el posicionamiento "basado en evidencia"; pero aplicado a una frase corrida la hacía leer como etiqueta técnica o texto de placeholder, no como la promesa humana que es.
+Solución: `.herobtns` pasa a `flex-direction:column`, el microcopy va **debajo** del botón, en Archivo 13.5px, con un check chico en `--bronze` que lo ancla visualmente al CTA. En mobile se centra (`align-items:center`) para acompañar al botón, que ahí va a ancho completo. Verificado en desktop y en viewport chico.
+
+**"Cómo trabajo" pasa a ser la única sección oscura del sitio (15/08/2026).** Es el cambio de mayor impacto visual de esta sesión y ataca la causa de fondo del "parece de juguete": hasta ahora **todas** las secciones alternaban entre `--paper` (#FAF6F2) y `--paper-dim` (#F1E9E1), dos crema casi idénticos, así que por más animación que se sumara la página se leía plana. Ahora el recorrido tiene ritmo real: crema → crema-dim → **oscuro** → crema-dim → crema con el bloque oscuro del CTA final.
+- `#proceso` va con `linear-gradient(170deg, var(--wine-950), var(--wine-900))`. Token nuevo `--wine-950:#3E1422`.
+- Token nuevo `--bronze-light:#DCBA84`, que es el acento sobre fondo oscuro. `--bronze` (#A9824A) no tiene contraste suficiente contra el wine oscuro; se usa el claro para el paso activo, el indicador de progreso y las etiquetas `.pn`.
+- Las tarjetas blancas `.pin-viz` y sus SVG **no se tocaron**: sobre el fondo oscuro pasan a ser el elemento de mayor contraste de la sección, que es exactamente el efecto buscado (mismo recurso que usa Coderhouse con el mockup de browser sobre fondo oscuro). Si alguna vez se editan esos SVG, tener en cuenta que sus colores están hardcodeados y asumen fondo blanco.
+- Las inversiones de color van todas scopeadas bajo `#proceso ...`, sin tocar las reglas base de `.paso`/`.pin-prog`, para no afectar nada fuera de la sección.
+- Verificado en desktop y en mobile (bajo el breakpoint de 720px, donde `.pin` se oculta y los pasos se leen como lista): el contraste se mantiene y no hubo que retocar el bloque de mobile.
+- Queda pendiente evaluado y **descartado por ahora**: hacer también `#testimonios` oscuro. Dos secciones oscuras seguidas anularían el contraste que se acaba de ganar.
+
+**Animación de aparición: 16px → 34px de recorrido (15/08/2026).** El `translateY` de `.reveal` era de 16px con easing lineal (`ease`), prácticamente imperceptible — el elemento llegaba a su lugar antes de que el ojo registrara que se había movido. Se subió a 34px con el mismo `cubic-bezier(.22,.61,.36,1)` que ya usa el resto del sitio, y la duración a .8s. Es la diferencia entre "tiene animaciones" y "se nota que tiene animaciones".
+
+**Bug real encontrado y arreglado (15/08/2026): las animaciones de aparición al scrollear casi nunca se veían.** Gastón reportó que el sitio "sigue pareciendo de juguete" y que no notaba ninguna animación al scrollear, a pesar de que el sistema `.reveal`/`.reveal.stagger` ya estaba implementado (ver "Principio técnico importante" y el bloque de reveal más abajo). La causa no era falta de animación: era que la red de seguridad del script (`setTimeout(revealAll, 2000)`, pensada para revelar todo si el `IntersectionObserver` fallaba) disparaba a los **2 segundos de cargar la página**, sin importar el scroll. Cualquier persona real tarda más de 2s en llegar scrolleando a una sección de abajo — para cuando llegaba, esa sección ya estaba marcada `in-view` de antemano por el timeout, y la transición ya había pasado sin que nadie la viera. El sitio nunca mostraba lo que sí tenía programado. Arreglado subiendo el timeout a 8000ms (verificado: el observer real dispara en ~400ms al entrar en viewport, muy por debajo de eso, así que ahora gana la transición real casi siempre).
+
+De paso se sumó `reveal stagger` a dos listas que hasta ahora aparecían de golpe sin ninguna animación, ninguna de las dos la tenía antes: `.esp-lista` (En qué me especializo, 8 ítems) y `.programa-feats` (las 6 features del programa, hoy aparecía como un solo bloque dentro de `.programa-card` en vez de cascada por ítem). Se extendió la tabla de `transition-delay` de `.reveal.stagger > *` de 6 a 8 hijos para cubrir `.esp-lista`. Nota técnica: ambas quedaron anidadas dentro de otro `.reveal` (`.sobre-grid` y `.programa-card` respectivamente) — funciona bien porque `opacity:0` del padre ya oculta visualmente al hijo aunque el hijo tenga su propio `opacity:1`, y el `IntersectionObserver` mide posición en el layout (no opacidad), así que ambos disparan casi al mismo tiempo sin conflicto.
+
 **Eyebrows sacados del sitio (14/08/2026, pedido de Jimena).** Las etiquetas superiores ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") no aportaban valor y se sacaron de las cinco secciones que las tenían. Se limpió también el CSS que quedó sin uso (`.eyebrow`, su animación de entrada en el hero, el override de mobile). Los `<h2>` de cada sección quedan como único encabezado.
+
+**Testimonios: de grilla de tres tarjetas a cinta en movimiento (18/08/2026).** Gastón reportó que era la sección que menos le gustaba, que "no parece world class" y que no le hacía confiar en Jimena. El diagnóstico encontró tres problemas, ninguno estético de superficie:
+
+- **Las tarjetas tenían borde punteado.** La clase se llamaba `.testimonial-card` y el comentario del CSS decía literalmente "placeholder cards": los dos testimonios **reales** se mostraban con el recurso visual universal de "acá todavía no hay nada".
+- **La tercera tarjeta era un testimonio falso** ("Tu lugar está reservado acá") en el mismo contenedor que los dos verdaderos. Le decía a la visitante "solo tenemos dos" y contagiaba sospecha sobre los reales.
+- **El `<h2>` prometía lo que la sección no mostraba:** "Mujeres reales, cambios reales" y debajo no había un solo cambio. Ahora dice "Lo que dicen las que ya entrenan conmigo", **sin subtítulo**: el que había ("Dos alumnas, sus palabras textuales") repetía el título con otras palabras y Gastón lo rechazó. Cualquier subtítulo que agregue algo necesita datos que todavía no existen, así que por ahora no va ninguno.
+
+La forma nueva es una **cinta horizontal a todo el ancho de la pantalla** (`.t-mas` > `.t-cinta` > dos `.t-grupo`) que se desplaza sola hacia la izquierda. Detalles que hay que conocer antes de tocarla:
+
+- **El loop no tiene salto porque hay seis grupos idénticos** y el recorrido es exactamente el ancho de uno, o sea `calc(-100% / 6)`. La separación entre tarjetas va como `gap` adentro del grupo y la separación **entre** grupos como `margin-right` del grupo: así cada grupo ocupa siempre (ancho + separación), la pista mide exactamente seis veces eso, y el recorrido es un porcentaje exacto sin ningún número mágico en píxeles.
+- **Bug del 18/08/2026, encontrado por Gastón en su monitor: la cinta dejaba un hueco vacío a la derecha al llegar al final.** Con dos grupos la pista medía 1614px, y en cualquier pantalla más ancha que eso la cinta terminaba antes que el viewport. **La causa de fondo fue de verificación, no de CSS: se había medido solo a 1280px, que es justo el ancho donde la condición se cumplía.** La regla que hay que respetar al cambiar la cantidad de tarjetas es: `(grupos − 1) × ancho_de_grupo ≥ la pantalla más ancha donde se vaya a ver` — al correrse un grupo entero, lo que queda tiene que seguir tapando toda la pantalla. Con 6 grupos de dos citas eso da 4460px y cubre 4K (3840); con 5 daba 3568 y volvía a fallar en 4K por 272px. Verificado a 390, 1280, 1920, 2560, 3440 y 3840.
+- El arreglo eliminó de paso el `calc(-50% - 13px)` anterior, que dependía del valor del `gap` y obligaba a un segundo keyframe (`marqueeMobile`) solo porque en mobile el gap es 16 y no 26. Ahora mobile solo cambia el `gap` y el `margin-right`, y el keyframe es uno solo.
+- **La velocidad depende de cuántas tarjetas hay**, porque la duración es fija y el recorrido es el ancho del grupo. Con las dos citas de hoy, 30s dan ~27 px/s. Con 62s daban 13 px/s y no se leía como movimiento. **Al sumar testimonios hay que subir la duración en proporción o la cinta se acelera sola.**
+- **Se frena con click o tap, no con hover.** Frenar al pasar el mouse convierte cualquier paso del cursor por la sección en un arranque y frenado que nadie pidió (decisión de Gastón, 18/08). Es la única interacción de la sección que necesita JavaScript: en CSS puro habría que abusar de un checkbox con un `<label>` tapando las tarjetas, y eso rompe la selección de texto de las citas. Si el JS no corre, la cinta sigue girando y no se pierde nada.
+- **La cinta sigue andando en mobile.** Se evaluó apagarla y se descartó: al no depender del scroll no pelea contra el dedo, y resuelve que varios testimonios apilados sean varias pantallas de alto.
+- **`prefers-reduced-motion` va último en la hoja de estilos, a propósito.** El marquee no depende de `animation-timeline`, así que queda fuera del bloque de reduced-motion de más arriba, y además se redefine en el breakpoint de 720px: si la regla fuera antes, cualquiera de las dos lo volvería a prender. Ahí no alcanza con frenar la cinta — una pista detenida deja la mitad de las tarjetas fuera de pantalla sin forma de llegar a ellas — así que además se esconde el grupo duplicado y las tarjetas se envuelven en varias filas.
+- Se borraron las reglas `.cards`, `.card`, `.card:hover`, `.card .num/h3/p/.tag`, `.testimonial-card*` y `.testimonial-quote`, más sus overrides de mobile: ninguna otra sección las usaba (`.programa-card` es otra clase y no matchea `.card`).
+
+**Interacción de la cinta (18/08/2026, tres iteraciones con Gastón mirando en local).** Referencia: la cinta de `coderhouse.com`. Quedó así:
+
+• **El hover NO la frena, la relentece.** Baja a `0.28×` con una rampa de 450ms y vuelve a `1×` al salir. **No se puede hacer en CSS:** cambiar `animation-duration` en `:hover` produce un salto, porque el progreso es `currentTime / duration` y al cambiar la duración el mismo instante cae en otro punto del recorrido. Medido en esta cinta, el tirón habría sido del **73% del recorrido**. `updatePlaybackRate()` conserva la posición — medido: 0 ms y 0 px de salto.
+• **Se arrastra con el mouse y con el dedo.** La primera versión falló de una forma engañosa: durante el gesto no se movía nada y recién al soltar aparecía en la posición nueva. **La causa es la cascada: una animación CSS le gana al `style` inline, también estando en pausa**, así que el `transform` de la animación pisaba el que escribía el arrastre. La solución fue dejar de tocar el `transform`: como la animación es lineal y recorre exactamente un grupo, arrastrar N píxeles equivale a mover el reloj, `dt = -dx × DUR / G`. **Se arrastra el tiempo, no la posición**, y al soltar no hace falta ninguna conversión porque la animación ya está en el momento correcto. El tiempo se envuelve en `[0, DUR)` para que arrastrar de más nunca llegue a un tope.
+• **El cursor es flecha, no `grab` ni `pointer`** (pedido explícito de Gastón). La manito sugiere "esto se toca" y convierte la sección en algo para jugar; la flecha la deja como algo para leer. Se arrastra igual. Lo único que se mantiene es `user-select:none` mientras se arrastra, para que el gesto no termine pintando la cita de azul.
+• **No hay pausa por click.** Se implementó y se sacó: agregaba un estado que nadie iba a descubrir y dejaba la cinta detenida sin aviso.
+• **Las tarjetas no se resaltan en hover.** Se sacó el cambio de color del borde: la cinta entera ya responde al hover relentándose, y subrayar además la tarjeta de abajo del cursor es un segundo feedback para el mismo gesto, y sugiere que la tarjeta es clickeable cuando no lo es.
+• **`touch-action: pan-y`** en la pista: el dedo vertical scrollea la página y el horizontal queda para la cinta. Sin eso, en mobile arrastrar la cinta scrollea la página y la cinta no se mueve.
+
+**Velocidad: 22s por vuelta = ~41 px/s en desktop, ~28 en mobile** (el grupo es más angosto ahí). Se probaron 62s (13 px/s, no se leía como movimiento) y 30s (30 px/s, quedaba lento contra la referencia).
+
+**Límite conocido de la sección: con dos testimonios la cinta se ve repetida.** La pista mide 1614px contra 1280px de pantalla, así que a cualquier altura se ven las dos citas y el arranque de la repetición. No es un bug del loop (cierra exacto, medido) sino falta de contenido. Se resuelve solo cuando Jimena pase más citas: se agregan al primer `.t-grupo` y se copian idénticas al segundo.
+
+**Bloque destacado, publicado el 18/08/2026.** Arriba de la cinta va la cita de Verónica en grande, que aparece **línea por línea**, después la autoría, y después la franja de datos. La cita está cortada en líneas a mano pero es **textual**, no se editó.
+
+**El destacado pasó a ser un panel oscuro (18/08/2026, segunda pasada).** Gastón miró la sección publicada y la rechazó entera. Dos causas concretas, las dos mías:
+
+- **Un error de oficio en la alineación.** El `<h2>` arrancaba en x=205 y la cita en x=370, 165px más adentro y sin ningún motivo. Era un `margin:0 auto` sobre un bloque de 900px dentro de un contenedor de 1180 — resto del layout de dos columnas que existía cuando había una foto al lado, y que quedó vivo cuando saqué la foto. Ahora el panel arranca en el mismo borde que el título (medido: 158 y 158).
+- **La sección era la única del sitio sin una sola masa visual.** Todas las demás tienen tarjetas, video o fondo oscuro; esta era texto flotando en crema, sobre un `--paper-dim` casi idéntico al de las secciones vecinas. Por eso se leía vacía por más que el copy y la animación estuvieran bien.
+
+La solución fue meter la cita en un **panel oscuro** (`linear-gradient(150deg, wine-950, wine-900)`, radio `--r-lg`) con una comilla gigante de fondo en `--bronze-light` al 14% de opacidad, decorativa y con `aria-hidden` + `user-select:none` para que no ensucie el texto que se copia. La franja de datos vive adentro del panel y va invertida entera: separadores en `rgba(255,255,255,.16)` y acento en `--bronze-light`, porque `--bronze` no tiene contraste suficiente contra el wine oscuro (mismo criterio que ya se había aplicado en `#proceso`).
+
+Dos detalles que costaron y conviene no repetir: la cita **no lleva `max-width` en `ch`** — los cortes de línea los define cada `<span class="ln">`, y con un `max-width` encima cada span se partía además por su cuenta, dejando la cita en cinco líneas cortas contra el borde izquierdo con media caja vacía. Y el énfasis en bronce pasó de "me manda videos y me exige mandarle todo" a "para revisar que esté haciéndolo bien": la primera versión ponía en el tamaño más grande de la sección una frase que suena a carga, cuando lo que vende es que Jimena corrige.
+
+**Se evaluó y se descartó hacer oscura la sección entera:** `#testimonios` está justo antes de `#proceso`, que es la única sección oscura del sitio, y dos oscuras seguidas anulan el contraste que se ganó el 15/08. Un panel contenido sobre fondo claro da la masa sin romper el ritmo del recorrido.
+
+**Se probó ligarlo al scroll y se revirtió el mismo día. Vale como criterio general, no solo para esta sección.** Durante unas horas la cita usó `animation-timeline: view()`, con un tramo de scroll distinto por línea. Gastón lo reportó así: *"me preocupa un poco esa animación porque cuando subo parece borrada"*. No era una impresión: si el avance lo maneja la posición del scroll, al subir la animación **retrocede** y el texto se desvanece. Para una decoración da igual; para una cita que hay que leer está mal, porque el contenido desaparece justo cuando la persona vuelve sobre él para releerlo. **Regla que queda: animación ligada al scroll sí para adorno, nunca para contenido que hay que leer.** Ahora usa el mismo `.reveal.stagger` que el resto del sitio — `IntersectionObserver` con `unobserve` al revelar, o sea de ida y sin vuelta — que además escalona a los hijos, así que se conserva el efecto de aparición por línea y se hereda la red de seguridad de 8s del script.
+
+**La franja de datos: ninguno de los tres es un resultado de alumna.** Dice "1 a 2% por año / de masa muscular, si no entrenás fuerza" (después de los 50), "2 sesiones / por semana, en casa o en el gimnasio" y "Jimena, siempre / no hay un equipo detrás".
+
+El primero es el **dato fisiológico publicado** que el benchmark 03 recomienda explícitamente usar como "número con plazo" mientras no haya datos propios: da urgencia sin prometer nada que dependa de Jimena. **Pendiente: que Jimena confirme y cite la fuente de ese 1-2% antes de que quede fijo.** Los otros dos son hechos del programa ya publicados más abajo en la página, así que son verificables. El tercero además dice por primera vez en el sitio la ventaja de que atiende una sola persona, que el benchmark marcó como lo único que ninguno de los 18 sitios relevados puede copiar.
+
+**Gastón pidió (18/08/2026) algo del estilo "+100 alumnas" en esa franja y no se puso: Jimena tiene dos alumnas.** Un número de escala inventado es la única cosa capaz de romper el principio de marca que sostiene todo lo demás, y además contradice el hero, que a propósito no afirma trayectoria previa. El reemplazo honesto para el mismo efecto es el dato fisiológico. Cuando haya alumnas de verdad, el número va y es el mejor dato de la página.
+
+**Lo que sigue bloqueado por falta de datos:** la foto de la alumna en el destacado y las métricas reales (hace cuánto entrena, de dónde arrancó, qué cambió medible). Cuando Jimena las pase, reemplazan a los tres datos del programa y la sección pasa a ser un caso de éxito de verdad. La versión con foto en retrato 4:5 está diseñada y verificada en `docs/_testimonios-preview.html` (archivo local sin commitear, porque tiene datos inventados y el sitio está en vivo).
+
+**19/08/2026: llegaron cinco testimonios reales y la sección se rehizo con contenido en vez de con diseño.** Es exactamente lo que la advertencia de más arriba decía que había que esperar: no faltaba una quinta iteración de la forma, faltaba material. Con el material, la sección se resolvió en una sola pasada.
+
+**Las citas.** Cinco, pasadas por Gastón: Daiana Gillese Urueña (34, Argentina), Margarita Izurieta López (49, Puerto Rico), Verónica Vázquez (39, Estados Unidos), Lorena Mariel Agout (49, Argentina) y Silvia Rodríguez (41, Estados Unidos). Cuatro van en la cinta y Silvia en el destacado. Criterio de edición, el mismo de siempre: **son textuales**. Lo único que se hizo fue cortar en el límite de una oración cuando la cita no entraba en la tarjeta, y corregir tipeos evidentes del mensaje original (`ganada`→`ganaba`, `contante`→`constante`, `esilo`→`estilo`, `anios`→`años`). No se completó ninguna frase ni se reordenó nada. A Daiana se le sacó la última oración porque repetía la primera, y a Lorena y Margarita las dos últimas por largo.
+
+**La tarjeta de la cinta pasó a la forma de la referencia que pasó Gastón** (tarjetas de testimonio de coderhouse.com): foto redonda + nombre + una línea de contexto arriba, la cita en el medio, un dato en el pie. Antes era comilla decorativa + cita + iniciales abajo. La diferencia de fondo es el orden: **primero quién habla, después qué dijo.** Dos traducciones al caso de Jimena, las dos pedidas por Gastón:
+
+- **Donde la referencia pone el curso, va la edad.** Es el dato que hace que la visitante de 45 se reconozca, y el nicho del sitio es +35. Funciona como el "Top 10" del ejemplo: ubica a la persona sin ocupar una línea entera.
+- **Donde la referencia pone "Ver en LinkedIn", va el país con su bandera.** No hay perfil público que linkear, y el país dice algo que el sitio necesitaba decir y no decía: se entrena a distancia y ya hay alumnas en tres países. Argentina, Puerto Rico y Estados Unidos, dos de las cinco a distancia real.
+- **Las banderas son SVG inline, no emoji.** Un sprite de tres `<symbol>` al principio del `<body>` y cada tarjeta lo referencia con `<use>`, así que las cuatro copias de la cinta no repiten los trazados. **Windows no dibuja los emoji de bandera: muestra las dos letras del país** (🇦🇷 se ve "AR"), y este sitio se mira mucho desde desktop. Son versiones simplificadas a propósito — a 22×15px las 50 estrellas de Estados Unidos son ruido, van ocho puntos.
+- Se sacó la comilla decorativa de estas tarjetas: con foto, nombre y pie la cita ya se lee como cita, y el glifo competía con el comillón del panel de arriba. Con eso se fue también el bug de `line-height` que había obligado a documentarla.
+
+**Las fotos van en `docs/img/testimonios/`, con nombre de archivo fijo** (`silvia.jpg`, `daiana.jpg`, `margarita.jpg`, `veronica.jpg`, `lorena.jpg`). Hay un README en esa carpeta con el formato. Lo que importa del mecanismo: **el degradé de marca con las iniciales no es un placeholder que se saca cuando llega la foto, es el fondo del avatar.** La foto va encima como `<img>` absoluto con `alt=""` y `onerror="this.remove()"`, así que mientras el archivo no esté la tarjeta se ve entera y nunca aparece el ícono de imagen rota. Verificado en local con las cinco fotos faltando. Cuando lleguen, se copian con ese nombre y no se toca una línea de HTML.
+
+**El destacado pasó de Verónica a Silvia, y de cita a relato.** Silvia mandó su historia completa y es el único testimonio con **recorrido**: 2020 empezó sola con videos y caminatas, no le alcanzó; 2023 encontró clases en vivo y ahí apareció la disciplina; hace 2 años entrena una a una con Jimena. Un destacado tiene que hacer eso — que las otras cuatro citas digan que Jimena es atenta y corrige ya está cubierto. La cita grande es el cierre de su mensaje, textual, cortada en cuatro `<span class="ln">`.
+
+**Y con eso la franja de datos dejó de ser un préstamo.** Eran tres hechos del programa (el 1-2% de masa muscular, las 2 sesiones semanales, "Jimena siempre") puestos ahí justamente hasta que existiera un dato real de una alumna. Ahora es la línea de tiempo de Silvia: 2020 / 2023 / Hoy, con fragmentos textuales de ella en itálica y entre comillas para distinguir de un vistazo lo que dijo ella de lo que escribimos nosotros. **El dato del 1-2% no se perdió y sigue sin fuente citada: queda disponible para la sección Programa, que es donde ahora tiene más sentido.** También se cambió la autoría: la barrita de bronce era un adorno ocupando el lugar donde tiene que estar la cara, así que ahora va foto + nombre + edad + país.
+
+**Lo que hubo que recalcular en la cinta al pasar de 2 citas a 4** — son las dos cosas que la propia sección ya avisaba que se rompen solas:
+
+- **La velocidad.** El grupo pasó de ~810px a 1784px medidos, así que la duración subió de 22s a 45s para sostener los ~40 px/s de la referencia. Regla práctica: `segundos ≈ ancho_de_grupo / 40`.
+- **La cantidad de grupos, que bajó de 6 a 4.** Con 4 citas, `(4−1) × 1784 = 5352px` y cubre 4K (3840) con margen. Con 3 grupos daba 3568 y volvía a fallar en 4K por 272px, que es **exactamente el error del 18/08** — por eso son 4 y no 3, aunque 3 "alcance" mirando a 1280. El `4` está en dos lugares y hay que cambiarlo en los dos: el `@keyframes marquee` (`-100%/4`) y el `unGrupo()` del script, que lo necesita para el arrastre. Está anotado en los dos comentarios.
+- Verificado midiendo el DOM a 1440 y a 390 (viewport real vía iframe): alturas de tarjeta parejas (285 y 336), cero overflow horizontal, y la regla del hueco cumplida en los dos.
+
+**Cierre del 19/08/2026: Gastón aprobó la sección, pasó las fotos y confirmó que las autorizaciones están.** Cuatro decisiones más de ese cierre:
+
+**1. La carga de testimonios pasó a ser un proceso escrito, con una herramienta.** Está en `testimonios.md` (raíz) y en `herramientas/build-testimonios.py`. Motivo: Gastón está esperando más citas, y sumar una a mano significa pegar la misma tarjeta N veces y acordarse de tres números que ya rompieron la sección en producción. El script tiene la lista de citas como **única fuente**, regenera la cinta entera y **recalcula solo** la duración, la cantidad de grupos con su recorrido en el keyframe, y el divisor de `unGrupo()` en el JS. Además verifica la regla del hueco contra 4K y avisa si falta una foto o una autorización. Corre con `--check` para saber si el HTML quedó desincronizado. **El destacado no sale del script y se sigue editando a mano: es un relato, no una tarjeta, y no entra en campos.** Acordado con Gastón: cuando avise que va a cargar un testimonio, lo primero es **pedirle los cinco campos** (texto, nombre, edad, país, foto) más la autorización, antes de tocar nada.
+
+**2. Las autorizaciones no se publican en el sitio, se registran en el repo.** Gastón preguntó si convenía exponerlas o hacer un `/legales`. No: una página de legales en un sitio de una sola página le da volumen institucional a algo que se sostiene por ser cercano, y publicar el detalle de quién autorizó qué expone más datos de las alumnas, que es justo lo que se quiere evitar. Quedan registradas en el campo `autorizacion` de cada cita en el script (fecha y alcance: texto, o texto y foto), que es donde sirven — al lado del dato que habilitan. **Queda propuesto y sin implementar** (no se toca el sitio sin que Gastón lo mire): una línea en el footer, *"Los testimonios son textuales y se publican con autorización de sus autoras"*, que es la parte que sí le sirve a quien lee.
+
+**3. Silvia no se repite en la cinta.** Gastón lo planteó como duda. Se descartó: el destacado y la cinta se ven juntos en la misma pantalla, y leer la misma cara dos veces con menos palabras la segunda vez achica la sección en vez de agrandarla — es el mismo problema que tenía la cinta con dos citas repitiéndose. Si en algún momento el destacado rota a otra alumna, Silvia entra a la cinta con su cita corta y son dos líneas en el script.
+
+**4. Las cuatro fotos que llegaron se recortaron antes del primer commit, a propósito.** Venían como las mandaron por WhatsApp: la de Silvia era una foto de pareja (a 64px no se sabía cuál de las dos era ella, y es la foto más importante de la sección), la de Margarita un plano entero donde la cara ocupaba un cuarto del cuadro, y la de Lorena una foto en la playa en bikini, que no es un problema de encuadre sino de tono para un sitio que se apoya en el posicionamiento profesional de Jimena. Las tres se recortaron a la cara con `sips` y las cuatro se bajaron a 256px: **de 192 KB a 60 KB en total**. Se hizo **antes de commitear** para que los originales no queden para siempre en el historial de un repositorio público — una foto de terceros no se borra con un commit que la reemplaza. Los originales quedaron fuera del repo. Efecto de fondo: las cuatro son ahora retratos de cara comparables, y esa consistencia es buena parte de lo que hace que la fila se lea profesional.
+
+**Lo que queda abierto de esta pasada:**
+
+- **Falta una sola foto: `daiana.jpg`.** Las otras cuatro entraron el 19/08. Mientras no esté, su tarjeta muestra "DG" sobre el degradé y no se rompe nada.
+- **La autorización quedó resuelta:** Gastón confirmó el 19/08 que están las cinco. Con eso se reescribió la regla de `CLAUDE.md`, que decía "no se publican datos de alumnas: nombres completos…" y contradecía lo publicado desde el 13/08. Ahora dice lo que de verdad se hace: **nunca condiciones de salud, mediciones ni contacto; nombre, edad, país, foto y cita solo con autorización explícita pedida por Jimena, registrada junto a la cita.**
+- **Ahora sí hay número honesto para la franja del hero.** El 18/08 se rechazó el "+100 alumnas" que pidió Gastón porque Jimena tenía dos alumnas. Con cinco testimonios de tres países y dos de ellos de gente que entrena hace dos años, hay algo verdadero que decir. Sigue sin ser "+100": es "cinco mujeres, tres países".
 
 **Mobile.** Hay un bloque dedicado en el breakpoint de 720px, con tres reglas que conviene sostener al agregar secciones nuevas:
 
@@ -134,21 +350,58 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 ## Pendientes
 
-**Mejoras pedidas por Jimena (14/08/2026), en curso — ver `backlog.md` para la vista por área:**
+### Estado al cerrar el 18/08/2026 — leer esto primero
+
+**Lo que pasó ese día, en orden:** se sincronizaron los cuatro archivos de documentación (estaban diciendo cuatro cosas distintas), se rediseñó Testimonios cuatro veces, y en el medio quedó claro que **el problema no era Testimonios sino el sistema de tokens** — de ahí salió la pasada de sistema visual (blanco, títulos livianos y grandes, botones en píldora), que es el cambio más grande que tuvo el sitio hasta ahora.
+
+**Lo que está pendiente y bloquea la fecha, en orden de urgencia:**
+
+1. ✅ **El dominio ya no bloquea nada: resuelto entero el 19/08/2026.** `entrenaconjime.com` está comprado, apuntado y en vivo con HTTPS. Era el único punto del lanzamiento con una espera que no dependía de que alguien hiciera algo, y esa espera terminó siendo de menos de un minuto. Detalle en la sección de abajo.
+2. 🔴 **Las reglas de la comunidad de WhatsApp** siguen sin definirse y la feature 06 se promociona en el sitio en vivo.
+3. 🔴 **Foto profesional de Jimena** para "Sobre mí". Con el sitio ahora blanco y limpio **la foto actual canta mucho más** que antes: sobre crema se disimulaba, sobre blanco y al lado de un título liviano de 40px es lo primero que rompe.
+4. ✅ **Testimonios: cerrado el 19/08/2026.** Llegaron cinco citas con edad y país, la historia completa de Silvia, cuatro de las cinco fotos y las autorizaciones. La sección dejó de ser un diseño esperando contenido. Queda solo 🟢 `daiana.jpg`, que no bloquea nada. La carga de los próximos testimonios tiene proceso escrito en `testimonios.md`.
+
+**Lo que quedó sin commitear a propósito:** `docs/_testimonios-preview.html`, que tiene el bloque destacado con foto en retrato 4:5 y el antes/después armado. No se publica porque tiene datos inventados y el sitio está en vivo.
+
+**Advertencia sobre el proceso, que costó cara.** Se rediseñó Testimonios cuatro veces empujando la forma contra un contenido que no daba, y recién a la cuarta quedó claro que faltaban dos cosas distintas: un sistema visual (que se arregló) y contenido real (que sigue faltando). Antes de volver a iterar sobre una sección, conviene preguntarse si lo que falta es diseño o es material.
+
+### Fecha de lanzamiento: 23/08/2026, con dominio propio
+
+**Decisión de Gastón del 17/08/2026.** El sitio tiene que estar en vivo bajo un dominio propio el **23/08/2026**. Deja de ser una fecha abierta y pasa a ser el hito que ordena todo lo demás.
+
+Dos consecuencias sobre lo que ya estaba escrito acá:
+
+• **El dominio deja de ser una idea 🟢 de septiembre.** En `backlog.md` estaba en Operaciones como "definir si se contrata dominio/hosting propio o se sigue con GitHub Pages", sin fecha, y en el gantt figuraba recién el 20/09. Está decidido: dominio propio, y hay que comprarlo y apuntarlo. GitHub Pages puede seguir siendo el hosting — un dominio propio no obliga a cambiar de hosting, se apunta con un CNAME.
+**El dominio es `entrenaconjime.com`, comprado el 19/08/2026 en Cloudflare.** Lo eligió y lo registró Gastón. No está entre los tres que se habían chequeado el 17/08 (`jimenaibanez.com`, `jimenaibanez.com.ar`, `pfjimenaibanez.com`) y el cambio de criterio importa: el nombre no es la persona sino **lo que se hace con ella** — se lee como una frase ("entrená con Jime"), usa el diminutivo con el que la conocen las alumnas y funciona dicho en voz alta en un audio de WhatsApp o en una story, que es por donde va a llegar la mayoría del tráfico. Un dominio con nombre y apellido obliga a deletrear.
+
+Consecuencias técnicas, **todas ejecutadas el 19/08/2026**:
+
+• ✅ **`CNAME` versionado dentro de `docs/`**, con `entrenaconjime.com` y nada más. Tenía que estar adentro de `docs/` o cada push lo borraría, porque GitHub Pages publica esa carpeta entera.
+• ✅ **DNS en Cloudflare.** Cuatro registros `A` en el apex hacia `185.199.108-111.153` más un `CNAME` de `www` hacia `gaston-perez-art.github.io`, los cinco en **DNS only** (nube gris). Lo del proxy era real: en naranja, GitHub no puede validar el apex ni emitir el certificado. Mientras la nube siga gris, el modo SSL/TLS de Cloudflare no interviene; **si alguna vez se prende, hay que pasarlo a Full (strict) antes**, nunca *Flexible*.
+• ✅ **El certificado no tardó 24h: se emitió en menos de un minuto.** Let's Encrypt, cubre el apex y el `www`, vence el 17/11/2026 y se renueva solo. HTTPS forzado activado, así que las cuatro variantes de entrada terminan en `https://entrenaconjime.com`.
+• ✅ **URLs absolutas revisadas:** el sitio no tiene `og:url`, `canonical` ni `sitemap`, así que no había nada que corregir. El `README.md` ya apunta al dominio nuevo. La URL vieja de `github.io` sigue funcionando y redirige sola.
+• ⬜ **Queda un pendiente menor, sin urgencia:** verificar la propiedad del dominio en GitHub (Settings → Pages → Verified domains, vía un registro TXT en Cloudflare). No cambia nada de lo que funciona hoy; protege el nombre si el repo alguna vez dejara de publicar.
+
+**Observación aparte, no bloquea nada:** al no haber etiquetas Open Graph, cuando alguien comparte el link por WhatsApp o Instagram **no aparece la tarjeta con imagen y título** — se ve la URL pelada. Para un sitio cuyo tráfico va a llegar por stories y audios de WhatsApp, es una mejora de bajo costo a considerar después del lanzamiento.
+
+• **Se abre un corte entre "lanzamiento" y "después".** Antes del 23 solo entra lo que bloquea publicar; todo lo que sea mejora del sitio ya publicado pasa a después. El criterio para decidir de qué lado cae cada pendiente: *¿esto hace que la página no se pueda mostrar, o solo que se pueda mostrar mejor?*
+
+**Mejoras pedidas por Jimena (14/08/2026) — ver `backlog.md` para la vista por área:**
 
 - [x] Sacar los eyebrows que no aportaban valor (ver Decisiones de diseño).
 - [x] Bug: botón "Quiero mi cambio" ahora abre WhatsApp directo (ver Decisiones de diseño).
 - [x] Bug: ícono de WhatsApp roto en el botón de contacto (ver Decisiones de diseño).
 - [x] Bug encontrado sin pedirlo: menú hamburguesa no aparecía entre 401-720px (ver Decisiones de diseño, sección Mobile).
-- [ ] Animación del claim del hero: mantenerla pero arreglar el desborde del `clip-path` y mejorar la estética (diagnosticado, ver Decisiones de diseño).
-- [ ] Hacer más armónica la sección "Sobre mí" — ajustar layout o imagen.
+- [x] Animación del claim del hero: arreglada en dos pasos — el fantasma semitransparente (14/08) y el hueco de ~0,4s por relevo que dejaba ese arreglo (15/08). Ver Decisiones de diseño.
+- [x] Hacer más armónica la sección "Sobre mí" (15/08/2026): retrato 4:5, título en dos líneas, cita con más presencia y corregido el recorte apaisado de tablet/mobile. Ver Decisiones de diseño. **Queda abierto lo que el CSS no arregla: la foto en sí.**
 - [ ] Nueva sección antes de "En qué me especializo" con logos animados (marquee) de empresas de prestigio donde trabajó Jimena. **Bloqueada: falta que Jimena pase los logos y la autorización de uso.**
 - [ ] Reescribir "En qué me especializo" — hoy es una lista de tags que no cuenta nada.
-- [ ] Testimonios: sumar fotos de Silvia y Verónica y hacerlos menos genéricos. Benchmark pasado por Jimena: Coderhouse, reseñas de Airbnb, sariadnapascual.com. **Bloqueada: falta la autorización y el archivo de las fotos.**
-- [ ] Sumar más animación en general (que no parezca landing "de juguete") y jugar más con contraste de color — Jimena sugiere empezar por el botón de WhatsApp.
+- [x] Testimonios: hacerlos menos genéricos (19/08/2026). Se rehizo la tarjeta con la forma de la referencia de Coderhouse — foto, nombre, edad y país — y el destacado pasó a contar el recorrido de Silvia. Ver Decisiones de diseño. **Queda pendiente el archivo de las cinco fotos y la autorización de Jimena; el código ya las espera y la tarjeta no se rompe sin ellas.**
+- [x] Sumar más animación en general (que no parezca landing "de juguete") y jugar más con contraste de color (15/08/2026, dos pasadas). Botones y CTAs a gradiente wine→bronze, "Cómo trabajo" como única sección oscura del sitio, recorrido de la animación de aparición de 16px a 34px, y el bug de fondo: la red de seguridad del script revelaba todo a los 2s y las animaciones de scroll nunca llegaban a verse. Ver Decisiones de diseño.
 - [ ] Mejorar todos los gráficos del sitio — falta definir con Jimena cuáles y qué espera de cada uno.
 - [ ] Mejorar la sección de contacto "Escribime y arrancamos".
-- [ ] Pasada completa de mobile, foco especial pedido por Jimena — ya resuelto el bug del hamburguesa, falta revisar el resto (animación, Sobre mí, testimonios) en viewport chico.
+- [x] Pasada completa de mobile (15/08/2026), con viewport real de 390px vía harness con iframe. Cinco bugs encontrados midiendo el DOM, no mirando. Verificado: cero overflow horizontal y cero áreas táctiles bajo 44px. Ver Decisiones de diseño.
+- [ ] Decidir si el CTA del nav ("Escribime") va directo a WhatsApp o sigue scrolleando a `#contacto` — es lo único que queda contra el criterio del 14/08 de no agregar pasos.
 
 **Mejoras pedidas por Jimena (12/08/2026), en curso:**
 
@@ -162,10 +415,11 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - [x] **Reemplazar los tres planes por un solo programa (13/08/2026, decisión de Jimena)** — resuelve de paso el pendiente de "repensar el tercer plan" y el de precios públicos: ahora hay un precio único y visible. Ver "Programa" en Decisiones de diseño.
 - [ ] Revisar si la nueva cadencia (videollamada mensual 1 a 1 del programa único) cambia el análisis de capacidad de `estrategia/business-case.md` — el business case todavía está escrito sobre la estructura de tres planes.
 
-**Bloqueantes de captación** (hoy la web no puede convertir una sola visita):
+**Bloqueantes de captación — cerrados el 15/08/2026.** Hasta esa fecha la web no podía convertir una sola visita.
 
-- [x] **Número real de WhatsApp cargado (14/08/2026).** Los dos botones ("Quiero mi cambio" del hero y "Escribime por WhatsApp" de contacto) apuntan a `https://wa.me/5491135863879`. Se sacó también el `.placeholder-flag` que marcaba el número de ejemplo, ya sin uso.
-- [x] **Enlace real de Instagram agregado (14/08/2026).** `@pf.jimenaibanez` — actualizado en el footer y en la nota de la sección de contacto (`https://instagram.com/pf.jimenaibanez`).
+- [x] Reemplazar el número de WhatsApp de ejemplo en `docs/index.html` por el real (15/08/2026): `541135863879`, con mensaje pre-cargado, en los dos botones. Ver "Datos de contacto reales" en Decisiones de diseño.
+- [x] Agregar el enlace real de Instagram (15/08/2026): `instagram.com/pf.jimenaibanez`, en el footer y como botón secundario en la caja de contacto.
+- [ ] **Foto nueva de Jimena para "Sobre mí" — pedírsela a ella.** La actual es una toma casual en la vereda, sin contexto de entrenamiento, y contradice el posicionamiento profesional del resto de la página. Ningún ajuste de CSS lo arregla. Al reemplazarla hay que recalibrar `transform:scale` y `object-position` de `.foto-ph img`, que están ajustados a mano para la foto actual.
 - [x] Sumar testimonios reales de alumnas a la sección "Testimonios" (13/08/2026): Silvia Rodríguez y Verónica Vázquez, con autorización confirmada por Jimena. Las citas son textuales (Silvia, transcripta tal cual, cortada donde cortaba el mensaje original — no se completó la frase; Verónica, extraída de un posteo más largo, sacando solo la mención dirigida a Jimena). Sin fotos de ellas todavía. La tercera tarjeta del grid quedó como invitación abierta ("Tu lugar está reservado acá") en vez de un tercer testimonio inventado — no inventar testimonios hasta que exista uno real.
 
 **Decisiones abiertas de negocio:**
@@ -205,6 +459,14 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Producto y operación:**
 
-- [ ] Definir si se contrata dominio/hosting propio o se usa GitHub Pages.
+- [x] **Comprar el dominio: hecho el 19/08/2026.** Es `entrenaconjime.com`, registrado en Cloudflare por Gastón.
+- [x] **Apuntar el dominio: hecho el 19/08/2026, cuatro días antes de la fecha límite.** El sitio está en vivo en **https://entrenaconjime.com**. Cómo quedó: cuatro registros `A` en el apex hacia las IPs de GitHub Pages (`185.199.108-111.153`) y un `CNAME` de `www` hacia `gaston-perez-art.github.io`, los cinco en **DNS only** (nube gris). El archivo `docs/CNAME` está versionado, así que ningún push lo borra. Las cuatro variantes de entrada (con y sin `www`, con y sin HTTPS) terminan en `https://entrenaconjime.com`, y la URL vieja de GitHub redirige sola, así que los links ya compartidos siguen funcionando. El certificado de Let's Encrypt se emitió en menos de un minuto —no las 24h previstas— y vence el 17/11/2026, con renovación automática. HTTPS forzado activado.
+  - **Si algún día se prende la nube naranja de Cloudflare** (para caché o analítica de red), antes hay que pasar SSL/TLS a **Full (strict)**, o el sitio se cae con un loop de redirecciones. Mientras la nube esté gris, el modo SSL de Cloudflare no interviene.
+  - **Pendiente menor, sin urgencia:** verificar la propiedad del dominio en GitHub (Settings → Pages → Verified domains, con un registro TXT en Cloudflare). No cambia nada de lo que funciona hoy; evita que, si el repo dejara de publicar, otra cuenta de GitHub pudiera reclamar el dominio.
+
+- [x] **Analytics: Google Analytics 4, instalado el 19/08/2026.** Propiedad `G-CNR32WF83Z`, el tag va en el `<head>` de `docs/index.html`. Se eligió GA4 sobre Cloudflare Web Analytics porque esta última no mide eventos: habría dicho cuánta gente entra, nunca cuántas apretaron WhatsApp.
+  - **Qué mide, además de las visitas:** los cuatro links salientes están marcados con `data-ga` y emiten dos eventos propios — `contacto_whatsapp` y `visita_instagram` — cada uno con el parámetro `ubicacion` (`hero`, `cierre` o `footer`). O sea que se puede saber **si la gente escribe apenas entra o recién después de leer todo el sitio**, que son dos historias distintas sobre qué está haciendo la página.
+  - **Sin banner de cookies**, decisión tomada: el público es argentino y rige la ley 25.326, que no lo exige como sí lo hace el GDPR europeo. En un sitio de una sola página, el banner es fricción arriba del contenido. Igual quedó configurado **Consent Mode v2** con publicidad y perfilado denegados y solo la medición habilitada, más `anonymize_ip`: si alguna vez entra tráfico de España, no hay que rehacer nada.
+  - **Al tocar los CTA, mantener el atributo `data-ga`.** Si se reemplaza el botón de WhatsApp por un quiz o por una sesión de valoración (dos pendientes abiertos más arriba), hay que ponerle su propio `data-ga` al elemento nuevo o se pierde la medición de conversión sin que nada se rompa a la vista.
 - [ ] Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`.
 - [ ] Usar las planillas de `herramientas/` como argumento comercial en la web. Hoy son el activo de retención del proyecto y no se mencionan en ningún lado.
