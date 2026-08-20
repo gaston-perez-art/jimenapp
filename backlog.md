@@ -16,6 +16,8 @@ Ajustes directos sobre `docs/index.html`, sin decisión de negocio pendiente det
 - [x] 🔴 **Agregar el enlace real de Instagram** (15/08/2026): `instagram.com/pf.jimenaibanez`, en el footer y en la nota de contacto.
 - [x] **Ícono de WhatsApp roto (de nuevo, 15/08/2026).** No era el mismo bug del 14/08: esta vez el `path` completo igual se deformaba a 18px porque era un dibujo hecho a mano. Reemplazado por el glifo estándar de la marca.
 - [x] **Microcopy del hero desencajado** (pedido de Gastón, 15/08/2026): estaba al lado del botón y en mono, así que flotaba y leía como etiqueta técnica. Ahora va debajo del CTA, en Archivo, con un check en bronce.
+- [ ] 🔴 **El sitio no tiene favicon ni og-image propia.** Hoy `index.html` no declara ningún `<link rel="icon">`, así que la pestaña muestra el ícono default del navegador, y el `og:image` apunta a `jimena-sobre-mi.jpg` — una foto, no una pieza de marca. Se nota justo donde más importa: cuando alguien comparte el link por WhatsApp. **Bloqueado por: falta el símbolo** (ver abajo)
+- [ ] 🔴 **Definir el símbolo de marca.** No existe ninguno: el header es texto plano (`Jimena Ibañez.`). El camino elegido es un dibujo de raíz, por el nombre del método. **Se intentó dibujarlo en SVG a mano el 19/08/2026 y salió mal** — ver la lección en `memory.md`. El próximo intento va por IA de imagen; el prompt quedó armado. Con el master elegido se derivan favicon y og-image con un script
 - [ ] 🟡 Decidir si el CTA del nav ("Escribime") va directo a WhatsApp o sigue scrolleando a `#contacto` — hoy es lo único que agrega un paso, contra el criterio del 14/08
 - [x] Sacar los eyebrows ("Mujeres +35", "Sobre mí", "Testimonios", "Cómo trabajo", "Programa") que no aportaban valor — pedido de Jimena (14/08/2026). Se limpió también el CSS asociado (`.eyebrow`, animación de entrada del hero, override mobile) que quedó sin uso.
 - [x] **Bug: botón "Quiero mi cambio" del hero.** Funcionaba (scrolleaba a la sección de contacto), pero eso era un paso de más para convertir — ahora abre WhatsApp directo, igual que el botón de la sección de contacto (14/08/2026, decisión de Gastón).
@@ -51,7 +53,8 @@ Ajustes directos sobre `docs/index.html`, sin decisión de negocio pendiente det
 Todo lo que hace crecer la base de alumnas o sostiene a las que ya están, más allá del sitio.
 
 - [ ] 🔴 Reglas de la comunidad de WhatsApp para alumnas activas: cuándo se abre el grupo, quién modera. Urgente porque ya se promociona como feature 06 del programa en el sitio en vivo y todavía no existe operativamente
-- [ ] 🟡 Ponerle nombre al método de Jimena — hoy la metodología está documentada y no tiene nombre; sostiene precio y da identidad de marca
+- [x] **Ponerle nombre al método de Jimena: es el "Método Raíz"** (dato de Gastón, 19/08/2026). Todavía no aparece escrito en ningún lado del sitio ni de la documentación — ver el pendiente de bajarlo a `contexto.md` y al sitio, más abajo.
+- [ ] 🟡 **Bajar el "Método Raíz" a `contexto.md` y al sitio.** El método ya tiene nombre pero vive solo en la cabeza de Gastón y Jimena: no está en `contexto.md`, ni en `index.html`, ni en `estrategia/`. Es lo que sostiene precio e identidad de marca, así que hasta que no esté escrito no rinde nada
 - [ ] 🟢 Capturar emails con una guía descargable de perimenopausia (idea del benchmark)
 - [x] Primeros testimonios reales sumados: Silvia Rodríguez y Verónica Vázquez (13/08/2026)
 

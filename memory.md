@@ -308,6 +308,26 @@ El primero es el **dato fisiológico publicado** que el benchmark 03 recomienda 
 
 **Bug arreglado (14/08/2026): el menú hamburguesa no aparecía entre 401px y 720px de ancho.** Las reglas del hamburguesa (`.navtoggle{display:block}` y el dropdown de `.navlinks`) estaban en el breakpoint de `max-width:400px` en vez del de `max-width:720px`, que es el que usa el resto del sitio para mobile. En ese rango (celulares grandes, iPhone Pro Max incluido) no había hamburguesa pero tampoco entraba el nav de escritorio: el logo y los links se pisaban. Se movieron esas reglas al breakpoint de 720px.
 
+### Identidad de marca: el símbolo, el "Método Raíz" y una lección cara (19/08/2026)
+
+**El método de Jimena se llama "Método Raíz".** Dato que aportó Gastón ese día y que cierra un pendiente abierto del backlog. **Ojo: no está escrito en ningún lado todavía** — ni en `contexto.md`, ni en `index.html`, ni en `estrategia/`. Queda como pendiente bajarlo.
+
+**El sitio no tiene símbolo de marca, ni favicon, ni og-image propia.** El header es texto plano (`Jimena Ibañez.`), `index.html` no declara ningún `<link rel="icon">` y el `og:image` apunta a `jimena-sobre-mi.jpg`, que es una foto y no una pieza diseñada. Se nota cuando alguien comparte el link por WhatsApp, que es el canal principal.
+
+**Se decidió que el símbolo sale del nombre del método** (una raíz), aplicando el criterio que ya había salido en donAR: el símbolo tiene que venir de lo único que no se puede copiar. Una mancuerna es el logo de cualquier gimnasio y una hoja el de cualquier marca de wellness; el nombre propio del método, no. Regla que quedó: **la raíz nunca lleva parte aérea** — agregarle hojas la convierte en un árbol genérico.
+
+**La lección, que es lo que hay que recordar:** se intentaron dibujar los símbolos en **SVG a mano y salieron mal**. Tres rondas, y recién al renderizarlas en el navegador se vio que la primera tanda se leía como una antena de TV, un abeto y una figura de palotes corriendo. Los intentos de silueta femenina fallaron los cinco: sólida da un florero, esquemática da el pictograma de baño público, en dos líneas se lee como paréntesis y de perfil dice spa. **Esto ya estaba escrito en `donAR/docs/proceso-logo.md` y se pasó por alto:** el SVG a mano sirve para lo geométrico y lo tipográfico; para un *dibujo* hay que ir a IA de imagen, y después derivar los tamaños finales localmente con un script. El próximo intento va por ahí.
+
+**Dos cosas que sí sirven de esa pasada:**
+- **Verificar mirando, no imaginando.** Renderizar en el navegador y mirar la captura es lo único que detectó los errores; a ojo desde el código las seis primeras opciones parecían razonables. Es la misma regla de "medir en vez de mirar" que ya está en `CLAUDE.md`, aplicada a lo visual.
+- **Detalle que vale para cualquier símbolo que se elija:** el header ya termina en un punto (`Jimena Ibañez.`). Un punto en bronce dentro del símbolo lo hace citar algo que la marca ya hacía, en vez de sumar un elemento nuevo.
+
+### `design-system.md`, nuevo en la raíz del repo (19/08/2026)
+
+Se creó `design-system.md`, que documenta en un solo lugar la paleta, la tipografía, los radios, las sombras y la voz de marca **tal como están hoy en `docs/index.html`**, leídos del CSS y no de este archivo. Mismo rol que cumple el suyo en el proyecto Tecla.
+
+**Corrección que salió de escribirlo:** este `memory.md` describía la tipografía como "Archivo (display) + Work Sans (cuerpo)". **Work Sans ya no se usa.** El `<link>` de Google Fonts que carga hoy el sitio trae solo **Archivo** (400/500/600/700 + itálica 700) y **IBM Plex Mono** (400/500); Archivo hace los dos roles. Si alguien buscaba Work Sans en el CSS, no está.
+
 ## Estructura de la página web
 
 Hero → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
@@ -360,6 +380,7 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 2. 🔴 **Las reglas de la comunidad de WhatsApp** siguen sin definirse y la feature 06 se promociona en el sitio en vivo.
 3. 🔴 **Foto profesional de Jimena** para "Sobre mí". Con el sitio ahora blanco y limpio **la foto actual canta mucho más** que antes: sobre crema se disimulaba, sobre blanco y al lado de un título liviano de 40px es lo primero que rompe.
 4. ✅ **Testimonios: cerrado el 19/08/2026.** Llegaron cinco citas con edad y país, la historia completa de Silvia, cuatro de las cinco fotos y las autorizaciones. La sección dejó de ser un diseño esperando contenido. Queda solo 🟢 `daiana.jpg`, que no bloquea nada. La carga de los próximos testimonios tiene proceso escrito en `testimonios.md`.
+5. 🔴 **Sin favicon ni og-image propia** (detectado el 19/08/2026). La pestaña muestra el ícono default del navegador y el preview al compartir es una foto suelta. Con el sitio ya en vivo y el lanzamiento el 23/08, es lo que se ve cada vez que alguien pasa el link por WhatsApp. Está bloqueado por el símbolo de marca, que todavía no existe — ver "Identidad de marca" más arriba.
 
 **Lo que quedó sin commitear a propósito:** `docs/_testimonios-preview.html`, que tiene el bloque destacado con foto en retrato 4:5 y el antes/después armado. No se publica porque tiene datos inventados y el sitio está en vivo.
 
