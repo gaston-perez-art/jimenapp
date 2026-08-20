@@ -72,7 +72,8 @@ Decisiones económicas y de posicionamiento. Viven en `estrategia/`.
 
 Lo que sostiene el negocio por detrás, sin ser ni web pública ni estrategia.
 
-- [ ] 🔴 **Apuntar el dominio propio, antes del 23/08/2026.** **Comprado el 19/08/2026: `entrenaconjime.com`, registrado en Cloudflare.** Falta poner el `CNAME` versionado dentro de `docs/` —si no, cada push lo borra— y configurar los registros DNS en Cloudflare, con el proxy en *DNS only* hasta que el certificado se emita y SSL/TLS en *Full*. El hosting sigue siendo GitHub Pages. **Arrancar temprano en la semana:** el certificado HTTPS de Pages tarda hasta 24h en emitirse después de apuntar el DNS
+- [x] ✅ **Apuntar el dominio propio: hecho el 19/08/2026**, cuatro días antes de la fecha límite. **El sitio está en vivo en https://entrenaconjime.com**, con HTTPS y candado en el navegador. El `CNAME` quedó versionado dentro de `docs/`, los registros DNS en Cloudflare en *DNS only*, y el certificado se emitió en menos de un minuto en lugar de las 24h que se temían. La URL vieja de `github.io` redirige sola. Configuración completa en `memory.md`
+- [x] ✅ **Instalar analytics: hecho el 19/08/2026.** Google Analytics 4 (`G-CNR32WF83Z`), midiendo visitas y además los clics a WhatsApp e Instagram, con el dato de si el clic pasó en el hero o al final del scroll. Sin banner de cookies (ley 25.326, no GDPR). Detalle y advertencia para cuando se toquen los CTA, en `memory.md`
 - [ ] 🟢 Sumar planillas de seguimiento de progreso (medidas, fotos, hábitos, fuerza) a `herramientas/`
 
 ## Cómo leer las prioridades
