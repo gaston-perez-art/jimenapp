@@ -404,6 +404,35 @@
   .section-head h2{font-size:clamp(32px,4.4vw,60px);}
   .section-head p{color:var(--ink-soft); margin-top:16px; font-size:16.5px;}
 
+  /* ---------- Problema (¿te suena algo de esto?) ---------- */
+  #problema .section-head{margin-left:auto; margin-right:auto; text-align:center;}
+  .problema-lista{
+    list-style:none; margin:0 auto 40px; padding:0;
+    max-width:620px;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .problema-lista li{
+    font-size:16.5px; color:var(--ink); line-height:1.5;
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .problema-lista li::before{
+    content:""; flex:0 0 auto; width:7px; height:7px; margin-top:9px;
+    border-radius:50%; background:var(--wine-600);
+  }
+  .realidad-box{
+    max-width:640px; margin:0 auto;
+    background:linear-gradient(155deg, var(--wine-900), var(--wine-600) 60%, var(--bronze));
+    color:#fff;
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-md);
+    padding:40px 40px;
+    text-align:center;
+  }
+  .realidad-box h3{color:#fff; font-size:21px; margin-bottom:14px;}
+  .realidad-box p{font-size:15.5px; line-height:1.65; color:rgba(255,255,255,.92); margin:0 0 14px;}
+  .realidad-box p:last-child{margin-bottom:0;}
+  .realidad-box strong{color:#fff;}
+
   /* ---------- Sobre mi ---------- */
   #sobre{border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   #sobre{padding:62px 0;}
@@ -1009,6 +1038,8 @@
 
     .hero-video{border-radius:var(--r-md);}
     .contact-box{padding:30px 22px; border-radius:var(--r-md);}
+    .problema-lista li{font-size:15.5px;}
+    .realidad-box{padding:30px 24px; border-radius:var(--r-md);}
 
     /* La cinta SIGUE andando en mobile. Al no depender del scroll no pelea
        contra el dedo, y resuelve que varios testimonios apilados sean varias
@@ -1201,6 +1232,28 @@
       <div class="video-ph" id="videoPh">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5-6-3.5z" fill="currentColor" stroke="none"/></svg>
         <span>Video próximamente</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMA -->
+  <section id="problema">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>¿Te suena algo de esto?</h2>
+      </div>
+      <ul class="problema-lista reveal stagger">
+        <li>Te cuidás, te movés, y aun así tu cuerpo no cambia como esperabas.</li>
+        <li>Comés bien, te esforzás, y la balanza no se mueve.</li>
+        <li>Probaste dietas, apps y rutinas gratis de internet, y siempre volviste al mismo punto.</li>
+        <li>Sentís que tu cuerpo ya no responde igual que antes de los 35.</li>
+        <li>La comida te genera culpa, y estás cansada de vivir pendiente de eso.</li>
+        <li>No tenés tiempo para entrenar todos los días ni para cocinar horas.</li>
+      </ul>
+      <div class="realidad-box reveal">
+        <h3>La realidad</h3>
+        <p>No es falta de voluntad. Es que nadie te explicó lo que realmente pasa en tu cuerpo después de los 35: la resistencia a la insulina, el SOP, el hipotiroidismo o la perimenopausia cambian cómo tu cuerpo usa la energía, y una rutina genérica no tiene eso en cuenta.</p>
+        <p>Por eso armé el <strong>Método Raíz</strong>: fuerza, alimentación flexible y seguimiento real, pensados específicamente para tus cambios hormonales. No es magia ni es rápido — es un método que por fin tiene en cuenta lo que te está pasando.</p>
       </div>
     </div>
   </section>
