@@ -354,6 +354,16 @@ Primera sesión con criterio explícito de **copywriting**, no solo de diseño. 
 
 **Verificación:** DOM medido en 14 anchos de 360px a 1440px — cero overflow horizontal, el claim nunca se parte, áreas táctiles de mobile en 46px mínimo. **El `resize_window` del navegador no funciona en este entorno** (queda fijo en 1440px): sirve el harness con iframe a ancho real, igual que en la pasada de mobile del 15/08.
 
+### El QA local mentía sobre el video (20/08/2026)
+
+**`qa-local.py` no soportaba `Range` requests.** Chrome pide media por rangos; `SimpleHTTPRequestHandler` ignora la cabecera y contesta `200` con el archivo entero, sin `Accept-Ranges`. GitHub Pages contesta `206` con `Content-Range`. O sea que **el servidor de QA se comportaba distinto a producción justo en lo único que no se puede revisar leyendo el código**. Arreglado: ahora responde 206, con `protocol_version = "HTTP/1.1"`. Verificado con `curl -H "Range: bytes=0-1023"` contra los dos.
+
+**Lección de método, que es lo que hay que recordar:** cuando algo se ve mal en local, la primera pregunta no es "¿qué rompí?" sino **"¿el entorno de QA se parece a producción en esto?"**. Acá se perdió una vuelta entera arreglando el JS del sitio antes de comparar las cabeceras de los dos servidores, que tardó diez segundos y fue lo que dio la respuesta.
+
+**Pendiente sin resolver, ojo:** con el `Range` ya arreglado, **el video del hero sigue sin cargar, y también sigue sin cargar en producción** — `networkState 2` (cargando) y `readyState 0` (cero bytes), sin error, en `localhost` y en `entrenaconjime.com` por igual. El archivo está bien: `curl` lo baja entero, 1 MB, `video/mp4`, HTTP 200 en los dos lados. **No está confirmado si le pasa a un navegador normal o solo al Chrome que maneja el harness**, así que falta abrir el sitio a mano en una máquina y un celular antes de sacar conclusiones.
+
+**Lo que sí se arregló del lado del sitio:** el JS tenía un círculo vicioso real. `play()` se llamaba **solo** dentro del handler de `loadeddata`, y `play()` es justamente lo que fuerza la descarga cuando `preload="metadata"` no la dispara. El video esperaba un evento que solo iba a existir si alguien lo despertaba primero. Ahora se pide la reproducción de entrada, y el placeholder se oculta por `readyState >= 2` **o** por evento, porque si el video ya venía de caché el evento tampoco se vuelve a emitir. **Este arreglo no resolvió el síntoma observado**, así que la causa de fondo sigue abierta.
+
 ### Precio por país: bloqueante nuevo (20/08/2026)
 
 **Decisión de Gastón: el sitio tiene que mostrar un precio para Argentina y otro para el resto del mundo.** Queda como **bloqueante del lanzamiento del 23/08**, con prioridad inmediatamente después del barrido del sitio.

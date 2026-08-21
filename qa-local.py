@@ -18,6 +18,13 @@ Qué hace además de servir
    script chico en las respuestas HTML que pregunta cada segundo si algo se
    modificó. La inyección pasa solo en este servidor: el archivo en disco no
    se toca, así que nunca se puede colar en lo que se publica.
+3. Responde `Range` requests (HTTP 206). Hace falta para el `<video>` del hero:
+   Chrome pide media por rangos, y `SimpleHTTPRequestHandler` ignora la
+   cabecera y contesta 200 con el archivo entero. El resultado era que acá el
+   video se quedaba clavado en el póster, con el placeholder encima, mientras
+   en producción andaba perfecto — GitHub Pages sí contesta 206. O sea que el
+   QA mentía justo sobre lo único que no se puede revisar de otra forma.
+   Costó una sesión entera de debugging el 20/08/2026: no lo saques.
 
 Uso
 ---
@@ -73,8 +80,63 @@ def marca_de_tiempo():
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
+    # HTTP/1.1 para que la conexión se reutilice. Todas las ramas de do_GET
+    # mandan Content-Length, que es lo que 1.1 exige para no cerrar el socket.
+    protocol_version = "HTTP/1.1"
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=RAIZ, **kwargs)
+
+    def _servir_rango(self, ruta):
+        """Responde 206 si el pedido trae Range. Devuelve True si ya respondió.
+
+        Chrome pide el video del hero con `Range: bytes=0-`, y el handler de la
+        stdlib no implementa rangos: contesta 200 con el archivo completo y sin
+        `Accept-Ranges`. Con eso el elemento <video> queda en networkState 2
+        (cargando) y readyState 0 (sin datos) para siempre, sin tirar error.
+        """
+        rango = self.headers.get("Range")
+        if not rango or not rango.startswith("bytes="):
+            return False
+
+        total = os.path.getsize(ruta)
+        desde_txt, _, hasta_txt = rango[len("bytes="):].partition("-")
+        try:
+            if desde_txt:
+                desde = int(desde_txt)
+                hasta = int(hasta_txt) if hasta_txt else total - 1
+            else:
+                # sufijo: "bytes=-500" son los ultimos 500 bytes
+                desde = max(0, total - int(hasta_txt))
+                hasta = total - 1
+        except ValueError:
+            return False
+
+        hasta = min(hasta, total - 1)
+        if desde > hasta:
+            self.send_response(416)
+            self.send_header("Content-Range", f"bytes */{total}")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return True
+
+        largo = hasta - desde + 1
+        self.send_response(206)
+        self.send_header("Content-Type", self.guess_type(ruta))
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Range", f"bytes {desde}-{hasta}/{total}")
+        self.send_header("Content-Length", str(largo))
+        self.end_headers()
+        with open(ruta, "rb") as f:
+            f.seek(desde)
+            restante = largo
+            while restante > 0:
+                bloque = f.read(min(64 * 1024, restante))
+                if not bloque:
+                    break
+                self.wfile.write(bloque)
+                restante -= len(bloque)
+        return True
 
     def end_headers(self):
         # Sin esto se mide el CSS viejo: va todo inline en index.html.
@@ -109,6 +171,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Content-Length", str(len(cuerpo)))
             self.end_headers()
             self.wfile.write(cuerpo)
+            return
+
+        if os.path.isfile(ruta) and self._servir_rango(ruta):
             return
 
         super().do_GET()
