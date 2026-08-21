@@ -354,6 +354,30 @@ Primera sesión con criterio explícito de **copywriting**, no solo de diseño. 
 
 **Verificación:** DOM medido en 14 anchos de 360px a 1440px — cero overflow horizontal, el claim nunca se parte, áreas táctiles de mobile en 46px mínimo. **El `resize_window` del navegador no funciona en este entorno** (queda fijo en 1440px): sirve el harness con iframe a ancho real, igual que en la pasada de mobile del 15/08.
 
+### Precio por país: bloqueante nuevo (20/08/2026)
+
+**Decisión de Gastón: el sitio tiene que mostrar un precio para Argentina y otro para el resto del mundo.** Queda como **bloqueante del lanzamiento del 23/08**, con prioridad inmediatamente después del barrido del sitio.
+
+**El motivo importa más que la feature, porque cambia de qué se trata el problema.** No es "poner precios distintos": **Jimena ya le cobra más a las alumnas extranjeras**. O sea que el USD 35 publicado es el precio argentino expuesto a todo el mundo, y una extranjera que entra hoy lee un número más barato que el que después le van a cobrar. El sitio no está por crear una asimetría, la está contradiciendo. **Y el sitio está en vivo desde el 19/08, así que esto ya está pasando** — no es un pendiente que empieza el 23.
+
+Vale anotar el error de razonamiento, porque es reutilizable: la primera reacción fue advertir sobre el riesgo político de cobrar distinto por país. Esa advertencia estaba construida sobre una premisa falsa (que la diferencia no existía todavía). **Antes de objetar una decisión de precio, preguntar qué se cobra hoy de verdad.**
+
+**Restricción dura, pedida explícitamente: sin latencia y sin parpadeo.** Eso descarta las dos opciones obvias:
+- **API de geolocalización por IP** (ipapi.co, ipinfo.io): la respuesta llega a los ~200ms y el número cambia a la vista, justo en el dato más sensible de la página. Además suma un tercero que ve las IP de las visitantes y un límite de plan gratuito.
+- **Cloudflare Workers**: es la solución técnicamente correcta —se resuelve en el servidor, país real, cero parpadeo— pero **exige prender la nube naranja**, y este mismo archivo tiene escrito que antes hay que pasar SSL/TLS a *Full (strict)* o el sitio se cae con un loop de redirecciones. A tres días del lanzamiento no se toca.
+
+**Camino elegido: zona horaria del navegador.** `Intl.DateTimeFormat().resolvedOptions().timeZone` devuelve algo como `America/Argentina/Buenos_Aires`; todas las zonas argentinas empiezan con `America/Argentina`. Resuelve local, instantáneo, sin llamada externa y sin exponer ninguna IP. Falla con VPN o con alguien de viaje, y ese costo se acepta.
+
+**Regla de implementación que no es obvia: el precio que va escrito en el HTML es el internacional, no el argentino.** El proyecto ya tiene la regla de que el contenido se vea sin JavaScript, y acá esa regla tiene una dirección correcta: si el script no corre, la que ve el precio equivocado tiene que ser la argentina —a quien se le corrige a la baja en la conversación, que es una charla fácil— y no la extranjera, a quien habría que corregirle a la suba. El fallback tiene que fallar hacia el lado barato de explicar.
+
+**Bloqueado por una decisión de negocio:** cuál es el número internacional. Jimena lo cobra pero no está escrito en ningún lado del repo.
+
+### Búsqueda con IA: qué falta (20/08/2026)
+
+Pedido de Gastón, **no bloqueante**. `robots.txt` ya permite todos los crawlers (`User-agent: *`), así que no hay nada que desbloquear. Lo que falta es material citable: **el JSON-LD declara solo `Person`** —nombre, oficio, foto, Instagram— y no dice nada del programa, del precio, del Método Raíz ni de los testimonios, que es justo lo que un modelo necesita para responder "¿quién entrena mujeres +35 con cambios hormonales?".
+
+**Interacción con el pendiente de precio, que es fácil de pasar por alto:** los datos estructurados son estáticos y se indexan una sola vez para todo el mundo. Si se declara el precio ahí, ese número lo ve cualquiera sin importar el país, y se pierde el sentido de la detección por zona horaria. Ahí va el precio internacional o no va ninguno.
+
 ### Sección "¿Te suena algo de esto?" y el manual (20/08/2026)
 
 Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
