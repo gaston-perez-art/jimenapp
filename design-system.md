@@ -2,7 +2,7 @@
 
 > Documenta lo que **ya está decidido y en producción** en `docs/index.html`, leído directo del CSS
 > (no de `memory.md`, que en algún punto queda desactualizado — ver nota de tipografía abajo).
-> **Última actualización:** 19/08/2026
+> **Última actualización:** 20/08/2026
 
 ## Logo
 
@@ -39,7 +39,7 @@ El calor de la marca lo aportan el vino y el bronce, no el fondo.
 |---|---|---|
 | `--wine-950` | `#3E1422` | Fondo de sección oscura (única del sitio: "Cómo trabajo") |
 | `--wine-900` | `#5C1F32` | Texto de marca fuerte, footer |
-| `--wine-600` | `#9D3A57` | Color de marca principal — botones, acentos |
+| `--wine-600` | `#9D3A57` | Color de marca principal — botones, acentos, palabra que rota en el hero. Da **6.6:1** sobre blanco, así que pasa AA también como texto normal |
 | `--wine-500` | `#B14A67` | Variante clara |
 | `--wine-100` | `#F3E4E9` | Fondo suave |
 
@@ -73,6 +73,7 @@ da 4.9:1 con el mismo tono visual. `--bronze` se sigue usando para lo que no es 
   "wellness artesanal" cuando el contenido habla de periodización y RPE. Proceso completo en
   `product-discovery/01-tipografia/`.
 - Letter-spacing: `-.02em` en títulos grandes (aprieta), `.02em` a `.14em` en mono/labels (abre).
+- **Claim del hero (actualizado 20/08/2026):** `clamp(40px, 5.6vw, 72px)`. Bajó de un techo de 92px, que estaba dimensionado para cuando el `<h1>` cargaba solo con todo el mensaje. La palabra que rota va en cursiva y en `--wine-600`; el "Más" fijo queda recto y en `--wine-900`. El énfasis lo hace el contraste entre dos tonos del mismo vino, no un subrayado ni un tercer color.
 
 ## Radios y sombras
 

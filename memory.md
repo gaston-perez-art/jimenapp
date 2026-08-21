@@ -328,9 +328,47 @@ Se creó `design-system.md`, que documenta en un solo lugar la paleta, la tipogr
 
 **Corrección que salió de escribirlo:** este `memory.md` describía la tipografía como "Archivo (display) + Work Sans (cuerpo)". **Work Sans ya no se usa.** El `<link>` de Google Fonts que carga hoy el sitio trae solo **Archivo** (400/500/600/700 + itálica 700) y **IBM Plex Mono** (400/500); Archivo hace los dos roles. Si alguien buscaba Work Sans en el CSS, no está.
 
+### Pasada de copy y de hero (20/08/2026)
+
+Primera sesión con criterio explícito de **copywriting**, no solo de diseño. Gastón pidió tratar el copy con el mismo rigor que un flujo de producto. Se transcribieron al pie de la letra los heros de las dos referencias directas — `entrenadoranoeliarodriguezfit.com` (misma clienta, mismo negocio de una sola persona) y `sariadnapascual.com` — y de ahí salieron las reglas de abajo.
+
+**Lo que hace bien la referencia de Noelia:** su titular tiene seis palabras ("Tu cuerpo cambia en la menopausia") y ninguna habla de ella ni de su método. Habla del cuerpo de quien lee. La estructura es: nombro tu condición → qué vas a conseguir → sin qué → CTA. Y su CTA no dice "quiero mi cambio", dice **"quiero saber por dónde empiezo"**, que nombra la duda real de alguien que ya probó de todo. Sariadna es el contraejemplo: "EL PROYECTO MÁS IMPORTANTE / ¡ERES TÚ!" es grande y podría ser de una inmobiliaria. Ojo, la referencia de Sariadna que había pasado Jimena era **por testimonios**, no por copy.
+
+**Reglas de copy que quedan para el resto del sitio:**
+
+• **Nada de paréntesis técnicos en la parte alta.** El lead viejo tenía 44 palabras y aclaraba "(pérdida de grasa y ganancia de masa muscular/tonificación)". Si hay que aclarar entre paréntesis, ya perdiste a quien lee.
+• **No enumerar condiciones clínicas arriba.** Observación de Gastón y es la más importante de la sesión: listar "resistencia a la insulina, SOP, hipotiroidismo, perimenopausia" no confunde a quien las tiene diagnosticadas — **excluye a la que no sabe que las tiene** y se autodescarta leyendo la lista. Y esa es buena parte del público. Arriba se nombra lo que ella siente; el nombre clínico va abajo, con contexto, y explicado la primera vez que aparece. La sección Problema ya lo hace bien.
+• **Contar las paradas de lectura antes del botón.** El hero pasó de seis a cuatro.
+
+**Qué quedó en el hero:**
+
+- **El claim vuelve a "Más fuerte. / Más segura. / Más vos."** Se probó reemplazarlo por un remate en dos niveles ("No es tu fuerza de voluntad… / **Son tus hormonas.**") y **se descartó por decisión de Gastón**: a 72px y en color de marca esa frase deja de ser un alivio y se lee como un veredicto sobre el cuerpo de la clienta. Además **esa idea ya vive en la caja "La realidad" de la sección Problema**, quince centímetros más abajo y con espacio para explicarla: el hero le estaba robando el remate a esa sección y lo entregaba peor. **Lección: el titular del hero no es el lugar del diagnóstico.**
+- **Las tres palabras que rotan van en `--wine-600`**, y "Más" queda en `--wine-900`. El énfasis lo hace el contraste entre dos tonos del mismo vino. Se probó antes un subrayado en bronce y se descartó. Dato para no rehacer la cuenta: `--wine-600` sobre blanco da **6.6:1**, así que pasa AA incluso como texto normal.
+- **Si alguna vez se vuelve a intentar un subrayado ahí, ojo con el `clip-path` de `.rot`**, que recorta a `-.08em` por debajo: un `text-underline-offset` grande se corta solo. Con `.08em` entraba.
+- **El techo del `<h1>` bajó de 92px a 72px.** Los 92 estaban puestos cuando el titular cargaba solo con todo el mensaje y el lead no se leía. Con un lead que ahora dice algo, 92px lo aplastaba.
+- **El lead lo escribió Gastón** y es mejor que la versión que había propuesto la IA: *"Desarrollé mi Método Raíz para que puedas perder grasa, ganar músculo y recuperar energía. Pensado para tu cuerpo después de los 35."* Arrancar por el verbo en primera persona resuelve tres cosas de un saque: le da al método el peso que le faltaba, y dice sin decirlo que **acá hay alguien y no una empresa** — que era un pendiente suelto del benchmark world class ("escribir la ventaja de ser una sola persona").
+- **CTA: "Quiero saber por dónde empiezo"** en lugar de "Quiero mi cambio". Pide preguntar, no anotarse. **El atributo `data-ga="whatsapp_hero"` se conservó**, así que la medición de conversión de GA4 sigue intacta.
+- **Microcopy: "Respondo personalmente cada consulta".** Se probó "Te respondo yo, no un bot" y Gastón lo bajó.
+- **El video de alumnas pasó a ocupar el ancho completo de su columna.** Estaba topeado en `max-width:340px` dentro de una columna de ~507px, o sea con 167px de aire muerto — un tercio de su propia columna. **El límite pasó a ser el alto y no el ancho** (`max-height:min(64vh,620px)`): sin eso, un video a ancho completo con `aspect-ratio:3/4` pide más alto del que el hero tiene disponible y lo empuja fuera del viewport, y revienta primero entre 1280x800 y 1440x900.
+- **Salió la etiqueta mono "Método Raíz"** que estaba debajo del `<h1>`: quedó redundante con el lead. Al sacarla hubo que devolver el `margin-top` del lead a 26px, que se había bajado a 10px justamente porque esa etiqueta ocupaba el espacio.
+
+**Verificación:** DOM medido en 14 anchos de 360px a 1440px — cero overflow horizontal, el claim nunca se parte, áreas táctiles de mobile en 46px mínimo. **El `resize_window` del navegador no funciona en este entorno** (queda fijo en 1440px): sirve el harness con iframe a ancho real, igual que en la pasada de mobile del 15/08.
+
+### Sección "¿Te suena algo de esto?" y el manual (20/08/2026)
+
+Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
+
+- **Sección Problema nueva**, entre el hero y "Sobre mí": seis bullets de dolor en primera persona más una caja "La realidad" en gradiente vino→bronce que explica por qué no es falta de voluntad. **Cierra sin querer un pendiente 🟢 del benchmark 02** ("reordenar la web para arrancar por el problema de la clienta, no por la oferta").
+- **"Método Raíz" bajado al sitio**, que cierra el pendiente 🟡 de Growth.
+- **`materiales/Manual_Metodo_Raiz_Jimena_Ibanez.pdf`** — un manual ya producido con el público objetivo +35. **Todavía no está enlazado desde ningún lado del sitio.** Es un lead magnet terminado sin CTA, justo cuando hay un pendiente del benchmark que pide "regalar algo con nombre, formato y plazo".
+
+**Deuda de proceso que se ve acá:** entre el 19 y el 20/08 se pushearon cambios de sitio sin actualizar `memory.md` ni `backlog.md`, y los cuatro archivos volvieron a decir cosas distintas — el mismo problema que ya se había arreglado el 18/08. El sitio es un solo archivo y la documentación es lo único que explica por qué está como está.
+
+**Pendiente que abre esta pasada:** las tres secciones de arriba de todo (hero, Problema, Sobre mí) son **las tres blancas y seguidas**. `#problema` no declara fondo propio, así que hereda `--paper`. El recorrido con ritmo que se armó el 15/08 (claro → dim → oscuro → dim → claro) ahora arranca con tres bloques planos antes del primer cambio. Y la sección nueva tampoco está en el nav.
+
 ## Estructura de la página web
 
-Hero → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
+Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
 
 El orden es deliberado: **el método va antes que el precio**. Explicar cómo se trabaja antes de mostrar cuánto sale es lo que hace que el precio se entienda. Antes estaba al revés.
 
