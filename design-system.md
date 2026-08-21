@@ -2,7 +2,20 @@
 
 > Documenta lo que **ya está decidido y en producción** en `docs/index.html`, leído directo del CSS
 > (no de `memory.md`, que en algún punto queda desactualizado — ver nota de tipografía abajo).
-> **Última actualización:** 20/08/2026
+> **Última actualización:** 21/08/2026
+
+## Movimiento
+
+**Dos curvas de easing, y la diferencia es deliberada** (21/08/2026). Hasta esa fecha el sitio usaba una sola, `cubic-bezier(.16,1,.3,1)`, que es una exponencial: arranca disparada y frena en seco. Ese frenazo hacía que las entradas se sintieran como un golpe.
+
+| Uso | Curva | Por qué |
+|---|---|---|
+| **Entradas** (hero, reveal, stagger) | `cubic-bezier(.25,.46,.45,.94)` | Desacelera de a poco. El elemento se posa en vez de caer |
+| **Interacciones** (hover, botones, foco) | `cubic-bezier(.16,1,.3,1)` | Una interacción tiene que responder rápido |
+
+**Duraciones de entrada:** hero `1.35s`–`1.6s` con recorrido de 14px; reveal general `1.5s` con recorrido de 34px; stagger de hijos `1.25s` con escalón de `.16s`.
+
+**Ritmo de fondos del recorrido:** blanco → dim → blanco → dim → **oscuro** → dim → blanco. La única sección oscura es "Cómo trabajo".
 
 ## Logo
 

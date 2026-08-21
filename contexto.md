@@ -40,6 +40,8 @@ Mujeres +35 que atraviesan cambios hormonales — resistencia a la insulina, SOP
   - Nada de paréntesis técnicos ni aclaraciones en la parte alta de la página.
   - **No enumerar condiciones clínicas arriba.** Listar "SOP, hipotiroidismo, perimenopausia" no confunde a quien las tiene diagnosticadas: excluye a la que no sabe que las tiene y se autodescarta leyendo la lista. Arriba se nombra lo que ella siente; el nombre clínico va abajo, con contexto y explicado la primera vez que aparece.
   - El titular del hero no es el lugar del diagnóstico.
+  - **Nunca escribir un dato de negocio sin preguntarlo**: cupo, capacidad, precio, trayectoria. Pasó dos veces — "el programa que ya ayudó a mujeres…" en agosto, y "trabajo con pocas alumnas a la vez" el 21/08/2026. Las dos veces era invención.
+  - La página califica **en los dos sentidos**: dice para quién es y también para quién no. Es la decisión que ordena la sección "¿Te suena algo de esto?".
 - **Paleta y tipografía:** ver `memory.md`, sección "Decisiones de diseño", y `design-system.md`
 
 ## Estado actual

@@ -407,34 +407,205 @@
   .section-head h2{font-size:clamp(32px,4.4vw,60px);}
   .section-head p{color:var(--ink-soft); margin-top:16px; font-size:16.5px;}
 
-  /* ---------- Problema (¿te suena algo de esto?) ---------- */
+  /* ---------- Problema (¿te suena algo de esto?) ----------
+     Rediseñada el 20/08/2026. Antes era una lista de seis viñetas del mismo
+     peso —una lista es lo que se escribe cuando todavía no se decidió qué es
+     lo importante— más una caja de color con el texto centrado. Un párrafo
+     centrado es hostil: cada renglón arranca en una x distinta.
+
+     Fondo --paper-dim y no blanco: hero, Problema y Sobre mí eran las tres
+     blancas y seguidas, y el recorrido con ritmo del 15/08 recién arrancaba
+     después. Ahora queda blanco → dim → blanco → dim → oscuro → dim → blanco.
+
+     Los dos bloques van APILADOS y no lado a lado. Se probó en dos columnas
+     y con 6 ítems contra 4 quedaban siempre desparejas (730px contra 500px).
+     Emparejar alturas no lo arregla: deja aire muerto adentro de la corta.
+     Bloques de ancho completo no pueden quedar disparejos. */
+  #problema{background:var(--paper-dim);}
   #problema .section-head{margin-left:auto; margin-right:auto; text-align:center;}
-  .problema-lista{
-    list-style:none; margin:0 auto 40px; padding:0;
-    max-width:620px;
-    display:flex; flex-direction:column; gap:14px;
+
+  .bloque-si{
+    max-width:1000px; margin:0 auto;
+    background:var(--wine-100); border-radius:var(--r-lg);
+    padding:36px 38px 34px;
+    position:relative; overflow:hidden; isolation:isolate;
   }
-  .problema-lista li{
-    font-size:16.5px; color:var(--ink); line-height:1.5;
-    display:flex; gap:12px; align-items:flex-start;
+  /* ---- Barrido del perimetro (20/08/2026) ----
+     Un cuadrado con un gradiente conico gira detras de la tarjeta; el ::after
+     tapa todo el interior menos 1.5px, asi que lo unico que se ve del giro es
+     un destello recorriendo el borde. Sin @property y sin JS: se anima
+     `transform`, que ya es lo que el navegador compone barato.
+     Cada 8s, y el barrido dura menos de 3: tiene que ser un detalle que se descubre,
+     no algo que este pasando todo el tiempo al lado del texto que hay que leer. */
+  .bloque-si::before{
+    content:""; position:absolute; z-index:0;
+    top:50%; left:50%; width:150%; aspect-ratio:1;
+    background:conic-gradient(from 0turn,
+      transparent 0 .74turn,
+      rgba(220,186,132,.75) .88turn,
+      var(--bronze) .94turn,
+      rgba(220,186,132,.75) .97turn,
+      transparent 1turn);
+    opacity:0;
   }
-  .problema-lista li::before{
-    content:""; flex:0 0 auto; width:7px; height:7px; margin-top:9px;
-    border-radius:50%; background:var(--wine-600);
+  /* La secuencia importa: aparece la tarjeta → baja el recorrido por los
+     bullets → recien ahi arranca el recuadro. Por eso cuelga de `.in-view` y
+     no del load: antes empezaba a girar aunque la seccion todavia estuviera
+     fuera de pantalla, y se pisaba con la cascada.
+     3s = el ultimo bullet aterriza a 2.05s y su guiño termina a 2.70s. */
+  .has-js .bloque-si.reveal.in-view::before{
+    animation:barridoBorde 8s linear 3s infinite;
   }
-  .realidad-box{
-    max-width:640px; margin:0 auto;
-    background:linear-gradient(155deg, var(--wine-900), var(--wine-600) 60%, var(--bronze));
-    color:#fff;
+  /* Tapa el interior y deja solo el anillo. Va del color de la tarjeta. */
+  .bloque-si::after{
+    content:""; position:absolute; z-index:1; inset:1.5px;
+    border-radius:calc(var(--r-lg) - 1px);
+    background:var(--wine-100);
+  }
+  .bloque-si > *{position:relative; z-index:2;}
+  @keyframes barridoBorde{
+    0%    {transform:translate(-50%,-50%) rotate(0turn); opacity:0;}
+    2%    {opacity:.9;}
+    30%   {opacity:.9;}
+    35%   {transform:translate(-50%,-50%) rotate(1turn); opacity:0;}
+    100%  {transform:translate(-50%,-50%) rotate(1turn); opacity:0;}
+  }
+  .tira-no{
+    max-width:1000px; margin:16px auto 0;
+    background:var(--card); border:1px solid var(--line);
     border-radius:var(--r-lg);
-    box-shadow:var(--shadow-md);
-    padding:40px 40px;
-    text-align:center;
+    padding:28px 38px 30px;
   }
-  .realidad-box h3{color:#fff; font-size:21px; margin-bottom:14px;}
-  .realidad-box p{font-size:15.5px; line-height:1.65; color:rgba(255,255,255,.92); margin:0 0 14px;}
-  .realidad-box p:last-child{margin-bottom:0;}
-  .realidad-box strong{color:#fff;}
+  /* Los dos títulos comparten familia, tamaño y construcción (marca redonda +
+     Archivo 600). La jerarquía la da el color, no la tipografía: en mono el
+     "no" parecía de otro sistema y hacía ruido al lado del "sí". */
+  .bloque-si h3, .tira-no h3{
+    display:flex; align-items:center; gap:11px;
+    margin:0 0 24px; font-size:20px; font-weight:600; letter-spacing:-.01em;
+  }
+  .bloque-si h3{color:var(--wine-900);}
+  .tira-no h3{color:var(--ink-soft);}
+  .bloque-si .mk, .tira-no .mk{
+    flex:0 0 auto; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; line-height:1;
+  }
+  .bloque-si .mk{background:var(--wine-600); color:#fff;}
+  .tira-no .mk{background:var(--line); color:var(--ink-soft);}
+
+  /* Llenado por COLUMNAS, no por filas. Por defecto el grid coloca 1 y 2 en la
+     primera fila, o sea izquierda-derecha-izquierda-derecha, y la cascada del
+     stagger saltaba en zigzag entre las dos columnas al mismo tiempo. Con
+     auto-flow en columna, los items 1 a 3 son la columna izquierda y 4 a 6 la
+     derecha, asi que el recorrido baja una y despues la otra. */
+  .bloque-si ul{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:1fr 1fr;
+    grid-template-rows:repeat(3, auto);
+    grid-auto-flow:column;
+    gap:16px 40px;
+  }
+  .bloque-si li{
+    position:relative; padding-left:20px; line-height:1.5;
+    font-size:16.5px; color:var(--ink);
+  }
+  .bloque-si li::before{
+    content:""; position:absolute; left:0; top:9px;
+    width:7px; height:7px; border-radius:50%; background:var(--wine-600);
+  }
+  /* ---- Guiño de los bullets, una sola vez ----
+     Reemplaza a un anillo que se expandia desde el punto (20/08/2026). La
+     entrada ahora hace EXACTAMENTE el mismo gesto que el hover: el punto
+     crece a 1.5x y la linea se corre 3px. Asi la animacion de entrada no
+     inventa un lenguaje nuevo, le enseña que ahi hay algo que responde.
+     Sale cuando el item ya aterrizo, no mientras sube: si se pisara con la
+     transicion del stagger, la animacion le ganaria al transform y el item
+     entraria de golpe. */
+  @keyframes guinoPunto{
+    0%,100%{transform:scale(1);}
+    45%    {transform:scale(1.5);}
+  }
+  @keyframes guinoItem{
+    0%,100%{transform:translateX(0);}
+    45%    {transform:translateX(3px);}
+  }
+  .has-js .bloque-si ul.reveal.stagger.in-view > li{
+    animation:guinoItem .6s cubic-bezier(.16,1,.3,1);
+  }
+  .has-js .bloque-si ul.reveal.stagger.in-view > li::before{
+    animation:guinoPunto .6s cubic-bezier(.16,1,.3,1);
+  }
+  /* El prefijo repite las cinco clases a proposito: el shorthand `animation`
+     resetea `animation-delay` a 0, asi que con un selector mas corto estos
+     retrasos perdian y los seis salian juntos. */
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(1),
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(1)::before{animation-delay:1.30s;}
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(2),
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(2)::before{animation-delay:1.46s;}
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(3),
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(3)::before{animation-delay:1.62s;}
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(4),
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(4)::before{animation-delay:1.78s;}
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(5),
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(5)::before{animation-delay:1.94s;}
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(6),
+  .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(6)::before{animation-delay:2.10s;}
+  .tira-no ul{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px 32px;
+  }
+  .tira-no li{
+    position:relative; padding-left:18px; line-height:1.45;
+    font-size:15px; color:var(--ink-soft);
+  }
+  /* El "no" se distingue por la forma, no por el color: en rojo o tachado se
+     leería como un reto, y esto es honestidad, no un castigo. */
+  .tira-no li::before{
+    content:"×"; position:absolute; left:0; top:0;
+    color:var(--ink-soft); opacity:.55; font-size:14px;
+  }
+
+  /* ---- Movimiento de la seccion (20/08/2026) ----
+     Todo en CSS, sin una linea de JS, y colgado del `.in-view` que ya pone el
+     IntersectionObserver del sitio. Cuatro cosas, ninguna decorativa:
+     1) los seis items del "si" escalonan (`.reveal.stagger`, que necesita LAS
+        DOS clases en el mismo elemento; con `stagger` solo, el bloque entraba
+        de una pieza y por eso se leia estatico);
+     2) las marcas ✓ y × entran con un pop despues de su tarjeta;
+     3) la linea de bronce del remate se dibuja de 0 a 52px;
+     4) hover en los items del "si".
+     Las reglas que ocultan algo van todas bajo `.has-js`, asi que sin
+     JavaScript se ve todo quieto y completo. */
+
+  /* Las marcas: pop despues de que entro la tarjeta que las contiene */
+  .bloque-si .mk, .tira-no .mk{transition:transform .45s cubic-bezier(.16,1,.3,1) .18s;}
+  .has-js .reveal .mk{transform:scale(.4);}
+  .has-js .reveal.in-view .mk{transform:scale(1);}
+
+  /* Hover: el punto crece y la linea se corre apenas. No son elementos
+     clickeables, asi que el gesto tiene que ser chico — alcanza para que la
+     lista respire cuando el mouse la recorre, sin prometer que se puede tocar. */
+  .bloque-si li{transition:transform .22s cubic-bezier(.16,1,.3,1);}
+  .bloque-si li::before{transition:transform .22s cubic-bezier(.16,1,.3,1);}
+  .bloque-si li:hover{transform:translateX(3px);}
+  .bloque-si li:hover::before{transform:scale(1.5);}
+
+  .remate{max-width:720px; margin:56px auto 0; text-align:center;}
+  /* 52px de base: sin JS la linea esta dibujada. Con JS arranca en 0 y crece. */
+  .remate .linea{
+    width:52px; height:2px; background:var(--bronze); margin:0 auto 30px; border:0;
+    transition:width .7s cubic-bezier(.16,1,.3,1) .1s;
+  }
+  .has-js .remate.reveal .linea{width:0;}
+  .has-js .remate.reveal.in-view .linea{width:52px;}
+  .remate h3{
+    font-size:clamp(28px,3.6vw,44px); font-weight:500; letter-spacing:-.02em;
+    line-height:1.1; margin:0 0 18px; color:var(--wine-600);
+  }
+  /* El párrafo va alineado a la izquierda aunque el bloque esté centrado. */
+  .remate p{font-size:17px; color:var(--ink-soft); margin:0 auto; max-width:56ch; text-align:left;}
+  .remate p + p{margin-top:14px;}
+  .remate strong{color:var(--ink); font-weight:600;}
 
   /* ---------- Sobre mi ---------- */
   #sobre{border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
@@ -854,9 +1025,12 @@
   /* 16px con easing lineal era practicamente imperceptible: el elemento ya
      estaba en su lugar antes de que el ojo registrara que se movio. 34px con
      el mismo cubic-bezier que usa el resto del sitio se lee como entrada. */
+  /* Duraciones subidas un 45% el 20/08/2026 (de .8s y .62s). Mismo recorrido y
+     mismo easing: lo unico que cambia es el tiempo, para que la entrada se
+     lea como un movimiento y no como un corte. Aplica a TODO el sitio. */
   .has-js .reveal{
     opacity:0; transform:translateY(34px);
-    transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+    transition:opacity 1.5s cubic-bezier(.25,.46,.45,.94), transform 1.5s cubic-bezier(.25,.46,.45,.94);
   }
   .has-js .reveal.in-view{opacity:1; transform:none;}
 
@@ -867,29 +1041,32 @@
   .has-js .reveal.stagger{opacity:1; transform:none;}
   .has-js .reveal.stagger > *{
     opacity:0; transform:translateY(24px);
-    transition:opacity .62s cubic-bezier(.16,1,.3,1), transform .62s cubic-bezier(.16,1,.3,1);
+    transition:opacity 1.25s cubic-bezier(.25,.46,.45,.94), transform 1.25s cubic-bezier(.25,.46,.45,.94);
   }
   .has-js .reveal.stagger.in-view > *{opacity:1; transform:none;}
-  .has-js .reveal.stagger.in-view > *:nth-child(2){transition-delay:.09s;}
-  .has-js .reveal.stagger.in-view > *:nth-child(3){transition-delay:.18s;}
-  .has-js .reveal.stagger.in-view > *:nth-child(4){transition-delay:.27s;}
-  .has-js .reveal.stagger.in-view > *:nth-child(5){transition-delay:.36s;}
-  .has-js .reveal.stagger.in-view > *:nth-child(6){transition-delay:.45s;}
-  .has-js .reveal.stagger.in-view > *:nth-child(7){transition-delay:.54s;}
-  .has-js .reveal.stagger.in-view > *:nth-child(8){transition-delay:.63s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(2){transition-delay:.16s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(3){transition-delay:.32s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(4){transition-delay:.48s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(5){transition-delay:.64s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(6){transition-delay:.80s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(7){transition-delay:.96s;}
+  .has-js .reveal.stagger.in-view > *:nth-child(8){transition-delay:1.12s;}
 
   /* ---------- entrada del hero ----------
      Animacion CSS pura. El opacity:0 vive solo dentro del keyframe, nunca en una
      regla base, asi que si las animaciones no corren todo queda visible igual. */
+  /* 22px con un easing expo frenaba en seco y la entrada se sentia como un
+     golpe. 14px con una curva que desacelera de a poco (easeOutQuad) llega
+     posandose en vez de cayendo. */
   @keyframes heroIn{
-    from{opacity:0; transform:translateY(22px);}
+    from{opacity:0; transform:translateY(14px);}
     to  {opacity:1; transform:none;}
   }
-  .has-js .hero h1        {animation:heroIn .85s cubic-bezier(.16,1,.3,1) .15s both;}
-  .has-js .hero p.lead    {animation:heroIn .70s cubic-bezier(.16,1,.3,1) .30s both;}
-  .has-js .hero .hero-bullets{animation:heroIn .70s cubic-bezier(.16,1,.3,1) .36s both;}
-  .has-js .hero .herobtns {animation:heroIn .70s cubic-bezier(.16,1,.3,1) .42s both;}
-  .has-js .hero .hero-video{animation:heroIn .90s cubic-bezier(.16,1,.3,1) .34s both;}
+  .has-js .hero h1        {animation:heroIn 1.5s cubic-bezier(.25,.46,.45,.94) .15s both;}
+  .has-js .hero p.lead    {animation:heroIn 1.35s cubic-bezier(.25,.46,.45,.94) .34s both;}
+  .has-js .hero .hero-bullets{animation:heroIn 1.35s cubic-bezier(.25,.46,.45,.94) .46s both;}
+  .has-js .hero .herobtns {animation:heroIn 1.35s cubic-bezier(.25,.46,.45,.94) .58s both;}
+  .has-js .hero .hero-video{animation:heroIn 1.6s cubic-bezier(.25,.46,.45,.94) .38s both;}
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -898,6 +1075,19 @@
     .has-js .hero h1, .has-js .hero p.lead, .has-js .hero .hero-bullets,
     .has-js .hero .herobtns, .has-js .hero .hero-video,
     .has-js .hero .herobtns .btn-primary{animation:none !important;}
+    /* Seccion Problema: la regla general de arriba no alcanza, porque estas
+       animan `width` y `transform` sobre elementos que no son `.reveal`. */
+    .has-js .reveal .mk,
+    .has-js .reveal.in-view .mk{transition:none !important; transform:none !important;}
+    .bloque-si li, .bloque-si li::before{transition:none !important;}
+    .bloque-si li:hover{transform:none !important;}
+    .bloque-si li:hover::before{transform:none !important;}
+    .has-js .remate.reveal .linea,
+    .has-js .remate.reveal.in-view .linea{transition:none !important; width:52px !important;}
+    /* El barrido del borde y el guiño de los bullets se apagan enteros. */
+    .bloque-si::before{animation:none !important; opacity:0 !important;}
+    .has-js .bloque-si ul.reveal.stagger.in-view > li,
+    .has-js .bloque-si ul.reveal.stagger.in-view > li::before{animation:none !important;}
   }
 
   /* ---------- Responsive ---------- */
@@ -997,6 +1187,9 @@
 
   @media (max-width:960px){
     .programa-feats{grid-template-columns:1fr;}
+    /* En 4 columnas cada item queda en ~160px y se parte en cuatro renglones,
+       asi que la tira terminaba mas alta en tablet que en escritorio. */
+    .tira-no ul{grid-template-columns:1fr 1fr; gap:14px 28px;}
   }
 
   /* ---------- Mobile ---------- */
@@ -1041,8 +1234,19 @@
 
     .hero-video{border-radius:var(--r-md);}
     .contact-box{padding:30px 22px; border-radius:var(--r-md);}
-    .problema-lista li{font-size:15.5px;}
-    .realidad-box{padding:30px 24px; border-radius:var(--r-md);}
+    .bloque-si{padding:28px 24px 26px; border-radius:var(--r-md);}
+    /* En una sola columna hay que devolver el flujo a filas, o el auto-flow
+       en columna seguiria creando columnas nuevas fuera de la caja. */
+    .bloque-si ul{
+      grid-template-columns:1fr; grid-template-rows:none;
+      grid-auto-flow:row; gap:14px;
+    }
+    .bloque-si li{font-size:15.5px;}
+    .tira-no{padding:24px 24px 26px; border-radius:var(--r-md);}
+    .tira-no ul{grid-template-columns:1fr 1fr; gap:12px 24px;}
+    .bloque-si h3, .tira-no h3{font-size:18px; margin-bottom:20px;}
+    .remate{margin-top:44px;}
+    .remate p{font-size:16px;}
 
     /* La cinta SIGUE andando en mobile. Al no depender del scroll no pelea
        contra el dedo, y resuelve que varios testimonios apilados sean varias
@@ -1083,6 +1287,7 @@
   /* ---------- Pantallas chicas: 360px y menos ---------- */
   @media (max-width:400px){
     .wrap{padding-left:16px; padding-right:16px;}
+    .tira-no ul{grid-template-columns:1fr;}
     .programa-top .n{font-size:34px;}
     .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
     .section-head h2{font-size:32px;}
@@ -1242,19 +1447,36 @@
     <div class="wrap">
       <div class="section-head reveal">
         <h2>¿Te suena algo de esto?</h2>
+        <p>Antes de contarte cómo trabajo, prefiero que sepas si esto es para vos.</p>
       </div>
-      <ul class="problema-lista reveal stagger">
-        <li>Te cuidás, te movés, y aun así tu cuerpo no cambia como esperabas.</li>
-        <li>Comés bien, te esforzás, y la balanza no se mueve.</li>
-        <li>Probaste dietas, apps y rutinas gratis de internet, y siempre volviste al mismo punto.</li>
-        <li>Sentís que tu cuerpo ya no responde igual que antes de los 35.</li>
-        <li>La comida te genera culpa, y estás cansada de vivir pendiente de eso.</li>
-        <li>No tenés tiempo para entrenar todos los días ni para cocinar horas.</li>
-      </ul>
-      <div class="realidad-box reveal">
-        <h3>La realidad</h3>
-        <p>No es falta de voluntad. Es que nadie te explicó lo que realmente pasa en tu cuerpo después de los 35: la resistencia a la insulina, el SOP, el hipotiroidismo o la perimenopausia cambian cómo tu cuerpo usa la energía, y una rutina genérica no tiene eso en cuenta.</p>
-        <p>Por eso armé el <strong>Método Raíz</strong>: fuerza, alimentación flexible y seguimiento real, pensados específicamente para tus cambios hormonales. No es magia ni es rápido — es un método que por fin tiene en cuenta lo que te está pasando.</p>
+
+      <div class="bloque-si reveal">
+        <h3><span class="mk" aria-hidden="true">✓</span> Es para vos si…</h3>
+        <ul class="reveal stagger">
+          <li>Te cuidás, te movés, y aun así tu cuerpo no cambia como esperabas.</li>
+          <li>Comés bien, te esforzás, y la balanza no se mueve.</li>
+          <li>Ya probaste dietas, apps y rutinas gratis, y siempre volviste al mismo punto.</li>
+          <li>Sentís que después de los 35 tu cuerpo dejó de responder igual.</li>
+          <li>La comida te genera culpa y estás cansada de vivir pendiente de eso.</li>
+          <li>No tenés tiempo para entrenar todos los días ni para cocinar horas.</li>
+        </ul>
+      </div>
+
+      <div class="tira-no reveal">
+        <h3><span class="mk" aria-hidden="true">×</span> No es para vos si…</h3>
+        <ul>
+          <li>Buscás bajar diez kilos en un mes.</li>
+          <li>Querés una dieta con alimentos prohibidos.</li>
+          <li>No podés destinarle dos sesiones por semana.</li>
+          <li>Esperás resultados sin medir nada en el camino.</li>
+        </ul>
+      </div>
+
+      <div class="remate reveal">
+        <hr class="linea">
+        <h3>No es falta de voluntad.</h3>
+        <p>Es que nadie te explicó qué cambia en tu cuerpo después de los 35. La resistencia a la insulina, el hipotiroidismo, el SOP (síndrome de ovario poliquístico) o la perimenopausia cambian cómo tu cuerpo usa la energía, y una rutina genérica no tiene eso en cuenta.</p>
+        <p>Por eso desarrollé el <strong>Método Raíz</strong>: fuerza, alimentación flexible y seguimiento real, pensados para lo que te está pasando. No es magia ni es rápido. Es un método que por fin te tiene en cuenta.</p>
       </div>
     </div>
   </section>
@@ -1784,16 +2006,40 @@
   // even if IntersectionObserver is unsupported or throws in an older browser.
   const revealEls = document.querySelectorAll('.reveal');
   function revealAll(){ revealEls.forEach(el => el.classList.add('in-view')); }
-  // 2000ms era mas corto que el tiempo real que tarda una persona en llegar
-  // scrolleando a una seccion de abajo: para cuando llegaba, esta red de
-  // seguridad ya habia revelado todo y no se veia ninguna transicion. 8s es
-  // un ultimo recurso de verdad (IntersectionObserver es universal hoy), no
-  // una carrera contra el scroll normal.
-  setTimeout(revealAll, 8000);
+  // Historia de este temporizador, porque ya se ajusto dos veces por el mismo
+  // motivo: con 2000ms (14/08) y despues con 8000ms (20/08), la red de
+  // seguridad terminaba revelando la pagina entera mientras la persona todavia
+  // estaba leyendo arriba. Cuando por fin scrolleaba, las secciones de abajo ya
+  // estaban puestas y no veia una sola transicion.
+  //
+  // El error era atarlo a un cronometro. Ninguna cifra puede funcionar: compite
+  // contra cuanto tarda alguien en leer, que es un dato que no tenemos. Ahora
+  // la red no mide tiempo, mide si el observador ANDA: apenas entrega su primer
+  // lote de entradas —cosa que hace siempre al arrancar, intersecten o no— se
+  // cancela sola. O sea que solo llega a disparar si el observador nunca
+  // respondio, que es el unico caso para el que fue pensada.
+  let redDeSeguridad = setTimeout(revealAll, 8000);
+  function observadorAnda(){
+    if (redDeSeguridad){ clearTimeout(redDeSeguridad); redDeSeguridad = null; }
+  }
+
+  // Sonda: confirma que IntersectionObserver funciona en este navegador.
+  // Hace falta una aparte y no alcanza con el observador de abajo, por un
+  // detalle que costo encontrar: con un `threshold` distinto de 0, el
+  // observador NO entrega lote inicial si nada intersecta. Y como el hero no
+  // tiene elementos `.reveal`, al cargar no intersecta ninguno: el callback
+  // no corria nunca y la red de seguridad terminaba disparando igual.
+  // El header siempre esta en pantalla, asi que con threshold 0 responde de
+  // inmediato y confirma que el mecanismo anda.
+  try {
+    const sonda = new IntersectionObserver(() => { observadorAnda(); sonda.disconnect(); }, { threshold: 0 });
+    sonda.observe(document.querySelector('header') || document.body);
+  } catch (e) { /* si tira, la red de seguridad queda armada, que es lo correcto */ }
 
   try {
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
+        observadorAnda();
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
       }, { threshold: 0.15 });
       revealEls.forEach(el => io.observe(el));

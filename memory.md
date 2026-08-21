@@ -354,6 +354,18 @@ Primera sesión con criterio explícito de **copywriting**, no solo de diseño. 
 
 **Verificación:** DOM medido en 14 anchos de 360px a 1440px — cero overflow horizontal, el claim nunca se parte, áreas táctiles de mobile en 46px mínimo. **El `resize_window` del navegador no funciona en este entorno** (queda fijo en 1440px): sirve el harness con iframe a ancho real, igual que en la pasada de mobile del 15/08.
 
+### La pestaña oculta: por qué varias mediciones fueron falsas (21/08/2026)
+
+**Descubrimiento que invalida conclusiones anteriores y hay que tener presente siempre.** La pestaña que maneja el harness corre con `document.visibilityState === "hidden"`. Chrome, en una pestaña de segundo plano, **suspende el pintado, no entrega callbacks de `IntersectionObserver` y no descarga media**.
+
+Consecuencias sobre cosas que se dieron por ciertas:
+
+• **El video del hero probablemente nunca estuvo roto.** El 20/08 se concluyó, con `readyState 0` y `networkState 2` medidos en esa pestaña, que el video no cargaba ni en local ni en producción. Eso es exactamente lo que Chrome hace con el media de una pestaña oculta. Queda como pendiente comprobarlo a mano, en primer plano y en un celular. Se perdió una sesión entera persiguiéndolo.
+• **`getComputedStyle` devuelve valores previos a la transición** en esa pestaña, porque no hay pintado. Varias veces dio `opacity:0` sobre elementos que en pantalla se veían perfectos.
+• **El observador nunca dispara ahí**, así que todo lo que se vio revelado fue obra de la red de seguridad, no del scroll.
+
+**Regla que queda:** la regla del repo dice "medir en vez de mirar", y sigue siendo cierta **para geometría** — anchos, altos, overflow, áreas táctiles. Pero para **movimiento, media y cualquier cosa que dependa del pintado, hay que mirar**, y si la medición y la captura se contradicen, gana la captura. Antes de dar por roto algo que depende del render, chequear `document.visibilityState`.
+
 ### El QA local mentía sobre el video (20/08/2026)
 
 **`qa-local.py` no soportaba `Range` requests.** Chrome pide media por rangos; `SimpleHTTPRequestHandler` ignora la cabecera y contesta `200` con el archivo entero, sin `Accept-Ranges`. GitHub Pages contesta `206` con `Content-Range`. O sea que **el servidor de QA se comportaba distinto a producción justo en lo único que no se puede revisar leyendo el código**. Arreglado: ahora responde 206, con `protocol_version = "HTTP/1.1"`. Verificado con `curl -H "Range: bytes=0-1023"` contra los dos.
@@ -363,6 +375,45 @@ Primera sesión con criterio explícito de **copywriting**, no solo de diseño. 
 **Pendiente sin resolver, ojo:** con el `Range` ya arreglado, **el video del hero sigue sin cargar, y también sigue sin cargar en producción** — `networkState 2` (cargando) y `readyState 0` (cero bytes), sin error, en `localhost` y en `entrenaconjime.com` por igual. El archivo está bien: `curl` lo baja entero, 1 MB, `video/mp4`, HTTP 200 en los dos lados. **No está confirmado si le pasa a un navegador normal o solo al Chrome que maneja el harness**, así que falta abrir el sitio a mano en una máquina y un celular antes de sacar conclusiones.
 
 **Lo que sí se arregló del lado del sitio:** el JS tenía un círculo vicioso real. `play()` se llamaba **solo** dentro del handler de `loadeddata`, y `play()` es justamente lo que fuerza la descarga cuando `preload="metadata"` no la dispara. El video esperaba un evento que solo iba a existir si alguien lo despertaba primero. Ahora se pide la reproducción de entrada, y el placeholder se oculta por `readyState >= 2` **o** por evento, porque si el video ya venía de caché el evento tampoco se vuelve a emitir. **Este arreglo no resolvió el síntoma observado**, así que la causa de fondo sigue abierta.
+
+### Rediseño de la sección Problema y pasada de movimiento (21/08/2026)
+
+**La sección era una lista de seis viñetas del mismo peso más una caja de color con el texto centrado.** Los dos problemas, dichos con precisión: una lista es lo que se escribe cuando todavía no se decidió qué es lo importante, y un párrafo centrado es hostil porque cada renglón arranca en una x distinta. Además enterraba su mejor frase, *"No es falta de voluntad"*, en el medio de ese párrafo.
+
+**Se probaron tres direcciones en un comparador** (`docs/_problema-preview.html`, borrado al cerrar, mismo criterio que el de testimonios):
+
+- **A · checklist interactiva** — ella marcaba lo que le pasaba y Jimena respondía según el tema dominante, con el mensaje de WhatsApp precargado con lo marcado. **Descartada por Gastón, con razón, y el motivo sirve para la próxima:** en mobile la respuesta quedaba **724px por debajo** de la tarjeta que tocaba, o sea casi una pantalla. El corazón de la idea era la reacción inmediata y en mobile no había ninguna. Además eran dos pantallas de scroll para la segunda sección de la página. **La idea no está mal, está en el lugar equivocado:** una herramienta que pide participación rinde cuando ya decidió que le interesa, no antes. Queda apuntada al pendiente del quiz de conversión.
+- **B · mito contra realidad** — quedó mejor de forma pero **le cambió el trabajo a la sección**: pasaba de calificar a argumentar. Observación de Gastón que vale como regla: alguien puede darle la razón a los cuatro mitos y no concluir nunca que el programa es para ella.
+- **C · elegida.** Vuelve a calificar, pero en los dos sentidos, que era la otra mitad de la frase de Gastón: *"tanto ellas como yo nos tenemos que elegir mutuamente"*.
+
+**Cómo quedó:** un bloque vino a todo el ancho, "Es para vos si…", con las seis situaciones en dos columnas; debajo una tira más fina, "No es para vos si…", con cuatro descartes; y el remate suelto, sin caja, con el párrafo alineado a la izquierda.
+
+• **Apilados y no lado a lado, por una razón medida:** en dos columnas, seis ítems contra cuatro daban 730px contra 500px. Emparejar alturas no lo arregla, deja aire muerto adentro de la caja corta. Bloques de ancho completo no pueden quedar disparejos.
+• **Los dos títulos comparten familia, tamaño y construcción.** El "no" estaba en IBM Plex Mono a 11.5px y parecía de otro sistema. La jerarquía la da el color.
+• **El "no" se distingue por la forma, no por el color:** cruz gris. En rojo o tachado se lee como un reto, y esto es honestidad.
+• **Fondo `--paper-dim`**, que cierra de paso el pendiente de que hero, Problema y Sobre mí eran las tres blancas y seguidas. El recorrido quedó blanco → dim → blanco → dim → oscuro → dim → blanco.
+• **Los cuatro descartes los tiene que validar Jimena.** Se derivaron de principios ya escritos en `contexto.md`, pero rechazar clientas es decisión de ella.
+
+**Advertencia sobre inventar datos, porque volvió a pasar.** El subtítulo decía *"Trabajo con pocas alumnas a la vez"*. Jimena nunca dijo eso y no está en ningún lado del repo. Es la misma clase de error que el "el programa que ya ayudó a mujeres…" que ella tuvo que corregir en agosto. **Antes de escribir un dato de negocio —cupo, capacidad, precio, trayectoria— hay que preguntarlo.**
+
+**Pasada de movimiento, toda en CSS:**
+
+• **Bug de fondo: el selector es `.reveal.stagger` y necesita las dos clases en el mismo elemento.** El `<ul>` tenía solo `stagger`, así que los seis ítems entraban de golpe. Buena parte de lo que se leía como "estático" era eso.
+• **El grid llena por columnas** (`grid-auto-flow:column` con tres filas). Por defecto llenaba por filas, así que la cascada saltaba en zigzag entre las dos columnas a la vez.
+• **Secuencia encadenada:** entra la tarjeta → baja el recorrido por la columna izquierda y después la derecha → recién ahí arranca el recuadro. El barrido cuelga de `.in-view` y no del load, que era el error: giraba aunque la sección estuviera fuera de pantalla.
+• **Recuadro premium:** un cuadrado con gradiente cónico gira detrás y un pseudo-elemento tapa el interior menos 1.5px, así que del giro solo se ve el filo recorriendo el borde. Cada 8s, sin `@property` y sin JS.
+• **Guiño de los bullets:** al aterrizar, cada ítem hace **el mismo gesto que el hover**. La entrada no inventa un lenguaje nuevo, le enseña que ahí hay algo que responde. Sale 50ms después de aterrizar: si se pisara con la transición, la animación le ganaría al `transform` y el ítem entraría de golpe.
+• **Trampa de CSS que costó encontrar:** el shorthand `animation` resetea `animation-delay` a 0. Las reglas de delay tienen que repetir el mismo prefijo de clases o pierden por especificidad y todos los escalones salen juntos.
+
+**Dos curvas de easing, que es una excepción deliberada a la regla del 18/08.** Las entradas usaban `cubic-bezier(.16,1,.3,1)`, una exponencial que arranca disparada y **frena en seco**; ese frenazo era el "cae muy pesado" que Gastón marcó tres veces. Las entradas pasaron a `cubic-bezier(.25,.46,.45,.94)`, que desacelera de a poco, con el recorrido del hero de 22px a 14px y las duraciones bastante más largas. **Los hovers y los botones conservan la curva vieja**: una interacción tiene que responder rápido, una entrada tiene que ser suave.
+
+### La red de seguridad del reveal, arreglada de fondo (21/08/2026)
+
+**Se ajustó dos veces por el mismo síntoma y las dos veces se erró el diagnóstico.** 2000ms el 14/08, 8000ms el 20/08: siempre la red terminaba revelando la página entera mientras la persona seguía leyendo arriba, y cuando por fin scrolleaba ya no veía ninguna transición.
+
+**El error era atarla a un cronómetro.** Ninguna cifra puede funcionar: compite contra cuánto tarda alguien en leer, que es un dato que no tenemos. Ahora **la red no mide tiempo, mide si el observador anda**: una sonda sobre el `<header>` con `threshold: 0` confirma que `IntersectionObserver` responde y cancela el temporizador. Solo llega a disparar si el observador nunca contestó, que es el único caso para el que fue pensada.
+
+**Por qué hace falta una sonda aparte y no alcanza con el observador principal:** con un `threshold` distinto de 0 el observador no entrega lote inicial si nada intersecta, y el hero no tiene ningún elemento `.reveal`, así que al cargar no intersecta ninguno. El `<header>` siempre está en pantalla.
 
 ### Precio por país: bloqueante nuevo (20/08/2026)
 
