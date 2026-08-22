@@ -475,6 +475,39 @@ Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
 
 **Pendiente que abre esta pasada:** las tres secciones de arriba de todo (hero, Problema, Sobre mí) son **las tres blancas y seguidas**. `#problema` no declara fondo propio, así que hereda `--paper`. El recorrido con ritmo que se armó el 15/08 (claro → dim → oscuro → dim → claro) ahora arranca con tres bloques planos antes del primer cambio. Y la sección nueva tampoco está en el nav.
 
+### La entrada de los bullets: de golpe a respiración (22/08/2026)
+
+Gastón: *"la animación del bulleteado es muy brusca, que pase más lentamente y smooth, estilo Headspace, que me dé calma no que me genere un choque"*.
+
+**El golpe eran dos cosas concretas, las dos leíbles en el CSS:**
+
+1. **El punto hacía `scale(1.5)` en 0.6s.** Crecía a una vez y media su tamaño y volvía, seis veces seguidas. Ahora llega a **1.22 en 1.4s**.
+2. **Y las dos animaciones del guiño usaban `cubic-bezier(.16,1,.3,1)`**, que en este sitio es **la curva de interacción**: arranca disparada y frena en seco. Es la correcta para un hover, que tiene que contestar rápido, y es justo la que no va en algo que pasa solo mientras la persona lee. Ahora usan una sinusoide simétrica, `cubic-bezier(.37,0,.63,1)`, que entra y sale sin filo.
+
+Este es el mismo error que ya está documentado arriba en la nota de las dos curvas de easing del 21/08 — la exponencial se sentía como "cae muy pesado". Volvió a aparecer, en otro lugar.
+
+**El desplazamiento horizontal del texto se sacó entero** (`guinoItem`, que corría cada ítem 3px). Una línea que se corre de costado mientras la estás leyendo es lo más molesto del conjunto, y el punto que respira ya alcanza para anticipar el hover. Se pierde que la entrada sea *exactamente* el mismo gesto que el hover, que era el criterio original; se acepta a cambio de la calma.
+
+**Ritmo propio para esta lista.** El `.reveal.stagger` general del sitio escalona cada `.16s` con entradas de `1.25s`; para seis bullets seguidos eso es una ráfaga. Acá el paso sube a **.34s** y la entrada a **1.8s**, así que los seis tardan ~3.5s en vez de ~2 y **cada uno se termina de posar antes de que arranque el siguiente**. El recorrido baja de 24px a 16px: cuanto más corto el viaje, menos se lee como que algo fue empujado. Va con selector propio para no cambiarle el pulso al resto del sitio.
+
+**Y el barrido del borde se recalculó**, como avisaba su propio comentario: el último bullet ahora aterriza a 3.50s y su respiración termina a 4.95s, así que el barrido pasó de arrancar a los 3s a los **5s**. Si se vuelve a tocar el ritmo de la lista, ese número va atrás.
+
+### "Sobre mí": fuera el volanta, y entra la formación (22/08/2026)
+
+Pedido de Gastón: sacar el volanta "SOBRE MÍ" —que no aportaba nada que el titular no diga—, bajar el titular a dos renglones, y **gastar ese espacio en autoridad por formación**.
+
+El titular pasó de `max-width:17ch` a **26ch**: con 17 caía en tres renglones. Ahora entra en dos y la sección arranca directo por él.
+
+Al final de la columna entra un bloque **Formación**: *Profesora Nacional de Educación Física · Entrenadora en levantamiento olímpico · Especialista en salud femenina*. Va último y en chico a propósito, mismo criterio por el que el cargo dejó de ser titular: **es prueba, no gancho**.
+
+**Dos interpretaciones que hice sobre lo que pasó Gastón** y que conviene revisar con él: escribió *"entrenadora y en OLY"*, y se resolvió como una sola credencial, "Entrenadora en levantamiento olímpico" — se expandió OLY porque el público del sitio son mujeres +35 que no tienen por qué conocer la sigla.
+
+### Footer: dado vuelta otra vez (22/08/2026)
+
+El arreglo de la mañana —tres columnas a `max-content`— resolvió que se leyeran desparramadas pero creó el problema opuesto: **la marca se quedaba con todo el sobrante** (564px para un texto de 460) y las tres columnas de links quedaban apretadas contra el borde derecho, con **168px de vacío en el medio**. Gastón lo marcó como "muy arrastrado a la derecha".
+
+Ahora es al revés: **la marca toma el ancho de su texto** (`max-content`) y son **las tres columnas de links las que se reparten el resto en partes iguales**. Sus bordes izquierdos quedan a 269px uno de otro, o sea a distancia pareja, que es lo que el ojo lee como orden — dentro de cada columna sobra aire a la derecha, pero eso no se ve porque no hay borde ni fondo que lo marque.
+
 ### Las dos tarjetas del "problema" vuelven a ir lado a lado (22/08/2026)
 
 **Esto revierte una decisión escrita, a pedido explícito de Gastón.** El CSS decía, desde que se armó la sección, que los dos bloques iban **apilados y no lado a lado**, porque en dos columnas quedaban siempre disparejos —6 ítems contra 4, 730px contra 500px— y que emparejar alturas no lo arregla, solo mueve el problema adentro de la tarjeta corta.
