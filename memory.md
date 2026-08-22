@@ -475,6 +475,42 @@ Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
 
 **Pendiente que abre esta pasada:** las tres secciones de arriba de todo (hero, Problema, Sobre mí) son **las tres blancas y seguidas**. `#problema` no declara fondo propio, así que hereda `--paper`. El recorrido con ritmo que se armó el 15/08 (claro → dim → oscuro → dim → claro) ahora arranca con tres bloques planos antes del primer cambio. Y la sección nueva tampoco está en el nav.
 
+### La cinta de testimonios se congelaba en mobile (22/08/2026)
+
+Reportado por Gastón: en el teléfono los testimonios "se pierden, queda en blanco después de que pasan los que ya existen"; en desktop giraba infinito.
+
+**No era el loop ni faltaban tarjetas.** Cualquier toque sobre la cinta disparaba `pointerdown`, y el handler del arrastre hace `anim.pause()` para poder mover el reloj de la animación con el dedo. El problema es lo que pasa después: cuando el gesto se convierte en scroll vertical nativo —que es justo lo que `touch-action:pan-y` habilita—, **el navegador no siempre entrega el `pointerup` ni el `pointercancel`** que reanudarían la animación. La cinta quedaba pausada a mitad de recorrido y de ahí en más se veía estática, con el hueco del final del grupo a la vista.
+
+**Arreglo: el arrastre queda solo para mouse real** (`window.matchMedia('(pointer: fine)')`). En touch no se registra ningún listener, así que nada puede pausar la animación y la cinta corre pura por CSS, infinita, sin excepción. No se pierde nada de valor: la cinta ya se mueve sola y en mobile el dedo sirve para scrollear la página, no para arrastrar un carrusel. Se sacó también el `touch-action:pan-y`, que existía únicamente para reservarle el eje horizontal a ese arrastre.
+
+**La lección general:** pausar una animación en `pointerdown` es seguro solo si tenés garantizado el evento que la reanuda. En touch no lo tenés.
+
+### Se sacó la nota bajo el programa (22/08/2026)
+
+*"¿Tenés dudas si es para vos? Escribime y lo vemos juntas, sin compromiso."* Pedido de Gastón. Se borró también `.planes-nota`, que quedaba sin usos. El aire lo resuelve el padding de la sección, no hizo falta compensar nada.
+
+### El cierre pasa a ser una persona, no una caja (22/08/2026)
+
+Pedido de Gastón: *"el Instagram lo siento al pedo en ese componente"*. Tenía razón, y buscando el porqué apareció algo más grande.
+
+**El diagnóstico salió de leer la sección en voz alta: decía "escribime" cuatro veces.** El `<h3>` ("Escribime y arrancamos") repetía el título de la sección, y la bajada ("La forma más rápida de empezar es por WhatsApp") repetía el botón que estaba 40px más abajo. Las dos líneas eran relleno para que la caja no quedara vacía — por eso se leía inflada y despegada del resto de la página.
+
+**Instagram era una fuga, no una opción.** La sección tiene un solo trabajo, que te escriban, y el segundo botón mandaba a otra app justo en el momento de decidir. Coherente con lo que ya estaba escrito en los pendientes: **Instagram es canal de captación, no de cierre**.
+
+Sacado el relleno y la fuga, la caja quedaba con una sola cosa (el botón), así que el espacio libre lo ocupa **lo único que la sección necesitaba y no tenía: la cara de Jimena**. La bajada promete "te respondo personalmente" y hasta ese día eso era una afirmación sin cara.
+
+**La caja pasó de 300px de alto a 118px**, de tarjeta alta y centrada a **franja de identidad + acción**: avatar, nombre y credencial a la izquierda, un solo CTA a la derecha. No inventa un patrón nuevo — el avatar redondo con nombre y línea de contexto es **el mismo componente de las tarjetas de testimonios** (`.t-av`), y la estructura "dato a la izquierda, CTA a la derecha" es la de `.programa-top`, la banda del precio. Debajo va una línea de microcopy, igual que el hero bajo su CTA: *"El primer paso es tu entrevista inicial, y es gratuita"*.
+
+**Se revirtió una decisión escrita del 15/08 a propósito.** Ese día Instagram pasó de link suelto a `.btn-ghost` porque como link inline medía 15px de alto tocable. Ese problema era del **link inline**, no de que Instagram tuviera que estar en el cierre: en el footer sigue con su botón y su área tocable correcta. `.btn-ghost` quedó sin usos y se borró.
+
+**Costo asumido de medición:** se pierde el evento `instagram_cierre` de GA4, que era el único lugar que lo emitía. `instagram_footer` sigue intacto, así que las visitas a Instagram se siguen midiendo, pero **no se puede comparar más cuánto aportaba el cierre**.
+
+**Asset nuevo: `docs/img/jimena-avatar.jpg`** — recorte cuadrado de 240px de la cara, generado desde `jimena-sobre-mi.jpg`. Hace falta y no es un capricho: la foto de "Sobre mí" es de cuerpo entero, y a 66px de círculo la cabeza queda de ~9px, o sea no se reconoce a nadie. Con `object-fit:cover` sobre la original no se arregla, porque el problema es la escala, no el encuadre. **Si en algún momento hay una foto nueva de Jimena, el avatar se regenera aparte, no se apunta el `<img>` a la de cuerpo entero.**
+
+Dos detalles del avatar sobre este fondo: el degrade vino→bronce de `.t-av` **desaparece sobre una caja del mismo degrade**, así que la caída sin foto va en `--wine-950` sólido; y lleva un anillo blanco al 38% para despegar el círculo del gradiente.
+
+**Medido de 360px a 1440px** (360, 390, 721, 768, 860, 1024, 1440): sin overflow horizontal, botón de 55px en desktop y 60px en mobile —sobre el mínimo de 44—, y el nombre no se parte en ningún ancho. Entre 721 y ~740px la credencial pasa a dos líneas sin romper nada, porque el alto lo fija el avatar.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
