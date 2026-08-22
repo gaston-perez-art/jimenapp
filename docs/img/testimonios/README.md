@@ -10,6 +10,7 @@ Para cambiar una foto no hay que tocar el HTML: se reemplaza el archivo y listo.
 | `margarita.jpg` | Margarita Izurieta López | cinta |
 | `veronica.jpg` | Verónica Vázquez | cinta |
 | `lorena.jpg` | Lorena Mariel Agout | cinta |
+| `carolina.jpg` | Carolina Ibañez | cinta |
 
 ## Cómo tienen que estar las fotos
 
@@ -17,7 +18,7 @@ Para cambiar una foto no hay que tocar el HTML: se reemplaza el archivo y listo.
   lo que quede fuera del círculo se pierde. La cara, centrada.
 - **256×256 px alcanza y sobra.** En la cinta se ven a 54px y en el destacado a 64px.
   Subir un archivo de 3000px de la cámara solo hace más lenta la página.
-- **JPG, y por debajo de 60 KB cada una.** Son 5 imágenes que cargan en la misma
+- **JPG, y por debajo de 60 KB cada una.** Son 6 imágenes que cargan en la misma
   sección; juntas no deberían pasar de 300 KB.
 
 Para redimensionar sin instalar nada (viene con macOS):

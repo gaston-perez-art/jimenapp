@@ -475,6 +475,30 @@ Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
 
 **Pendiente que abre esta pasada:** las tres secciones de arriba de todo (hero, Problema, Sobre mí) son **las tres blancas y seguidas**. `#problema` no declara fondo propio, así que hereda `--paper`. El recorrido con ritmo que se armó el 15/08 (claro → dim → oscuro → dim → claro) ahora arranca con tres bloques planos antes del primer cambio. Y la sección nueva tampoco está en el nav.
 
+### Testimonio de Carolina, y la cinta en blanco en iOS (22/08/2026)
+
+**Cuarto testimonio en la cinta: Carolina Ibañez, 35 años, Argentina.** Autorización del 22/08/2026, texto y foto. Del mensaje se publica **el último párrafo entero y contiguo** —*"Hoy no solo cambió mi cuerpo: cambió mi forma de cuidarme..."*—, 173 caracteres, justo en el rango de las otras cuatro (158 a 181), así que la tarjeta no cambia de alto.
+
+**Lo que quedó afuera y por qué vale la pena anotarlo:** el párrafo del medio de Caro es el único de toda la cinta que habla de **alimentación**, y dice lo más propio de su testimonio — que la clave fue entender la combinación entre comer bien y entrenar fuerza, *"uno sin el otro no alcanza"*. Mide 191 caracteres y no entra sin agrandar la tarjeta. Queda anotado en `build-testimonios.py`: si algún día se rota el destacado, ese párrafo da para un relato.
+
+**La cinta se veía en blanco en el teléfono, y no era el bug del 22/08 a la mañana.** Ese día se arregló que el arrastre pausara la animación en touch, y era un bug real, pero el blanco era otra cosa.
+
+**No es un hueco de geometría, y eso se midió:** recorriendo el ciclo entero a 390px, el borde derecho de la última tarjeta **nunca baja de 3070px**, o sea que siempre sobran ~2700px de tarjetas fuera de pantalla. La regla del hueco se cumplía de sobra.
+
+**Es un problema de rasterizado.** Con `will-change:transform` la pista entera es **una sola capa de compositor**, y con 3 grupos medía **4590px de ancho**. Safari en iOS no rasteriza capas de más de ~4096px: pinta lo que entra y deja el resto en blanco, que es exactamente lo que se reportó. En desktop no pasa porque el límite es mucho más alto.
+
+**Arreglo: en mobile la pista es de 2 grupos.** `(2-1) x 1530 = 1530px` cubre cualquier teléfono con margen, y la capa baja a **3060px**, debajo del límite. Se hace con `.t-cinta > .t-grupo:nth-child(n+3){display:none}`, que **no depende de cuántos grupos genere el script** — al sumar testimonios no hay que tocarlo. Va con un `@keyframes marquee-mobile` propio que recorre `-50%`, escrito **a propósito sin `calc()`**: el patrón con `calc(-100% / N)` es el que reescribe `build-testimonios.py`, y este no tiene que moverse cuando cambie la cantidad de grupos de desktop.
+
+**De paso, la velocidad en mobile.** Con la duración de desktop daba 27 px/s sobre una pantalla de 390px y Gastón lo marcó como "va muy rápido". Ahora son **85s sobre un grupo de 1530px, o sea ~18 px/s**. Desktop queda igual: 56s, 39.8 px/s.
+
+**Regla nueva para la próxima:** al sumar testimonios, además de la regla del hueco hay que mirar **el ancho total de la pista contra los ~4096px del límite de capa de iOS**. Son dos cuentas distintas y la segunda no la hace el script todavía.
+
+### Tres retoques de la pasada (22/08/2026)
+
+- **Se sacó la franja 2020 / 2023 / HOY** del destacado de Silvia, por pedido de Gastón. El relato de ella ya cuenta el recorrido y la franja lo repetía resumido. Salieron también `.t-datos`/`.t-dato` del CSS y dos comentarios que quedaban hablando de una franja inexistente. El panel cierra con la firma y los 48px de padding de abajo, sin hueco huérfano.
+- **La credencial de "Sobre mí" pasó a ser una firma.** Decía "Prof. Jimena Ibañez · Profesora Nacional de Educación Física" en mono a 12px: repetía un cargo que ya está más arriba y pesaba como dato técnico. Ahora dice solo **"Prof. Jimena Ibañez"**, en Archivo cursiva a 13px. **Trampa de especificidad que costó una medición:** `.sobre-texto p` es (0,1,1) y le gana a `.credential` (0,1,0), así que con el selector corto la firma se quedaba en los 16px del párrafo aunque la regla dijera 13. Va como `.sobre-texto .credential`.
+- **Casilleros:** ahora son **"+4 países"** y **"1 a 1 · cada alumna, sin planes genéricos"**. El +4 lo pasó Gastón; los testimonios publicados muestran 3 países (Argentina, Puerto Rico, Estados Unidos), así que el cuarto son alumnas que no están en la cinta. Queda anotado en el CSS para que nadie lo "corrija" a 3 mirando solo las tarjetas.
+
 ### "Sobre mí" rehecha contra el benchmark de la competencia (22/08/2026)
 
 Gastón comparó la sección con **Noelia Rodríguez** y **Sara Ariadna** y el veredicto fue: *"hay mucho texto, no empieza con un llamado o copy poderoso, no se vende bien, la UI no es linda, la imagen tampoco"*.

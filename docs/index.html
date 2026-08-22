@@ -661,13 +661,22 @@
     object-fit:cover; object-position:50% 22%;
     display:block;
   }
-  .credential{
-    margin-top:20px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
+  /* Firma, no credencial (22/08/2026). Antes decia "Prof. Jimena Ibañez ·
+     Profesora Nacional de Educacion Fisica" en mono a 12px: repetia el cargo
+     que ya esta dos veces mas arriba en la pagina y pesaba como un dato
+     tecnico. Ahora es una firma en cursiva, mas chica y en Archivo — el mono
+     se reserva para labels y cifras, que es su rol en este sitio. */
+  /* `.sobre-texto .credential` y no `.credential` a secas: la firma es un <p>
+     dentro de .sobre-texto, y `.sobre-texto p` (0,1,1) le gana a una clase
+     sola (0,1,0). Con el selector corto la firma se quedaba en los 16px del
+     parrafo aunque la regla dijera 13. */
+  .sobre-texto .credential{
+    margin-top:18px;
+    font-size:13px;
+    font-style:italic;
     color:var(--ink-soft);
-    letter-spacing:.03em;
     line-height:1.5;
+    max-width:none;
   }
 
   /* ---- casilleros de prueba ----
@@ -675,10 +684,12 @@
      mujeres transformadas / +20 años de experiencia" de la competencia son lo
      que mas vende de su seccion, pero contexto.md prohibe escribir un dato de
      negocio sin preguntarlo (cupo, capacidad, precio, trayectoria) y ya se
-     invento dos veces en este proyecto. Los 3 paises salen de los testimonios
-     publicados; el "1 a 1" es como funciona el programa. Cuando Jimena pase un
-     numero real —años entrenando, alumnas acompañadas— entra un tercer .dato
-     y la grilla se acomoda sola. */
+     invento dos veces en este proyecto. El "+4 paises" lo paso Gaston el
+     22/08/2026 (los testimonios publicados muestran 3: Argentina, Puerto Rico
+     y Estados Unidos, asi que el cuarto son alumnas que no estan en la cinta);
+     el "1 a 1" es como funciona el programa. Si aparece un tercer dato real
+     —años entrenando, alumnas acompañadas— entra como un .dato mas y la
+     grilla se acomoda sola. */
   /* `grid-auto-flow:column` + `grid-auto-columns:1fr` crea exactamente una
      columna por casillero, todas iguales, sin que la regla sepa cuantos hay.
      Las dos alternativas obvias fallan y se midieron las dos:
@@ -812,37 +823,12 @@
      chip claro no se ve contra el vino */
   .t-autor .bandera{box-shadow:0 0 0 1px rgba(255,255,255,.22);}
 
-  /* La franja de abajo del panel cambio de contenido el 19/08/2026: eran tres
-     HECHOS DEL PROGRAMA (el 1-2% de masa muscular, las 2 sesiones semanales,
-     "Jimena siempre") puestos ahi mientras no hubiera datos reales de una
-     alumna. Ahora hay: Silvia conto su historia completa, asi que la franja
-     pasa a ser la LINEA DE TIEMPO de esa historia — 2020, 2023 y hoy.
-     Se conserva la estructura de tres columnas con etiqueta + valor del
-     patron 1 del benchmark 03; lo que cambia es que el plazo ahora es de
-     verdad y es de ella.
-     El dato fisiologico del 1-2% no se perdio, sigue disponible para la
-     seccion Programa: era el reemplazo honesto mientras faltaba esto. */
-  /* La franja va DENTRO del panel oscuro, asi que se invierte entera. El
-     acento sobre fondo oscuro es --bronze-light: el --bronze normal no tiene
-     contraste suficiente contra el wine (mismo criterio que #proceso). */
-  .t-datos{
-    position:relative;
-    display:grid; grid-template-columns:repeat(3,1fr);
-    margin-top:40px; padding-top:30px;
-    border-top:1px solid rgba(255,255,255,.16);
-  }
-  .t-dato{padding:0 22px 0 0;}
-  .t-dato + .t-dato{border-left:1px solid rgba(255,255,255,.16); padding-left:22px;}
-  .t-dato .k{
-    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--bronze-light); display:block; margin-bottom:8px;
-  }
-  .t-dato .v{font-size:19px; font-weight:600; color:#fff; line-height:1.2; display:block;}
-  .t-dato .v small{display:block; font-size:13px; font-weight:400; color:rgba(255,255,255,.62); margin-top:4px; letter-spacing:0;}
-  /* los fragmentos de la linea de tiempo que son palabras textuales de Silvia
-     van en italica y entre comillas: hay que poder distinguir de un vistazo lo
-     que dijo ella de lo que escribimos nosotros */
-  .t-dato .v small.dicho{font-style:italic; color:rgba(255,255,255,.72);}
+  /* La franja de linea de tiempo (2020 / 2023 / HOY) que iba debajo del panel
+     se saco el 22/08/2026 por pedido de Gaston. El destacado se queda con la
+     cita, el comillon y la firma: el relato de Silvia ya cuenta el recorrido
+     y la franja lo repetia en version resumida. Los .t-datos/.t-dato salieron
+     del CSS con ella. El dato fisiologico del 1-2% de masa muscular, que
+     habia vivido ahi antes, sigue disponible para la seccion Programa. */
 
   /* La cinta va a todo el ancho de la pantalla, fuera del .wrap: con margenes
      a los costados no se lee como cinta, se lee como una fila cortada mal. */
@@ -865,7 +851,7 @@
        asi que la duracion subio de 22s a 45s para sostener esos 40 px/s. Si
        se suman testimonios hay que volver a subirla en proporcion (regla:
        segundos ≈ ancho_de_grupo / 40) o la cinta se acelera sola. */
-    animation:marquee 45s linear infinite;
+    animation:marquee 56s linear infinite;
     will-change:transform;
     /* Cursor de flecha, NO `grab` ni `pointer`. La manito sugiere "esto se
        toca" y convierte la seccion en algo para jugar; la flecha la deja como
@@ -905,7 +891,13 @@
      mismo N esta en el script (`unGrupo`), que lo necesita para el arrastre. */
   @keyframes marquee{
     from{transform:translateX(0);}
-    to  {transform:translateX(calc(-100% / 4));}
+    to  {transform:translateX(calc(-100% / 3));}
+  }
+  /* Pareja del de arriba para mobile, donde la pista es de 2 grupos.
+     Ver el bloque de @media (max-width:720px) para el porque. */
+  @keyframes marquee-mobile{
+    from{transform:translateX(0);}
+    to  {transform:translateX(-50%);}
   }
 
   /* ---- La tarjeta de la cinta (19/08/2026) ----
@@ -1400,18 +1392,38 @@
        lo que midan. Antes esto obligaba a un keyframe aparte solo por el
        ajuste en pixeles. */
     .t-grupo{gap:16px; margin-right:16px;}
+
+    /* ---- Mobile: media pista, y mas lenta (22/08/2026) ----
+       Dos problemas distintos que se arreglan con la misma regla.
+
+       1) LA CINTA SE VEIA EN BLANCO EN EL TELEFONO. No era un hueco de
+          geometria: se midio el ciclo entero a 390px y el borde derecho de la
+          ultima tarjeta nunca baja de 3070px, o sea que siempre sobran ~2700px
+          de tarjetas fuera de pantalla. El problema es de RASTERIZADO. Con
+          `will-change:transform` la pista entera es UNA capa de compositor, y
+          con 3 grupos mide 4590px de ancho; Safari en iOS no rasteriza capas
+          de mas de ~4096px y deja el sobrante sin pintar, que es exactamente
+          el blanco que se reporto. En mobile alcanzan 2 grupos de sobra:
+          (2-1) x 1530 = 1530px cubre cualquier telefono, y la capa baja a
+          3060px. El `nth-child(n+3)` sirve para cualquier cantidad de grupos
+          que genere el script, no hay que tocarlo al sumar testimonios.
+
+       2) IBA MUY RAPIDO. Con la duracion de desktop daba 27 px/s sobre una
+          pantalla de 390px y se leia como un tren. 85s sobre un grupo de
+          1530px da ~18 px/s.
+
+       El keyframe propio usa -50% y NO `calc(-100% / 2)` a proposito: el
+       patron con calc() es el que reescribe build-testimonios.py, y este no
+       tiene que moverse cuando cambie la cantidad de grupos de desktop. */
+    .t-cinta > .t-grupo:nth-child(n+3){display:none;}
+    .t-cinta{animation-name:marquee-mobile; animation-duration:85s;}
     .t-mini{padding:24px 22px 20px; border-radius:var(--r-md);}
     .t-av{width:48px; height:48px;}
     .t-autor .t-av{width:56px; height:56px;}
 
-    /* la franja de tres en fila se aprieta abajo de 400px: pasa a columna, y
-       el separador vertical se convierte en horizontal */
     .t-destacado{padding:34px 24px 30px; border-radius:var(--r-md); margin-bottom:40px;}
     .t-destacado .comillon{font-size:120px; top:-16px; right:12px;}
     .t-quote{margin-bottom:22px; max-width:none;}
-    .t-datos{grid-template-columns:1fr; margin-top:28px; padding-top:22px;}
-    .t-dato{padding:14px 0;}
-    .t-dato + .t-dato{border-left:0; border-top:1px solid rgba(255,255,255,.16); padding-left:0;}
     .step .stepnum{font-size:26px;}
 
     /* El panel fijo es una mejora de escritorio. En mobile se oculta y la
@@ -1650,15 +1662,15 @@
         <h2>Entrenar perfecto no existe. Entrenar para tu etapa, sí.</h2>
         <p>Soy mamá de dos y nunca dejé de entrenar. En el embarazo y el posparto lo aprendí en mi propio cuerpo: el movimiento se adapta a la etapa, no al revés.</p>
         <p>Hoy acompaño a mujeres +35 a recomponer su cuerpo con sus cambios hormonales a favor, sin vivir a dieta.</p>
-        <p class="credential">Prof. Jimena Ibañez · Profesora Nacional de Educación Física</p>
+        <p class="credential">Prof. Jimena Ibañez</p>
         <div class="sobre-datos">
           <div class="dato">
-            <span class="k">3</span>
+            <span class="k">+4</span>
             <span class="v">países donde entrenan mis alumnas</span>
           </div>
           <div class="dato">
             <span class="k">1 a 1</span>
-            <span class="v">cada plan, sin plantillas</span>
+            <span class="v">cada alumna, sin planes genéricos</span>
           </div>
         </div>
         <a class="sobre-cta" href="#proceso">Así trabajo, paso a paso →</a>
@@ -1695,8 +1707,7 @@
            una a una. Un destacado tiene que hacer eso — el resto de las
            citas ya dicen que Jimena es atenta y corrige.
            La cita es TEXTUAL, solo esta cortada en lineas para que el
-           descubrimiento sea por linea, y la franja de abajo son fragmentos
-           igual de textuales de ese mismo mensaje. -->
+           descubrimiento sea por linea. -->
       <div class="t-destacado">
         <div class="comillon" aria-hidden="true">“</div>
         <p class="t-quote reveal stagger">
@@ -1715,29 +1726,10 @@
             </span>
           </span>
         </div>
-        <!-- Los tres son de ella y estan en su mensaje: no hay ni un dato
-             inventado ni un numero de escala. Lo que estaba antes en este
-             lugar eran hechos del programa (1-2% de masa muscular, 2 sesiones
-             semanales, "Jimena siempre"), puestos ahi justamente hasta que
-             existiera esto. -->
-        <div class="t-datos reveal stagger">
-          <div class="t-dato">
-            <span class="k">2020</span>
-            <span class="v">Sola, con videos<small class="dicho">«a todo esto le ganaba la indisciplina»</small></span>
-          </div>
-          <div class="t-dato">
-            <span class="k">2023</span>
-            <span class="v">Clases en vivo<small class="dicho">«aquí empezó mi verdadera disciplina»</small></span>
-          </div>
-          <div class="t-dato">
-            <span class="k">Hoy</span>
-            <span class="v">2 años con Jimena<small>entrenamiento personalizado, una a una</small></span>
-          </div>
-        </div>
       </div>
 
       <!-- BUILD:cinta — generado por herramientas/build-testimonios.py -->
-      <!-- 4 citas repetidas en 4 grupos idénticos. Los grupos 2 en
+      <!-- 5 citas repetidas en 3 grupos idénticos. Los grupos 2 en
            adelante existen SOLO para que el loop cierre sin salto, así que van
            aria-hidden: un lector de pantalla las lee una sola vez.
            NO editar a mano: correr herramientas/build-testimonios.py. -->
@@ -1796,56 +1788,15 @@
               <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
-        </div>
-        <div class="t-grupo" aria-hidden="true">
           <div class="t-mini">
             <div class="cab">
-              <span class="t-av">DG<img src="img/testimonios/daiana.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span class="t-av">CI<img src="img/testimonios/carolina.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
               <span>
-                <span class="qn">Daiana Gillese Urueña</span>
-                <span class="edad">34 años</span>
+                <span class="qn">Carolina Ibañez</span>
+                <span class="edad">35 años</span>
               </span>
             </div>
-            <p>A mí me encanta entrenar con vos porque siempre estás atenta a cada movimiento, ayudándome para que no me lastime. Sos muy dedicada y una excelente profesional.</p>
-            <div class="pie">
-              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
-            </div>
-          </div>
-          <div class="t-mini">
-            <div class="cab">
-              <span class="t-av">MI<img src="img/testimonios/margarita.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-              <span>
-                <span class="qn">Margarita Izurieta López</span>
-                <span class="edad">49 años</span>
-              </span>
-            </div>
-            <p>Después de dos años entrenando con vos me siento mucho más fuerte y pude lograr algo que me costaba muchísimo: ser constante. Siendo mamá, entrenar desde casa me facilitó un montón.</p>
-            <div class="pie">
-              <span class="t-pais"><svg class="bandera" role="img" aria-label="Puerto Rico"><use href="#fl-pr"/></svg>Puerto Rico</span>
-            </div>
-          </div>
-          <div class="t-mini">
-            <div class="cab">
-              <span class="t-av">VV<img src="img/testimonios/veronica.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-              <span>
-                <span class="qn">Verónica Vázquez</span>
-                <span class="edad">39 años</span>
-              </span>
-            </div>
-            <p>Gracias a Jimena, que cambió mi forma de entrenar y mi estilo de vida. Desde Argentina me manda videos y me exige mandarle todo para revisar que esté haciéndolo bien.</p>
-            <div class="pie">
-              <span class="t-pais"><svg class="bandera" role="img" aria-label="Estados Unidos"><use href="#fl-us"/></svg>Estados Unidos</span>
-            </div>
-          </div>
-          <div class="t-mini">
-            <div class="cab">
-              <span class="t-av">LA<img src="img/testimonios/lorena.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
-              <span>
-                <span class="qn">Lorena Mariel Agout</span>
-                <span class="edad">49 años</span>
-              </span>
-            </div>
-            <p>Mi experiencia fue muy buena y muy eficiente, vi muchos resultados. Las planificaciones un 1000 y muy personalizadas. Realmente muy profesional en su trabajo.</p>
+            <p>Hoy no solo cambió mi cuerpo: cambió mi forma de cuidarme. Me siento más fuerte, con más energía y en paz con mis hábitos. Jimena no solo me entrenó, me enseñó a entenderme.</p>
             <div class="pie">
               <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
@@ -1904,6 +1855,19 @@
               <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
           </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">CI<img src="img/testimonios/carolina.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Carolina Ibañez</span>
+                <span class="edad">35 años</span>
+              </span>
+            </div>
+            <p>Hoy no solo cambió mi cuerpo: cambió mi forma de cuidarme. Me siento más fuerte, con más energía y en paz con mis hábitos. Jimena no solo me entrenó, me enseñó a entenderme.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
+            </div>
+          </div>
         </div>
         <div class="t-grupo" aria-hidden="true">
           <div class="t-mini">
@@ -1954,6 +1918,19 @@
               </span>
             </div>
             <p>Mi experiencia fue muy buena y muy eficiente, vi muchos resultados. Las planificaciones un 1000 y muy personalizadas. Realmente muy profesional en su trabajo.</p>
+            <div class="pie">
+              <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
+            </div>
+          </div>
+          <div class="t-mini">
+            <div class="cab">
+              <span class="t-av">CI<img src="img/testimonios/carolina.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+              <span>
+                <span class="qn">Carolina Ibañez</span>
+                <span class="edad">35 años</span>
+              </span>
+            </div>
+            <p>Hoy no solo cambió mi cuerpo: cambió mi forma de cuidarme. Me siento más fuerte, con más energía y en paz con mis hábitos. Jimena no solo me entrenó, me enseñó a entenderme.</p>
             <div class="pie">
               <span class="t-pais"><svg class="bandera" role="img" aria-label="Argentina"><use href="#fl-ar"/></svg>Argentina</span>
             </div>
@@ -2335,8 +2312,9 @@
       const DUR = anim.effect.getTiming().duration;
       const LENTO = 0.28;
       // Lo que recorre la animacion es un grupo, o sea 1/4 de la pista.
-      // Este 4 es el mismo N del @keyframes marquee: si cambia alla, cambia aca.
-      const unGrupo = () => cinta.getBoundingClientRect().width / 4;
+      // Este N es el mismo del @keyframes marquee. Lo reescribe
+      // build-testimonios.py junto con el keyframe, no se toca a mano.
+      const unGrupo = () => cinta.getBoundingClientRect().width / 3;
 
       // ---- hover: rampa de velocidad, no un cambio de golpe ----
       let raf = null;

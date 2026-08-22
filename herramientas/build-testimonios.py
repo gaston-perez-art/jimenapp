@@ -85,6 +85,20 @@ CITAS = [
             "planificaciones un 1000 y muy personalizadas. Realmente muy profesional en "
             "su trabajo.",
     ),
+    dict(
+        nom="Carolina Ibañez", edad=35, pais="Argentina", ini="CI",
+        foto="carolina.jpg", autorizacion="22/08/2026, texto y foto",
+        # Del mensaje de Caro se publica el ULTIMO PARRAFO, entero y contiguo.
+        # El parrafo del medio —la combinacion entre alimentacion y
+        # entrenamiento de fuerza, que es lo mas propio de su testimonio y lo
+        # unico que habla de comida en toda la cinta— mide 191 caracteres y no
+        # entra sin agrandar la tarjeta (las otras cuatro van de 158 a 181).
+        # Queda anotado por si algun dia se usa en el destacado, que si da para
+        # un relato largo.
+        txt="Hoy no solo cambió mi cuerpo: cambió mi forma de cuidarme. Me siento "
+            "más fuerte, con más energía y en paz con mis hábitos. Jimena no solo "
+            "me entrenó, me enseñó a entenderme.",
+    ),
     # Silvia Rodríguez no va acá: es el destacado, y el destacado se edita a mano
     # en el HTML porque es un relato, no una tarjeta. Ver `testimonios.md`.
 ]
