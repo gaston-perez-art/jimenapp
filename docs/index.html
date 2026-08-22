@@ -417,15 +417,29 @@
      blancas y seguidas, y el recorrido con ritmo del 15/08 recién arrancaba
      después. Ahora queda blanco → dim → blanco → dim → oscuro → dim → blanco.
 
-     Los dos bloques van APILADOS y no lado a lado. Se probó en dos columnas
-     y con 6 ítems contra 4 quedaban siempre desparejas (730px contra 500px).
-     Emparejar alturas no lo arregla: deja aire muerto adentro de la corta.
-     Bloques de ancho completo no pueden quedar disparejos. */
+     ---- 22/08/2026: vuelven a ser DOS TARJETAS LADO A LADO ----
+     Esto revierte la decision de arriba, que decia que apiladas era la unica
+     forma de que no quedaran desparejas. Pedido explicito de Gaston: dos
+     tarjetas verticales del mismo tamaño.
+     El problema que habia hecho descartar las dos columnas sigue siendo real
+     —6 items contra 4— y no se puede tapar: lo que se hace es asumirlo.
+     `align-items:stretch` iguala las alturas, cada lista pasa a UNA columna
+     (en dos columnas dentro de media pantalla las lineas quedaban de tres
+     palabras) y la tarjeta corta reparte su aire con `space-between` en vez
+     de dejarlo todo junto abajo. El calce fino del contenido queda pendiente,
+     es lo que Gaston llamo "luego alineamos contenidos". */
   #problema{background:var(--paper-dim);}
   #problema .section-head{margin-left:auto; margin-right:auto; text-align:center;}
 
-  .bloque-si{
+  /* La grilla de las dos tarjetas. `align-items:stretch` es lo que las deja
+     de la misma altura sin fijar un alto a mano. */
+  .problema-par{
     max-width:1000px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr; gap:20px;
+    align-items:stretch;
+  }
+  .bloque-si{
+    display:flex; flex-direction:column;
     background:var(--wine-100); border-radius:var(--r-lg);
     padding:36px 38px 34px;
     position:relative; overflow:hidden; isolation:isolate;
@@ -471,7 +485,7 @@
     100%  {transform:translate(-50%,-50%) rotate(1turn); opacity:0;}
   }
   .tira-no{
-    max-width:1000px; margin:16px auto 0;
+    display:flex; flex-direction:column;
     background:var(--card); border:1px solid var(--line);
     border-radius:var(--r-lg);
     padding:28px 38px 30px;
@@ -493,17 +507,21 @@
   .bloque-si .mk{background:var(--wine-600); color:#fff;}
   .tira-no .mk{background:var(--line); color:var(--ink-soft);}
 
-  /* Llenado por COLUMNAS, no por filas. Por defecto el grid coloca 1 y 2 en la
-     primera fila, o sea izquierda-derecha-izquierda-derecha, y la cascada del
-     stagger saltaba en zigzag entre las dos columnas al mismo tiempo. Con
-     auto-flow en columna, los items 1 a 3 son la columna izquierda y 4 a 6 la
-     derecha, asi que el recorrido baja una y despues la otra. */
+  /* Una sola columna desde que la tarjeta ocupa media pantalla (22/08/2026).
+     Antes eran dos columnas con `grid-auto-flow:column`, que existia para que
+     la cascada del stagger bajara una columna y despues la otra en vez de ir
+     en zigzag. Con la tarjeta a la mitad del ancho, dos columnas dejaban
+     lineas de tres palabras; en una columna el problema del zigzag desaparece
+     solo y el orden del stagger es el natural, de arriba abajo.
+     Las dos listas arrancan pegadas arriba y el sobrante queda abajo. Se
+     probo repartirlo con `space-between` y es peor: en la lista corta los
+     cuatro items quedan separados por ~90px y se leen como cuatro frases sin
+     relacion entre si. El aire junto al final se lee como "esta tarjeta tiene
+     menos", que es la verdad. */
   .bloque-si ul{
     list-style:none; margin:0; padding:0;
-    display:grid; grid-template-columns:1fr 1fr;
-    grid-template-rows:repeat(3, auto);
-    grid-auto-flow:column;
-    gap:16px 40px;
+    display:flex; flex-direction:column;
+    gap:16px;
   }
   .bloque-si li{
     position:relative; padding-left:20px; line-height:1.5;
@@ -550,9 +568,12 @@
   .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(5)::before{animation-delay:1.94s;}
   .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(6),
   .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(6)::before{animation-delay:2.10s;}
+  /* Misma logica que la del "si". Esta es la lista corta, 4 contra 6, asi que
+     es la que se queda con el aire sobrante al final de la tarjeta. */
   .tira-no ul{
     list-style:none; margin:0; padding:0;
-    display:grid; grid-template-columns:repeat(4,1fr); gap:14px 32px;
+    display:flex; flex-direction:column;
+    gap:14px;
   }
   .tira-no li{
     position:relative; padding-left:18px; line-height:1.45;
@@ -1076,10 +1097,16 @@
   }
   .fgrid{
     display:grid;
-    /* la columna de marca lleva bajada y redes, las otras tres son listas
-       cortas: 1.7fr contra 1fr evita que la bajada se parta en seis renglones */
-    grid-template-columns:minmax(0,1.7fr) repeat(3, minmax(0,1fr));
-    gap:44px 40px;
+    /* Las tres columnas de links van a `max-content` y no a 1fr (22/08/2026).
+       Con 1fr cada una ocupaba un cuarto del ancho para sostener una lista de
+       uno o tres items, asi que "Programas" y "Otros servicios" quedaban con
+       medio ancho de aire a la derecha y las tres se leian desparramadas en
+       vez de como un grupo. Con max-content cada columna mide lo que mide su
+       link mas largo, la separacion entre ellas es siempre la misma y el
+       sobrante se lo queda la columna de marca, que es la que tiene texto
+       para llenarlo. */
+    grid-template-columns:minmax(0,1fr) repeat(3, max-content);
+    gap:44px 64px;
     align-items:start;
   }
   footer .fname{
@@ -1310,7 +1337,6 @@
     .programa-feats{grid-template-columns:1fr;}
     /* En 4 columnas cada item queda en ~160px y se parte en cuatro renglones,
        asi que la tira terminaba mas alta en tablet que en escritorio. */
-    .tira-no ul{grid-template-columns:1fr 1fr; gap:14px 28px;}
     /* La marca pasa a ocupar la fila entera y las tres listas se reparten
        abajo. Con 4 columnas a este ancho la bajada se parte en seis renglones
        y las tres listas quedan con mas aire vacio que texto. */
@@ -1370,16 +1396,12 @@
     }
     .contact-quien{flex-direction:column; text-align:center; gap:13px;}
     .contact-quien .t-av{width:76px; height:76px;}
+    /* Las dos tarjetas se apilan: lado a lado, a media pantalla de un
+       telefono, no entra una linea legible. */
+    .problema-par{grid-template-columns:1fr; gap:16px;}
     .bloque-si{padding:28px 24px 26px; border-radius:var(--r-md);}
-    /* En una sola columna hay que devolver el flujo a filas, o el auto-flow
-       en columna seguiria creando columnas nuevas fuera de la caja. */
-    .bloque-si ul{
-      grid-template-columns:1fr; grid-template-rows:none;
-      grid-auto-flow:row; gap:14px;
-    }
     .bloque-si li{font-size:15.5px;}
     .tira-no{padding:24px 24px 26px; border-radius:var(--r-md);}
-    .tira-no ul{grid-template-columns:1fr 1fr; gap:12px 24px;}
     .bloque-si h3, .tira-no h3{font-size:18px; margin-bottom:20px;}
     .remate{margin-top:44px;}
     .remate p{font-size:16px;}
@@ -1453,7 +1475,6 @@
   /* ---------- Pantallas chicas: 360px y menos ---------- */
   @media (max-width:400px){
     .wrap{padding-left:16px; padding-right:16px;}
-    .tira-no ul{grid-template-columns:1fr;}
     .programa-top .n{font-size:34px;}
     .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
     .section-head h2{font-size:32px;}
@@ -1616,6 +1637,7 @@
         <p>Antes de contarte cómo trabajo, prefiero que sepas si esto es para vos.</p>
       </div>
 
+      <div class="problema-par">
       <div class="bloque-si reveal">
         <h3><span class="mk" aria-hidden="true">✓</span> Es para vos si…</h3>
         <ul class="reveal stagger">
@@ -1636,6 +1658,7 @@
           <li>No podés destinarle dos sesiones por semana.</li>
           <li>Esperás resultados sin medir nada en el camino.</li>
         </ul>
+      </div>
       </div>
 
       <div class="remate reveal">

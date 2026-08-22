@@ -475,6 +475,26 @@ Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
 
 **Pendiente que abre esta pasada:** las tres secciones de arriba de todo (hero, Problema, Sobre mí) son **las tres blancas y seguidas**. `#problema` no declara fondo propio, así que hereda `--paper`. El recorrido con ritmo que se armó el 15/08 (claro → dim → oscuro → dim → claro) ahora arranca con tres bloques planos antes del primer cambio. Y la sección nueva tampoco está en el nav.
 
+### Las dos tarjetas del "problema" vuelven a ir lado a lado (22/08/2026)
+
+**Esto revierte una decisión escrita, a pedido explícito de Gastón.** El CSS decía, desde que se armó la sección, que los dos bloques iban **apilados y no lado a lado**, porque en dos columnas quedaban siempre disparejos —6 ítems contra 4, 730px contra 500px— y que emparejar alturas no lo arregla, solo mueve el problema adentro de la tarjeta corta.
+
+**Esa advertencia era correcta y se cumplió.** Ahora las dos miden exactamente lo mismo (490x472 en desktop), y la tarjeta del "no" queda con **264px de aire abajo**. No hay forma de tapar eso con CSS: la lista corta tiene cuatro líneas de una línea cada una.
+
+Se probó `justify-content:space-between` para repartir ese aire y **es peor**: los cuatro ítems quedan separados por ~90px y se leen como cuatro frases sin relación entre sí. Quedó `flex-start`, con el sobrante junto al final, que al menos se lee como "esta tarjeta tiene menos", que es la verdad.
+
+**Lo que falta es contenido, no CSS.** Gastón lo dejó anotado como "luego alineamos contenidos". Las salidas reales son dos: sumarle dos ítems más a "No es para vos si…" para que empareje, o mover ahí alguna línea del remate. Con cuatro ítems contra seis, cualquier arreglo de layout va a ser un parche.
+
+Las listas pasaron a **una sola columna** dentro de cada tarjeta. Las dos columnas que tenían existían para que la cascada del stagger bajara una y después la otra en vez de ir en zigzag; con la tarjeta a media pantalla dejaban líneas de tres palabras, y en una columna el problema del zigzag desaparece solo.
+
+### Footer: las columnas de links dejan de estar desparramadas (22/08/2026)
+
+Con `repeat(3, minmax(0,1fr))` cada columna de links ocupaba un cuarto del ancho para sostener una lista de **uno o tres ítems**, así que "Programas" y "Otros servicios" quedaban con medio ancho de aire a la derecha y las tres se leían desparramadas en vez de como un grupo. Ahora van a `max-content` con separación fija de 64px: cada una mide lo que mide su link más largo y el sobrante se lo queda la columna de marca, que es la única con texto para llenarlo.
+
+### Foto de Carolina, segunda vuelta (22/08/2026)
+
+La primera —la de la fiesta, 738x1600— tenía a Caro chica en el cuadro, así que para llenar el círculo había que recortar muy cerrado y quedaba con demasiado zoom. Gastón pasó otra, 1500x2000 y de cerca. El recorte nuevo es más suelto a propósito: entra la cabeza entera con aire, no solo la cara.
+
 ### Testimonio de Carolina, y la cinta en blanco en iOS (22/08/2026)
 
 **Cuarto testimonio en la cinta: Carolina Ibañez, 35 años, Argentina.** Autorización del 22/08/2026, texto y foto. Del mensaje se publica **el último párrafo entero y contiguo** —*"Hoy no solo cambió mi cuerpo: cambió mi forma de cuidarme..."*—, 173 caracteres, justo en el rango de las otras cuatro (158 a 181), así que la tarjeta no cambia de alto.
