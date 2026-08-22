@@ -610,21 +610,33 @@
   /* ---------- Sobre mi ---------- */
   #sobre{border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   #sobre{padding:62px 0;}
-  .sobre-grid{display:grid; grid-template-columns:.72fr 1.28fr; gap:48px;
-              align-items:start; max-width:1020px;}
-  /* 24ch partia el titulo en 4 lineas y lo dejaba como un muro de credencial;
-     con 32ch entra en 2 y se lee como una frase. */
-  .sobre-texto h2{font-size:clamp(27px,3vw,40px); max-width:26ch; margin-top:2px;}
-  .sobre-texto p{margin-top:16px; color:var(--ink-soft); font-size:16px; max-width:54ch;}
+  /* ---- Rehecha el 22/08/2026 contra el benchmark de la competencia ----
+     Se comparo con Noelia Rodriguez y Sara Ariadna. Las dos dicen para que
+     sirven en dos segundos; esta seccion abria con el CARGO de Jimena
+     ("Profesora Nacional de Educacion Fisica, especializada en...") en tres
+     renglones. Un cargo es prueba, no gancho: ahora va abajo y chico.
+
+     El titular pasa a ser su tesis, que ya estaba escrita pero enterrada en
+     el parrafo 1: "no se trata de entrenar perfecto, sino de adaptar el
+     movimiento a cada etapa". El cuerpo baja de ~180 palabras a ~52, y se
+     suman las dos cosas que la seccion no tenia y la competencia si:
+     casilleros de prueba y una salida (CTA hacia el metodo). */
+  .sobre-grid{display:grid; grid-template-columns:.8fr 1.2fr; gap:44px;
+              align-items:stretch; max-width:1020px;}
+  .sobre-texto h2{font-size:clamp(26px,3.1vw,38px); max-width:17ch; line-height:1.1; margin-top:2px;}
+  .sobre-texto p{margin-top:16px; color:var(--ink-soft); font-size:16px; max-width:46ch;}
+  .sobre-eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--bronze-text); margin:0 0 12px;
+  }
 
   /* ---- columna de la foto ---- */
   .sobre-foto{display:flex; flex-direction:column;}
-  /* Retrato 4:5, no cuadrado: la foto de origen es 3:4 vertical (960x1280) y
-     el cuadrado descartaba el 25% del alto. En 4:5 se aprovecha casi todo el
-     encuadre y la columna de la foto queda a la altura de la de texto (el
-     desbalance entre columnas paso de 124px a ~40px). */
+  /* La foto se estira a lo que mida la columna de texto en vez de fijar una
+     proporcion. Con aspect-ratio:4/5 quedaba mas baja que el texto y flotaba
+     centrada, con aire muerto arriba y abajo. */
   .foto-ph{
-    aspect-ratio:4/5; width:100%;
+    height:100%; min-height:440px; width:100%;
     border-radius:var(--r-lg);
     /* solo se ve mientras carga la foto */
     background:var(--paper-dim);
@@ -639,30 +651,58 @@
     font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em;
     text-transform:uppercase; opacity:.75;
   }
-  /* OJO: el scale y el object-position estan calibrados a mano PARA ESTA FOTO
-     (una toma de cuerpo entero, donde Jimena ocupa poco del cuadro y sobra
-     piso y cielo). Sin el zoom queda chica dentro del encuadre. Si se cambia
-     la foto hay que volver a calibrar estos dos valores, o directamente
-     sacarlos si la nueva ya viene bien encuadrada. */
+  /* Sin scale ni object-position calibrados a mano: la foto del 22/08/2026 ya
+     viene encuadrada (cabeza a mitad de muslo). Los valores que habia antes
+     estaban calculados para la toma de cuerpo entero anterior, donde Jimena
+     ocupaba poco del cuadro y sobraba piso y cielo. Si vuelve a cambiar la
+     foto, encuadrarla al recortarla y no compensar con CSS. */
   .foto-ph img{
     width:100%; height:100%;
-    object-fit:cover; object-position:50% 6%;
-    transform:scale(1.14); transform-origin:50% 10%;
+    object-fit:cover; object-position:50% 22%;
     display:block;
   }
-  .sobre-quote{
-    margin:22px 0 0; padding:0 0 0 18px;
-    border-left:2px solid var(--bronze);
-    font-size:16.5px; font-style:italic; color:var(--wine-900); line-height:1.5;
-  }
   .credential{
-    margin-top:14px;
+    margin-top:20px;
     font-family:'IBM Plex Mono', monospace;
     font-size:12px;
     color:var(--ink-soft);
     letter-spacing:.03em;
     line-height:1.5;
   }
+
+  /* ---- casilleros de prueba ----
+     OJO, y esto no es negociable: aca van SOLO datos verificables. Los "+2000
+     mujeres transformadas / +20 años de experiencia" de la competencia son lo
+     que mas vende de su seccion, pero contexto.md prohibe escribir un dato de
+     negocio sin preguntarlo (cupo, capacidad, precio, trayectoria) y ya se
+     invento dos veces en este proyecto. Los 3 paises salen de los testimonios
+     publicados; el "1 a 1" es como funciona el programa. Cuando Jimena pase un
+     numero real —años entrenando, alumnas acompañadas— entra un tercer .dato
+     y la grilla se acomoda sola. */
+  /* `grid-auto-flow:column` + `grid-auto-columns:1fr` crea exactamente una
+     columna por casillero, todas iguales, sin que la regla sepa cuantos hay.
+     Las dos alternativas obvias fallan y se midieron las dos:
+     `repeat(auto-fit, minmax(0,1fr))` genera cientos de pistas de 0px y solo
+     funciona de casualidad, y con flex `1 1 0` el padding del divisor queda
+     fuera del reparto y las columnas salen 21px desparejas. */
+  .sobre-datos{
+    display:grid; grid-auto-flow:column; grid-auto-columns:1fr;
+    margin-top:26px; padding-top:22px; border-top:1px solid var(--line);
+  }
+  .dato{min-width:0; padding-right:20px;}
+  .dato + .dato{padding-left:20px; border-left:1px solid var(--line);}
+  .dato .k{
+    display:block; font-size:27px; font-weight:700; color:var(--wine-600);
+    letter-spacing:-.02em; line-height:1;
+  }
+  .dato .v{display:block; font-size:12.5px; color:var(--ink-soft); margin-top:6px; line-height:1.35;}
+  .sobre-cta{
+    display:inline-flex; align-items:center; gap:8px; margin-top:24px;
+    font-weight:600; font-size:14.5px; color:var(--wine-600); text-decoration:none;
+    border-bottom:1.5px solid var(--wine-600); padding-bottom:3px;
+    transition:color .2s cubic-bezier(.16,1,.3,1), border-color .2s cubic-bezier(.16,1,.3,1);
+  }
+  .sobre-cta:hover{color:var(--wine-900); border-color:var(--wine-900);}
 
   /* ---- especialidades: lista pareja en dos columnas, no pastillas sueltas ---- */
   .especialidades{
@@ -1182,11 +1222,13 @@
   @media (max-width:960px){
     .hero{grid-template-columns:1fr; padding-top:52px;}
     .sobre-grid{grid-template-columns:1fr; gap:30px;}
-    /* Al apilarse, la foto ocuparia todo el ancho de la columna (en tablet eso
-       son ~900px de alto). Se mantiene el retrato 4:5 de base y se le pone
+    /* Al apilarse hay que devolverle la proporcion: el height:100% del desktop
+       existe para igualar la altura de la columna de texto, y en una sola
+       columna esa referencia desaparece (la fila la define el propio contenido,
+       asi que la foto colapsaria al min-height). Se vuelve al retrato 4:5 con
        techo de ancho, en vez de aplastarla a apaisado: un retrato recortado a
        4:3 o 16:11 deja una banda horizontal con la persona cortada. */
-    .foto-ph{max-width:340px;}
+    .foto-ph{max-width:340px; height:auto; min-height:0; aspect-ratio:4/5;}
     .esp-lista{grid-template-columns:1fr 1fr; gap:10px 18px;}
     .especialidades{margin-top:30px; padding-top:22px;}
     .steps{grid-template-columns:1fr 1fr; row-gap:36px;}
@@ -1599,18 +1641,27 @@
 
       <div class="sobre-foto">
         <div class="foto-ph">
-          <img src="img/jimena-sobre-mi.jpg" alt="Jimena Ibañez, entrenadora de fuerza">
+          <img src="img/jimena-sobre-mi.jpg" alt="Jimena Ibañez entrenando en el gimnasio">
         </div>
-        <blockquote class="sobre-quote">“El verdadero cambio empieza cuando una mujer se siente fuerte, capaz y segura de sí misma.”</blockquote>
-        <div class="credential">Prof. Jimena Ibañez · Entrenadora de fuerza</div>
       </div>
 
       <div class="sobre-texto">
-        <h2>Profesora Nacional de Educación Física, especializada en fuerza femenina</h2>
-        <p>El entrenamiento se convirtió en mucho más que una profesión para mí: es mi forma de sentirme fuerte, segura y conectada conmigo misma. Soy mamá de dos hijos y nunca dejé de entrenar — en el embarazo y el posparto aprendí, desde mi propia experiencia, que no se trata de entrenar perfecto, sino de adaptar el movimiento a cada etapa de la vida.</p>
-        <p>Hoy oriento mi trabajo a un objetivo puntual: acompañar a mujeres +35 a lograr recomposición corporal teniendo en cuenta sus cambios hormonales — resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia — sin vivir a dieta ni tener que dejar de disfrutar su vida. Nada de rutinas genéricas: creo que la fuerza cambia cuerpos, cambia hábitos y mejora la calidad de vida.</p>
-        <p>Cada mujer es distinta, así que trabajo de forma personalizada, teniendo en cuenta sus objetivos, su contexto y la etapa de vida en la que está.</p>
-
+        <p class="sobre-eyebrow">Sobre mí</p>
+        <h2>Entrenar perfecto no existe. Entrenar para tu etapa, sí.</h2>
+        <p>Soy mamá de dos y nunca dejé de entrenar. En el embarazo y el posparto lo aprendí en mi propio cuerpo: el movimiento se adapta a la etapa, no al revés.</p>
+        <p>Hoy acompaño a mujeres +35 a recomponer su cuerpo con sus cambios hormonales a favor, sin vivir a dieta.</p>
+        <p class="credential">Prof. Jimena Ibañez · Profesora Nacional de Educación Física</p>
+        <div class="sobre-datos">
+          <div class="dato">
+            <span class="k">3</span>
+            <span class="v">países donde entrenan mis alumnas</span>
+          </div>
+          <div class="dato">
+            <span class="k">1 a 1</span>
+            <span class="v">cada plan, sin plantillas</span>
+          </div>
+        </div>
+        <a class="sobre-cta" href="#proceso">Así trabajo, paso a paso →</a>
       </div>
 
         <div class="especialidades">

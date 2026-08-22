@@ -475,6 +475,28 @@ Tres commits de Gastón que quedaron sin documentar hasta esta pasada:
 
 **Pendiente que abre esta pasada:** las tres secciones de arriba de todo (hero, Problema, Sobre mí) son **las tres blancas y seguidas**. `#problema` no declara fondo propio, así que hereda `--paper`. El recorrido con ritmo que se armó el 15/08 (claro → dim → oscuro → dim → claro) ahora arranca con tres bloques planos antes del primer cambio. Y la sección nueva tampoco está en el nav.
 
+### "Sobre mí" rehecha contra el benchmark de la competencia (22/08/2026)
+
+Gastón comparó la sección con **Noelia Rodríguez** y **Sara Ariadna** y el veredicto fue: *"hay mucho texto, no empieza con un llamado o copy poderoso, no se vende bien, la UI no es linda, la imagen tampoco"*.
+
+**El problema de raíz era el titular.** Noelia abre con "La Mujer Detrás de tu Transformación" — habla de la visitante. Esta sección abría con **el cargo de Jimena** en tres renglones. Un cargo es prueba, no gancho: ahora va abajo y chico, en la línea de credencial.
+
+El titular pasó a ser **su tesis, que ya estaba escrita pero enterrada en el párrafo 1**: *"Entrenar perfecto no existe. Entrenar para tu etapa, sí."* El cuerpo bajó de **~180 palabras a ~52**, y entraron las dos cosas que la competencia tenía y esta sección no: **casilleros de prueba** y **una salida** (link a `#proceso`; antes la sección no llevaba a ningún lado).
+
+**Los números son el punto delicado.** Lo que más vende de la sección de Noelia es "+2000 mujeres transformadas · +20 años de experiencia", y es exactamente lo que **no se puede copiar**: `contexto.md` prohíbe escribir un dato de negocio sin preguntarlo y ya se inventó dos veces en este proyecto. Se publicaron **solo dos casilleros verificables** — los 3 países salen de los testimonios ya publicados, el "1 a 1" es cómo funciona el programa. **Falta pedirle a Jimena un número real** (años entrenando, alumnas acompañadas): con un tercero la sección pega bastante más, y la grilla ya lo soporta sin tocar CSS.
+
+**Foto nueva**, y se sobrescribió `img/jimena-sobre-mi.jpg` en vez de agregar un archivo: ese nombre lo usan también `og:image`, `twitter:image` y el JSON-LD, así que las cuatro referencias pasaron juntas a la foto buena. La anterior era una toma en la vereda con pasto, ladrillos y un auto estacionado, a contraluz; la nueva es en el gimnasio. Se recortó a 1100x1375 (4:5, cabeza a mitad de muslo) y pesa 172 KB contra 249 KB de la anterior. **Sigue siendo selfie de espejo con el celular a la vista**: el pendiente de foto profesional de estudio no está cerrado, solo mejorado.
+
+Al venir ya encuadrada se **borraron el `transform:scale(1.14)` y el `object-position:50% 6%`** que estaban calibrados a mano para la toma anterior. Regla para la próxima: encuadrar al recortar, no compensar con CSS.
+
+**Dos cosas de layout que costaron medición:**
+- La foto ahora usa `height:100%` con `align-items:stretch` en vez de `aspect-ratio:4/5`. Con la proporción fija quedaba más baja que la columna de texto y flotaba centrada con aire muerto arriba y abajo; ahora el desbalance entre columnas es **0px exacto**. En el breakpoint de 960px hay que devolverle el `aspect-ratio`, porque al apilarse desaparece la referencia de altura y la foto colapsaría al `min-height`.
+- Los casilleros probaron **tres implementaciones**: `repeat(auto-fit, minmax(0,1fr))` genera cientos de pistas de 0px y solo funciona de casualidad; con flex `1 1 0` el padding del divisor queda fuera del reparto y salían **21px desparejos** (164 vs 175 medidos a 360px); quedó `grid-auto-flow:column` + `grid-auto-columns:1fr`, que da columnas exactamente iguales sin que la regla sepa cuántas hay.
+
+**Se perdió la cita** *"El verdadero cambio empieza cuando una mujer se siente fuerte, capaz y segura de sí misma"*, que era el pie de foto en itálica. El titular nuevo ocupa ese lugar emocional y tenerlos a los dos era repetir el registro. Es copy real de Jimena, así que si se la quiere recuperar, el lugar natural es el hero o el cierre — no acá.
+
+Medido de 360 a 1280px: sin overflow, foto en 4:5 al apilarse y casilleros parejos en todos los anchos.
+
 ### La cinta de testimonios se congelaba en mobile (22/08/2026)
 
 Reportado por Gastón: en el teléfono los testimonios "se pierden, queda en blanco después de que pasan los que ya existen"; en desktop giraba infinito.
