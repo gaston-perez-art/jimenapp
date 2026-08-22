@@ -15,7 +15,13 @@
 
 **Duraciones de entrada:** hero `1.35s`–`1.6s` con recorrido de 14px; reveal general `1.5s` con recorrido de 34px; stagger de hijos `1.25s` con escalón de `.16s`.
 
-**Ritmo de fondos del recorrido:** blanco → dim → blanco → dim → **oscuro** → dim → blanco. La única sección oscura es "Cómo trabajo".
+**Ritmo de fondos del recorrido:** blanco → dim → blanco → dim → **oscuro** → dim → blanco → **footer dim**. La única sección oscura es "Cómo trabajo", y el footer se mantiene claro para no disputárselo: la caja de contacto que va justo arriba ya es el último momento fuerte de color (gradiente vino→bronce).
+
+## Páginas legales
+
+Tres páginas planas —`/aviso-legal/`, `/politica-de-privacidad/`, `/cookies/`— que **comparten `docs/legal.css`** en vez de llevar el CSS inline como el index. El criterio: inline es correcto para *una* página, donde un archivo aparte solo agrega un round-trip; con tres páginas iguales, inline garantiza que en la próxima pasada de paleta terminen diciendo cosas distintas. Los tokens de `legal.css` son un subconjunto de los del index — **si cambia la paleta, cambian los dos lados**.
+
+Su lenguaje propio, que el sitio no tenía: columna de texto a `68ch` (arriba de eso el ojo pierde el renglón al volver), header reducido a logo + "Volver al sitio" sin menú, caja `.aviso` con filo vino a la izquierda para lo que no puede pasar desapercibido, y la tabla de cookies apilada como tarjetas por debajo de 560px.
 
 ## Logo
 
@@ -118,7 +124,7 @@ De `contexto.md` y las convenciones del sitio:
 | `<title>` | "Jimena Ibañez — Recomposición corporal para mujeres +35" |
 | `favicon` | **no existe** — default del navegador |
 | `og:image` | foto directa (`jimena-sobre-mi.jpg`), no una pieza diseñada |
-| Analítica | GA4 `G-CNR32WF83Z`, con eventos `contacto_whatsapp` / `visita_instagram` vía `data-ga` |
+| Analítica | GA4 `G-CNR32WF83Z`. El atributo es `data-ga="canal_ubicacion"` y un mapa explícito traduce el canal al evento (`whatsapp`→`contacto_whatsapp`, `instagram`→`visita_instagram`, `tiktok`→`visita_tiktok`). **Un canal que no esté en el mapa no manda evento**, a propósito: antes caía por defecto en `visita_instagram` y la métrica mentía sin romperse |
 | Dominio | `entrenaconjime.com` (CNAME, Cloudflare DNS-only → GitHub Pages) |
 
 ## Archivos relacionados

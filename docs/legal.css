@@ -1,0 +1,243 @@
+/* ---------------------------------------------------------------------------
+   Estilos de las tres paginas legales: /aviso-legal/, /politica-de-privacidad/
+   y /cookies/.
+
+   Por que este archivo existe y el sitio sigue siendo un solo index.html:
+   el index tiene el CSS inline porque es UNA pagina, y ahi un archivo aparte
+   solo agregaria un round-trip. Aca son tres paginas que comparten exactamente
+   la misma hoja, asi que inline significaria triplicar los tokens y garantizar
+   que en la proxima pasada de paleta queden diciendo cosas distintas.
+
+   Los tokens son un subconjunto de los de index.html. Si cambia la paleta,
+   cambian los dos lados. La fuente de verdad es design-system.md.
+   --------------------------------------------------------------------------- */
+
+:root{
+  --ink:#241F26;
+  --ink-soft:#5B5460;
+  --paper:#FFFFFF;
+  --paper-dim:#FAF8F6;
+  --line:#E9E4DE;
+  --wine-900:#5C1F32;
+  --wine-600:#9D3A57;
+  --wine-500:#B14A67;
+  --bronze:#A9824A;
+  --bronze-text:#8A6636;
+  --r-md:14px;
+  --r-pill:999px;
+  --maxw:1180px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Archivo', sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block; max-width:100%;}
+:focus-visible{outline:2px solid var(--wine-600); outline-offset:3px;}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding-left:28px; padding-right:28px;}
+
+/* ---------- Header (mismo vidrio esmerilado que el sitio) ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,.93);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--line);
+}
+nav.wrap{display:flex; align-items:center; justify-content:space-between; height:66px; gap:16px;}
+.logo{
+  font-family:'Archivo', sans-serif;
+  font-weight:700; font-size:19px; letter-spacing:.01em;
+  color:var(--wine-900); text-decoration:none;
+}
+.logo span{color:var(--bronze);}
+/* Volver es la unica accion del header en estas paginas: quien entro aca vino
+   desde el footer y lo que necesita es el camino de vuelta, no el menu entero. */
+.volver{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:14.5px; font-weight:500;
+  color:var(--ink); text-decoration:none;
+  padding:11px 0;
+}
+.volver svg{width:16px; height:16px; stroke:var(--wine-600); fill:none; stroke-width:2;}
+.volver:hover{color:var(--wine-600);}
+
+/* ---------- Cuerpo del documento ---------- */
+.doc{padding:64px 0 88px;}
+/* 68ch: por encima de eso el ojo pierde el renglon al volver, y estos textos
+   son largos y densos por definicion. */
+.doc .wrap{max-width:calc(68ch + 56px);}
+
+.doc h1{
+  font-family:'Archivo', sans-serif;
+  font-weight:500; letter-spacing:-.02em; line-height:1.05;
+  font-size:clamp(32px, 5vw, 46px);
+  color:var(--wine-900);
+  margin:0;
+}
+.fecha{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--bronze-text);
+  margin:18px 0 0;
+}
+.entrada{
+  font-size:18px; line-height:1.65; color:var(--ink-soft);
+  margin:26px 0 0;
+  padding-bottom:34px;
+  border-bottom:1px solid var(--line);
+}
+
+.doc h2{
+  font-family:'Archivo', sans-serif;
+  font-weight:500; letter-spacing:-.02em; line-height:1.15;
+  font-size:24px;
+  color:var(--wine-900);
+  margin:52px 0 0;
+}
+.doc h3{
+  font-family:'Archivo', sans-serif;
+  font-weight:600; font-size:17px; line-height:1.3;
+  color:var(--ink);
+  margin:32px 0 0;
+}
+.doc p{margin:14px 0 0; color:var(--ink-soft); line-height:1.7;}
+.doc h2 + p, .doc h3 + p{margin-top:12px;}
+.doc strong{color:var(--ink); font-weight:600;}
+.doc a{color:var(--wine-600); text-decoration:underline; text-underline-offset:3px;}
+.doc a:hover{color:var(--wine-900);}
+.doc code{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:.9em;
+  background:var(--paper-dim);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:1px 6px;
+  color:var(--ink);
+}
+
+/* Vinetas redondas, nunca guiones: convencion escrita del proyecto. */
+.doc ul{list-style:none; margin:16px 0 0; padding:0; display:grid; gap:12px;}
+.doc li{position:relative; padding-left:22px; color:var(--ink-soft); line-height:1.7;}
+/* La vinieta comparte el line-height del <li> para que caiga sobre la misma
+   linea base que el primer renglon, en vez de flotar unos pixeles arriba. */
+.doc li::before{
+  content:"•";
+  position:absolute; left:4px; top:0;
+  color:var(--bronze); font-size:17px; line-height:1.7;
+}
+
+/* Caja para lo que no puede pasar desapercibido: que esto no reemplaza a un
+   medico, y como se ejercen los derechos sobre los datos. */
+.aviso{
+  margin:34px 0 0;
+  background:var(--paper-dim);
+  border:1px solid var(--line);
+  border-left:3px solid var(--wine-600);
+  border-radius:var(--r-md);
+  padding:24px 26px;
+}
+.aviso p{margin-top:10px;}
+.aviso p:first-child{margin-top:0;}
+.aviso strong{color:var(--wine-900);}
+
+table{
+  width:100%; border-collapse:collapse; margin:20px 0 0;
+  font-size:14.5px;
+}
+th, td{
+  text-align:left; vertical-align:top;
+  padding:12px 14px;
+  border-bottom:1px solid var(--line);
+  color:var(--ink-soft); line-height:1.6;
+}
+th{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:11px; font-weight:500; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--bronze-text);
+  border-bottom-color:var(--wine-500);
+  white-space:nowrap;
+}
+td:first-child{color:var(--ink); font-weight:500; white-space:nowrap;}
+/* La tabla de cookies es lo unico que puede desbordar a 360px. */
+.tabla-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+
+/* ---------- Footer reducido ---------- */
+footer{
+  background:var(--paper-dim);
+  border-top:1px solid var(--line);
+  padding:44px 0 0;
+}
+.flegal{display:flex; flex-wrap:wrap; gap:14px 30px; align-items:center;}
+.flegal a{
+  font-size:14.5px; color:var(--ink); text-decoration:none;
+  position:relative; padding:11px 0;
+}
+.flegal a[aria-current="page"]{color:var(--wine-600); font-weight:600;}
+.flegal a:hover{color:var(--wine-600);}
+.fbottom{
+  margin-top:24px;
+  border-top:1px solid var(--line);
+  padding-top:24px; padding-bottom:26px;
+}
+.fbottom p{margin:0; font-size:13px; color:var(--ink-soft);}
+
+@media (max-width:720px){
+  .wrap{padding-left:20px; padding-right:20px;}
+  .doc{padding:44px 0 64px;}
+  .entrada{font-size:16.5px;}
+  .doc h2{font-size:21px; margin-top:44px;}
+  .aviso{padding:22px 20px;}
+  .flegal{gap:0 26px;}
+  /* El logo es un link al home: sin esto mide 26px de alto, debajo del minimo
+     tocable de 44px. Es el mismo ajuste que ya tiene index.html en mobile. */
+  .logo{display:inline-block; padding:9px 0;}
+}
+
+/* La tabla de cookies apilada como tarjetas (<=560px).
+   Con scroll horizontal el documento no desborda, pero hay que arrastrar una
+   tabla de cuatro columnas para leer la duracion de una cookie, que es
+   justo el dato por el que alguien abre esta pagina. Cada fila pasa a ser
+   una tarjeta y el encabezado de columna se repite como etiqueta por celda. */
+@media (max-width:560px){
+  .tabla-scroll{overflow-x:visible;}
+  table, tbody, tr, td{display:block; width:100%;}
+  /* El thead se oculta a la vista pero sigue existiendo para el lector de
+     pantalla, que asi mantiene la relacion celda-encabezado. */
+  thead{
+    position:absolute; width:1px; height:1px;
+    margin:-1px; padding:0; overflow:hidden;
+    clip:rect(0 0 0 0); white-space:nowrap; border:0;
+  }
+  tr{
+    border:1px solid var(--line);
+    border-radius:var(--r-md);
+    background:var(--paper-dim);
+    padding:18px 20px;
+    margin-top:14px;
+  }
+  td{border:0; padding:0; white-space:normal;}
+  td + td{margin-top:12px;}
+  td::before{
+    content:attr(data-label);
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; font-weight:500;
+    letter-spacing:.1em; text-transform:uppercase;
+    color:var(--bronze-text);
+    margin-bottom:3px;
+  }
+}
+
+@media (max-width:400px){
+  .wrap{padding-left:16px; padding-right:16px;}
+  .logo{font-size:17px;}
+}

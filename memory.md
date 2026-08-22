@@ -354,6 +354,30 @@ Primera sesión con criterio explícito de **copywriting**, no solo de diseño. 
 
 **Verificación:** DOM medido en 14 anchos de 360px a 1440px — cero overflow horizontal, el claim nunca se parte, áreas táctiles de mobile en 46px mínimo. **El `resize_window` del navegador no funciona en este entorno** (queda fijo en 1440px): sirve el harness con iframe a ancho real, igual que en la pasada de mobile del 15/08.
 
+### Footer de cuatro columnas y tres páginas legales (21/08/2026)
+
+**Pedido de Gastón**, tomando como referencia de estructura el footer de `entrenadoranoeliarodriguezfit.com`, pero con la paleta y la tipografía de este sitio. El footer anterior era una sola línea: nombre a la izquierda, un link a Instagram a la derecha.
+
+**Cómo quedó:** cuatro columnas — marca (Método Raíz *by* Jimena Ibañez, bajada corta y las redes), Programas (ancla a `#servicios`), Otros servicios (consulta personalizada, que abre WhatsApp) y Legal (las tres páginas nuevas). Debajo, una barra con la línea de derechos reservados.
+
+**Fondo `--paper-dim`, no oscuro, y el motivo importa.** La referencia tiene el footer en color fuerte, pero acá arriba del footer está la caja de contacto con el gradiente vino→bronce, que es el último momento fuerte de color del recorrido. Un footer oscuro pegado abajo lo duplica y además le saca a "Cómo trabajo" el lugar de única sección oscura del sitio, que es una regla escrita. En dim, el recorrido cierra con la alternancia de siempre. **Se descartó también la onda decorativa** de la referencia: el sitio no tiene ningún elemento decorativo de ese tipo y habría sido el único.
+
+**Bug de medición que el footer nuevo destapó, y es el más importante de la sesión.** El handler de GA4 era un ternario: *si el `data-ga` empieza con "whatsapp" es contacto, si no es Instagram*. Con una sola red funcionaba. Pero **Jimena tiene TikTok**, y en cuanto entre ese link, cada clic a TikTok iba a llegar a GA4 disfrazado de visita a Instagram — la métrica mintiendo sin que nada se rompa a la vista, que es la peor clase de error para un dato que se mira una vez por mes. Ahora hay un mapa explícito `canal → evento` y **el canal desconocido no manda evento**, que es preferible a mandar uno falso. Es la misma trampa que la advertencia ya escrita sobre conservar `data-ga` al tocar los CTA: el riesgo del sitio no es que la medición se rompa, es que siga andando y mienta.
+
+**Las tres páginas legales** viven en `docs/aviso-legal/`, `docs/politica-de-privacidad/` y `docs/cookies/`, cada una como `index.html` adentro de su carpeta, para que la URL sea `/cookies/` y no `/cookies.html`.
+
+• **Comparten `docs/legal.css`, y eso no contradice la regla del archivo único.** El index tiene el CSS inline porque es *una* página, donde un archivo aparte solo agregaría un round-trip. Acá son tres páginas con exactamente la misma hoja: inline significaría triplicar los tokens y garantizar que en la próxima pasada de paleta terminen diciendo cosas distintas, que es el problema que este repo ya tuvo con los cuatro archivos de documentación.
+• **Orientadas a la ley 25.326 argentina, no al GDPR.** Encaja con la decisión ya tomada de no poner banner de cookies, y la página de cookies ahora la explica en vez de dejarla implícita: el banner lo exige el RGPD europeo, no la 25.326, y las únicas cookies del sitio son analíticas sin fines publicitarios.
+• **Los datos de salud tienen su propio bloque destacado en privacidad.** Son datos sensibles por el artículo 7 de la ley 25.326 y Jimena los recibe todo el tiempo por WhatsApp. Dice tres cosas: que se comparten voluntariamente y con consentimiento expreso, que no se publican ni se ceden nunca, y que nadie está obligado a darlos.
+• **El aviso legal aclara que esto no es asesoramiento médico** y que no reemplaza al médico ni al nutricionista, con la indicación explícita de consultar antes de empezar. Ya era un principio de marca escrito en `contexto.md`; ahora también está donde legalmente corresponde.
+• **No se inventó ningún dato que no esté en el repo.** No hay CUIT, ni domicilio, ni razón social, ni email: los textos están redactados para funcionar sin eso, con WhatsApp e Instagram como canales de contacto, que son los dos reales. Ver los pendientes abiertos abajo.
+
+**Lo que apareció midiendo a 360px**, que a ojo no se veía:
+
+• El **ícono de Instagram del footer medía 42px** de alto, dos por debajo del mínimo tocable del repo. Un círculo no puede estirarse a lo ancho para compensar, así que pasó a 44.
+• El **logo de las páginas legales medía 26px**. `index.html` ya tenía el `padding:8px 0` en mobile para esto; `legal.css` arrancó sin él.
+• La **tabla de cookies obligaba a arrastrar** para llegar a la columna de duración. El documento no desbordaba —el contenedor con `overflow-x` hacía su trabajo— así que el chequeo de overflow horizontal daba limpio igual. A ≤560px cada fila pasa a ser una tarjeta con el encabezado repetido como etiqueta, y el `<thead>` queda oculto a la vista pero disponible para el lector de pantalla. **Que no desborde no quiere decir que se pueda leer.**
+
 ### La pestaña oculta: por qué varias mediciones fueron falsas (21/08/2026)
 
 **Descubrimiento que invalida conclusiones anteriores y hay que tener presente siempre.** La pestaña que maneja el harness corre con `document.visibilityState === "hidden"`. Chrome, en una pestaña de segundo plano, **suspende el pintado, no entrega callbacks de `IntersectionObserver` y no descarga media**.
