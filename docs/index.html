@@ -563,6 +563,46 @@
      fondo de la tarjeta acompaña al texto en vez de quedar con aire muerto
      a la derecha. */
   .problema-uno{max-width:760px; margin:0 auto;}
+
+  /* ---------- 23/08/2026: los dolores pasan a seis tarjetas con icono ----------
+     Reemplaza a la tarjeta unica con lista de bullets. Referencia visual que
+     trajo Jimena: grilla de 2x3, icono en un azulejo redondeado a la
+     izquierda, linea vertical de separacion, y el texto a la derecha.
+
+     Por que <ul>/<li> y no <div>: siguen siendo una lista de seis cosas del
+     mismo peso. Que ahora tengan icono y caja es presentacion; el lector de
+     pantalla tiene que seguir escuchando "lista de 6 elementos". Los iconos
+     van con aria-hidden porque no agregan informacion: cada uno repite lo que
+     su texto ya dice. */
+  .dolores{
+    list-style:none; margin:0 auto; padding:0; max-width:1000px;
+    display:grid; grid-template-columns:1fr 1fr; gap:18px;
+  }
+  /* `align-items:stretch` (el default de grid) es lo que empareja las dos
+     tarjetas de cada fila, y dentro de la tarjeta es lo que permite que la
+     linea divisoria llegue de arriba abajo. Si se pone `center` aca, la
+     divisoria se encoge al alto del texto y las filas quedan desparejas. */
+  .dolor{
+    display:flex; align-items:stretch; gap:0;
+    background:var(--card); border:1px solid var(--line);
+    border-radius:var(--r-lg); padding:20px 24px;
+    box-shadow:var(--shadow-sm);
+  }
+  .dolor-ico{
+    flex:0 0 auto; align-self:center;
+    width:64px; height:64px; border-radius:17px;
+    background:var(--paper-dim); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* `currentColor` en los trazos: el color del icono se define una sola vez
+     aca y no seis veces adentro de cada SVG. */
+  .dolor-ico svg{width:32px; height:32px; color:var(--wine-600);}
+  .dolor p{
+    margin:0 0 0 20px; padding-left:20px;
+    border-left:1px solid var(--line);
+    display:flex; align-items:center;
+    font-size:16px; line-height:1.55; color:var(--ink);
+  }
   .bloque-si{
     display:flex; flex-direction:column;
     background:var(--wine-100); border-radius:var(--r-lg);
@@ -1755,6 +1795,14 @@
     /* Las dos tarjetas se apilan: lado a lado, a media pantalla de un
        telefono, no entra una linea legible. */
     .problema-par{grid-template-columns:1fr; gap:16px;}
+    /* Dos columnas de tarjeta con icono no entran: a 360px cada una queda en
+       ~160px y el texto sale de tres palabras por renglon. Una sola columna,
+       y el azulejo baja de 64 a 54 para que el texto se quede con el ancho. */
+    .dolores{grid-template-columns:1fr; gap:14px;}
+    .dolor{padding:16px 18px; border-radius:var(--r-md);}
+    .dolor-ico{width:54px; height:54px; border-radius:15px;}
+    .dolor-ico svg{width:27px; height:27px;}
+    .dolor p{margin-left:16px; padding-left:16px; font-size:15.5px;}
     .bloque-si{padding:28px 24px 26px; border-radius:var(--r-md);}
     .bloque-si li{font-size:15.5px;}
     .tira-no{padding:24px 24px 26px; border-radius:var(--r-md);}
@@ -2001,18 +2049,101 @@
            otra pregunta, que ademas llegaba antes de que el sitio contara que
            ofrece. El par no se borro: esta guardado en el comentario que hay
            arriba de #contacto, listo para reubicar cuando se decida donde. -->
-      <div class="problema-uno">
-      <div class="bloque-si reveal">
-        <ul class="reveal stagger">
-          <li>Comés bien, te esforzás, y la balanza no se mueve.</li>
-          <li>Probaste dietas, apps, planes gratis y clases colectivas, y siempre terminás donde empezaste.</li>
-          <li>Sentís que tu cuerpo ya no responde como antes de los 35.</li>
-          <li>La comida te genera ansiedad y culpa, y estás cansada de vivir con ese ruido mental todo el día.</li>
-          <li>No tenés tiempo para entrenar cinco días ni para cocinar dos horas.</li>
-          <li>Y lo peor: dejaste de confiar en vos misma.</li>
-        </ul>
-      </div>
-      </div>
+      <!-- Los seis iconos son geometricos a proposito: circulos, rectangulos,
+           arcos y quiebres de linea. Ninguno intenta dibujar una figura
+           humana. Esta escrito mas arriba en memory.md y ya costo una vez:
+           los cinco intentos de silueta femenina en SVG a mano salieron
+           florero, pictograma de baño publico, parentesis y spa. Para un
+           DIBUJO hay que ir a IA de imagen y derivar el SVG de ahi; el SVG a
+           mano sirve para lo geometrico. La referencia que trajo Jimena tenia
+           dos siluetas (el cuerpo con reloj y el corazon con figura): se
+           reemplazaron por la curva que cae y por el corazon solo, que dicen
+           lo mismo sin ese riesgo. -->
+      <ul class="dolores reveal stagger">
+
+        <li class="dolor">
+          <span class="dolor-ico" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="7" width="24" height="19" rx="4.5"/>
+              <circle cx="16" cy="16.5" r="5.5"/>
+              <path d="M16 16.5 18.9 13.2"/>
+              <path d="M9.5 26v1.6M22.5 26v1.6"/>
+            </svg>
+          </span>
+          <p>Comés bien, te esforzás, y la balanza no se mueve.</p>
+        </li>
+
+        <li class="dolor">
+          <span class="dolor-ico" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 16a10 10 0 0 1 16.6-7.5"/>
+              <path d="M18.2 9.4 22.9 8.7 23.4 4"/>
+              <path d="M26 16a10 10 0 0 1-16.6 7.5"/>
+              <path d="M13.8 22.6 9.1 23.3 8.6 28"/>
+            </svg>
+          </span>
+          <p>Probaste dietas, apps, planes gratis y clases colectivas, y siempre terminás donde empezaste.</p>
+        </li>
+
+        <li class="dolor">
+          <span class="dolor-ico" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 6v20h20"/>
+              <path d="M9.5 11.5 15 16.5 19 14 25.5 21.5"/>
+              <circle cx="25.5" cy="21.5" r="1.9" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          <p>Sentís que tu cuerpo ya no responde como antes de los 35.</p>
+        </li>
+
+        <li class="dolor">
+          <span class="dolor-ico" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <!-- Espiral que entra hacia el centro: el pensamiento que da
+                   vueltas. Se probo antes un circulo con dos zigzags adentro
+                   y se leia como una carita mareada, no como ansiedad: un
+                   circulo con cualquier cosa adentro se lee como una cara. -->
+              <path d="M26 16A10 10 0 0 1 6 16A8.5 8.5 0 0 1 23 16A7 7 0 0 1 9 16A5.5 5.5 0 0 1 20 16A4 4 0 0 1 12 16A2.5 2.5 0 0 1 17 16"/>
+            </svg>
+          </span>
+          <p>La comida te genera ansiedad y culpa, y estás cansada de vivir con ese ruido mental todo el día.</p>
+        </li>
+
+        <li class="dolor">
+          <span class="dolor-ico" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4.5" y="7" width="23" height="20" rx="3.5"/>
+              <path d="M4.5 13h23"/>
+              <path d="M11 4.5v5M21 4.5v5"/>
+              <circle cx="11.5" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>
+              <circle cx="16" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>
+              <circle cx="20.5" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>
+              <circle cx="11.5" cy="23" r="1.5" fill="currentColor" stroke="none"/>
+              <circle cx="16" cy="23" r="1.5" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          <p>No tenés tiempo para entrenar cinco días ni para cocinar dos horas.</p>
+        </li>
+
+        <li class="dolor">
+          <span class="dolor-ico" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 25.6C10.4 21.5 6.9 18.2 6.9 14.1c0-3.1 2.3-5.4 5.2-5.4 1.8 0 3.3.9 3.9 2.2.6-1.3 2.1-2.2 3.9-2.2 2.9 0 5.2 2.3 5.2 5.4 0 4.1-3.5 7.4-9.1 11.5Z"/>
+              <!-- La grieta. Antes era una linea vertical recta y parecia un
+                   error de trazado; en quiebre se lee como corazon partido. -->
+              <path d="M16.6 11.2 14.3 15.4 17.4 17.6 15.2 21.6"/>
+            </svg>
+          </span>
+          <p>Y lo peor: dejaste de confiar en vos misma.</p>
+        </li>
+
+      </ul>
 
       <div class="remate reveal">
         <hr class="linea">

@@ -636,7 +636,7 @@ Dos detalles del avatar sobre este fondo: el degrade vino→bronce de `.t-av` **
 
 ### 23/08/2026 — "¿Te suena algo de esto?" pasa a una sola tarjeta, y el filtro sale de ahí
 
-**Qué cambió, pedido de Jimena.** La sección tenía dos tarjetas lado a lado ("Es para vos si… / No es para vos si…") y pasa a **una sola tarjeta con la lista de dolores**. El criterio: esta sección hace *una* cosa —que la persona se reconozca— y "¿a quién le sirve el programa?" es otra pregunta, que además llegaba antes de que el sitio contara qué ofrece y cuánto sale. La bajada dejó de anunciar el filtro ("Antes de contarte cómo trabajo, prefiero que sepas si esto es para vos") y ahora es el gancho de lectura: *"Si te cuidás, te movés y aun así tu cuerpo no cambia, seguí leyendo."*
+**Qué cambió, pedido de Jimena.** La sección tenía dos tarjetas lado a lado ("Es para vos si… / No es para vos si…") y pasa a **la lista de dolores**. Ese mismo día la lista pasó por dos formas: primero una tarjeta única con bullets, y después —con una referencia visual que trajo Jimena— **seis tarjetas con ícono en grilla de 2×3**, que es como quedó (ver más abajo). El criterio: esta sección hace *una* cosa —que la persona se reconozca— y "¿a quién le sirve el programa?" es otra pregunta, que además llegaba antes de que el sitio contara qué ofrece y cuánto sale. La bajada dejó de anunciar el filtro ("Antes de contarte cómo trabajo, prefiero que sepas si esto es para vos") y ahora es el gancho de lectura: *"Si te cuidás, te movés y aun así tu cuerpo no cambia, seguí leyendo."*
 
 **Esto revierte el pedido de Gastón del 22/08** ("dos tarjetas verticales del mismo tamaño"), que tiene apenas un día. La tensión que él quería tapar —6 items contra 4— desaparece sola al quedar una sola lista, pero **conviene que lo sepa antes de que lo vea en vivo**.
 
@@ -651,6 +651,25 @@ Dos detalles del avatar sobre este fondo: el degrade vino→bronce de `.t-av` **
 **No se agregó la volanta "El Desafío"** que venía en el material de referencia. El 22/08 se sacó la volanta "SOBRE MÍ" por el motivo opuesto —no aportaba nada que el titular no dijera— y "¿Te suena algo de esto?" ya dice de qué va la sección. Si se quiere volanta, es una decisión de sistema y van todas o ninguna.
 
 **`.problema-uno` limita la tarjeta a 760px** y no hereda los 1000px de `.problema-par`: a ese ancho los renglones pasaban de 100 caracteres. Medido de 360px a 1280px, sin desborde en ningún ancho.
+
+#### Los dolores pasan a seis tarjetas con ícono (2×3)
+
+Jimena trajo una referencia visual: grilla de dos columnas, ícono en un azulejo redondeado a la izquierda, línea vertical, texto a la derecha. Es la forma final de la sección.
+
+**Sigue siendo `<ul>`/`<li>`.** Que ahora tengan ícono y caja es presentación: son seis cosas del mismo peso y un lector de pantalla tiene que seguir escuchando "lista de 6 elementos". Los `<svg>` van con `aria-hidden` porque no agregan información, cada uno repite lo que su texto ya dice.
+
+**`align-items:stretch` es lo que hace que funcione**, y es contraintuitivo: empareja las dos tarjetas de cada fila *y* permite que la línea divisoria llegue de arriba abajo. Si se pone `center` en `.dolor`, la divisoria se encoge al alto del texto y las filas quedan desparejas. El ícono se centra solo, con `align-self:center`.
+
+**Los seis íconos son geométricos a propósito** —círculos, rectángulos, arcos, quiebres de línea— y **ninguno intenta dibujar una figura humana**. La referencia traía dos siluetas femeninas (un cuerpo con reloj y un corazón con figura adentro): se reemplazaron por una curva que cae y por un corazón partido, que dicen lo mismo sin ese riesgo. El motivo está escrito más arriba en este archivo y ya costó una vez: los cinco intentos de silueta femenina en SVG a mano salieron florero, pictograma de baño público, paréntesis y spa. **Para un dibujo hay que ir a IA de imagen; el SVG a mano sirve para lo geométrico.**
+
+**Dos íconos hubo que rehacerlos, y solo se vio al renderizarlos grandes** —la lección de siempre con SVG a mano, que a 32px todo parece pasable:
+
+- **"Ruido mental" era un círculo con dos zigzags adentro y se leía como una carita mareada.** La regla que sale de acá: *un círculo con cualquier cosa adentro se lee como una cara*. Se reemplazó por una espiral que entra hacia el centro, construida con seis arcos de radio decreciente.
+- **El corazón llevaba una línea vertical recta y parecía un error de trazado.** En quiebre (zigzag) se lee como corazón partido, que es lo que dice el texto.
+
+**Método que conviene repetir:** para juzgarlos se inyectó un overlay temporal en la página que clona los seis SVG a 96px. A tamaño real es imposible ver que un ícono no se entiende.
+
+**Medido:** 6 tarjetas, 6 SVG renderizando, filas emparejadas (116/116, 116/116, 105/105 px) y sin desborde horizontal. En `≤720px` pasa a una columna con el azulejo de 64 a 54px; a 360px la columna de texto queda en 197px. **Ojo con el método de medición:** encoger `.wrap` NO dispara los media queries, que leen el ancho del *viewport* — la primera pasada dio "2 columnas a 360px" y era un falso positivo. Se verificó leyendo las reglas del CSSOM y aplicándolas a mano.
 
 #### Bug preexistente encontrado y arreglado: los bullets nunca volvían a su lugar
 
