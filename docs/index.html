@@ -596,7 +596,11 @@
   }
   /* `currentColor` en los trazos: el color del icono se define una sola vez
      aca y no seis veces adentro de cada SVG. */
-  .dolor-ico svg{width:32px; height:32px; color:var(--wine-600);}
+  .dolor-ico svg{width:34px; height:34px; color:var(--wine-600);}
+  /* El reloj del calendario se recorta del calendario con un relleno del
+     color del azulejo, en vez de dejar que se crucen los dos trazos. Va por
+     CSS y no hardcodeado en el SVG para que siga al token si cambia el fondo. */
+  .dolor-ico .ico-cut{fill:var(--paper-dim);}
   .dolor p{
     margin:0 0 0 20px; padding-left:20px;
     border-left:1px solid var(--line);
@@ -1801,7 +1805,7 @@
     .dolores{grid-template-columns:1fr; gap:14px;}
     .dolor{padding:16px 18px; border-radius:var(--r-md);}
     .dolor-ico{width:54px; height:54px; border-radius:15px;}
-    .dolor-ico svg{width:27px; height:27px;}
+    .dolor-ico svg{width:29px; height:29px;}
     .dolor p{margin-left:16px; padding-left:16px; font-size:15.5px;}
     .bloque-si{padding:28px 24px 26px; border-radius:var(--r-md);}
     .bloque-si li{font-size:15.5px;}
@@ -2057,87 +2061,110 @@
            DIBUJO hay que ir a IA de imagen y derivar el SVG de ahi; el SVG a
            mano sirve para lo geometrico. La referencia que trajo Jimena tenia
            dos siluetas (el cuerpo con reloj y el corazon con figura): se
-           reemplazaron por la curva que cae y por el corazon solo, que dicen
-           lo mismo sin ese riesgo. -->
+           reemplazaron por la llama del metabolismo y por el corazon
+           partido, que dicen lo mismo sin ese riesgo. -->
       <ul class="dolores reveal stagger">
-
+        <!-- Balanza vista DESDE ARRIBA: plataforma cuadrada, arco de la
+             escala y visor con la aguja en linea plana, que es el dolor.
+             Dos intentos fallados antes: con dial se leia caja fuerte, y de
+             frente y apaisada con patas se leia tostadora. -->
         <li class="dolor">
           <span class="dolor-ico" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="7" width="24" height="19" rx="4.5"/>
-              <circle cx="16" cy="16.5" r="5.5"/>
-              <path d="M16 16.5 18.9 13.2"/>
-              <path d="M9.5 26v1.6M22.5 26v1.6"/>
+              <rect x="5" y="5" width="22" height="22" rx="4.5"/>
+              <path d="M10.6 13.4a5.6 5.6 0 0 1 10.8 0"/>
+              <path d="M16 13.2v-2.4"/>
+              <rect x="11.6" y="18.4" width="8.8" height="5" rx="1.6"/>
+              <path d="M13.8 20.9h4.4"/>
             </svg>
           </span>
           <p>Comés bien, te esforzás, y la balanza no se mueve.</p>
         </li>
 
+        <!-- Ciclo cerrado con el punto de partida marcado: el punto es
+             literalmente "donde empezaste". -->
         <li class="dolor">
           <span class="dolor-ico" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 16a10 10 0 0 1 16.6-7.5"/>
               <path d="M18.2 9.4 22.9 8.7 23.4 4"/>
               <path d="M26 16a10 10 0 0 1-16.6 7.5"/>
               <path d="M13.8 22.6 9.1 23.3 8.6 28"/>
+              <circle cx="6" cy="16" r="2.1" fill="currentColor" stroke="none"/>
             </svg>
           </span>
           <p>Probaste dietas, apps, planes gratis y clases colectivas, y siempre terminás donde empezaste.</p>
         </li>
 
+        <!-- Llama con llama interior: el metabolismo, que es de lo que habla
+             el texto. Dos intentos fallados antes: una curva de linea que
+             baja era un grafico y no un cuerpo, y un tablero con aguja se
+             leia como un amanecer sobre el horizonte por la linea de base. -->
         <li class="dolor">
           <span class="dolor-ico" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 6v20h20"/>
-              <path d="M9.5 11.5 15 16.5 19 14 25.5 21.5"/>
-              <circle cx="25.5" cy="21.5" r="1.9" fill="currentColor" stroke="none"/>
+              <path d="M16 27.8c-4.5 0-8.1-3.2-8.1-7.4 0-5.5 5.8-7.7 5.2-14.2 3.4 1.8 5.8 5.3 5.8 8.7 1-1 1.4-2.6 1.4-2.6 2.4 2 3.9 4.9 3.9 8.1 0 4.2-3.7 7.4-8.2 7.4Z"/>
+              <path d="M16 27.8c-2.1 0-3.9-1.6-3.9-3.6 0-2.7 2.8-3.7 2.5-6.8 1.6.9 2.7 2.6 2.7 4.2.5-.5.7-1.3.7-1.3 1.1 1 1.8 2.4 1.8 3.8 0 2.1-1.7 3.6-3.8 3.6Z"/>
             </svg>
           </span>
           <p>Sentís que tu cuerpo ya no responde como antes de los 35.</p>
         </li>
 
+        <!-- Nube de pensamiento con la espiral adentro. La espiral sola era
+             muy poca cosa; y un circulo con algo adentro se lee como cara. -->
         <li class="dolor">
           <span class="dolor-ico" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
-              <!-- Espiral que entra hacia el centro: el pensamiento que da
-                   vueltas. Se probo antes un circulo con dos zigzags adentro
-                   y se leia como una carita mareada, no como ansiedad: un
-                   circulo con cualquier cosa adentro se lee como una cara. -->
-              <path d="M26 16A10 10 0 0 1 6 16A8.5 8.5 0 0 1 23 16A7 7 0 0 1 9 16A5.5 5.5 0 0 1 20 16A4 4 0 0 1 12 16A2.5 2.5 0 0 1 17 16"/>
+              <path d="M9.6 21.4A4.6 4.6 0 0 1 10.4 12.3 5.9 5.9 0 0 1 21.3 10.6 5 5 0 0 1 22.6 21.4Z"/>
+              <path d="M20 15.9A4 4 0 0 1 12 15.9A3.1 3.1 0 0 1 18.2 15.9A2.2 2.2 0 0 1 13.8 15.9A1.3 1.3 0 0 1 16.4 15.9"/>
+              <circle cx="11.4" cy="24.6" r="1.7"/>
+              <circle cx="7.9" cy="27.6" r="1.1"/>
             </svg>
           </span>
           <p>La comida te genera ansiedad y culpa, y estás cansada de vivir con ese ruido mental todo el día.</p>
         </li>
 
+        <!-- Calendario + reloj: los dias que no tenes y las horas que no
+             tenes, que son las dos cosas que dice el texto. El circulo del
+             reloj se recorta del calendario con un relleno del color del
+             azulejo (.ico-cut), asi no quedan lineas cruzadas. -->
         <li class="dolor">
           <span class="dolor-ico" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4.5" y="7" width="23" height="20" rx="3.5"/>
-              <path d="M4.5 13h23"/>
-              <path d="M11 4.5v5M21 4.5v5"/>
-              <circle cx="11.5" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>
-              <circle cx="16" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>
-              <circle cx="20.5" cy="18.5" r="1.5" fill="currentColor" stroke="none"/>
-              <circle cx="11.5" cy="23" r="1.5" fill="currentColor" stroke="none"/>
-              <circle cx="16" cy="23" r="1.5" fill="currentColor" stroke="none"/>
+              <rect x="3" y="6.4" width="17" height="17.2" rx="2.8"/>
+              <path d="M3 11.6h17"/>
+              <path d="M8 4.2v4.4M15 4.2v4.4"/>
+              <circle cx="7.4" cy="15.4" r="1.15" fill="currentColor" stroke="none"/>
+              <circle cx="11.5" cy="15.4" r="1.15" fill="currentColor" stroke="none"/>
+              <circle cx="15.6" cy="15.4" r="1.15" fill="currentColor" stroke="none"/>
+              <circle cx="7.4" cy="19.6" r="1.15" fill="currentColor" stroke="none"/>
+              <circle cx="11.5" cy="19.6" r="1.15" fill="currentColor" stroke="none"/>
+              <circle class="ico-cut" cx="23.6" cy="22.6" r="7.1" stroke="none"/>
+              <circle cx="23.6" cy="22.6" r="5.9"/>
+              <path d="M23.6 18.9v3.7l2.5 1.6"/>
             </svg>
           </span>
           <p>No tenés tiempo para entrenar cinco días ni para cocinar dos horas.</p>
         </li>
 
+        <!-- Corazon partido de verdad: dos mitades separadas por el quiebre,
+             cada una corrida 1px. Antes era un corazon entero con una raya
+             adentro y la raya parecia un error de trazado. -->
         <li class="dolor">
           <span class="dolor-ico" aria-hidden="true">
-            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 25.6C10.4 21.5 6.9 18.2 6.9 14.1c0-3.1 2.3-5.4 5.2-5.4 1.8 0 3.3.9 3.9 2.2.6-1.3 2.1-2.2 3.9-2.2 2.9 0 5.2 2.3 5.2 5.4 0 4.1-3.5 7.4-9.1 11.5Z"/>
-              <!-- La grieta. Antes era una linea vertical recta y parecia un
-                   error de trazado; en quiebre se lee como corazon partido. -->
-              <path d="M16.6 11.2 14.3 15.4 17.4 17.6 15.2 21.6"/>
+              <g transform="translate(-1.1 0)">
+                <path d="M16 10.4c-.7-1.1-2-1.8-3.5-1.8-2.9 0-5.2 2.3-5.2 5.4 0 4.1 3.5 7.4 8.7 11.5L14.4 21.4 17.2 17.3 13.7 14.9Z"/>
+              </g>
+              <g transform="translate(1.1 0)">
+                <path d="M16 10.4c.7-1.1 2-1.8 3.5-1.8 2.9 0 5.2 2.3 5.2 5.4 0 4.1-3.5 7.4-8.7 11.5L14.4 21.4 17.2 17.3 13.7 14.9Z"/>
+              </g>
             </svg>
           </span>
           <p>Y lo peor: dejaste de confiar en vos misma.</p>

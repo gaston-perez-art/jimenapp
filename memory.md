@@ -660,17 +660,26 @@ Jimena trajo una referencia visual: grilla de dos columnas, ícono en un azulejo
 
 **`align-items:stretch` es lo que hace que funcione**, y es contraintuitivo: empareja las dos tarjetas de cada fila *y* permite que la línea divisoria llegue de arriba abajo. Si se pone `center` en `.dolor`, la divisoria se encoge al alto del texto y las filas quedan desparejas. El ícono se centra solo, con `align-self:center`.
 
-**Los seis íconos son geométricos a propósito** —círculos, rectángulos, arcos, quiebres de línea— y **ninguno intenta dibujar una figura humana**. La referencia traía dos siluetas femeninas (un cuerpo con reloj y un corazón con figura adentro): se reemplazaron por una curva que cae y por un corazón partido, que dicen lo mismo sin ese riesgo. El motivo está escrito más arriba en este archivo y ya costó una vez: los cinco intentos de silueta femenina en SVG a mano salieron florero, pictograma de baño público, paréntesis y spa. **Para un dibujo hay que ir a IA de imagen; el SVG a mano sirve para lo geométrico.**
+**Los seis íconos son geométricos a propósito** —círculos, rectángulos, arcos, quiebres de línea— y **ninguno intenta dibujar una figura humana**. La referencia traía dos siluetas femeninas (un cuerpo con reloj y un corazón con figura adentro): se reemplazaron por la llama del metabolismo y por el corazón partido, que dicen lo mismo sin ese riesgo. El motivo está escrito más arriba en este archivo y ya costó una vez: los cinco intentos de silueta femenina en SVG a mano salieron florero, pictograma de baño público, paréntesis y spa. **Para un dibujo hay que ir a IA de imagen; el SVG a mano sirve para lo geométrico.**
 
-**Dos íconos hubo que rehacerlos, y solo se vio al renderizarlos grandes** —la lección de siempre con SVG a mano, que a 32px todo parece pasable:
+**El set de íconos se rehízo entero, y hubo cuatro descartes en total.** Jimena rechazó la primera tanda por dos motivos que conviene tener juntos: *"no se entiende qué son"* y *"demasiado simples"*. Eran primitivas geométricas planas (rectángulo, arco, línea) y el problema real era que la metáfora no llegaba al texto. La segunda tanda subió el detalle y, sobre todo, **cambió de metáfora**: el ícono dejó de ilustrar la categoría y pasó a ilustrar *el dolor concreto de esa línea*.
 
-- **"Ruido mental" era un círculo con dos zigzags adentro y se leía como una carita mareada.** La regla que sale de acá: *un círculo con cualquier cosa adentro se lee como una cara*. Se reemplazó por una espiral que entra hacia el centro, construida con seis arcos de radio decreciente.
-- **El corazón llevaba una línea vertical recta y parecía un error de trazado.** En quiebre (zigzag) se lee como corazón partido, que es lo que dice el texto.
+Set final: **balanza desde arriba** (con la aguja del visor en línea plana, que ES "no se mueve") · **ciclo con el punto de partida marcado** (el punto es literalmente "donde empezaste") · **llama con llama interior** (el metabolismo) · **nube de pensamiento con espiral y burbujas** · **calendario con reloj** (los días y las horas que no tenés, las dos cosas que dice el texto) · **corazón partido en dos mitades**.
 
-**Método que conviene repetir:** para juzgarlos se inyectó un overlay temporal en la página que clona los seis SVG a 96px. A tamaño real es imposible ver que un ícono no se entiende.
+**Los cuatro dibujos que se descartaron, con lo que enseñó cada uno.** Todos parecían pasables a 32px y se cayeron al verlos a 78px:
 
-**Medido:** 6 tarjetas, 6 SVG renderizando, filas emparejadas (116/116, 116/116, 105/105 px) y sin desborde horizontal. En `≤720px` pasa a una columna con el azulejo de 64 a 54px; a 360px la columna de texto queda en 197px. **Ojo con el método de medición:** encoger `.wrap` NO dispara los media queries, que leen el ancho del *viewport* — la primera pasada dio "2 columnas a 360px" y era un falso positivo. Se verificó leyendo las reglas del CSSOM y aplicándolas a mano.
+- **Círculo con dos zigzags adentro** (ruido mental) → se leía como **carita mareada**. Regla general: *un círculo con cualquier cosa adentro se lee como una cara.*
+- **Corazón con una línea vertical recta** → la línea parecía **un error de trazado**. En quiebre, y con las dos mitades separadas 1px cada una, se lee como corazón partido.
+- **Rectángulo apaisado con visor y patas** (balanza) → se leía como **tostadora**. Los electrodomésticos comparten silueta: caja redondeada + ventana. Se resolvió cambiando el punto de vista, no el detalle: **desde arriba** la balanza no se parece a nada más.
+- **Tablero con aguja** (el cuerpo que no responde) → la línea de base debajo del arco lo convertía en **un amanecer sobre el horizonte**. Antes de eso, una curva de línea que baja: era un gráfico, no un cuerpo.
 
+**La regla que sale de las cuatro:** el riesgo no está en el trazo sino en la **silueta general**. Antes de dibujar conviene preguntarse a qué otra cosa se parece el contorno.
+
+**Método que conviene repetir, y que fue lo único que sirvió:** inyectar un overlay temporal en la página que clona los seis SVG a 78px dentro de un azulejo del mismo color. A tamaño real es imposible ver que un ícono no se entiende, y es exactamente el error que ya está documentado más arriba con las siluetas femeninas.
+
+**Detalle técnico:** el reloj del calendario se recorta del calendario con un círculo relleno del color del azulejo (`.ico-cut`), en vez de dejar que se crucen los dos trazos. El relleno va por CSS (`fill:var(--paper-dim)`) y no hardcodeado en el SVG, así sigue al token si cambia el fondo. Verificado que el color del recorte y el del azulejo coinciden.
+
+**Medido:** 6 tarjetas, 6 SVG renderizando a 34px, filas emparejadas (116/116, 116/116, 105/105 px) y sin desborde horizontal. En `≤720px` pasa a una columna con el azulejo de 64 a 54px; a 360px la columna de texto queda en 197px. **Ojo con el método de medición:** encoger `.wrap` NO dispara los media queries, que leen el ancho del *viewport* — la primera pasada dio "2 columnas a 360px" y era un falso positivo. Se verificó leyendo las reglas del CSSOM y aplicándolas a mano.
 #### Bug preexistente encontrado y arreglado: los bullets nunca volvían a su lugar
 
 Los seis items de `.bloque-si` **aparecían con el fade pero se quedaban 16px más abajo para siempre**. El movimiento de subida —el motivo entero del stagger que se calibró el 22/08— no ocurría nunca.
