@@ -634,6 +634,30 @@ Dos detalles del avatar sobre este fondo: el degrade vino→bronce de `.t-av` **
 
 **Nota de método:** `qa-local.py` no corrió porque en la máquina de Jimena no hay Python instalado. Se levantó un servidor equivalente en PowerShell, sin versionarlo. Si esto se repite, conviene decidir si el script de QA pasa a tener una variante que no dependa de Python.
 
+### 23/08/2026 — "¿Te suena algo de esto?" pasa a una sola tarjeta, y el filtro sale de ahí
+
+**Qué cambió, pedido de Jimena.** La sección tenía dos tarjetas lado a lado ("Es para vos si… / No es para vos si…") y pasa a **una sola tarjeta con la lista de dolores**. El criterio: esta sección hace *una* cosa —que la persona se reconozca— y "¿a quién le sirve el programa?" es otra pregunta, que además llegaba antes de que el sitio contara qué ofrece y cuánto sale. La bajada dejó de anunciar el filtro ("Antes de contarte cómo trabajo, prefiero que sepas si esto es para vos") y ahora es el gancho de lectura: *"Si te cuidás, te movés y aun así tu cuerpo no cambia, seguí leyendo."*
+
+**Esto revierte el pedido de Gastón del 22/08** ("dos tarjetas verticales del mismo tamaño"), que tiene apenas un día. La tensión que él quería tapar —6 items contra 4— desaparece sola al quedar una sola lista, pero **conviene que lo sepa antes de que lo vea en vivo**.
+
+**El par no se borró: está comentado en `docs/index.html`, justo arriba de `#contacto`.** Ahí es donde más sentido hace si vuelve —después del precio, "¿esto es para mí?" es la pregunta que queda abierta— pero la ubicación la decide Jimena. Todo el CSS de `.problema-par`, `.bloque-si` y `.tira-no` sigue entero, así que reactivarlo es descomentar.
+
+**Trampa anotada para cuando se reactive:** la columna "es para vos si…" es casi palabra por palabra la lista de dolores que ahora vive en `#problema`. Si vuelve tal cual, la página dice lo mismo dos veces. Antes de descomentar hay que reescribir esa columna en términos de **encaje** (qué espera, cuánto tiempo puede darle, qué busca), que es lo que un filtro al lado del precio tiene que responder.
+
+**Sobre la copy:** el texto que trajo Jimena venía en español peninsular ("te cuidas", "báscula", "has probado", "ti misma"). Se pasó entero a voseo y a vocabulario rioplatense ("te cuidás", "balanza", "probaste", "vos misma"), como el resto del sitio. Se sumó un dolor que antes no estaba y que es el más fuerte de la lista: *"Y lo peor: dejaste de confiar en vos misma."*
+
+**No se agregó la volanta "El Desafío"** que venía en el material de referencia. El 22/08 se sacó la volanta "SOBRE MÍ" por el motivo opuesto —no aportaba nada que el titular no dijera— y "¿Te suena algo de esto?" ya dice de qué va la sección. Si se quiere volanta, es una decisión de sistema y van todas o ninguna.
+
+**`.problema-uno` limita la tarjeta a 760px** y no hereda los 1000px de `.problema-par`: a ese ancho los renglones pasaban de 100 caracteres. Medido de 360px a 1280px, sin desborde en ningún ancho.
+
+#### Bug preexistente encontrado y arreglado: los bullets nunca volvían a su lugar
+
+Los seis items de `.bloque-si` **aparecían con el fade pero se quedaban 16px más abajo para siempre**. El movimiento de subida —el motivo entero del stagger que se calibró el 22/08— no ocurría nunca.
+
+La causa es de especificidad, otra vez: la regla que fija el punto de partida es `.has-js .bloque-si ul.reveal.stagger > li` **(0,4,2)** y la regla general del sitio que los devuelve a su lugar es `.has-js .reveal.stagger.in-view > *` **(0,4,0)**. Los dos nombres de elemento (`ul`, `li`) alcanzan para que la primera le gane a la segunda, así que `transform:none` no se aplicaba nunca.
+
+**No se veía a ojo** porque los seis quedan corridos exactamente lo mismo y la lista se lee pareja. Apareció midiendo el `transform` computado contra el de otra `.reveal.stagger` del sitio (`.programa-feats`), que sí daba `none`. Es el mismo tipo de error que el de las barras del proceso el 22/08: **una regla larga y específica ganándole en silencio a la corta que la tenía que corregir.** Van dos en dos días; cuando un `transform` de reveal no se comporte, lo primero a mirar es la especificidad, no el keyframe.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.

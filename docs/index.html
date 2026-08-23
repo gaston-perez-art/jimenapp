@@ -438,6 +438,15 @@
     display:grid; grid-template-columns:1fr 1fr; gap:20px;
     align-items:stretch;
   }
+  /* ---- 23/08/2026: la tarjeta sola ----
+     Al quedar una sola tarjeta ya no hay par que igualar, pero tampoco puede
+     ocupar los 1000px de `.problema-par`: a ese ancho los renglones de la
+     lista pasan de 100 caracteres y el ojo pierde el renglon al volver.
+     760px deja los items en torno a 70-75 caracteres, que es donde se leen
+     de un tiron. El limite lo pone el contenedor y no la lista, asi que el
+     fondo de la tarjeta acompaña al texto en vez de quedar con aire muerto
+     a la derecha. */
+  .problema-uno{max-width:760px; margin:0 auto;}
   .bloque-si{
     display:flex; flex-direction:column;
     background:var(--wine-100); border-radius:var(--r-lg);
@@ -577,6 +586,19 @@
     transform:translateY(16px);
     transition:opacity 1.8s cubic-bezier(.25,.46,.45,.94), transform 1.8s cubic-bezier(.25,.46,.45,.94);
   }
+  /* ---- 23/08/2026: los bullets no volvian a su lugar ----
+     La regla general del sitio que los devuelve es
+     `.has-js .reveal.stagger.in-view > *{transform:none}` (0,4,0). La regla de
+     arriba, que fija el punto de partida, es `.has-js .bloque-si ul.reveal
+     .stagger > li` (0,4,2): los dos elementos del selector la vuelven mas
+     especifica, asi que le GANABA a la que resetea. Resultado: los seis items
+     aparecian con el fade pero se quedaban 16px mas abajo para siempre, y el
+     movimiento de subida —el motivo entero del stagger— no ocurria nunca.
+     No se veia porque los seis quedan corridos lo mismo y la lista se lee
+     pareja; aparecio midiendo el `transform` computado contra el de otra
+     `.reveal.stagger` del sitio, que si daba `none`.
+     Este reset tiene que igualar o superar (0,4,2). */
+  .has-js .bloque-si ul.reveal.stagger.in-view > li{transform:none;}
   .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(1){transition-delay:0s;}
   .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(2){transition-delay:.34s;}
   .has-js .bloque-si ul.reveal.stagger.in-view > li:nth-child(3){transition-delay:.68s;}
@@ -1800,29 +1822,25 @@
     <div class="wrap">
       <div class="section-head reveal">
         <h2>¿Te suena algo de esto?</h2>
-        <p>Antes de contarte cómo trabajo, prefiero que sepas si esto es para vos.</p>
+        <p>Si te cuidás, te movés y aun así tu cuerpo no cambia, seguí leyendo.</p>
       </div>
 
-      <div class="problema-par">
+      <!-- 23/08/2026: una sola tarjeta con la lista de dolores, en vez del par
+           "es para vos / no es para vos" que estuvo hasta ayer.
+           Pedido de Jimena: esta seccion tiene que hacer UNA cosa —que la
+           persona se reconozca— y el filtro de a quien le sirve el programa es
+           otra pregunta, que ademas llegaba antes de que el sitio contara que
+           ofrece. El par no se borro: esta guardado en el comentario que hay
+           arriba de #contacto, listo para reubicar cuando se decida donde. -->
+      <div class="problema-uno">
       <div class="bloque-si reveal">
-        <h3><span class="mk" aria-hidden="true">✓</span> Es para vos si…</h3>
         <ul class="reveal stagger">
-          <li>Te cuidás, te movés, y aun así tu cuerpo no cambia como esperabas.</li>
           <li>Comés bien, te esforzás, y la balanza no se mueve.</li>
-          <li>Ya probaste dietas, apps y rutinas gratis, y siempre volviste al mismo punto.</li>
-          <li>Sentís que después de los 35 tu cuerpo dejó de responder igual.</li>
-          <li>La comida te genera culpa y estás cansada de vivir pendiente de eso.</li>
-          <li>No tenés tiempo para entrenar todos los días ni para cocinar horas.</li>
-        </ul>
-      </div>
-
-      <div class="tira-no reveal">
-        <h3><span class="mk" aria-hidden="true">×</span> No es para vos si…</h3>
-        <ul>
-          <li>Buscás bajar diez kilos en un mes.</li>
-          <li>Querés una dieta con alimentos prohibidos.</li>
-          <li>No podés destinarle dos sesiones por semana.</li>
-          <li>Esperás resultados sin medir nada en el camino.</li>
+          <li>Probaste dietas, apps, planes gratis y clases colectivas, y siempre terminás donde empezaste.</li>
+          <li>Sentís que tu cuerpo ya no responde como antes de los 35.</li>
+          <li>La comida te genera ansiedad y culpa, y estás cansada de vivir con ese ruido mental todo el día.</li>
+          <li>No tenés tiempo para entrenar cinco días ni para cocinar dos horas.</li>
+          <li>Y lo peor: dejaste de confiar en vos misma.</li>
         </ul>
       </div>
       </div>
@@ -2342,6 +2360,52 @@
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       GUARDADO, NO BORRADO — bloque "es para vos / no es para vos"
+       ============================================================
+       Estuvo dentro de #problema hasta el 23/08/2026. Jimena lo saco de ahi
+       porque esa seccion pasa a hacer una sola cosa (que la persona se
+       reconozca en la lista de dolores) y decidio la ubicacion nueva "para
+       despues". Queda aca, comentado, porque este es el lugar donde mas
+       sentido hace: despues de leer que ofrece el programa y cuanto sale,
+       "¿esto es para mi?" es exactamente la pregunta que queda abierta.
+
+       Para reactivarlo alcanza con descomentar: el CSS de .problema-par,
+       .bloque-si y .tira-no sigue entero en la hoja de estilos, y .bloque-si
+       lo usa hoy la tarjeta de #problema.
+
+       OJO AL REACTIVAR: la lista de "es para vos si…" que se guarda aca es
+       casi palabra por palabra la lista de dolores que ahora vive en
+       #problema. Si vuelve tal cual, la pagina dice lo mismo dos veces.
+       Antes de descomentarlo hay que reescribir esa columna en terminos de
+       ENCAJE (que espera, cuanto tiempo le puede dar, que busca), que es lo
+       que un filtro al lado del precio tiene que responder, y no repetir el
+       dolor que la persona ya leyo arriba.
+
+  <div class="problema-par">
+    <div class="bloque-si reveal">
+      <h3><span class="mk" aria-hidden="true">✓</span> Es para vos si…</h3>
+      <ul class="reveal stagger">
+        <li>Te cuidás, te movés, y aun así tu cuerpo no cambia como esperabas.</li>
+        <li>Comés bien, te esforzás, y la balanza no se mueve.</li>
+        <li>Ya probaste dietas, apps y rutinas gratis, y siempre volviste al mismo punto.</li>
+        <li>Sentís que después de los 35 tu cuerpo dejó de responder igual.</li>
+        <li>La comida te genera culpa y estás cansada de vivir pendiente de eso.</li>
+        <li>No tenés tiempo para entrenar todos los días ni para cocinar horas.</li>
+      </ul>
+    </div>
+    <div class="tira-no reveal">
+      <h3><span class="mk" aria-hidden="true">×</span> No es para vos si…</h3>
+      <ul>
+        <li>Buscás bajar diez kilos en un mes.</li>
+        <li>Querés una dieta con alimentos prohibidos.</li>
+        <li>No podés destinarle dos sesiones por semana.</li>
+        <li>Esperás resultados sin medir nada en el camino.</li>
+      </ul>
+    </div>
+  </div>
+       ============================================================ -->
 
   <!-- CONTACTO -->
   <section id="contacto">
