@@ -664,16 +664,19 @@ Jimena trajo una referencia visual: grilla de dos columnas, ícono en un azulejo
 
 **El set de íconos se rehízo entero, y hubo cuatro descartes en total.** Jimena rechazó la primera tanda por dos motivos que conviene tener juntos: *"no se entiende qué son"* y *"demasiado simples"*. Eran primitivas geométricas planas (rectángulo, arco, línea) y el problema real era que la metáfora no llegaba al texto. La segunda tanda subió el detalle y, sobre todo, **cambió de metáfora**: el ícono dejó de ilustrar la categoría y pasó a ilustrar *el dolor concreto de esa línea*.
 
-Set final: **balanza desde arriba** (con la aguja del visor en línea plana, que ES "no se mueve") · **ciclo con el punto de partida marcado** (el punto es literalmente "donde empezaste") · **llama con llama interior** (el metabolismo) · **nube de pensamiento con espiral y burbujas** · **calendario con reloj** (los días y las horas que no tenés, las dos cosas que dice el texto) · **corazón partido en dos mitades**.
+Set final: **balanza desde arriba** (con la aguja del visor en línea plana, que ES "no se mueve") · **ciclo con el punto de partida marcado** (el punto es literalmente "donde empezaste") · **llama con llama interior** (el metabolismo) · **plato servido con una espiral en lugar de comida** · **calendario con reloj** (los días y las horas que no tenés, las dos cosas que dice el texto) · **corazón partido en dos mitades**.
 
-**Los cuatro dibujos que se descartaron, con lo que enseñó cada uno.** Todos parecían pasables a 32px y se cayeron al verlos a 78px:
+**Los cinco dibujos que se descartaron, con lo que enseñó cada uno.** Todos parecían pasables a 32px y se cayeron al verlos a 78px:
 
 - **Círculo con dos zigzags adentro** (ruido mental) → se leía como **carita mareada**. Regla general: *un círculo con cualquier cosa adentro se lee como una cara.*
 - **Corazón con una línea vertical recta** → la línea parecía **un error de trazado**. En quiebre, y con las dos mitades separadas 1px cada una, se lee como corazón partido.
 - **Rectángulo apaisado con visor y patas** (balanza) → se leía como **tostadora**. Los electrodomésticos comparten silueta: caja redondeada + ventana. Se resolvió cambiando el punto de vista, no el detalle: **desde arriba** la balanza no se parece a nada más.
 - **Tablero con aguja** (el cuerpo que no responde) → la línea de base debajo del arco lo convertía en **un amanecer sobre el horizonte**. Antes de eso, una curva de línea que baja: era un gráfico, no un cuerpo.
+- **Nube de pensamiento con espiral y burbujas** (la comida y la ansiedad) → Jimena la rechazó aparte, después de aprobar las otras cinco. Se leía, pero el contorno de la nube quedaba irregular y **el dibujo no nombraba la comida**, que es la mitad de la frase. Se reemplazó por un **plato servido con una espiral en lugar de comida**: dice "comer" y "vueltas en la cabeza" en la misma imagen, y los cubiertos a los lados son los que impiden que el plato caiga en la trampa del círculo-que-se-lee-como-cara.
 
-**La regla que sale de las cuatro:** el riesgo no está en el trazo sino en la **silueta general**. Antes de dibujar conviene preguntarse a qué otra cosa se parece el contorno.
+**La regla que sale de las cinco:** el riesgo no está en el trazo sino en la **silueta general**. Antes de dibujar conviene preguntarse a qué otra cosa se parece el contorno.
+
+**Y una segunda, que salió del plato:** cuando un ícono tiene dos trazos concéntricos a menos de ~2px al tamaño real, se empastan. El plato llevaba borde externo e interno separados 1.9 unidades de viewBox —unos 2px a 34px— y la espiral de adentro se volvía una mancha. Se resolvió sacando el borde interno y agrandando la espiral. **Conviene mirar cada ícono a 34px y a 78px lado a lado**, no solo ampliado: lo que se empasta no se ve en la ampliación.
 
 **Método que conviene repetir, y que fue lo único que sirvió:** inyectar un overlay temporal en la página que clona los seis SVG a 78px dentro de un azulejo del mismo color. A tamaño real es imposible ver que un ícono no se entiende, y es exactamente el error que ya está documentado más arriba con las siluetas femeninas.
 
