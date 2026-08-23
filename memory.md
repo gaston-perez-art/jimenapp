@@ -498,9 +498,9 @@ Pedido de Gastón: sacar el volanta "SOBRE MÍ" —que no aportaba nada que el t
 
 El titular pasó de `max-width:17ch` a **26ch**: con 17 caía en tres renglones. Ahora entra en dos y la sección arranca directo por él.
 
-Al final de la columna entra un bloque **Formación**: *Profesora Nacional de Educación Física · Entrenadora en levantamiento olímpico · Especialista en salud femenina*. Va último y en chico a propósito, mismo criterio por el que el cargo dejó de ser titular: **es prueba, no gancho**.
+Al final de la columna entra un bloque **Formación**: *Profesora Nacional de Educación Física · Entrenadora de fuerza · Especialista en salud femenina*. Va último y en chico a propósito, mismo criterio por el que el cargo dejó de ser titular: **es prueba, no gancho**.
 
-**Dos interpretaciones que hice sobre lo que pasó Gastón** y que conviene revisar con él: escribió *"entrenadora y en OLY"*, y se resolvió como una sola credencial, "Entrenadora en levantamiento olímpico" — se expandió OLY porque el público del sitio son mujeres +35 que no tienen por qué conocer la sigla.
+**La credencial del medio quedó resuelta el 23/08/2026 por Jimena: es "Entrenadora de fuerza".** Cierra una interpretación que había quedado marcada como dudosa: Gastón había escrito *"entrenadora y en OLY"* y se había resuelto como una sola credencial, "Entrenadora en levantamiento olímpico", expandiendo la sigla porque el público son mujeres +35 que no tienen por qué conocerla. Jimena corrigió a fuerza, que además es lo que el resto del sitio promete (recomposición corporal, mesociclos, RPE) y no una disciplina de competencia. **No quedan otras apariciones de esa credencial en el repo**, así que no hay nada más que sincronizar.
 
 ### Footer: dado vuelta otra vez (22/08/2026)
 
