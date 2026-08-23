@@ -610,6 +610,30 @@ Dos detalles del avatar sobre este fondo: el degrade vino→bronce de `.t-av` **
 
 **Medido de 360px a 1440px** (360, 390, 721, 768, 860, 1024, 1440): sin overflow horizontal, botón de 55px en desktop y 60px en mobile —sobre el mínimo de 44—, y el nombre no se parte en ningún ancho. Entre 721 y ~740px la credencial pasa a dos líneas sin romper nada, porque el alto lo fija el avatar.
 
+### 22/08/2026 — "Cómo trabajo": copy del paso 01 y 02, y las cuatro ilustraciones pasaron a estar animadas
+
+**El copy, pedido por Jimena.** El paso 01 dejó de llamarse "Ficha de ingreso" y pasó a **"Entrevista inicial"**, alineado con lo que el hero y el cierre ya prometían desde el 21/08 ("Quiero mi entrevista gratuita", "El primer paso es tu entrevista inicial, y es gratuita"): el sitio ofrecía una entrevista y el proceso decía que lo primero era llenar una ficha. Ahora dice *"Es una conversación gratuita de 30min donde revisamos tus objetivos…"*. El paso 02 pasó de "Evaluación inicial" a **"Evaluación"** a secas —dos "inicial" seguidos en cuatro pasos— y su texto ahora nombra lo que se hace de verdad: estudio de composición corporal, evaluación física y foto inicial. Se sacó además una raya (—) del paso 03 por preferencia de puntuación de Jimena.
+
+**Las cuatro ilustraciones ahora son loops en CSS.** Antes eran SVG estáticos y dos de ellos no se entendían. Qué muestra cada una y por qué:
+
+1. **Chat que se acumula.** Entra "escribiendo", se convierte en mensaje y **el mensaje se queda**; recién al cerrar el ciclo se limpia todo. La primera versión borraba cada mensaje antes del siguiente y se leía como notificaciones sueltas, no como una conversación.
+2. **Anillo + caliper.** El `41%` y el arco se dibujan juntos. **La etiqueta "TU PUNTO DE PARTIDA" salió de adentro del círculo**, donde no entraba, y quedó abajo separada por una línea.
+3. **Plantilla → tu semana.** Concepto entero nuevo. Antes decía `ACUM / INTENS / DESC`, jerga de periodización que no significa nada para quien entra al sitio. Ahora son los siete días de la semana: arrancan como plantilla gris pareja y se transforman en la semana real (entreno, movilidad, descanso). Dice lo mismo que el título de la diapositiva sin pedir vocabulario.
+4. **Progreso.** Se eliminó la línea de tendencia que cruzaba las barras: quedaba sucia sobre los bordes redondeados. Las etiquetas pasaron de `S1 → S12` a **`MES 1` / `MES 6`**.
+
+**Dos bugs que se comieron el tiempo de esta pasada, y las dos lecciones:**
+
+- **Un `var()` que no existe invalida el shorthand `animation` entero, y no anima nada — en silencio.** Las animaciones se escribieron con `var(--ease-in)`, un token que existía en el prototipo pero **no en este sitio**. No hay error en consola: la declaración simplemente se descarta. Se resolvió declarando `--pvEase` local en `.pin-viz`, y no en `:root`, porque el sitio maneja dos curvas y un nombre suelto en `:root` se presta a que la próxima pasada agarre la equivocada.
+- **Un selector genérico le puede ganar en especificidad a la clase que quiere corregirlo.** `.pin-viz svg [class]{transform-origin:center}` (0,2,1) le ganaba a `.pvWk{transform-origin:center bottom}` (0,1,0), así que las barras crecían **desde su centro, hacia arriba y hacia abajo**, y el sobrante de abajo tapaba las letras de los días — se veía sobre todo en la M de miércoles. **La regla genérica ahora declara solo `transform-box`**, que es lo único que necesita ser genérico. Con `transform-box:fill-box` el origen ya cae en el centro por defecto, así que no hacía falta declararlo.
+
+**Medido en el DOM, no mirado:** las 7 barras comparten exactamente la misma base (mismo `bottom` en píxeles) y quedan 11px libres hasta las letras; los 4 SVG entran en su caja de 210px sin desbordar; y las 34 animaciones `pv*` corren de verdad.
+
+**El contador del `41%` se lee del reloj de la animación del aro (`animation.currentTime`), no de un cronómetro propio.** Es lo único que CSS no puede animar, porque el contenido de un `<text>` no es una propiedad animable. Con cronómetro propio se desincronizaba: el CSS pausa el aro cuando su diapositiva no está activa (`.pin-slide:not(.on)`) y el número seguía contando contra un arco congelado, así que al volver a la 02 se veía el aro lleno diciendo 12%.
+
+**Esto es solo escritorio.** `@media (max-width:720px){ .pin{display:none} }` ya apagaba el panel fijo desde antes: en mobile los cuatro pasos se leen como lista y ningún SVG se dibuja. Ningún riesgo mobile, y tampoco ganancia — si alguna vez se quiere movimiento ahí, hay que diseñarlo aparte.
+
+**Nota de método:** `qa-local.py` no corrió porque en la máquina de Jimena no hay Python instalado. Se levantó un servidor equivalente en PowerShell, sin versionarlo. Si esto se repite, conviene decidir si el script de QA pasa a tener una variante que no dependa de Python.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.

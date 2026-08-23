@@ -1380,6 +1380,125 @@
   .paso p{margin:0; color:var(--ink-soft); font-size:16px; max-width:44ch; opacity:.45; transition:opacity .4s ease;}
   .paso.on .pn, .paso.on p{opacity:1;}
 
+  /* ---------- Ilustraciones animadas de .pin-viz (22/08/2026) ----------
+     Cuatro loops en CSS, uno por diapositiva. Son SVG inline con clases
+     prefijadas 'pv' para no chocar con nada del resto de la hoja.
+
+     REGLA BASE: aca va SOLO transform-box. NO fijar transform-origin en
+     este selector generico. Cuesta caro: '.pin-viz svg [class]' tiene mas
+     especificidad que '.pvWk', asi que un transform-origin declarado aca
+     le gana a las clases de abajo, las barras crecen desde su centro
+     —hacia arriba Y hacia abajo— y el sobrante inferior tapa las letras
+     de los dias. Fue exactamente el bug de la "M" de miercoles.
+
+     Las animaciones son mejora progresiva: ningun opacity:0 vive en una
+     regla base, solo dentro de los @keyframes. Si el navegador no anima,
+     los cuatro dibujos quedan visibles y completos.
+
+     Solo corren en escritorio: .pin{display:none} en <=960px, asi que en
+     mobile este bloque no dibuja nada. */
+  .pin-viz svg [class]{transform-box:fill-box;}
+  .pvMono{font-family:'IBM Plex Mono',monospace;}
+  /* La curva de entradas del design-system. Se declara como token local y no
+     global: el sitio maneja dos curvas y un nombre suelto en :root se presta
+     a que la proxima pasada agarre la equivocada. Ojo, un var() que no existe
+     invalida el shorthand 'animation' entero y no anima nada. */
+  .pin-viz{--pvEase:cubic-bezier(.25,.46,.45,.94);}
+
+  /* 01 · el chat se ACUMULA: cada mensaje entra despues de su "escribiendo"
+     y se queda hasta que termina el ciclo. */
+  .pvTyp{animation:pvTypShow 10s linear infinite;}
+  .pvTyp.t2{animation-delay:2.6s;}
+  .pvTyp.t3{animation-delay:5.2s;}
+  @keyframes pvTypShow{
+    0%{opacity:0;} 2%{opacity:1;} 12%{opacity:1;} 14%{opacity:0;} 100%{opacity:0;}
+  }
+  .pvDot{animation:pvDotBounce .95s ease-in-out infinite;}
+  .pvDot.d2{animation-delay:.14s;}
+  .pvDot.d3{animation-delay:.28s;}
+  @keyframes pvDotBounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-3.5px);}}
+  .pvMsg{animation:pvMsgIn 10s var(--pvEase) infinite;}
+  .pvMsg.m2{animation-delay:2.6s;}
+  .pvMsg.m3{animation-delay:5.2s;}
+  @keyframes pvMsgIn{
+    0%,13%{opacity:0; transform:translateY(8px) scale(.94);}
+    18%{opacity:1; transform:translateY(0) scale(1);}
+    92%{opacity:1; transform:translateY(0) scale(1);}
+    97%,100%{opacity:0; transform:translateY(-5px) scale(.99);}
+  }
+
+  /* 02 · anillo que se dibuja + caliper que mide */
+  .pvRing{animation:pvRingDraw 4.4s var(--pvEase) infinite; transform:rotate(-90deg);}
+  @keyframes pvRingDraw{
+    0%{stroke-dashoffset:264;} 30%{stroke-dashoffset:156;}
+    64%{stroke-dashoffset:156;} 90%,100%{stroke-dashoffset:264;}
+  }
+  .pvCalL{animation:pvCalL 4.4s var(--pvEase) infinite;}
+  .pvCalR{animation:pvCalR 4.4s var(--pvEase) infinite;}
+  @keyframes pvCalL{
+    0%,18%{transform:translateX(0);} 44%{transform:translateX(11px);}
+    72%{transform:translateX(11px);} 100%{transform:translateX(0);}
+  }
+  @keyframes pvCalR{
+    0%,18%{transform:translateX(0);} 44%{transform:translateX(-11px);}
+    72%{transform:translateX(-11px);} 100%{transform:translateX(0);}
+  }
+  .pvNum{font-variant-numeric:tabular-nums;}
+
+  /* 03 · siete dias que pasan de plantilla pareja a la semana real */
+  .pvWk{transform-origin:center bottom; animation:pvWkMorph 5.5s var(--pvEase) infinite;}
+  .pvWk.w2{animation-delay:.06s;} .pvWk.w3{animation-delay:.12s;}
+  .pvWk.w4{animation-delay:.18s;} .pvWk.w5{animation-delay:.24s;}
+  .pvWk.w6{animation-delay:.30s;} .pvWk.w7{animation-delay:.36s;}
+  @keyframes pvWkMorph{
+    0%,14%{transform:scaleY(1); fill:#E9E4DE;}
+    38%{transform:scaleY(var(--s)); fill:var(--c);}
+    84%{transform:scaleY(var(--s)); fill:var(--c);}
+    96%,100%{transform:scaleY(1); fill:#E9E4DE;}
+  }
+  .pvWk.w1{--s:1.30; --c:#9D3A57;}
+  .pvWk.w2{--s:.34;  --c:#E9E4DE;}
+  .pvWk.w3{--s:1.62; --c:#9D3A57;}
+  .pvWk.w4{--s:.34;  --c:#E9E4DE;}
+  .pvWk.w5{--s:1.46; --c:#9D3A57;}
+  .pvWk.w6{--s:.74;  --c:#A9824A;}
+  .pvWk.w7{--s:.34;  --c:#E9E4DE;}
+  .pvCapA{animation:pvCapA 5.5s var(--pvEase) infinite;}
+  .pvCapB{animation:pvCapB 5.5s var(--pvEase) infinite;}
+  @keyframes pvCapA{0%,14%{opacity:1;} 30%,100%{opacity:0;}}
+  @keyframes pvCapB{0%,22%{opacity:0;} 38%,88%{opacity:1;} 96%,100%{opacity:0;}}
+
+  /* 04 · barras que crecen apoyadas en la linea de base */
+  .pvBar{transform-origin:center bottom; animation:pvBarGrow 5s var(--pvEase) infinite;}
+  .pvBar.b2{animation-delay:.11s;} .pvBar.b3{animation-delay:.22s;}
+  .pvBar.b4{animation-delay:.33s;} .pvBar.b5{animation-delay:.44s;}
+  @keyframes pvBarGrow{
+    0%{transform:scaleY(0);} 24%{transform:scaleY(1);}
+    84%{transform:scaleY(1);} 95%,100%{transform:scaleY(0);}
+  }
+  .pvTip{animation:pvTip 5s var(--pvEase) infinite;}
+  @keyframes pvTip{
+    0%,10%{opacity:0; transform:translateY(6px);}
+    26%{opacity:1; transform:translateY(0);}
+    84%{opacity:1; transform:translateY(0);}
+    95%,100%{opacity:0; transform:translateY(-3px);}
+  }
+  .pvHalo{animation:pvHalo 5s ease-out infinite;}
+  @keyframes pvHalo{
+    0%,44%{opacity:0; transform:scale(.6);}
+    56%{opacity:.5; transform:scale(1);}
+    74%,100%{opacity:0; transform:scale(1.7);}
+  }
+
+  /* La diapositiva que no se ve no gasta CPU animando. */
+  .pin-slide:not(.on) .pin-viz svg [class]{animation-play-state:paused;}
+
+  @media (prefers-reduced-motion:reduce){
+    .pin-viz svg [class]{animation:none !important;}
+    /* sin movimiento, el "escribiendo" se superpondria con su mensaje */
+    .pvTyp{display:none;}
+  }
+
   @media (max-width:960px){
     .programa-feats{grid-template-columns:1fr;}
     /* En 4 columnas cada item queda en ~160px y se parte en cuatro renglones,
@@ -2029,55 +2148,113 @@
           <div class="pin-slide on">
             <div class="pin-prog"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><em>01 DE 04</em></div>
             <h3>Primero escuchar,<br>después entrenar.</h3>
-            <div class="pin-viz"><svg width="200" height="150" viewBox="0 0 200 150" fill="none" aria-hidden="true">
-              <rect x="20" y="10" width="160" height="130" rx="8" fill="#fff" stroke="#E9E4DE"/>
-              <rect x="38" y="32" width="70" height="8" rx="4" fill="#9D3A57"/>
-              <rect x="38" y="54" width="124" height="6" rx="3" fill="#E9E4DE"/>
-              <rect x="38" y="72" width="104" height="6" rx="3" fill="#E9E4DE"/>
-              <rect x="38" y="90" width="118" height="6" rx="3" fill="#E9E4DE"/>
-              <rect x="38" y="112" width="46" height="14" rx="7" fill="#F3E4E9" stroke="#9D3A57"/>
+            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="pvWineGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#9D3A57"/><stop offset="1" stop-color="#A9824A"/>
+                </linearGradient>
+              </defs>
+              <g class="pvTyp t1">
+                <rect x="14" y="14" width="58" height="32" rx="16" fill="#F3E4E9"/>
+                <circle class="pvDot d1" cx="31" cy="30" r="4" fill="#9D3A57"/>
+                <circle class="pvDot d2" cx="43" cy="30" r="4" fill="#9D3A57"/>
+                <circle class="pvDot d3" cx="55" cy="30" r="4" fill="#9D3A57"/>
+              </g>
+              <g class="pvMsg m1">
+                <rect x="14" y="14" width="122" height="32" rx="16" fill="#F3E4E9"/>
+                <rect x="30" y="24" width="78" height="6.5" rx="3.25" fill="#9D3A57" opacity=".8"/>
+                <rect x="30" y="35" width="48" height="6.5" rx="3.25" fill="#9D3A57" opacity=".45"/>
+              </g>
+              <g class="pvTyp t2">
+                <rect x="168" y="58" width="58" height="32" rx="16" fill="#EFE3CD"/>
+                <circle class="pvDot d1" cx="185" cy="74" r="4" fill="#A9824A"/>
+                <circle class="pvDot d2" cx="197" cy="74" r="4" fill="#A9824A"/>
+                <circle class="pvDot d3" cx="209" cy="74" r="4" fill="#A9824A"/>
+              </g>
+              <g class="pvMsg m2">
+                <rect x="96" y="58" width="130" height="48" rx="18" fill="url(#pvWineGrad)"/>
+                <rect x="112" y="72" width="94" height="6.5" rx="3.25" fill="#fff" opacity=".92"/>
+                <rect x="112" y="86" width="60" height="6.5" rx="3.25" fill="#fff" opacity=".6"/>
+              </g>
+              <g class="pvTyp t3">
+                <rect x="14" y="118" width="58" height="32" rx="16" fill="#F3E4E9"/>
+                <circle class="pvDot d1" cx="31" cy="134" r="4" fill="#9D3A57"/>
+                <circle class="pvDot d2" cx="43" cy="134" r="4" fill="#9D3A57"/>
+                <circle class="pvDot d3" cx="55" cy="134" r="4" fill="#9D3A57"/>
+              </g>
+              <g class="pvMsg m3">
+                <rect x="14" y="118" width="104" height="32" rx="16" fill="#F3E4E9"/>
+                <rect x="30" y="128" width="66" height="6.5" rx="3.25" fill="#9D3A57" opacity=".8"/>
+                <rect x="30" y="139" width="38" height="6.5" rx="3.25" fill="#9D3A57" opacity=".45"/>
+              </g>
             </svg></div>
           </div>
 
           <div class="pin-slide">
             <div class="pin-prog"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><em>02 DE 04</em></div>
             <h3>Sin medir,<br>estamos adivinando.</h3>
-            <div class="pin-viz"><svg width="200" height="150" viewBox="0 0 200 150" fill="none" aria-hidden="true">
-              <circle cx="100" cy="75" r="52" stroke="#E9E4DE" stroke-width="10"/>
-              <circle cx="100" cy="75" r="52" stroke="#9D3A57" stroke-width="10" stroke-linecap="round"
-                      stroke-dasharray="327" stroke-dashoffset="196" transform="rotate(-90 100 75)"/>
-              <text x="100" y="72" text-anchor="middle" font-family="monospace" font-size="21" fill="#5C1F32">41%</text>
-              <text x="100" y="91" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#8C838F">PUNTO DE PARTIDA</text>
+            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
+              <circle cx="120" cy="84" r="42" stroke="#E9E4DE" stroke-width="10"/>
+              <circle class="pvRing" cx="120" cy="84" r="42" stroke="#9D3A57" stroke-width="10"
+                      stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/>
+              <text class="pvNum pvMono" x="120" y="93" text-anchor="middle" font-size="26"
+                    font-weight="500" fill="#5C1F32">41%</text>
+              <g class="pvCalL" stroke="#A9824A" stroke-width="6" stroke-linecap="round" fill="none">
+                <path d="M44 61 Q32 84 44 107"/>
+              </g>
+              <g class="pvCalR" stroke="#A9824A" stroke-width="6" stroke-linecap="round" fill="none">
+                <path d="M196 61 Q208 84 196 107"/>
+              </g>
+              <line x1="62" y1="152" x2="178" y2="152" stroke="#E9E4DE" stroke-width="1.5"/>
+              <text class="pvMono" x="120" y="172" text-anchor="middle" font-size="10.5"
+                    letter-spacing=".1em" fill="#8A6636">TU PUNTO DE PARTIDA</text>
             </svg></div>
           </div>
 
           <div class="pin-slide">
             <div class="pin-prog"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><em>03 DE 04</em></div>
             <h3>Tu plan no sale<br>de una plantilla.</h3>
-            <div class="pin-viz"><svg width="220" height="150" viewBox="0 0 220 150" fill="none" aria-hidden="true">
-              <rect x="14" y="26" width="58" height="34" rx="6" fill="#F3E4E9" stroke="#9D3A57"/>
-              <rect x="82" y="26" width="58" height="34" rx="6" fill="#F3E4E9" stroke="#9D3A57"/>
-              <rect x="150" y="26" width="58" height="34" rx="6" fill="#EFE3CD" stroke="#A9824A"/>
-              <rect x="14" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#E9E4DE"/>
-              <rect x="82" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#E9E4DE"/>
-              <rect x="150" y="72" width="58" height="34" rx="6" fill="#fff" stroke="#E9E4DE"/>
-              <text x="43" y="48" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#5C1F32">ACUM</text>
-              <text x="111" y="48" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#5C1F32">INTENS</text>
-              <text x="179" y="48" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#6B4E22">DESC</text>
-              <text x="110" y="128" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#8C838F">MESOCICLO · 6 SEMANAS</text>
+            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
+              <rect class="pvWk w1" x="19"  y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <rect class="pvWk w2" x="49"  y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <rect class="pvWk w3" x="79"  y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <rect class="pvWk w4" x="109" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <rect class="pvWk w5" x="139" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <rect class="pvWk w6" x="169" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <rect class="pvWk w7" x="199" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
+              <line x1="15" y1="130" x2="225" y2="130" stroke="#E9E4DE" stroke-width="1.5"/>
+              <g class="pvMono" font-size="11" fill="#8C838F" text-anchor="middle">
+                <text x="30" y="148">L</text>
+                <text x="60" y="148">M</text>
+                <text x="90" y="148">M</text>
+                <text x="120" y="148">J</text>
+                <text x="150" y="148">V</text>
+                <text x="180" y="148">S</text>
+                <text x="210" y="148">D</text>
+              </g>
+              <text class="pvCapA pvMono" x="120" y="174" text-anchor="middle" font-size="10"
+                    letter-spacing=".08em" fill="#8C838F">UNA PLANTILLA IGUAL PARA TODAS</text>
+              <text class="pvCapB pvMono" x="120" y="174" text-anchor="middle" font-size="10"
+                    letter-spacing=".08em" fill="#8A6636">TU SEMANA REAL</text>
             </svg></div>
           </div>
 
           <div class="pin-slide">
             <div class="pin-prog"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><em>04 DE 04</em></div>
             <h3>El plan cambia<br>cuando vos cambiás.</h3>
-            <div class="pin-viz"><svg width="220" height="150" viewBox="0 0 220 150" fill="none" aria-hidden="true">
-              <rect x="18" y="98" width="24" height="30" rx="4" fill="#B14A67"/>
-              <rect x="54" y="84" width="24" height="44" rx="4" fill="#B14A67"/>
-              <rect x="90" y="68" width="24" height="60" rx="4" fill="#9D3A57"/>
-              <rect x="126" y="48" width="24" height="80" rx="4" fill="#9D3A57"/>
-              <rect x="162" y="26" width="24" height="102" rx="4" fill="#A9824A"/>
-              <text x="102" y="146" text-anchor="middle" font-family="monospace" font-size="9.5" fill="#8C838F">S1 → S12 · CARGA REAL</text>
+            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
+              <rect class="pvBar b1" x="26"  y="108" width="24" height="42"  rx="5" fill="#E4C9D2"/>
+              <rect class="pvBar b2" x="64"  y="90"  width="24" height="60"  rx="5" fill="#D3A2B2"/>
+              <rect class="pvBar b3" x="102" y="70"  width="24" height="80"  rx="5" fill="#B14A67"/>
+              <rect class="pvBar b4" x="140" y="46"  width="24" height="104" rx="5" fill="#9D3A57"/>
+              <rect class="pvBar b5" x="178" y="22"  width="24" height="128" rx="5" fill="#A9824A"/>
+              <circle class="pvHalo" cx="190" cy="22" r="10" fill="#DCBA84"/>
+              <circle class="pvTip" cx="190" cy="22" r="4.5" fill="#5C1F32"/>
+              <line x1="18" y1="152" x2="216" y2="152" stroke="#E9E4DE" stroke-width="1.5"/>
+              <g class="pvMono" font-size="10" fill="#8C838F">
+                <text x="38"  y="172" text-anchor="middle">MES 1</text>
+                <text x="190" y="172" text-anchor="middle" fill="#8A6636">MES 6</text>
+              </g>
             </svg></div>
           </div>
 
@@ -2085,16 +2262,16 @@
 
         <div class="pasos" id="pasosProceso">
           <div class="paso on">
-            <span class="pn">01 · FICHA DE INGRESO</span>
-            <p>Qué probaste antes, qué te funcionó y qué no, tu historial de entrenamiento y tu situación de salud, incluidas las condiciones hormonales que cambian la forma de entrenar.</p>
+            <span class="pn">01 · ENTREVISTA INICIAL</span>
+            <p>Es una conversación gratuita de 30min donde revisamos tus objetivos: qué probaste antes, qué te funcionó y qué no, tu historial de entrenamiento y tu situación de salud, incluidas las condiciones hormonales que cambian la forma de entrenar.</p>
           </div>
           <div class="paso">
-            <span class="pn">02 · EVALUACIÓN INICIAL</span>
-            <p>Medimos fuerza, antropometría y hábitos. Ese punto de partida es lo que después permite saber si el programa está funcionando, en vez de discutir con la balanza.</p>
+            <span class="pn">02 · EVALUACIÓN</span>
+            <p>Hacemos un estudio de composición corporal, una evaluación física y una foto inicial. Ese punto de partida es lo que después te permite ver el progreso real, en vez de discutir con la balanza.</p>
           </div>
           <div class="paso">
             <span class="pn">03 · PLAN A MEDIDA</span>
-            <p>Mesociclo por bloques con autorregulación por esfuerzo percibido, y educación alimentaria flexible y adaptada a tu gasto real — para que aprendas a comer, no para que sigas una dieta cerrada. Pensado para la semana que realmente tenés, no para una semana ideal que no existe.</p>
+            <p>Mesociclo por bloques con autorregulación por esfuerzo percibido, y educación alimentaria flexible y adaptada a tu gasto real, para que aprendas a comer y no sigas una dieta cerrada. Pensado para la semana que realmente tenés, no para una semana ideal que no existe.</p>
           </div>
           <div class="paso">
             <span class="pn">04 · SEGUIMIENTO REAL</span>
@@ -2355,6 +2532,43 @@
       pasos.forEach(b => pio.observe(b));
     }
   } catch (err) { /* la primera diapositiva queda visible por CSS */ }
+
+  // El 41% del anillo de la diapositiva 02: es lo unico de las cuatro
+  // ilustraciones que CSS no puede animar, porque el contenido de un <text>
+  // no es una propiedad animable. El resto son keyframes puros.
+  // El numero queda escrito en el HTML, asi que sin JS se lee 41% fijo.
+  try {
+    const anillo = document.querySelector('.pvNum');
+    const aro = document.querySelector('.pvRing');
+    const quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (anillo && aro && !quieto.matches && aro.getAnimations) {
+      const dibujo = aro.getAnimations()[0];
+      if (dibujo) {
+        // El contador se lee del reloj de la PROPIA animacion del aro, no del
+        // reloj de pared. Es la unica forma de que no se desincronicen: el CSS
+        // pausa el aro cuando su diapositiva no esta activa
+        // (.pin-slide:not(.on)), y con un cronometro propio el numero seguiria
+        // contando contra un arco congelado. Al volver a la diapositiva 02 se
+        // veria el aro lleno diciendo 12%.
+        // Con currentTime, si el aro se pausa el numero se pausa con el.
+        const CICLO = 4400, TOPE = 41;
+        const cuadro = () => {
+          const ms = Number(dibujo.currentTime) || 0;
+          const t = (ms % CICLO) / CICLO;
+          let v;
+          // Mismos tramos que @keyframes pvRingDraw: si se toca uno, tocar el otro.
+          if (t < .30)      v = Math.round((t / .30) * TOPE);
+          else if (t < .64) v = TOPE;
+          else if (t < .90) v = Math.round(TOPE * (1 - (t - .64) / .26));
+          else              v = 0;
+          anillo.textContent = Math.max(0, v) + '%';
+          requestAnimationFrame(cuadro);
+        };
+        requestAnimationFrame(cuadro);
+      }
+    }
+  } catch (err) { /* queda el 41% que ya viene escrito en el HTML */ }
 
   // ---------- cinta de testimonios: hover la relentece, y se puede arrastrar con el mouse ----------
   // Referencia: la cinta de coderhouse.com. Dos cosas:
