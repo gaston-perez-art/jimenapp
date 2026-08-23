@@ -658,7 +658,7 @@ La causa es de especificidad, otra vez: la regla que fija el punto de partida es
 
 **No se veía a ojo** porque los seis quedan corridos exactamente lo mismo y la lista se lee pareja. Apareció midiendo el `transform` computado contra el de otra `.reveal.stagger` del sitio (`.programa-feats`), que sí daba `none`. Es el mismo tipo de error que el de las barras del proceso el 22/08: **una regla larga y específica ganándole en silencio a la corta que la tenía que corregir.** Van dos en dos días; cuando un `transform` de reveal no se comporte, lo primero a mirar es la especificidad, no el keyframe.
 
-### 23/08/2026 — La marca existe: tres piezas, dos correcciones y un header que flota
+### 23/08/2026 — La marca existe: tres piezas, dos correcciones y cuatro bugs
 
 **El logo salió de ChatGPT en dos pasadas y llegó con defectos que no se ven a ojo.** Lo que entró al repo no es lo que salió del modelo.
 
@@ -695,7 +695,15 @@ Arriba de todo el header es la banda de vidrio de siempre. Apenas se scrollea, l
 
 **Segundo detalle, del mismo tipo:** `backdrop-filter` en el header Y en la tarjeta no funciona. Crea contexto de apilado y el de afuera anula al de adentro, así que la tarjeta se veía plana. El blur se mudó entero a la tarjeta.
 
-#### Dos cosas que se rompieron al poner la marca, y las dos aparecieron mirando
+#### El header ya se partía entre 721 y 730px, y sumarle el isotipo estiró el rango
+
+El nav de escritorio a medida real pide **~772px**: logo (171) + las cuatro listas con sus gaps de 36px (545) + 56 de padding. La hamburguesa arranca en 720, así que entre 721 y ~772 el header **se partía en dos líneas con el CTA cortado**. Era preexistente en la franja 721–730; sumarle el isotipo al logo (30px + 11 de gap) estiró el rango roto hasta ~790.
+
+**No se movió el corte de la hamburguesa.** Ese corte —`@media (max-width:720px)`— gobierna todo el layout mobile, no solo el nav: la cinta de testimonios, el panel fijo de "Cómo trabajo", las áreas tocables de 44px. Moverlo por un problema del header habría arrastrado nueve cosas más.
+
+Se aprieta el nav **solo en la franja donde falta lugar**, con `@media (min-width:721px) and (max-width:860px)`: gap de 20 en vez de 36, links a 14px, logo a 18px y el CTA con menos padding horizontal. A 721px con esos valores el header pide ~685px y sobra aire. **El padding vertical del CTA no se toca**: en esa franja sigue valiendo el mínimo tocable de 44px.
+
+#### Dos cosas más que se rompieron, y las dos aparecieron mirando
 
 **1. La ilustración 02 giraba alrededor de la esquina.** El arco vino del anillo aparecía flotando arriba del anillo gris, fuera de la tarjeta. La causa: `.pvRing` usa `transform:rotate(-90deg)` pero **no declaraba `transform-origin`**, y en SVG el valor inicial de `transform-origin` es `0 0`, no `50% 50%`. Con `transform-box:fill-box` eso es la esquina superior izquierda de la caja del círculo, así que el aro rotaba alrededor de esa esquina. Medido: 73.4px de desfasaje, exactamente 2r.
 

@@ -108,6 +108,17 @@ sin transición.
 **Sobre `#proceso`, la única sección oscura**, la tarjeta flota clara sobre el fondo vino y se lee
 bien. La regla de opacidad de la banda sigue valiendo para la tarjeta: **no bajar de .9**.
 
+**La franja angosta: 721 a 860px.** La hamburguesa arranca en 720, pero el nav de escritorio a
+medida real pide **~772px** —logo 171 + las cuatro listas con gaps de 36px 545 + 56 de padding—,
+así que a 721 se partía en dos líneas con el CTA cortado. En esa franja el nav se aprieta: gap de
+20px, links a 14px, logo a 18px y el CTA con menos padding horizontal. A 721 con esos valores el
+header pide ~685px.
+
+**No se corrige moviendo el corte de la hamburguesa:** `@media (max-width:720px)` gobierna todo el
+layout mobile —la cinta, el panel fijo de "Cómo trabajo", las áreas tocables— y moverlo por un
+problema del header arrastraría nueve cosas más. Y el padding vertical del CTA no se toca ahí: sigue
+valiendo el mínimo tocable de 44px.
+
 ## Footer
 
 **Cinco grupos: la marca y cuatro listas** —Programas, Otros servicios, Legal y Redes sociales—.
