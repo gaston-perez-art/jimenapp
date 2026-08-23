@@ -658,6 +658,72 @@ La causa es de especificidad, otra vez: la regla que fija el punto de partida es
 
 **No se veía a ojo** porque los seis quedan corridos exactamente lo mismo y la lista se lee pareja. Apareció midiendo el `transform` computado contra el de otra `.reveal.stagger` del sitio (`.programa-feats`), que sí daba `none`. Es el mismo tipo de error que el de las barras del proceso el 22/08: **una regla larga y específica ganándole en silencio a la corta que la tenía que corregir.** Van dos en dos días; cuando un `transform` de reveal no se comporte, lo primero a mirar es la especificidad, no el keyframe.
 
+### 23/08/2026 — La marca existe: tres piezas, dos correcciones y un header que flota
+
+**El logo salió de ChatGPT en dos pasadas y llegó con defectos que no se ven a ojo.** Lo que entró al repo no es lo que salió del modelo.
+
+**Las tres piezas y la regla que las separa.** No se eligió "el mejor logo": se repartieron por tamaño.
+
+| Pieza | Dónde | Regla |
+|---|---|---|
+| **Marca sólida** (raíz blanca sobre disco vino) | favicon, header del sitio y de las legales, foto de perfil | todo lo menor a 120px |
+| **Isotipo** (raíz vino en aro bronce) | og:image, manual, impresos | 120px para arriba |
+| **Firma con silueta** | solo el footer | 268px de ancho |
+
+**Por qué dos marcas y no una: está medido, no opinado.** El isotipo reducido a 16px reales —el tamaño al que Chrome dibuja la pestaña— queda una mancha rosa indistinguible de cualquier otra; a 30px, el tamaño del header, todavía se lee lavado. El aro bronce y las raíces finas se promedian contra el fondo blanco. La marca sólida invierte el problema: disco relleno, raíz blanca, tres pares de raíces gruesas en vez de doce finas. **A 16px la marca sólida da un punto vino con el tronco adentro** — las raíces igual desaparecen, y eso está asumido: es lo que un favicon puede dar.
+
+**Dos defectos corregidos a mano sobre los PNG:**
+
+1. **El aro del isotipo no cerraba.** En el arco inferior se aplanaba en una recta y perdía opacidad. Lo encontró Gastón ampliándolo. Se verificó midiendo el grosor del aro ángulo por ángulo contra el original: parejo en todo el resto, así que el defecto era local. Se redibujó el aro como círculo real sobre las raíces originales.
+2. **El tronco quedaba corto.** Terminaba en corte plano a unos píxeles del aro, sin tocarlo — se leía como un error de dibujo, no como una decisión. Ahora cruza el aro y remata arriba. Rompe la simetría perfecta del círculo, que era lo único que le faltaba para no parecer un sello genérico de herboristería.
+
+**Y el vino no era el del sitio.** El isotipo traía `#631A2A` y la marca sólida `#671A31`. Los dos se llevaron a `--wine-900` (`#5C1F32`). El bronce ya coincidía (`#AF824C` contra `#A9824A`) y no se tocó.
+
+**Todo esto son PNG corregidos, no archivos de producción.** Pendiente vectorizar: un SVG no vuelve a tener el problema del aro en ningún tamaño, se ve nítido en retina y pesa una fracción. No es bloqueante.
+
+#### Arquitectura de marca: arriba la persona, abajo el método
+
+El header lleva la marca sólida + "Jimena Ibañez" en Archivo. El footer lleva la firma con silueta, que trae "Método Raíz" adentro y **reemplaza** —no acompaña— a la línea de texto que estaba ahí. Jimena es quien vende; Método Raíz es lo que vende.
+
+**El logotipo serif del lockup no entra al sitio.** Vive en el og:image, el manual y los impresos. El sitio no usa serif por la decisión documentada del 11/08 (de 12 referencias, 11 usan grotesca sans; Fraunces empujaba a "wellness artesanal" con contenido de periodización y RPE). La serif le da al método una edad y un peso que Archivo no le da, pero solo donde hay lugar para respirar — nunca al lado de un texto del sitio. Es lo que hace cualquier marca con logotipo display: **el logo no dicta la tipografía del producto.**
+
+#### Header flotante en desktop (pedido de Gastón)
+
+Arriba de todo el header es la banda de vidrio de siempre. Apenas se scrollea, la banda se disuelve y `nav.wrap` queda como tarjeta flotante a 26px de los costados y 6px del techo. Solo de 721px para arriba; en mobile no cambia nada. El detalle completo está en `design-system.md`, sección Header.
+
+**El bug que costó la primera versión: colapso de margen.** El aire de la tarjeta se puso como `margin-top` del primer hijo del header, y un margin-top del primer hijo **colapsa hacia afuera**: el header pasaba de 67px a 61px y la página daba un salto de 6px al cruzar el umbral. Se resolvió pasando el aire a `padding` del header. **No se vio a ojo** —el salto dura una transición— y apareció midiendo el alto del header en los dos estados. Van tres pasadas seguidas donde el error estaba en el CSS y solo apareció midiendo el DOM.
+
+**Segundo detalle, del mismo tipo:** `backdrop-filter` en el header Y en la tarjeta no funciona. Crea contexto de apilado y el de afuera anula al de adentro, así que la tarjeta se veía plana. El blur se mudó entero a la tarjeta.
+
+#### Dos cosas que se rompieron al poner la marca, y las dos aparecieron mirando
+
+**1. La ilustración 02 giraba alrededor de la esquina.** El arco vino del anillo aparecía flotando arriba del anillo gris, fuera de la tarjeta. La causa: `.pvRing` usa `transform:rotate(-90deg)` pero **no declaraba `transform-origin`**, y en SVG el valor inicial de `transform-origin` es `0 0`, no `50% 50%`. Con `transform-box:fill-box` eso es la esquina superior izquierda de la caja del círculo, así que el aro rotaba alrededor de esa esquina. Medido: 73.4px de desfasaje, exactamente 2r.
+
+Es la **contracara del bug de las barras del 22/08**. Ese día se sacó `transform-origin:center` del selector genérico `.pin-viz svg [class]` porque le ganaba en especificidad a `.pvWk`. Eso arregló las barras y rompió el anillo, que dependía del genérico sin declarar nada propio. La regla que queda: **todo lo que rote o escale declara su propio origen.** Se revisaron los seis animados y había dos más en la misma situación —`.pvHalo` (escala de .6 a 1.7) y `.pvMsg` (escala .94)—, que crecían desde su esquina. Los tres arreglados.
+
+**2. El footer de escritorio quedó desbalanceado.** Al entrar la silueta, la columna de marca pasó a medir ~350px de alto (firma + bajada + label de redes + botón) contra ~130px de las tres listas, y quedaba un hueco vacío enorme abajo a la derecha. **El problema era de alto, no de ancho**: repartir mejor el ancho —que es lo que se había hecho el 22/08— no lo tocaba.
+
+La solución fue mudar el bloque de redes a **columna propia**. Baja la marca a dos elementos (~204px) y suma una cuarta lista corta que ocupa el hueco. El label pasó de "Seguime en redes sociales" a **"Redes sociales"**: a 170px de columna el largo se partía en dos renglones y desalineaba los cuatro títulos.
+
+**Y los cortes del footer salen de medir el contenido, no de números redondos.** El item más ancho de las cuatro listas es "Consulta personalizada": 167px sin partir. Con eso:
+
+| Viewport | Forma | La cuenta |
+|---|---|---|
+| ≥1240px | marca al lado + 4 columnas | 282 + 4×167 + 4×40 + 56 = 1166px de contenido |
+| 845–1239px | marca arriba + 4 columnas | 4×167 + 3×40 + 56 = 844px |
+| 721–844px | marca arriba + 2×2 | debajo de 844 las cuatro se parten |
+| ≤720px | una sola columna | manda el bloque mobile |
+
+**Medido de 360 a 1440px** (360, 390, 430, 600, 721, 760, 844, 845, 961, 1024, 1239, 1240, 1440): sin desborde horizontal en ninguno, header de 67px en todos, y **las cuatro listas miden exactamente lo mismo en todos los anchos de 721 para arriba** —o sea que ningún label ni ningún link se parte en ningún lado—. El footer baja de 914px apilado a 392px en escritorio.
+
+#### Qué se tocó
+
+`docs/index.html` (head con iconos y og, header, footer), `docs/legal.css` y las tres páginas legales, `docs/img/marca/` (nueva), `docs/logo-preview.html` (nueva, con `noindex`), `materiales/marca/` (los masters de 1024px, fuera de `docs/` para que Pages no los sirva).
+
+**El `og:image` dejó de ser una foto suelta.** Apuntaba a `jimena-sobre-mi.jpg`, que se recortaba al azar en 1200×630. Ahora es una pieza diseñada: isotipo + logotipo sobre crema, con `og:image:width/height/alt`. Es el único lugar del sistema donde el nombre completo aparece antes que la cara de Jimena, y está bien que así sea: el link se comparte, la marca viaja.
+
+**Tres PNG de favicon en vez de un `.ico`.** Un `.ico` multi-tamaño es un binario que no se puede revisar en un diff, y los navegadores que importan eligen por el atributo `sizes`.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.

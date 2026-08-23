@@ -7,6 +7,16 @@
 <meta name="description" content="El programa de recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Sin pasar hambre, sin entrenar todos los días, adaptado a tus hormonas.">
 <link rel="canonical" href="https://entrenaconjime.com/">
 
+<!-- Iconos de marca. Tres PNG en vez de un .ico: un .ico multi-tamaño obliga a
+     un binario que no se puede revisar en un diff, y los navegadores que
+     importan eligen solo por el atributo sizes. El de 16 es el que se ve en la
+     pestaña; el de 48 lo usan los accesos directos de escritorio. -->
+<link rel="icon" type="image/png" sizes="16x16" href="/img/marca/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/marca/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/img/marca/favicon-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/marca/apple-touch-icon.png">
+<meta name="theme-color" content="#5C1F32">
+
 <!-- Open Graph / redes sociales -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://entrenaconjime.com/">
@@ -14,12 +24,15 @@
 <meta property="og:locale" content="es_AR">
 <meta property="og:title" content="Jimena Ibañez — Recomposición corporal para mujeres +35">
 <meta property="og:description" content="El programa de recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Sin pasar hambre, sin entrenar todos los días, adaptado a tus hormonas.">
-<meta property="og:image" content="https://entrenaconjime.com/img/jimena-sobre-mi.jpg">
+<meta property="og:image" content="https://entrenaconjime.com/img/marca/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Método Raíz — entrenamiento fuerte, desde la raíz">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Jimena Ibañez — Recomposición corporal para mujeres +35">
 <meta name="twitter:description" content="El programa de recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Sin pasar hambre, sin entrenar todos los días, adaptado a tus hormonas.">
-<meta name="twitter:image" content="https://entrenaconjime.com/img/jimena-sobre-mi.jpg">
+<meta name="twitter:image" content="https://entrenaconjime.com/img/marca/og-image.jpg">
 
 <script type="application/ld+json">
 {
@@ -167,8 +180,15 @@
     color:var(--wine-900);
     letter-spacing:.01em;
     text-decoration:none;
+    display:flex; align-items:center; gap:11px;
   }
-  .logo span{color:var(--bronze);}
+  /* La marca del header es la SOLIDA (raiz blanca sobre disco vino), no el
+     isotipo de aro. A 30px el aro bronce y las raices finas se promedian
+     contra el blanco y queda una mancha rosa: medido, el isotipo delicado
+     recien se lee de 120px para arriba. Ese vive en el og:image y en los
+     materiales impresos, donde hay tamaño. */
+  .logo img{width:30px; height:30px; flex:0 0 30px;}
+  .logo .logotxt span{color:var(--bronze);}
   .navlinks{
     display:flex; align-items:center; gap:36px;
     list-style:none; margin:0; padding:0;
@@ -199,6 +219,102 @@
   .navcta:hover{background:var(--wine-900); border-color:var(--wine-900);}
   .navtoggle{display:none; background:none; border:none; padding:8px;}
   .navtoggle svg{width:24px; height:24px; stroke:var(--wine-900);}
+
+  /* ---------- Franja angosta de escritorio: 721 a 860px ----------
+     La hamburguesa arranca en 720px, pero el nav de escritorio a medida real
+     no entra en 721: con los gaps de 36px el header pide ~772px y la barra se
+     parte en dos lineas con el CTA cortado. Medido, no mirado.
+
+     Era un bug preexistente en el rango 721-730; al sumarle el isotipo al logo
+     (30px + 11px de gap) el rango roto se estiro hasta ~790px. En vez de mover
+     el corte de la hamburguesa —que gobierna TODO el layout mobile, no solo el
+     nav— se aprieta el nav en la franja donde falta lugar. A 721px con estos
+     valores el header pide ~685px y sobra aire.
+
+     Ojo: aca no se puede bajar de 44px de alto tocable, asi que el padding
+     vertical del CTA no se toca. */
+  @media (min-width:721px) and (max-width:860px){
+    .logo{gap:9px; font-size:18px;}
+    .navlinks{gap:20px;}
+    .navlinks a{font-size:14px;}
+    .navcta{padding:11px 16px;}
+    header.flota nav.wrap{
+      max-width:calc(100% - 40px);
+      padding-left:18px; padding-right:10px;
+    }
+  }
+
+  /* ---------- Header flotante al scrollear (solo desktop) ----------
+     Arriba de todo el header es la banda de vidrio de siempre. Apenas se
+     scrollea, la banda se disuelve y lo que queda es `nav.wrap` convertido en
+     una tarjeta flotante, separada de los bordes.
+
+     Tres decisiones para que NO haya salto de layout:
+     • La altura total del header no cambia nunca: la tarjeta baja de 66px a
+       54px y las 6px de margen arriba y abajo reponen la diferencia.
+     • El borde inferior no se saca, se vuelve transparente (si se sacara, el
+       header mediria 66px en vez de 67 y la pagina daria un tironcito).
+     • El blur se muda de <header> a la tarjeta. Los dos no pueden tenerlo:
+       `backdrop-filter` crea contexto de apilado y el de afuera anula al de
+       adentro, asi que la tarjeta se veia plana.
+
+     La opacidad de la tarjeta sigue la misma regla que la banda: no bajar de
+     .9. Sobre #proceso —la unica seccion oscura— el vidrio toma el color de
+     lo que tiene detras y el logo en wine-900 se vuelve ilegible.
+
+     La curva es la de INTERACCION (.16,1,.3,1), no la de entrada: esto
+     responde a un gesto de la persona, tiene que arrancar rapido. */
+  @media (min-width:721px){
+    header{
+      transition:background .38s cubic-bezier(.16,1,.3,1),
+                 border-bottom-color .38s cubic-bezier(.16,1,.3,1),
+                 padding .38s cubic-bezier(.16,1,.3,1),
+                 backdrop-filter .38s cubic-bezier(.16,1,.3,1);
+    }
+    nav.wrap{
+      border:1px solid transparent;
+      border-radius:0;
+      box-shadow:0 0 0 0 rgba(36,31,38,0);
+      transition:height .38s cubic-bezier(.16,1,.3,1),
+                 max-width .38s cubic-bezier(.16,1,.3,1),
+                 padding .38s cubic-bezier(.16,1,.3,1),
+                 background .38s cubic-bezier(.16,1,.3,1),
+                 border-color .38s cubic-bezier(.16,1,.3,1),
+                 border-radius .38s cubic-bezier(.16,1,.3,1),
+                 box-shadow .38s cubic-bezier(.16,1,.3,1);
+    }
+    header.flota{
+      background:transparent;
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+      border-bottom-color:transparent;
+      /* El aire va de padding del header y NO de margin de la tarjeta: un
+         margin-top del primer hijo COLAPSA hacia afuera (el header pasaba de
+         67px a 61px y la pagina daba un salto de 6px al scrollear). */
+      padding-top:6px; padding-bottom:6px;
+    }
+    header.flota nav.wrap{
+      height:54px;
+      max-width:calc(var(--maxw) - 72px);
+      padding-left:24px; padding-right:12px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-color:var(--line);
+      border-radius:var(--r-lg);
+      box-shadow:var(--shadow-sm);
+    }
+  }
+
+  /* Sin movimiento: el estado flotante igual se aplica, pero de una. */
+  @media (prefers-reduced-motion: reduce){
+    header, nav.wrap{transition:none;}
+  }
+
+  /* Testigo del scroll. 1px al tope del documento: mientras se ve, estamos
+     arriba de todo. No se usa un listener de scroll porque este sitio ya
+     resuelve todo con IntersectionObserver y un listener por frame no aporta. */
+  #tope-testigo{position:absolute; top:0; left:0; width:1px; height:1px; pointer-events:none;}
 
   /* ---------- Hero ---------- */
   .hero{
@@ -1173,10 +1289,31 @@
        medio. Se dio vuelta: la marca toma el ancho de su texto y son las tres
        columnas de links las que se reparten el resto en partes iguales, asi
        que sus bordes izquierdos quedan a distancia pareja en vez de amontonados
-       a la derecha. */
-    grid-template-columns:max-content repeat(3, minmax(0,1fr));
-    gap:44px 48px;
+       a la derecha.
+
+       23/08/2026 — CUATRO columnas de links, no tres. Al entrar la silueta, la
+       columna de marca paso a medir ~350px de alto (firma + bajada + label de
+       redes + boton) contra ~130px de las listas, y el desbalance dejaba un
+       hueco vacio enorme abajo a la derecha. El problema era de ALTO, no de
+       ancho: repartir mejor el ancho no lo tocaba.
+       La solucion fue mudar el bloque de redes a columna propia. Baja la marca
+       a dos elementos (~230px) y suma una cuarta lista corta que ocupa el
+       hueco. El label paso de "Seguime en redes sociales" a "Redes sociales":
+       a 176px de columna, el largo se partia en dos renglones y desalineaba
+       los cuatro titulos. */
+    grid-template-columns:max-content repeat(4, minmax(0,1fr));
+    gap:44px 40px;
     align-items:start;
+  }
+  /* La firma del footer es la version con silueta: la raiz sale de la columna
+     de una mujer y ya trae el nombre adentro, asi que reemplaza —no acompaña—
+     a la linea "Metodo Raiz by Jimena Ibañez" que habia acá.
+     Es la unica pieza del sistema que no sirve como marca de uso general
+     (es horizontal, no se recorta en circulo y a 32px desaparece), y es
+     justo el footer donde su formato juega a favor. */
+  footer .fmarca{
+    width:100%; max-width:214px; height:auto;
+    margin:0 0 4px;
   }
   footer .fname{
     font-family:'Archivo', sans-serif; font-weight:700;
@@ -1188,7 +1325,7 @@
      que quedar, la autoria es la aclaracion */
   footer .fname span{font-weight:400; color:var(--ink-soft); letter-spacing:0;}
   .fbajada{
-    margin:12px 0 0; max-width:38ch;
+    margin:12px 0 0; max-width:34ch;
     font-size:14.5px; line-height:1.6; color:var(--ink-soft);
   }
   /* Mismo label mono en mayusculas que ya usan las etiquetas del sitio, pero
@@ -1200,7 +1337,6 @@
     color:var(--bronze-text);
     margin:0 0 18px;
   }
-  .fbrand .ftit{margin:30px 0 14px;}
   .fcol ul{list-style:none; margin:0; padding:0; display:grid; gap:12px;}
   .fcol ul a{
     text-decoration:none; font-size:14.5px; color:var(--ink);
@@ -1439,7 +1575,7 @@
   .pvDot.d2{animation-delay:.14s;}
   .pvDot.d3{animation-delay:.28s;}
   @keyframes pvDotBounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-3.5px);}}
-  .pvMsg{animation:pvMsgIn 10s var(--pvEase) infinite;}
+  .pvMsg{animation:pvMsgIn 10s var(--pvEase) infinite; transform-origin:center;}
   .pvMsg.m2{animation-delay:2.6s;}
   .pvMsg.m3{animation-delay:5.2s;}
   @keyframes pvMsgIn{
@@ -1450,7 +1586,20 @@
   }
 
   /* 02 · anillo que se dibuja + caliper que mide */
-  .pvRing{animation:pvRingDraw 4.4s var(--pvEase) infinite; transform:rotate(-90deg);}
+  /* transform-origin PROPIO, y no heredado del selector generico de arriba.
+     En SVG el valor inicial de transform-origin es `0 0`, no `50% 50%`: con
+     transform-box:fill-box eso es la esquina superior izquierda de la caja del
+     circulo. El rotate(-90deg) giraba el aro alrededor de esa esquina y lo
+     dejaba un diametro entero mas arriba, flotando fuera del anillo gris
+     —medido: 73.4px de desfasaje, exactamente 2r—.
+     Es la contracara del bug de las barras del 22/08: sacar el
+     transform-origin del selector generico arreglo `.pvWk` y rompio esto,
+     que dependia de el sin declararlo. La regla ahora es simple: **todo lo
+     que rote o escale declara su propio origen**. */
+  .pvRing{
+    animation:pvRingDraw 4.4s var(--pvEase) infinite;
+    transform:rotate(-90deg); transform-origin:center;
+  }
   @keyframes pvRingDraw{
     0%{stroke-dashoffset:264;} 30%{stroke-dashoffset:156;}
     64%{stroke-dashoffset:156;} 90%,100%{stroke-dashoffset:264;}
@@ -1505,7 +1654,7 @@
     84%{opacity:1; transform:translateY(0);}
     95%,100%{opacity:0; transform:translateY(-3px);}
   }
-  .pvHalo{animation:pvHalo 5s ease-out infinite;}
+  .pvHalo{animation:pvHalo 5s ease-out infinite; transform-origin:center;}
   @keyframes pvHalo{
     0%,44%{opacity:0; transform:scale(.6);}
     56%{opacity:.5; transform:scale(1);}
@@ -1525,12 +1674,31 @@
     .programa-feats{grid-template-columns:1fr;}
     /* En 4 columnas cada item queda en ~160px y se parte en cuatro renglones,
        asi que la tira terminaba mas alta en tablet que en escritorio. */
-    /* La marca pasa a ocupar la fila entera y las tres listas se reparten
-       abajo. Con 4 columnas a este ancho la bajada se parte en seis renglones
-       y las tres listas quedan con mas aire vacio que texto. */
-    .fgrid{grid-template-columns:repeat(3, minmax(0,1fr));}
+  }
+
+  /* ---------- Footer: tres formas segun el ancho ----------
+     Los cortes salen de medir el contenido, no de numeros redondos. El item
+     mas ancho de las cuatro listas es "Consulta personalizada": 167px sin
+     partir. Con eso:
+
+     • 5 columnas (marca al lado) piden 282 + 4x167 + 4x40 de gap + 56 de
+       padding = 1166px de contenido, o sea ~1240px de viewport.
+     • 4 columnas con la marca arriba piden 4x167 + 3x40 + 56 = 844px.
+     • Por debajo de eso las cuatro listas se parten, asi que pasan a 2x2.
+
+     Debajo de 720px manda el bloque mobile: una sola columna. */
+  @media (max-width:1239px){
+    /* La marca ocupa la fila entera, asi que la firma vuelve a su tamaño
+       completo y la bajada puede respirar. */
+    .fgrid{grid-template-columns:repeat(4, minmax(0,1fr));}
     .fbrand{grid-column:1 / -1;}
     .fbajada{max-width:52ch;}
+    footer .fmarca{max-width:268px;}
+  }
+  @media (max-width:844px){
+    /* Cuatro listas en 2x2: a este ancho, cuatro columnas dejan cada item
+       en ~136px y "Consulta personalizada" se parte en dos renglones. */
+    .fgrid{grid-template-columns:repeat(2, minmax(0,1fr));}
   }
 
   /* ---------- Mobile ---------- */
@@ -1652,6 +1820,7 @@
     .fgrid{grid-template-columns:1fr; gap:34px;}
     .fbrand{grid-column:auto;}
     .fbajada{max-width:none;}
+    footer .fmarca{max-width:268px;}
     .ftit{margin-bottom:14px;}
     /* enlaces del footer: area tactil comoda (minimo 44px de alto) */
     .fcol ul{gap:0;}
@@ -1712,6 +1881,7 @@
 </style>
 </head>
 <body>
+<div id="tope-testigo" aria-hidden="true"></div>
 
 <!-- Sprite de banderas. Va una sola vez y cada tarjeta la referencia con
      <use>, asi que las cuatro copias de la cinta no repiten los trazados.
@@ -1750,7 +1920,7 @@
 
 <header>
   <nav class="wrap">
-    <a href="#" class="logo">Jimena Ibañez<span>.</span></a>
+    <a href="#" class="logo"><img src="/img/marca/marca-96.png" alt="" width="30" height="30" decoding="async"><span class="logotxt">Jimena Ibañez<span>.</span></span></a>
     <ul class="navlinks" id="navlinks">
       <li><a href="#sobre">Sobre mí</a></li>
       <li><a href="#testimonios">Testimonios</a></li>
@@ -2445,14 +2615,8 @@
   <div class="wrap fgrid">
 
     <div class="fcol fbrand">
-      <p class="fname">Método Raíz <span>by Jimena Ibañez</span></p>
+      <img class="fmarca" src="/img/marca/silueta.png" alt="Método Raíz, by Jimena Ibañez" width="471" height="270" loading="lazy" decoding="async">
       <p class="fbajada">Entrenamiento y alimentación para mujeres +35 con cambios hormonales. Sin pasar hambre y sin entrenar todos los días.</p>
-      <p class="ftit">Seguime en redes sociales</p>
-      <div class="fsocial">
-        <a data-ga="instagram_footer" href="https://www.instagram.com/pf.jimenaibanez/" target="_blank" rel="noopener" aria-label="Instagram de Jimena Ibañez">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63 19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0z"/><path d="M12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>
-        </a>
-      </div>
     </div>
 
     <nav class="fcol" aria-label="Programas">
@@ -2477,6 +2641,15 @@
         <li><a href="/cookies/">Política de cookies</a></li>
       </ul>
     </nav>
+
+    <div class="fcol fredes">
+      <h2 class="ftit">Redes sociales</h2>
+      <div class="fsocial">
+        <a data-ga="instagram_footer" href="https://www.instagram.com/pf.jimenaibanez/" target="_blank" rel="noopener" aria-label="Instagram de Jimena Ibañez">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63 19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0z"/><path d="M12 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>
+        </a>
+      </div>
+    </div>
 
   </div>
 
@@ -2541,6 +2714,20 @@
       revealEls.forEach(el => io.observe(el));
     }
   } catch (err) { /* safety-net timeout above already covers this */ }
+
+  // Header flotante: la clase la pone el observador del testigo del tope.
+  // Si IntersectionObserver no existe o tira, no pasa nada: el header queda
+  // como la banda de siempre, que es un estado valido y completo.
+  try {
+    const testigo = document.getElementById('tope-testigo');
+    const cab = document.querySelector('header');
+    if (testigo && cab && 'IntersectionObserver' in window) {
+      const tio = new IntersectionObserver((entries) => {
+        entries.forEach(e => cab.classList.toggle('flota', !e.isIntersecting));
+      }, { threshold: 0 });
+      tio.observe(testigo);
+    }
+  } catch (e) { /* el header sin la clase es el estado por defecto */ }
 
   // hero video: el placeholder "Video próximamente" queda visible por defecto (no
   // depende de JS) y solo se oculta si el <video> logra cargar un archivo real.

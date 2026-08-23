@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Marca Método Raíz — registro de piezas</title>
+<!-- Pagina de trabajo, no de publico. Vive en docs/ porque las piezas viven en
+     docs/img/marca/ y asi las referencia por su ruta real: si una se rompe o se
+     renombra, se ve aca antes que en el sitio. Va con noindex y no esta en el
+     sitemap ni linkeada desde ningun lado. -->
+<link rel="icon" type="image/png" sizes="32x32" href="/img/marca/favicon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FFFFFF; --paper-dim:#FAF8F6; --line:#E9E4DE;
+    --ink:#241F26; --ink-soft:#5B5460;
+    --wine-950:#3E1422; --wine-900:#5C1F32; --wine-600:#9D3A57;
+    --bronze:#A9824A; --bronze-text:#8A6636;
+    --r-sm:10px; --r-md:14px;
+    --shadow-sm:0 1px 2px rgba(36,31,38,.05), 0 6px 16px -10px rgba(36,31,38,.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Archivo', sans-serif; font-size:16px; line-height:1.6;
+  }
+  .wrap{max-width:940px; margin:0 auto; padding:56px 28px 96px;}
+  h1{font-size:34px; font-weight:700; letter-spacing:-.02em; margin:0 0 8px;}
+  h2{font-size:20px; font-weight:600; letter-spacing:-.01em; margin:0 0 6px;}
+  .lead{color:var(--ink-soft); margin:0 0 48px; max-width:64ch;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--bronze-text); margin:0 0 6px;
+  }
+  section{border-top:1px solid var(--line); padding:36px 0 0; margin-top:36px;}
+  section:first-of-type{border-top:none; margin-top:0; padding-top:0;}
+  .desc{color:var(--ink-soft); font-size:15px; margin:0 0 22px; max-width:70ch;}
+  .row{display:flex; flex-wrap:wrap; gap:26px; align-items:flex-end;}
+  .item{display:flex; flex-direction:column; gap:9px; align-items:center;}
+  .item .cap{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.06em;
+    color:var(--ink-soft); text-align:center;
+  }
+  .item .cap b{display:block; color:var(--ink); font-weight:500;}
+  .plate{
+    background:var(--paper-dim); border:1px solid var(--line); border-radius:var(--r-md);
+    padding:28px; display:flex; align-items:center; justify-content:center; gap:34px; flex-wrap:wrap;
+  }
+  .plate.dark{background:var(--wine-950); border-color:var(--wine-950);}
+  .plate.dark .cap{color:#C9B49B;} .plate.dark .cap b{color:#FBF7F5;}
+  img{display:block; max-width:100%;}
+  .paleta{display:flex; gap:14px; flex-wrap:wrap; margin-top:6px;}
+  .sw{width:118px;}
+  .sw i{display:block; height:54px; border-radius:var(--r-sm); border:1px solid rgba(36,31,38,.12);}
+  .sw span{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-soft); display:block; margin-top:7px;}
+  .sw span b{display:block; color:var(--ink); font-weight:500;}
+  table{border-collapse:collapse; width:100%; font-size:14.5px; margin-top:6px;}
+  th,td{text-align:left; padding:11px 12px 11px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--bronze-text); font-weight:500;}
+  td.f{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--wine-600); white-space:nowrap;}
+  .nota{
+    background:var(--paper-dim); border:1px solid var(--line); border-left:3px solid var(--bronze);
+    border-radius:var(--r-sm); padding:16px 20px; font-size:15px; color:var(--ink-soft); margin-top:22px;
+  }
+  .nota strong{color:var(--ink);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Registro interno · 23/08/2026</p>
+  <h1>Marca Método Raíz</h1>
+  <p class="lead">Las piezas que están en producción, en qué tamaño se usa cada una y por qué. Si algo se rompe o se renombra en <span class="mono">docs/img/marca/</span>, se ve acá antes que en el sitio.</p>
+
+  <section>
+    <p class="eyebrow">Marca sólida</p>
+    <h2>Raíz blanca sobre disco vino</h2>
+    <p class="desc">Es la marca de los tamaños chicos: favicon, header, footer de las páginas legales, foto de perfil. Alto contraste, sobrevive a la reducción y se recorta en círculo sin perder nada. Reemplaza al isotipo de aro en todo lo que mida menos de 120px.</p>
+    <div class="plate">
+      <div class="item"><img src="/img/marca/marca-192.png" width="120" height="120" alt="Marca sólida a 120px"><span class="cap"><b>120px</b>og / perfil</span></div>
+      <div class="item"><img src="/img/marca/apple-touch-icon.png" width="60" height="60" alt="Marca sólida a 60px"><span class="cap"><b>60px</b>touch icon</span></div>
+      <div class="item"><img src="/img/marca/favicon-48.png" width="48" height="48" alt="Marca sólida a 48px"><span class="cap"><b>48px</b>escritorio</span></div>
+      <div class="item"><img src="/img/marca/marca-96.png" width="30" height="30" alt="Marca sólida a 30px"><span class="cap"><b>30px</b>header</span></div>
+      <div class="item"><img src="/img/marca/favicon-32.png" width="32" height="32" alt="Marca sólida a 32px"><span class="cap"><b>32px</b>pestaña hidpi</span></div>
+      <div class="item"><img src="/img/marca/favicon-16.png" width="16" height="16" alt="Marca sólida a 16px"><span class="cap"><b>16px</b>pestaña</span></div>
+    </div>
+    <div class="nota"><strong>El 16 es el caso límite y está asumido.</strong> A ese tamaño se lee un punto vino con el tronco claro adentro; las raíces se promedian y desaparecen. Es lo que un favicon puede dar, y es muchísimo más de lo que daba el isotipo de aro, que a 16px era una mancha rosa indistinguible.</div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Isotipo</p>
+    <h2>Raíz vino dentro de aro bronce</h2>
+    <p class="desc">El dibujo delicado. Solo de 120px para arriba: og:image, portada del manual, presentaciones, piezas impresas. El aro está redibujado como círculo real —el archivo original se aplanaba y se desvanecía en el arco inferior— y el tronco cruza el aro en vez de quedarse corto.</p>
+    <div class="plate">
+      <div class="item"><img src="/img/marca/isotipo-512.png" width="200" height="200" alt="Isotipo a 200px"><span class="cap"><b>200px</b></span></div>
+      <div class="item"><img src="/img/marca/isotipo-512.png" width="120" height="120" alt="Isotipo a 120px"><span class="cap"><b>120px</b>mínimo</span></div>
+      <div class="item" style="opacity:.55"><img src="/img/marca/isotipo-512.png" width="48" height="48" alt="Isotipo a 48px, ilegible"><span class="cap"><b>48px</b>no usar</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Firma con silueta</p>
+    <h2>La raíz sale de la columna</h2>
+    <p class="desc">Cierra el footer del sitio. Trae el nombre adentro, así que reemplaza a la línea de texto que había antes. No sirve como marca de uso general: es horizontal, no se recorta en círculo y a 32px la cabeza desaparece.</p>
+    <div class="plate" style="justify-content:flex-start">
+      <img src="/img/marca/silueta.png" width="268" alt="Método Raíz con silueta">
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">og:image</p>
+    <h2>Lo que se ve al compartir el link</h2>
+    <p class="desc">1200×630. Es la única pieza donde el nombre completo aparece antes que la cara de Jimena — el link se comparte y la marca viaja. Antes acá había una foto suelta recortada al azar.</p>
+    <div class="plate"><img src="/img/marca/og-image.jpg" width="600" alt="Pieza og:image de Método Raíz"></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Color</p>
+    <h2>Los dos tonos, y de dónde salen</h2>
+    <p class="desc">Las piezas llegaron con un vino propio (<span class="mono">#631A2A</span> en el isotipo, <span class="mono">#671A31</span> en la marca sólida). Los dos se llevaron al token del sitio. El bronce ya coincidía y no se tocó.</p>
+    <div class="paleta">
+      <div class="sw"><i style="background:#5C1F32"></i><span><b>#5C1F32</b>--wine-900</span></div>
+      <div class="sw"><i style="background:#FBF7F5"></i><span><b>#FBF7F5</b>raíz blanca</span></div>
+      <div class="sw"><i style="background:#A9824A"></i><span><b>#A9824A</b>--bronze</span></div>
+      <div class="sw"><i style="background:#FAF8F6"></i><span><b>#FAF8F6</b>--paper-dim</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Archivos</p>
+    <h2>Qué hay y para qué</h2>
+    <table>
+      <tr><th>Archivo</th><th>Uso</th></tr>
+      <tr><td class="f">favicon-16 / 32 / 48.png</td><td>Pestaña del navegador y accesos directos. Van con <span class="mono">sizes</span> explícito.</td></tr>
+      <tr><td class="f">apple-touch-icon.png</td><td>180×180. iOS al agregar a pantalla de inicio.</td></tr>
+      <tr><td class="f">marca-96 / 192 / 512.png</td><td>Marca sólida. El de 96 es el del header (30px con margen de retina).</td></tr>
+      <tr><td class="f">isotipo-512.png</td><td>Isotipo de aro, solo tamaños grandes.</td></tr>
+      <tr><td class="f">silueta.png</td><td>Firma del footer.</td></tr>
+      <tr><td class="f">og-image.jpg</td><td>1200×630 para redes.</td></tr>
+      <tr><td class="f">materiales/marca/</td><td>Los masters de 1024px, fuera de <span class="mono">docs/</span> para que no se sirvan.</td></tr>
+    </table>
+    <div class="nota"><strong>Pendiente:</strong> vectorizar. Todo esto son PNG salidos de un modelo de imagen, corregidos a mano. Un SVG no vuelve a tener el problema del aro en ningún tamaño, se ve nítido en retina y pesa una fracción. Es el próximo paso, no un bloqueante.</div>
+  </section>
+
+</div>
+</body>
+</html>

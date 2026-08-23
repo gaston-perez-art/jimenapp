@@ -57,8 +57,12 @@ nav.wrap{display:flex; align-items:center; justify-content:space-between; height
   font-family:'Archivo', sans-serif;
   font-weight:700; font-size:19px; letter-spacing:.01em;
   color:var(--wine-900); text-decoration:none;
+  display:inline-flex; align-items:center; gap:11px;
 }
-.logo span{color:var(--bronze);}
+/* Misma marca que el header del sitio: la solida, no el isotipo de aro.
+   Ver el comentario de .logo en index.html. */
+.logo img{width:30px; height:30px; flex:0 0 30px;}
+.logo .logotxt span{color:var(--bronze);}
 /* Volver es la unica accion del header en estas paginas: quien entro aca vino
    desde el footer y lo que necesita es el camino de vuelta, no el menu entero. */
 .volver{
@@ -199,7 +203,7 @@ footer{
   .flegal{gap:0 26px;}
   /* El logo es un link al home: sin esto mide 26px de alto, debajo del minimo
      tocable de 44px. Es el mismo ajuste que ya tiene index.html en mobile. */
-  .logo{display:inline-block; padding:9px 0;}
+  .logo{padding:9px 0;}
 }
 
 /* La tabla de cookies apilada como tarjetas (<=560px).

@@ -2,7 +2,7 @@
 
 > Documenta lo que **ya está decidido y en producción** en `docs/index.html`, leído directo del CSS
 > (no de `memory.md`, que en algún punto queda desactualizado — ver nota de tipografía abajo).
-> **Última actualización:** 21/08/2026
+> **Última actualización:** 23/08/2026
 
 ## Movimiento
 
@@ -15,6 +15,14 @@
 
 **Duraciones de entrada:** hero `1.35s`–`1.6s` con recorrido de 14px; reveal general `1.5s` con recorrido de 34px; stagger de hijos `1.25s` con escalón de `.16s`.
 
+**Todo lo que rote o escale declara su propio `transform-origin`** (23/08/2026). En SVG el valor
+inicial de `transform-origin` es `0 0`, no `50% 50%`, así que con `transform-box:fill-box` el origen
+cae en la esquina superior izquierda de la caja del elemento. `.pvRing` rotaba -90° alrededor de esa
+esquina y el aro terminaba un diámetro entero más arriba. Vale para las cuatro ilustraciones de
+`.pin-viz`: el origen **no** se declara en el selector genérico —le gana en especificidad a las
+clases que sí necesitan un origen distinto, que fue el bug de las barras del 22/08— sino en cada
+clase que transforma.
+
 **Ritmo de fondos del recorrido:** blanco → dim → blanco → dim → **oscuro** → dim → blanco → **footer dim**. La única sección oscura es "Cómo trabajo", y el footer se mantiene claro para no disputárselo: la caja de contacto que va justo arriba ya es el último momento fuerte de color (gradiente vino→bronce).
 
 ## Páginas legales
@@ -25,14 +33,108 @@ Su lenguaje propio, que el sitio no tenía: columna de texto a `68ch` (arriba de
 
 ## Logo
 
-**No existe todavía.** El header es texto plano: `<a class="logo">Jimena Ibañez<span>.</span></a>`
-en Archivo bold, color `--wine-900`. No hay isotipo, no hay favicon (el sitio usa el default del
-navegador), no hay og-image diseñada — el `og:image` actual apunta directo a una foto
-(`jimena-sobre-mi.jpg`), no a una pieza de marca.
+**Existe desde el 23/08/2026.** El sistema tiene **tres piezas**, y la que se usa depende del
+tamaño, no del gusto.
 
-**Pendiente:** definir un símbolo (monograma o geométrico, paleta vino/bronce) del que derivar
-favicon + og-image. Ver `docs/logo-preview.html` cuando exista — mismo criterio que
-`donAR/docs/proceso-logo.md`: iterar en artifact, guardar el preview final versionado en el repo.
+| Pieza | Archivo | Dónde | Desde/hasta |
+|---|---|---|---|
+| **Marca sólida** — raíz blanca sobre disco vino | `marca-96/192/512.png`, `favicon-16/32/48.png`, `apple-touch-icon.png` | Favicon, header del sitio y de las legales, foto de perfil | **Todo lo menor a 120px** |
+| **Isotipo** — raíz vino dentro de aro bronce | `isotipo-512.png` | og:image, manual, presentaciones, impresos | **120px para arriba** |
+| **Firma con silueta** — la raíz sale de la columna | `silueta.png` | Solo el footer del sitio | 268px de ancho |
+
+Todo vive en `docs/img/marca/`. Los masters de 1024px están en `materiales/marca/`, fuera de
+`docs/` para que GitHub Pages no los sirva. El registro visual de las piezas es
+**`docs/logo-preview.html`** — página de trabajo, con `noindex` y sin link desde ningún lado.
+
+**Por qué dos marcas y no una.** El isotipo de aro es el dibujo lindo, pero a tamaño chico
+desaparece: se midió reduciéndolo a 16px reales y queda una mancha rosa indistinguible; a 30px
+—el tamaño del header— todavía se lee lavado. El aro bronce y las raíces finas se promedian
+contra el fondo blanco. La marca sólida invierte el problema: disco vino relleno, raíz blanca,
+tres pares de raíces gruesas en vez de doce finas. A 30px se lee perfecto y a 16px queda un punto
+vino con el tronco adentro, que es lo que un favicon puede dar.
+
+**Correcciones aplicadas a los archivos originales** (son PNG salidos de un modelo de imagen):
+
+- **El aro del isotipo no cerraba.** En el arco inferior se aplanaba en una recta y perdía
+  opacidad. Se redibujó como círculo real. El resto del aro tenía grosor parejo — medido ángulo
+  por ángulo contra el original, el defecto era solo abajo.
+- **El tronco quedaba corto.** Terminaba en corte plano a unos píxeles del aro, sin tocarlo, y se
+  leía como un error. Ahora lo cruza y remata arriba.
+- **El vino no era el del sitio.** El isotipo traía `#631A2A` y la marca sólida `#671A31`. Los dos
+  se llevaron a `--wine-900` (`#5C1F32`). El bronce ya coincidía (`#AF824C` contra `#A9824A`,
+  imperceptible) y no se tocó.
+
+**Pendiente: vectorizar.** Son PNG corregidos a mano. Un SVG no vuelve a tener el problema del aro
+en ningún tamaño, se ve nítido en retina y pesa una fracción. Es el próximo paso, no un bloqueante.
+
+**Arquitectura de marca: arriba la persona, abajo el método.** El header lleva la marca sólida +
+"Jimena Ibañez" en Archivo; el footer lleva la firma con silueta, que trae "Método Raíz" adentro.
+Jimena es quien vende, Método Raíz es lo que vende. Por eso **el logotipo serif del lockup no entra
+al sitio**: vive en el og:image, el manual y los impresos, donde tiene lugar para respirar. La
+decisión del 11/08 sobre tipografía (grotesca sans, ver abajo) sigue en pie donde importaba, que es
+la lectura de la página.
+
+## Header
+
+**Dos estados, y el alto no cambia nunca** (23/08/2026).
+
+| Estado | Cuándo | Qué se ve |
+|---|---|---|
+| **Banda** | Arriba de todo | Vidrio esmerilado de borde a borde, `rgba(255,255,255,.93)` + `blur(20px)`, borde inferior |
+| **Flotante** | Apenas se scrollea | La banda se disuelve y `nav.wrap` queda como tarjeta: 26px de los costados, 6px del techo, `--r-lg`, `--shadow-sm` |
+
+Solo de **721px para arriba**. En mobile no cambia nada: abajo de ese ancho manda la hamburguesa y
+el menú desplegable está anclado al alto del header.
+
+**Los 67px son invariantes.** La tarjeta baja de 66 a 54px y los 6px de aire arriba y abajo reponen
+la diferencia. Tres detalles que lo sostienen y que ya costaron una vez:
+
+- **El aire va de `padding` del header, no de `margin` de la tarjeta.** Un `margin-top` del primer
+  hijo colapsa hacia afuera: el header pasaba de 67px a 61px y la página daba un salto de 6px al
+  cruzar el umbral.
+- **El borde inferior no se saca, se vuelve transparente.** Sacarlo cambiaría el alto en 1px.
+- **El blur se muda de `<header>` a la tarjeta.** Los dos no pueden tenerlo: `backdrop-filter` crea
+  contexto de apilado y el de afuera anula al de adentro.
+
+La clase la pone un **IntersectionObserver sobre un testigo de 1px** al tope del `<body>`, no un
+listener de scroll: el sitio ya resuelve todo con observadores y un callback por frame no aporta.
+Si el observador no existe o tira, el header queda como la banda de siempre, que es un estado
+completo y válido.
+
+La curva es la de **interacción** (`cubic-bezier(.16,1,.3,1)`), no la de entrada: responde a un
+gesto de la persona y tiene que arrancar rápido. Con `prefers-reduced-motion` el estado se aplica
+sin transición.
+
+**Sobre `#proceso`, la única sección oscura**, la tarjeta flota clara sobre el fondo vino y se lee
+bien. La regla de opacidad de la banda sigue valiendo para la tarjeta: **no bajar de .9**.
+
+## Footer
+
+**Cinco grupos: la marca y cuatro listas** —Programas, Otros servicios, Legal y Redes sociales—.
+Las redes son columna propia desde el 23/08/2026: cuando la firma con silueta entró a la columna de
+marca, esa columna pasó a ~350px de alto contra ~130px de las listas y quedaba un hueco vacío abajo
+a la derecha. **El desbalance era de alto, no de ancho**, así que repartir mejor el ancho no lo
+tocaba; mudar las redes baja la marca a dos elementos y suma una cuarta lista corta que ocupa el
+hueco.
+
+**Los cortes salen de medir el contenido.** El item más ancho de las cuatro listas es "Consulta
+personalizada": 167px sin partir.
+
+| Viewport | Forma | La cuenta |
+|---|---|---|
+| **≥1240px** | Marca al lado + 4 columnas | 282 + 4×167 + 4×40 de gap + 56 de padding = 1166px |
+| **845–1239px** | Marca arriba (fila entera) + 4 columnas | 4×167 + 3×40 + 56 = 844px |
+| **721–844px** | Marca arriba + listas en 2×2 | debajo de 844 las cuatro se parten |
+| **≤720px** | Una sola columna | manda el bloque mobile |
+
+A cualquier ancho de 721 para arriba las cuatro listas miden exactamente lo mismo: ningún label ni
+ningún link se parte en ningún punto. El alto total va de 914px apilado a 392px en escritorio.
+
+La firma mide **214px** en el layout de 5 columnas y **268px** cuando la marca ocupa la fila entera
+o está apilada — ahí el ancho sobra y la pieza puede respirar.
+
+**El label es "Redes sociales", no "Seguime en redes sociales":** a 170px de columna el largo se
+partía en dos renglones y desalineaba los cuatro títulos.
 
 ## Paleta
 
@@ -122,8 +224,9 @@ De `contexto.md` y las convenciones del sitio:
 | Campo | Valor hoy |
 |---|---|
 | `<title>` | "Jimena Ibañez — Recomposición corporal para mujeres +35" |
-| `favicon` | **no existe** — default del navegador |
-| `og:image` | foto directa (`jimena-sobre-mi.jpg`), no una pieza diseñada |
+| `favicon` | `img/marca/favicon-16/32/48.png` + `apple-touch-icon.png` (180). Tres PNG con `sizes` explícito en vez de un `.ico` multi-tamaño: un binario no se puede revisar en un diff |
+| `og:image` | `img/marca/og-image.jpg` — 1200×630, isotipo + logotipo sobre crema, con `og:image:width/height/alt` |
+| `theme-color` | `#5C1F32` |
 | Analítica | GA4 `G-CNR32WF83Z`. El atributo es `data-ga="canal_ubicacion"` y un mapa explícito traduce el canal al evento (`whatsapp`→`contacto_whatsapp`, `instagram`→`visita_instagram`, `tiktok`→`visita_tiktok`). **Un canal que no esté en el mapa no manda evento**, a propósito: antes caía por defecto en `visita_instagram` y la métrica mentía sin romperse |
 | Dominio | `entrenaconjime.com` (CNAME, Cloudflare DNS-only → GitHub Pages) |
 
@@ -132,4 +235,5 @@ De `contexto.md` y las convenciones del sitio:
 - `memory.md` — historial completo de decisiones e iteraciones (por qué se llegó a cada cosa).
 - `contexto.md` — quién es Jimena, público objetivo, objetivo del proyecto.
 - `product-discovery/01-tipografia/` — benchmark que descartó Fraunces.
-- `docs/logo-preview.html` — (pendiente de crear) registro del isotipo cuando se defina.
+- `docs/logo-preview.html` — registro visual de las piezas de marca, con `noindex`.
+- `materiales/marca/` — los masters de 1024px, fuera de `docs/`.
