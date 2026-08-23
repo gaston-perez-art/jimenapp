@@ -644,6 +644,8 @@ Dos detalles del avatar sobre este fondo: el degrade vino→bronce de `.t-av` **
 
 **Trampa anotada para cuando se reactive:** la columna "es para vos si…" es casi palabra por palabra la lista de dolores que ahora vive en `#problema`. Si vuelve tal cual, la página dice lo mismo dos veces. Antes de descomentar hay que reescribir esa columna en términos de **encaje** (qué espera, cuánto tiempo puede darle, qué busca), que es lo que un filtro al lado del precio tiene que responder.
 
+**La sección quedó sin bajada** (mismo día, pedido de Jimena). Se había puesto *"Si te cuidás, te movés y aun así tu cuerpo no cambia, seguí leyendo."* debajo del titular y se sacó: el "seguí leyendo" pide permiso para algo que la persona ya está haciendo, y la lista que sigue dice lo mismo mejor. `#problema` es ahora la única sección del sitio cuyo `.section-head` es solo el `<h2>`; el `margin-bottom:52px` de `.section-head` sostiene el aire sin nada extra.
+
 **Sobre la copy:** el texto que trajo Jimena venía en español peninsular ("te cuidas", "báscula", "has probado", "ti misma"). Se pasó entero a voseo y a vocabulario rioplatense ("te cuidás", "balanza", "probaste", "vos misma"), como el resto del sitio. Se sumó un dolor que antes no estaba y que es el más fuerte de la lista: *"Y lo peor: dejaste de confiar en vos misma."*
 
 **No se agregó la volanta "El Desafío"** que venía en el material de referencia. El 22/08 se sacó la volanta "SOBRE MÍ" por el motivo opuesto —no aportaba nada que el titular no dijera— y "¿Te suena algo de esto?" ya dice de qué va la sección. Si se quiere volanta, es una decisión de sistema y van todas o ninguna.
