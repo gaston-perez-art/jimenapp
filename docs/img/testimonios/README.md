@@ -27,6 +27,37 @@ Para redimensionar sin instalar nada (viene con macOS):
 sips -Z 256 original.jpg --out silvia.jpg
 ```
 
+**En Windows** (que es donde trabaja Jimena, y donde no hay Python ni `sips`), con
+PowerShell y `System.Drawing`. Ojo que `sips -Z` solo redimensiona: si la foto no es
+cuadrada hay que **recortar** primero, y ahí es donde se decide el encuadre.
+
+```powershell
+Add-Type -AssemblyName System.Drawing
+$img = [System.Drawing.Image]::FromFile("C:\ruta\original.jpg")
+$x = 0; $y = 230; $lado = 360        # cuadrado a recortar del original
+$bmp = New-Object System.Drawing.Bitmap(256,256)
+$g = [System.Drawing.Graphics]::FromImage($bmp)
+$g.InterpolationMode = 'HighQualityBicubic'
+$g.DrawImage($img, (New-Object System.Drawing.Rectangle(0,0,256,256)),
+             (New-Object System.Drawing.Rectangle($x,$y,$lado,$lado)),
+             [System.Drawing.GraphicsUnit]::Pixel)
+$enc = [System.Drawing.Imaging.ImageCodecInfo]::GetImageEncoders() | ? { $_.MimeType -eq 'image/jpeg' }
+$p = New-Object System.Drawing.Imaging.EncoderParameters(1)
+$p.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, 82)
+$bmp.Save("daiana.jpg", $enc, $p)
+```
+
+**Cómo elegir el recorte, que es lo que cuesta.** No estimar a ojo: abrir la foto en el
+navegador con una grilla de 50px encima y leer las coordenadas de la cara. Después
+generar dos o tres recortes candidatos y **compararlos en círculo, a 54px, al lado de
+las fotos que ya están** — el encuadre tiene que parecerse al del resto (cabeza y algo
+de hombros), y un recorte que se ve bien grande puede quedar apretado en el círculo
+chico. Así se eligió el de Daiana el 23/08/2026.
+
+Si la cara queda pegada a un borde del original, no hay recorte cuadrado que la deje
+centrada: hay que elegir entre centrarla y perder parte de la cabeza, o abrir el
+encuadre y aceptar que quede algo corrida. Para la foto de Daiana se abrió el encuadre.
+
 ## Si una foto todavía no está
 
 No pasa nada y no hay que comentar código: el avatar tiene detrás las iniciales sobre

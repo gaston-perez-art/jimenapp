@@ -296,7 +296,7 @@ El primero es el **dato fisiológico publicado** que el benchmark 03 recomienda 
 
 **Lo que queda abierto de esta pasada:**
 
-- **Falta una sola foto: `daiana.jpg`.** Las otras cuatro entraron el 19/08. Mientras no esté, su tarjeta muestra "DG" sobre el degradé y no se rompe nada.
+- ✅ **`daiana.jpg` entró el 23/08/2026.** Ya no falta ninguna: las seis alumnas tienen foto. Autorización registrada desde el 18/08/2026 en `herramientas/build-testimonios.py` (`autorizacion="18/08/2026, texto y foto"`); solo faltaba el archivo.
 - **La autorización quedó resuelta:** Gastón confirmó el 19/08 que están las cinco. Con eso se reescribió la regla de `CLAUDE.md`, que decía "no se publican datos de alumnas: nombres completos…" y contradecía lo publicado desde el 13/08. Ahora dice lo que de verdad se hace: **nunca condiciones de salud, mediciones ni contacto; nombre, edad, país, foto y cita solo con autorización explícita pedida por Jimena, registrada junto a la cita.**
 - **Ahora sí hay número honesto para la franja del hero.** El 18/08 se rechazó el "+100 alumnas" que pidió Gastón porque Jimena tenía dos alumnas. Con cinco testimonios de tres países y dos de ellos de gente que entrena hace dos años, hay algo verdadero que decir. Sigue sin ser "+100": es "cinco mujeres, tres países".
 
@@ -816,7 +816,7 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 1. ✅ **El dominio ya no bloquea nada: resuelto entero el 19/08/2026.** `entrenaconjime.com` está comprado, apuntado y en vivo con HTTPS. Era el único punto del lanzamiento con una espera que no dependía de que alguien hiciera algo, y esa espera terminó siendo de menos de un minuto. Detalle en la sección de abajo.
 2. 🔴 **Las reglas de la comunidad de WhatsApp** siguen sin definirse y la feature 06 se promociona en el sitio en vivo.
 3. 🔴 **Foto profesional de Jimena** para "Sobre mí". Con el sitio ahora blanco y limpio **la foto actual canta mucho más** que antes: sobre crema se disimulaba, sobre blanco y al lado de un título liviano de 40px es lo primero que rompe.
-4. ✅ **Testimonios: cerrado el 19/08/2026.** Llegaron cinco citas con edad y país, la historia completa de Silvia, cuatro de las cinco fotos y las autorizaciones. La sección dejó de ser un diseño esperando contenido. Queda solo 🟢 `daiana.jpg`, que no bloquea nada. La carga de los próximos testimonios tiene proceso escrito en `testimonios.md`.
+4. ✅ **Testimonios: cerrado el 19/08/2026.** Llegaron cinco citas con edad y país, la historia completa de Silvia, cuatro de las cinco fotos y las autorizaciones. La sección dejó de ser un diseño esperando contenido. Las seis fotos están completas desde el 23/08/2026, cuando entró `daiana.jpg`. La carga de los próximos testimonios tiene proceso escrito en `testimonios.md`.
 5. 🔴 **Sin favicon ni og-image propia** (detectado el 19/08/2026). La pestaña muestra el ícono default del navegador y el preview al compartir es una foto suelta. Con el sitio ya en vivo y el lanzamiento el 23/08, es lo que se ve cada vez que alguien pasa el link por WhatsApp. Está bloqueado por el símbolo de marca, que todavía no existe — ver "Identidad de marca" más arriba.
 
 **Lo que quedó sin commitear a propósito:** `docs/_testimonios-preview.html`, que tiene el bloque destacado con foto en retrato 4:5 y el antes/después armado. No se publica porque tiene datos inventados y el sitio está en vivo.
