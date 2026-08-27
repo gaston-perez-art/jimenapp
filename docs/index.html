@@ -1631,7 +1631,18 @@
      dos columnas dejan ~200px por item y cada titulo se parte en cuatro
      renglones. */
   .planes .programa-feats{grid-template-columns:1fr; gap:18px; padding:26px 28px 30px;}
-  .plan-nombre{font-size:19px; margin:0 0 14px; letter-spacing:-.01em;}
+  .plan-nombre{font-size:19px; margin:0 0 14px; letter-spacing:-.01em; line-height:1.35;}
+  /* El plan 2 se llama igual que el otro y la diferencia va abajo, en un
+     renglon aparte. El "+" arranca ESE renglon en vez de cerrar el de arriba:
+     leido de corrido, "Metodo Raiz / + Tu entrenadora en vivo" dice que hay un
+     programa y algo que se le suma. Con el "+" al final del primer renglon
+     ("Metodo Raiz +") el nombre queda cortado a la mitad y las dos tarjetas
+     dejan de leerse como el mismo programa. */
+  .plan-suma{
+    display:block; margin-top:4px;
+    font-size:15px; font-weight:500; color:var(--wine-600);
+  }
+  .plan-suma .mas{color:var(--bronze-text); font-weight:600;}
   /* El plan 2 no publica precio, por la misma decision de la estrategia que
      antes dejaba el adicional sin cifra (docx, seccion 6): el valor se cuenta
      en la entrevista inicial. Ocupa el lugar del monto para que las dos
@@ -1817,6 +1828,16 @@
     .pin-viz svg [class]{animation:none !important;}
     /* sin movimiento, el "escribiendo" se superpondria con su mensaje */
     .pvTyp{display:none;}
+  }
+
+  /* Lado a lado, el renglon extra del nombre del plan 2 corria su etiqueta y
+     todo lo de abajo 20px respecto del plan base, y esa desalineacion se ve
+     justo donde las dos tarjetas se comparan. Reservando dos renglones en las
+     dos, las etiquetas y los precios vuelven a arrancar a la misma altura.
+     Solo aplica de 961px para arriba: apiladas no hay con que comparar y el
+     hueco extra en el plan base seria aire de mas. */
+  @media (min-width:961px){
+    .planes .plan-nombre{min-height:calc(2 * 19px * 1.35);}
   }
 
   @media (max-width:960px){
@@ -2888,7 +2909,7 @@
            el unico lugar donde queda escrito el porque. -->
       <div class="programa-card reveal" id="plan-vivo">
         <div class="programa-top">
-          <h3 class="plan-nombre">Método Raíz + Tu entrenadora en vivo</h3>
+          <h3 class="plan-nombre">Método Raíz<span class="plan-suma"><span class="mas">+</span> Tu entrenadora en vivo</span></h3>
           <span class="lanz">Con clases en vivo</span>
           <p class="sin-precio">Todo el programa,<br>más yo del otro lado</p>
           <p class="sin-precio-nota">¿Querés saber más?</p>
