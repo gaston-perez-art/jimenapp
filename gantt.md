@@ -94,7 +94,7 @@ gantt
 
 ## Cerradas en los últimos días
 
-**25-27/08:** conversión a pesos bajo el precio, solo para visitantes de Argentina (y el bug del alias de zona horaria, que era invisible en producción) · llegó el documento de estrategia de precios de Jimena y entró al repo · el precio pasó a **USD 45 fundadoras** · adicional de clase en vivo 1 a 1, sin precio publicado · la lista del programa pasó a 7 items al separar el reporte semanal de la revisión mensual · **se cerró el bloqueante del precio por país, abierto desde el 20/08**: cada visitante ve una sola escala, con el precio de referencia tachado y el cupo.
+**25-27/08:** conversión a pesos bajo el precio, solo para visitantes de Argentina (y el bug del alias de zona horaria, que era invisible en producción) · llegó el documento de estrategia de precios de Jimena y entró al repo · el precio pasó a **USD 45 fundadoras** · la clase en vivo 1 a 1 pasó a ser **un segundo plan con tarjeta propia**, sin precio publicado · la lista del programa pasó a 7 items al separar el reporte semanal de la revisión mensual · **se cerró el bloqueante del precio por país, abierto desde el 20/08**: cada visitante ve una sola escala, con el precio de referencia tachado y el cupo.
 
 **18/08:** pasada de sistema visual (blanco dominante, títulos livianos y grandes, botones en píldora, header en vidrio) · Testimonios rediseñada como cinta arrastrable · servidor de QA local para dejar de publicar solo para revisar · sincronización de los cuatro archivos de documentación.
 

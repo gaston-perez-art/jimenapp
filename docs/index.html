@@ -1586,23 +1586,65 @@
   }
   .programa-feats h4{font-size:15.5px; margin:0 0 4px;}
   .programa-feats p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}
-  /* Adicional del programa. Usa el mismo mono, el mismo gap y los mismos
-     tamaños que .programa-feats, asi que se lee como parte de la misma lista,
-     pero va debajo de una linea y SIN numero. Eso es deliberado: la lista
-     numerada es lo que entra en el precio de arriba, y esto se paga aparte.
-     Si algun dia se convierte en el item 07, la tarjeta pasa a prometer que
-     esta incluido. */
-  .programa-extra{
-    display:flex; gap:14px; align-items:flex-start;
-    padding:24px 32px 30px; border-top:1px solid var(--line);
+  /* ================= DOS PLANES (27/08/2026) =================
+     El adicional de clase en vivo dejo de ser una franja al pie de la unica
+     tarjeta y paso a ser su propia tarjeta, por pedido de Jimena. Cada
+     tarjeta repite la lista COMPLETA en vez de decir "todo lo del plan
+     anterior mas la clase en vivo": una lista de un item al lado de una de
+     siete hace ver al plan mas caro como el que trae menos, aunque la letra
+     chica diga lo contrario. La unica diferencia entre las dos listas es el
+     item 08. */
+  .planes{
+    display:grid; grid-template-columns:1fr 1fr; gap:26px;
+    max-width:1040px; margin:0 auto; align-items:start;
   }
-  .programa-extra .pe-tag{
-    flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:12px;
-    color:var(--bronze-text); font-weight:600; letter-spacing:.06em;
-    text-transform:uppercase; margin-top:3px;
+  /* Las dos franjas de precio miden distinto por contenido: la del plan base
+     tiene monto, conversion y cupo; la del plan 2 tiene dos renglones de
+     texto y una linea. Medido: 309 contra 333px, y los dos CTA quedaban
+     desalineados 23px, que a esta escala se ve. `subgrid` hace que la fila de
+     la franja sea LA MISMA para las dos tarjetas, asi que se igualan solas y
+     siguen igualandose si manana cambia el copy. Donde no haya subgrid la
+     regla se ignora y vuelve el desfasaje de 23px, que es el estado anterior:
+     degrada a feo, no a roto. */
+  .planes{grid-template-rows:auto auto;}
+  .planes .programa-card{
+    max-width:none; margin:0;
+    display:grid; grid-row:span 2; grid-template-rows:subgrid;
   }
-  .programa-extra h4{font-size:15.5px; margin:0 0 4px;}
-  .programa-extra p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}
+  /* Con la franja ya igualada, el CTA se empuja al fondo con margin-top:auto
+     y los dos botones caen a la misma altura aunque arriba haya distinta
+     cantidad de renglones. align-items:center es porque en columna flex el
+     boton, que es inline-block, se estiraria de lado a lado. */
+  .planes .programa-top{
+    padding:30px 26px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .planes .programa-cta{margin-top:auto;}
+  /* Adentro de dos columnas la lista va en UNA sola: a ~470px de tarjeta,
+     dos columnas dejan ~200px por item y cada titulo se parte en cuatro
+     renglones. */
+  .planes .programa-feats{grid-template-columns:1fr; gap:18px; padding:26px 28px 30px;}
+  .plan-nombre{font-size:19px; margin:0 0 14px; letter-spacing:-.01em;}
+  /* El plan 2 no publica precio, por la misma decision de la estrategia que
+     antes dejaba el adicional sin cifra (docx, seccion 6): el valor se cuenta
+     en la entrevista inicial. Ocupa el lugar del monto para que las dos
+     franjas midan parecido, pero en cuerpo menor —un texto a 52px pesaria
+     mas que el precio real de al lado—. NO completarlo con un numero "para
+     que quede prolijo": es una decision, no un olvido. */
+  .programa-top .sin-precio{
+    font-size:27px; color:var(--wine-900); letter-spacing:-.02em; line-height:1.15;
+  }
+  .programa-top .sin-precio-nota{
+    margin:11px 0 0; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--wine-600);
+  }
+  /* El item que diferencia al plan 2. Fondo tenue en vez de un badge: la
+     lista tiene que seguir leyendose como lista, y el ojo cae ahi igual
+     porque es el unico item con fondo. */
+  .programa-feats li.es-extra{
+    background:var(--wine-100); border-radius:var(--r-md);
+    padding:14px 16px; margin:-4px;
+  }
 
   /* ================= PROCESO con panel fijo =================
      position:sticky puro. El JS solo sincroniza que diapositiva se ve; si
@@ -1772,6 +1814,10 @@
 
   @media (max-width:960px){
     .programa-feats{grid-template-columns:1fr;}
+    /* Dos tarjetas en paralelo dejan de entrar antes que la lista: a menos de
+       960px cada una cae por debajo de ~450px y la franja del precio se
+       aprieta. Apiladas se leen igual de bien, una debajo de la otra. */
+    .planes{grid-template-columns:1fr; max-width:900px; gap:22px;}
     /* En 4 columnas cada item queda en ~160px y se parte en cuatro renglones,
        asi que la tira terminaba mas alta en tablet que en escritorio. */
   }
@@ -1942,8 +1988,10 @@
     .wrap{padding-left:16px; padding-right:16px;}
     .programa-top .n{font-size:34px;}
     .programa-top .ref{font-size:18px;}
+    .programa-top .sin-precio{font-size:21px;}
     .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
-    .programa-extra{padding:20px 18px 24px;}
+    .planes .programa-feats{padding:20px 18px;}
+    .planes .programa-top{padding:26px 18px;}
     .section-head h2{font-size:32px;}
     .paso{padding-left:14px;}
     .paso p{font-size:15px;}
@@ -2697,11 +2745,11 @@
   <section id="servicios">
     <div class="wrap">
       <div class="section-head reveal" style="text-align:center; margin-left:auto; margin-right:auto;">
-        <h2>Un solo programa, hecho a tu medida</h2>
-        <p>Parte de una evaluación inicial. Nada de plantillas: se arma sobre tu rutina real.</p>
+        <h2>Dos formas de hacer el Método Raíz</h2>
       </div>
 
-      <div class="programa-card reveal">
+      <div class="planes">
+      <div class="programa-card reveal" id="plan-base">
         <!-- OJO: los numeros escritos aca son los de la escala INTERNACIONAL,
              a proposito. El script los reemplaza por los argentinos cuando la
              visitante entra desde Argentina. Si el script no corre, la que ve
@@ -2711,6 +2759,7 @@
              falla hacia el lado barato de explicar. No "arreglar" esto
              poniendo 45 aca. -->
         <div class="programa-top">
+          <h3 class="plan-nombre">Método Raíz</h3>
           <span class="lanz">Precio fundadoras</span>
           <div class="monto">
             <s class="ref" id="precio-ref">USD 175</s>
@@ -2756,7 +2805,7 @@
         const ESCALA_AR = { ref: 'USD 90', precio: 'USD 45', cupo: 'Quedan 10 lugares' };
         if (ES_AR) {
           const ref  = document.getElementById('precio-ref');
-          const n    = document.querySelector('.programa-top .n');
+          const n    = document.querySelector('#plan-base .n');
           const cupo = document.getElementById('cupo');
           if (ref)  ref.textContent  = ESCALA_AR.ref;
           if (n)    n.textContent    = ESCALA_AR.precio;
@@ -2814,20 +2863,89 @@
             </div>
           </li>
         </ul>
-        <!-- Adicional, sin precio publicado. Es la unica parte de la oferta
-             sin cifra a la vista, y es una decision tomada, no un olvido: la
-             estrategia de precios (estrategia/estrategia-de-precios-metodo-raiz.docx,
-             seccion 6) define que el valor del adicional se revela en la
-             entrevista inicial, para no complicar la lectura del precio
-             principal. Si alguien lo completa "para que quede prolijo", esta
-             deshaciendo la decision. -->
-        <div class="programa-extra">
-          <span class="pe-tag">Adicional</span>
-          <div>
-            <h4>Tu entrenadora en vivo, mientras entrenás</h4>
-            <p>Una clase individual por videollamada, con vos entrenando y yo del otro lado corrigiéndote en el momento. Se suma a todo lo que ya incluye el programa; el valor te lo cuento en la entrevista inicial.</p>
-          </div>
+      </div>
+
+      <!-- Plan 2. La lista es la misma del plan base mas el item 08, escrita
+           entera y no por referencia: ver el comentario de .planes en el CSS.
+           Si se toca un texto de la lista de arriba, hay que tocarlo aca
+           tambien —son dos copias a proposito—.
+
+           SIN PRECIO PUBLICADO, y es una decision tomada: la estrategia de
+           precios (estrategia/estrategia-de-precios-metodo-raiz.docx, seccion
+           6) define que el valor de la clase en vivo se revela en la
+           entrevista inicial, para no complicar la lectura del precio
+           principal. Si alguien completa la cifra "para que quede prolijo",
+           esta deshaciendo la decision. Desde el 27/08 la tarjeta ya no
+           dice siquiera "el valor te lo cuento en la entrevista" —Jimena
+           lo cambio por "¿Queres saber mas?"—, asi que este comentario es
+           el unico lugar donde queda escrito el porque. -->
+      <div class="programa-card reveal" id="plan-vivo">
+        <div class="programa-top">
+          <h3 class="plan-nombre">Método Raíz + En vivo</h3>
+          <span class="lanz">Con clases en vivo</span>
+          <p class="sin-precio">Todo el programa,<br>más yo del otro lado</p>
+          <p class="sin-precio-nota">¿Querés saber más?</p>
+          <a class="programa-cta" href="#contacto">Quiero sumar las clases</a>
         </div>
+        <ul class="programa-feats reveal stagger">
+          <li>
+            <span class="pf-n">01</span>
+            <div>
+              <h4>Entrenamiento adaptado a gimnasio o en casa</h4>
+              <p>Tu rutina se arma sobre tu día a día real, entrenes donde entrenes.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">02</span>
+            <div>
+              <h4>Alimentación flexible</h4>
+              <p>Ajustada a tus horarios, tus gustos y tus alergias o intolerancias. Comidas simples, que resuelven en minutos.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">03</span>
+            <div>
+              <h4>Tu entrenadora en WhatsApp</h4>
+              <p>Escribime cuando lo necesites. Estoy del otro lado para responderte y sostenerte en el día a día.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">04</span>
+            <div>
+              <h4>Reporte semanal</h4>
+              <p>Cada semana completás una planilla contándome cómo venís, y me mandás videos entrenando para que te corrija la técnica.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">05</span>
+            <div>
+              <h4>Revisión mensual con datos reales</h4>
+              <p>Cada mes reviso tus fotos, medidas y peso. Ajusto el plan con esos datos, no a ojo.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">06</span>
+            <div>
+              <h4>Videollamada mensual 1 a 1</h4>
+              <p>Para entender el porqué de cada ajuste. No busco que me obedezcas: busco que aprendas el proceso.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">07</span>
+            <div>
+              <h4>Comunidad de mujeres</h4>
+              <p>Compartir el camino con otras mujeres que van en la misma dirección es lo que sostiene el compromiso en el tiempo.</p>
+            </div>
+          </li>
+          <li class="es-extra">
+            <span class="pf-n">08</span>
+            <div>
+              <h4>Tu entrenadora en vivo, mientras entrenás</h4>
+              <p>Una clase individual por videollamada, con vos entrenando y yo del otro lado corrigiéndote en el momento.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
       </div>
     </div>
   </section>
@@ -3287,7 +3405,7 @@
   //    mostrar solo USD, la pagina se ve bien y nadie se entera. Los otros
   //    nombres de la lista son los alias viejos de las provincias.
   //  - El monto NO esta escrito aca: se lee del DOM. Si el precio cambia se
-  //    toca un solo lugar, el <span class="n">, y esto lo sigue.
+  //    toca un solo lugar, el <span class="n"> del plan base, y esto lo sigue.
   //  - DOLAR es que cotizacion se usa. Cambiar esa palabra es todo el cambio.
   const DOLAR = 'blue';
 
@@ -3301,7 +3419,7 @@
   (async () => {
     if (typeof ES_AR === 'undefined' || !ES_AR) return;
     const linea = document.getElementById('conv-ars');
-    const cifra = document.querySelector('.programa-top .n');
+    const cifra = document.querySelector('#plan-base .n');
     if (!linea || !cifra) return;
 
     const usd = parseFloat(cifra.textContent.replace(/[^\d.]/g, ''));
