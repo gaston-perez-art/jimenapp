@@ -451,11 +451,15 @@ Vale anotar el error de razonamiento, porque es reutilizable: la primera reacci�
 - **API de geolocalización por IP** (ipapi.co, ipinfo.io): la respuesta llega a los ~200ms y el número cambia a la vista, justo en el dato más sensible de la página. Además suma un tercero que ve las IP de las visitantes y un límite de plan gratuito.
 - **Cloudflare Workers**: es la solución técnicamente correcta —se resuelve en el servidor, país real, cero parpadeo— pero **exige prender la nube naranja**, y este mismo archivo tiene escrito que antes hay que pasar SSL/TLS a *Full (strict)* o el sitio se cae con un loop de redirecciones. A tres días del lanzamiento no se toca.
 
-**Camino elegido: zona horaria del navegador.** `Intl.DateTimeFormat().resolvedOptions().timeZone` devuelve algo como `America/Argentina/Buenos_Aires`; todas las zonas argentinas empiezan con `America/Argentina`. Resuelve local, instantáneo, sin llamada externa y sin exponer ninguna IP. Falla con VPN o con alguien de viaje, y ese costo se acepta.
+**Camino elegido: zona horaria del navegador.** `Intl.DateTimeFormat().resolvedOptions().timeZone` devuelve algo como `America/Argentina/Buenos_Aires`. Resuelve local, instantáneo, sin llamada externa y sin exponer ninguna IP. Falla con VPN o con alguien de viaje, y ese costo se acepta.
+
+> **Corrección del 25/08/2026, y es importante:** este párrafo decía que *"todas las zonas argentinas empiezan con `America/Argentina`"*. **Es falso.** Chrome en Windows devuelve el alias viejo **`America/Buenos_Aires`**, sin el tramo `Argentina/`, y chequear solo ese prefijo deja afuera a las visitantes argentinas. Se descubrió al implementar la conversión a pesos —ver la entrada del 25-27/08 más abajo—, y en producción habría sido invisible, porque el fallback de los dos casos es mostrar el precio internacional y la página se ve bien igual. **Usar la constante `TZ_AR` que ya está en `docs/index.html`, que cubre los dos formatos y los alias de provincias.**
 
 **Regla de implementación que no es obvia: el precio que va escrito en el HTML es el internacional, no el argentino.** El proyecto ya tiene la regla de que el contenido se vea sin JavaScript, y acá esa regla tiene una dirección correcta: si el script no corre, la que ve el precio equivocado tiene que ser la argentina —a quien se le corrige a la baja en la conversación, que es una charla fácil— y no la extranjera, a quien habría que corregirle a la suba. El fallback tiene que fallar hacia el lado barato de explicar.
 
-**Bloqueado por una decisión de negocio:** cuál es el número internacional. Jimena lo cobra pero no está escrito en ningún lado del repo.
+~~**Bloqueado por una decisión de negocio:** cuál es el número internacional. Jimena lo cobra pero no está escrito en ningún lado del repo.~~
+
+**Destrabado el 27/08/2026** por el documento de estrategia de precios: la escala internacional arranca en **USD 90** para fundadoras (contra USD 45 en Argentina), y el documento agrega una regla que este análisis no tenía — **cada visitante ve una sola escala, la suya; las dos nunca conviven a la vista**. Falta implementarlo. Ver la entrada del 25-27/08 más abajo.
 
 ### Búsqueda con IA: qué falta (20/08/2026)
 
@@ -765,6 +769,53 @@ La solución fue mudar el bloque de redes a **columna propia**. Baja la marca a 
 
 **Tres PNG de favicon en vez de un `.ico`.** Un `.ico` multi-tamaño es un binario que no se puede revisar en un diff, y los navegadores que importan eligen por el atributo `sizes`.
 
+### 25-27/08/2026 — Estrategia de precios nueva, conversión a pesos y el seguimiento real
+
+**Llegó un documento de estrategia de precios de Jimena** (`estrategia/estrategia-de-precios-metodo-raiz.docx`, vigencia desde el 1/09/2026). Reemplaza al precio único de USD 35/mes que estaba publicado desde el 13/08. Lo que define, y que este repo daba por abierto:
+
+| | Fundadoras (1/09 — 30/11/2026) | Lanzamiento (12/2026 — 02/2027) | Referencia (desde 03/2027) |
+|---|---|---|---|
+| **Argentina** | USD 45 · cupo 10-12 | USD 70 | USD 90-110 |
+| **Internacional** | USD 90 · cupo 5-6 | USD 130 | USD 175 |
+
+**Esto destraba el bloqueante de "Definir el precio internacional"**, abierto el 20/08: el número existía en la cabeza de Jimena pero no estaba escrito en ningún lado. Ahora está, y con criterio: no es un porcentaje sobre el argentino, son dos escalas independientes, justificadas por poder adquisitivo. El diagnóstico del documento es que el servicio entregado es de categoría premium (150-340 € en el mercado de habla hispana) y se estaba cobrando por debajo del segmento más básico.
+
+**Lo que se publicó en el sitio el 27/08:** el precio pasó a USD 45 y la etiqueta a "Precio fundadoras". **Ojo con esa etiqueta:** decía "Precio de lanzamiento", que en el vocabulario del documento es la Etapa 2 —USD 70, desde diciembre—, así que nombraba mal la etapa que describe. Los nombres de etapa ahora son vocabulario definido, no adjetivos sueltos.
+
+**El seguimiento real, corregido por Jimena (27/08/2026), porque el documento y el sitio decían cosas distintas.** El documento describe revisión "cada dos semanas"; el sitio había dicho primero "cada dos semanas" y después "cada mes". Ninguna de las dos era del todo la real. La cadencia verdadera:
+
+- **Semanal:** la alumna completa una planilla con su reporte y manda videos entrenando, para corrección de técnica.
+- **Mensual:** revisión de fotos, medidas y peso, y videollamada 1 a 1.
+- **Permanente:** WhatsApp.
+
+La lista del programa pasó de 6 a 7 items para separar el reporte semanal de la revisión mensual, que antes estaban fundidos en uno solo. **El seguimiento semanal es el punto de contacto más fuerte de la oferta y no estaba escrito en ningún lado** — ni en el sitio, ni en el documento de estrategia, que apoya parte de su argumento premium en una quincena que no existe.
+
+**Adicional nuevo: la clase en vivo 1 a 1**, que es Jimena del otro lado de la videollamada mientras la alumna entrena, corrigiendo en el momento. Son USD 15 por clase **y no se publican**: es la única parte de la oferta sin precio a la vista, por decisión del documento (sección 6), para no complicar la lectura del precio principal. Se revela en la entrevista inicial. En el HTML va fuera de la lista numerada, debajo de una línea y con etiqueta "ADICIONAL": la lista numerada es lo que entra en el precio, y esto se paga aparte. **Si alguna vez se convierte en el item 08, la tarjeta pasa a prometer que está incluido.**
+
+**Se distingue del item "Videollamada mensual 1 a 1", que sí está incluido**, y la distinción es fina a propósito: la mensual es para entender los ajustes del plan, el adicional es entrenar acompañada en vivo. Los títulos originales ("Clase en vivo 1 a 1" contra "Videollamada mensual 1 a 1") eran indistinguibles para quien lee, así que el adicional pasó a llamarse por lo que hace: "Tu entrenadora en vivo, mientras entrenás".
+
+#### Precio por país y formato de oferta, implementados (27/08/2026)
+
+**Se cerró el bloqueante abierto el 20/08.** El bloque del precio ahora muestra **una sola escala, la de quien mira**: `USD 90` tachado y `USD 45` para Argentina, `USD 175` tachado y `USD 90` para el resto del mundo, más "Quedan N lugares" debajo.
+
+**Decisiones de Jimena (27/08/2026):** el tachado va sobre **USD 90**, el piso del rango 90-110 de la etapa 3 —el número más defendible, porque si en marzo cobra 90 el tachado de hoy fue honesto— y el cupo se publica como **10**, el piso del rango 10-12, que deja margen si entran 11 o 12. **Eligió no publicar la fecha de cierre.** Eso se aparta de la regla 2 de su propio documento ("sin deadline no hay penetración, hay precio bajo permanente"): hoy la urgencia la sostiene solo el cupo. Queda anotado por si el número de altas no se mueve.
+
+**El cupo internacional (5) no lo confirmó nadie.** Sale del rango 5-6 del documento aplicando el mismo criterio que eligió Jimena para el argentino. Está marcado como tal en el código.
+
+**El script del precio está pegado al bloque, no al final del body, y eso no es un descuido.** Un `<script>` inline se ejecuta durante el parseo, antes de que el navegador pinte lo que sigue, así que la escala ya está resuelta la primera vez que el bloque se dibuja. Con el script al final queda una ventana donde se puede llegar a ver USD 90 y después cambiar a 45, que es exactamente el parpadeo que Gastón pidió evitar cuando se descartó la API de geolocalización. `TZ_AR` y `ES_AR` quedan en el scope global de los scripts clásicos y el script grande del final los reusa para la conversión a pesos, así que la detección de Argentina se define una sola vez.
+
+**Se intentó medir el parpadeo en vez de prevenirlo, y no se pudo.** `performance.getEntriesByType('paint')` volvió vacío: la pestaña del harness corre en segundo plano y Chrome no pinta ahí. **Es la misma trampa de la pestaña oculta que ya está anotada más arriba en este archivo, y volvió a aparecer disfrazada** — esta vez el dato falso no era un `readyState`, era un array vacío que hacía que la comparación diera `true` sola. Prevenir salió más barato que medir.
+
+**Verificado:** los cuatro bloques de JS parsean; con zona horaria argentina se ve 90 tachado / 45 / $70.000 / 10 lugares; y el HTML crudo servido —lo que ve alguien sin JavaScript— trae `USD 175`, `USD 90` y "Quedan 5 lugares", que es la escala internacional. **El fallback sigue fallando hacia el lado caro**, como pide la regla escrita el 20/08.
+
+#### Conversión a pesos bajo el precio (25/08/2026)
+
+Debajo del monto en dólares aparece una referencia en pesos —`(≈ $ 70.000 al valor de hoy)`— **solo para quien entra desde Argentina**. Sale de `dolarapi.com` al cargar la página, con la constante `DOLAR = 'blue'` (**pendiente de confirmar con Jimena a qué dólar cobra de verdad**), redondeada a los 500 pesos para no prometer una precisión que el dato no tiene, y lee el monto del DOM en vez de tenerlo escrito: si cambia el precio, se toca un solo lugar.
+
+**Por qué en dólares y no en pesos:** con inflación y un sitio estático sin CMS, un número en pesos escrito a mano queda viejo entre edición y edición, y además el precio ya se cobra en dólares a las alumnas del exterior. El paréntesis resuelve la conversión sin agregar un número que mantener.
+
+**El bug que casi se publica, y que vale para el precio por país que viene:** el chequeo de zona horaria pedía el prefijo `America/Argentina/`, y **Chrome en Windows devuelve el alias viejo `America/Buenos_Aires`**. Verificado el 25/08 en la máquina de Jimena, con la zona horaria del sistema en Buenos Aires. El resultado era que el paréntesis no aparecía nunca. **Es un bug silencioso**: como el fallback correcto es mostrar solo USD, la página se ve perfecta y nadie se entera. Ahora hay una constante `TZ_AR` con los dos formatos y los alias de provincias, probada contra diez zonas horarias. **La detección por país que está pendiente va a pisar exactamente esta piedra: reusar `TZ_AR`.**
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
@@ -775,7 +826,9 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 **Cómo trabajo:** panel fijo con `position: sticky` que cambia mientras se scrollea, al estilo de Equinox. La izquierda dice la idea de cada paso, la derecha el mecanismo concreto. Nunca lo mismo dicho dos veces. En mobile el panel se oculta y los cuatro pasos se leen como lista.
 
-**Programa (13/08/2026, reemplaza a "Planes"):** Jimena decidió pasar de tres planes (Entrenamiento, Integral, Nutrición) a un solo programa con precio único — USD 35/mes, confirmado real por ella. Se sacó el toggle de duración (Mensual/Semestral/Anual) porque ya no hay nada que comparar. La sección es una sola card (`.programa-card`) con el precio y el CTA arriba, y debajo una lista de 6 features numeradas (entrenamiento adaptado a gimnasio o casa, alimentación flexible, WhatsApp, revisión con datos cada 2 semanas, videollamada mensual 1 a 1, comunidad de mujeres). El copy de las features lo pasó Jimena copiado de otra página como referencia de estructura — se reescribió con palabras propias, mismo criterio que ya está anotado en `contexto.md`/memoria de la IA sobre no copiar texto de ejemplo literal.
+**Programa (13/08/2026, reemplaza a "Planes"):** Jimena decidió pasar de tres planes (Entrenamiento, Integral, Nutrición) a un solo programa con precio único — USD 35/mes, confirmado real por ella. Se sacó el toggle de duración (Mensual/Semestral/Anual) porque ya no hay nada que comparar. La sección es una sola card (`.programa-card`) con el precio y el CTA arriba, y debajo una lista de features numeradas.
+
+> **Actualizado el 27/08/2026:** el precio único de USD 35 ya no existe —pasó a USD 45 fundadoras, con dos escalas por país— y la lista pasó de 6 a 7 features, más un adicional sin precio publicado. La cadencia también cambió: la "revisión con datos cada 2 semanas" de la versión original nunca fue exacta. Ver la entrada del 25-27/08 más abajo, que es la versión vigente. El copy de las features lo pasó Jimena copiado de otra página como referencia de estructura — se reescribió con palabras propias, mismo criterio que ya está anotado en `contexto.md`/memoria de la IA sobre no copiar texto de ejemplo literal.
 
 ## Metodología de entrenamiento (referencia para las herramientas del proyecto)
 
@@ -885,8 +938,8 @@ Consecuencias técnicas, **todas ejecutadas el 19/08/2026**:
 - [x] Definir el posicionamiento: mujeres +30 en general o especialización hormonal. **Decidido por Jimena el 12/08/2026: especialización en salud hormonal femenina** — recomposición corporal para mujeres +35 con resistencia a la insulina, SOP, hipotiroidismo, perimenopausia o menopausia. Aplicado en `docs/index.html` (title, meta description, hero, "Sobre mí", especialidades, footer), `contexto.md` y `estrategia/propuesta-de-valor.md`. Ver `estrategia/propuesta-de-valor.md`.
 - [x] Corregir el footer de `docs/index.html`: decía "mujeres +40" mientras el resto del sitio decía +30. Resuelto: todo el sitio dice ahora +35, consistente con el posicionamiento decidido.
 - [x] Reescribir el hero (12/08/2026, pedido directo de Jimena): eyebrow, lead y una lista de tres bullets nuevos (`.hero-bullets`) con copy más directo — "sin pasar hambre", "sin entrenar todos los días", "adaptado a tus hormonas, tu edad y tu tiempo real". Reemplaza la primera versión del lead, que a Jimena no le convenció. **Corrección importante:** un primer intento puso "30 a 60 años" (tomado literal de un ejemplo de Jimena que era solo de estilo) y afirmaba "el programa que ya ayudó a mujeres..." — Jimena aclaró que el nicho es +35 y que **todavía no tiene alumnas ni resultados propios, recién empieza**. El lead final no afirma experiencia previa ni resultados; describe el método (sin dietas restrictivas, sin entrenar todos los días, adaptado a hormonas). No inventar trayectoria ni testimonios hasta que existan de verdad.
-- [x] **Confirmar el precio publicado.** Resuelto el 13/08/2026 al pasar a un solo programa: Jimena confirmó USD 35/mes como precio único y real. Ya no aplican los precios viejos de Entrenamiento/Integral/Nutrición ni los semestrales/anuales provisorios — se sacaron del sitio.
-- [ ] Medir las horas reales que consume al mes una alumna del programa. Una alumna, un mes, las horas anotadas. Define si el precio único (USD 35/mes) conviene sostenerlo como está.
+- [x] **Confirmar el precio publicado.** Resuelto el 13/08/2026 al pasar a un solo programa: Jimena confirmó USD 35/mes como precio único y real. **Superado el 27/08/2026:** el precio único fue reemplazado por dos escalas por país y tres etapas — USD 45 fundadoras en Argentina, USD 90 internacional. Ver la entrada del 25-27/08.
+- [ ] Medir las horas reales que consume al mes una alumna del programa. Una alumna, un mes, las horas anotadas. **El documento de estrategia del 27/08 estima 2 a 3 horas mensuales por alumna y construye sobre eso todo el argumento del techo del negocio** (a USD 45 hacen falta 22 alumnas para USD 1.000/mes, o sea 45-65 horas). Sigue siendo una estimación: la medición real ahora vale más que antes, porque hay una estrategia entera apoyada en ese número.
 - [ ] **Idea de Jimena (11/08/2026): descuento del 10% para docentes.** Sin definir todavía: si es para docentes en general o solo de Educación Física, y si es permanente o de lanzamiento. (Ya no hace falta definir "a qué planes aplica" — desde el 13/08/2026 hay un solo programa.)
 - [ ] **Comunidad (dirección acordada el 11/08/2026, sin implementar):** grupo de WhatsApp para alumnas activas (retención + testimonios orgánicos, aprovecha el canal que ya se usa para seguimiento 1 a 1) e Instagram como canal público de captación, no como comunidad cerrada — mezclar los dos diluye tanto el mensaje de venta como la intimidad del grupo. Requiere moderación activa de Jimena por ser temas de salud hormonal. Falta definir: cuándo se abre el grupo (¿desde el alta o a partir de cierta antigüedad?) y quién modera si el grupo crece. **Atención:** desde el 13/08/2026 "Comunidad de mujeres" ya se promociona como feature 06 del programa en `docs/index.html`, pero operativamente sigue sin implementarse — hay que resolver esto antes de que alguien se anote esperando algo que todavía no existe.
 
@@ -911,7 +964,7 @@ Consecuencias técnicas, **todas ejecutadas el 19/08/2026**:
 
 **Confirmaciones que salieron del mismo benchmark** (no requieren acción, sirven para no revisar decisiones ya tomadas):
 
-- **El precio publicado estaba bien.** El discovery 02 había concluido que en la categoría nadie publica precios. Con 18 sitios más, ocho sí lo hacen, y el patrón real es que lo publica quien vende un producto cerrado y no lo publica quien vende horas uno a uno. El paso a un solo programa de USD 35/mes del 13/08/2026 puso a la web del lado correcto. Lo que queda abierto no es si publicar el precio, es cuál, y eso depende del pendiente de medir horas reales por alumna.
+- **El precio publicado estaba bien.** El discovery 02 había concluido que en la categoría nadie publica precios. Con 18 sitios más, ocho sí lo hacen, y el patrón real es que lo publica quien vende un producto cerrado y no lo publica quien vende horas uno a uno. El paso a un solo programa de USD 35/mes del 13/08/2026 puso a la web del lado correcto. Lo que queda abierto no es si publicar el precio, es cuál, y eso depende del pendiente de medir horas reales por alumna. **(27/08/2026: la estrategia de precios coincide y va más lejos — publicar el precio de fundadoras es el diferencial de la etapa, porque sin número visible la escasez y la fecha de cierre no comunican nada. La única excepción es el adicional, que va sin precio a propósito.)**
 - **La cursiva del claim del hero tiene respaldo.** Oura usa el mismo recurso en sus titulares ("Get the best sleep of *your life*"): una sola palabra en cursiva marcando dónde está el sentido de la frase. Es la misma solución a la que llegó este proyecto, tomada por un equipo con otro presupuesto.
 - **El método con nombre dejó de ser una idea.** El 02 lo proponía con dos ejemplos. Ahora son cinco de cinco entre quienes venden bien, y cero entre quienes no. Sigue como pendiente arriba, pero ya no está en discusión si conviene.
 

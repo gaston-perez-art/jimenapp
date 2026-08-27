@@ -54,6 +54,8 @@ Este repo está pensado para que cualquiera de los dos (Jimena o Gastón) pueda 
 
 Si volvés después de unos días, esto es lo que cambió. El detalle de cada decisión está en `memory.md`.
 
+> **Esta sección es una foto del 11-12/08/2026 y quedó vieja en varias cosas — se deja fechada, no se reescribe.** Lo que cambió desde entonces: los tres planes con toggle de duración **ya no existen** (13/08, un solo programa), los precios provisorios de USD 20 / 32 tampoco, el WhatsApp y el Instagram reales están publicados desde el 15/08, y la foto de "Sobre mí" dejó de ser placeholder. **El precio vigente desde el 27/08/2026 es USD 45/mes en Argentina y USD 90/mes internacional**, etapa fundadoras — ver `contexto.md` para el estado actual y `estrategia/estrategia-de-precios-metodo-raiz.docx` para la estrategia completa.
+
 **El sitio**
 
 • **Tipografía nueva: Archivo** en lugar de Fraunces y Work Sans. Salió de relevar 12 sitios de referencia: 11 usan grotesca sans en los títulos. Ver `product-discovery/01-tipografia/`.

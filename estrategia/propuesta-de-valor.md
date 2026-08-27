@@ -44,6 +44,6 @@ Este documento cubre la propuesta de valor. Todavía no existen, y conviene arma
 
 ## Análisis económico
 
-El business case está en [`business-case.md`](business-case.md), en esta misma carpeta: rentabilidad por hora, techo del negocio y la secuencia recomendada para moverse. **Nota:** ese análisis todavía está escrito sobre la estructura vieja de tres planes — desde el 13/08/2026 se vende un solo programa a USD 35/mes (ver `memory.md`), pendiente de reflejar ahí.
+El business case está en [`business-case.md`](business-case.md), en esta misma carpeta: rentabilidad por hora, techo del negocio y la secuencia recomendada para moverse. **Nota:** ese análisis todavía está escrito sobre la estructura vieja de tres planes, y ya quedó dos veces atrás — el 13/08/2026 se pasó a un solo programa a USD 35/mes, y el 27/08/2026 ese precio único fue reemplazado por la estrategia de tres etapas y dos escalas de [`estrategia-de-precios-metodo-raiz.docx`](estrategia-de-precios-metodo-raiz.docx). **El precio vigente es USD 45/mes para Argentina y USD 90/mes internacional, etapa fundadoras, con vigencia desde el 1/09/2026.** Pendiente de reflejar en el business case.
 
 Los dos documentos se leen juntos. El business case muestra que el precio es la palanca más fuerte del negocio, y este documento explica qué hace falta para poder subirlo.

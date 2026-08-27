@@ -75,6 +75,8 @@ El patrón real no es "en salud no se publica el precio". Es más simple: **lo q
 
 Lo que queda abierto no es si publicar el precio, es cuál. El `business-case.md` ya concluyó que el techo del negocio lo fija el precio y no la capacidad, y el pendiente de medir las horas reales que consume una alumna sigue siendo el dato que falta para moverlo. Los USD 35 sostienen hoy un programa sin nombre. Un método con nombre, un número con plazo y una comparativa explícita son las tres cosas que, en los dieciocho sitios, acompañan a un precio más alto.
 
+> **Nota del 27/08/2026 — este relevamiento es del 14/08 y se deja como está, porque es el registro de lo que se vio ese día.** Vale anotar cómo terminó: las tres cosas que este benchmark identificó como acompañantes de un precio más alto **se cumplieron las tres**. El método tiene nombre desde el 19/08 ("Método Raíz"), el número tiene plazo desde el 27/08 (precio de fundadoras con fecha de cierre) y la comparativa explícita es justamente el precio de referencia tachado que pide la estrategia nueva. El precio pasó de USD 35 a USD 45, camino a USD 90-110. Ver `estrategia/estrategia-de-precios-metodo-raiz.docx`.
+
 ### 3. El quiz reemplazó al formulario de contacto
 
 Tres de los sitios con mejor conversión aparente abren con un quiz, no con un formulario: Sohee ("Find the perfect program! Take Quiz"), ZOE ("Take the quiz") y Stronger by the Day ("Which one of these do you relate to the most?").

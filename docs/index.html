@@ -1519,9 +1519,41 @@
     background:var(--card);
     border-bottom:1px solid var(--line);
   }
+  /* Etiqueta "Precio de lanzamiento": mismo mono de labels que .pf-n y .pn,
+     no un badge de color. El precio tiene que seguir siendo lo unico que pesa
+     en la franja. */
+  .programa-top .lanz{
+    display:inline-block; margin-bottom:10px;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--bronze-text);
+  }
   .programa-top .monto{display:flex; align-items:baseline; justify-content:center; gap:9px;}
+  /* Precio de referencia tachado. Comparte el baseline con el monto y va
+     antes, no despues: el ancla mental tiene que ser el precio de la etapa 3,
+     y el de fundadoras se lee como la excepcion temporal. Es un <s> y no un
+     span con line-through para que un lector de pantalla tambien sepa que ese
+     numero ya no rige. */
+  .programa-top .ref{
+    font-size:24px; color:var(--ink-soft); letter-spacing:-.02em;
+    text-decoration-thickness:1.5px;
+  }
+  /* El cupo es el otro dato que sostiene el precio de fundadoras. Mono, como
+     el resto de los datos del sitio, y en vino porque es lo unico de la franja
+     que tiene que leerse con algo de urgencia. */
+  .programa-top .cupo{
+    margin:11px 0 0; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--wine-600);
+  }
   .programa-top .n{font-size:52px; font-weight:500; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
   .programa-top .u{font-size:15px; color:var(--ink-soft);}
+  /* Referencia en pesos. Va debajo del monto y no adentro de .monto: ahi
+     dentro es una fila flex con baseline compartida y el parentesis competia
+     de igual a igual con la cifra de 52px. */
+  .programa-top .conv{
+    margin:9px 0 0; font-family:'IBM Plex Mono',monospace;
+    font-size:13px; color:var(--ink-soft);
+  }
+  .programa-top .conv[hidden]{display:none;}
   .programa-cta{
     display:inline-block; margin-top:20px;
     padding:14px 32px; border-radius:var(--r-pill); text-decoration:none;
@@ -1541,12 +1573,36 @@
     display:grid; grid-template-columns:1fr 1fr; gap:22px 28px;
   }
   .programa-feats li{display:flex; gap:14px; align-items:flex-start;}
+  /* Con la lista en 7 items (pasó de 6 el 27/08/2026, al separar el reporte
+     semanal de la revisión mensual) el último queda solo en la fila y deja un
+     hueco a la derecha, justo encima de la franja del adicional. Spanear las
+     dos columnas convierte ese hueco en una fila deliberada. La condicion
+     "impar Y ultimo" solo se cumple cuando la cantidad total es impar, asi que
+     si algun dia vuelven a ser 6 u 8 esto se apaga solo. */
+  .programa-feats li:nth-child(odd):last-child{grid-column:1 / -1;}
   .programa-feats .pf-n{
     flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:12px;
     color:var(--bronze-text); font-weight:600; letter-spacing:.06em; margin-top:2px;
   }
   .programa-feats h4{font-size:15.5px; margin:0 0 4px;}
   .programa-feats p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}
+  /* Adicional del programa. Usa el mismo mono, el mismo gap y los mismos
+     tamaños que .programa-feats, asi que se lee como parte de la misma lista,
+     pero va debajo de una linea y SIN numero. Eso es deliberado: la lista
+     numerada es lo que entra en el precio de arriba, y esto se paga aparte.
+     Si algun dia se convierte en el item 07, la tarjeta pasa a prometer que
+     esta incluido. */
+  .programa-extra{
+    display:flex; gap:14px; align-items:flex-start;
+    padding:24px 32px 30px; border-top:1px solid var(--line);
+  }
+  .programa-extra .pe-tag{
+    flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:12px;
+    color:var(--bronze-text); font-weight:600; letter-spacing:.06em;
+    text-transform:uppercase; margin-top:3px;
+  }
+  .programa-extra h4{font-size:15.5px; margin:0 0 4px;}
+  .programa-extra p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}
 
   /* ================= PROCESO con panel fijo =================
      position:sticky puro. El JS solo sincroniza que diapositiva se ve; si
@@ -1885,7 +1941,9 @@
   @media (max-width:400px){
     .wrap{padding-left:16px; padding-right:16px;}
     .programa-top .n{font-size:34px;}
+    .programa-top .ref{font-size:18px;}
     .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
+    .programa-extra{padding:20px 18px 24px;}
     .section-head h2{font-size:32px;}
     .paso{padding-left:14px;}
     .paso p{font-size:15px;}
@@ -2628,7 +2686,7 @@
           </div>
           <div class="paso">
             <span class="pn">04 · SEGUIMIENTO REAL</span>
-            <p>Cada mes revisamos cargas, medidas y hábitos, y ajustamos el plan con esos datos. Es la diferencia entre un acompañamiento y un PDF con ejercicios.</p>
+            <p>Cada semana me pasás tu reporte y tus videos entrenando, y cada mes revisamos medidas, cargas y hábitos para ajustar el plan con esos datos. Es la diferencia entre un acompañamiento y un PDF con ejercicios.</p>
           </div>
         </div>
       </div>
@@ -2644,10 +2702,67 @@
       </div>
 
       <div class="programa-card reveal">
+        <!-- OJO: los numeros escritos aca son los de la escala INTERNACIONAL,
+             a proposito. El script los reemplaza por los argentinos cuando la
+             visitante entra desde Argentina. Si el script no corre, la que ve
+             el precio equivocado tiene que ser la argentina —se le corrige a
+             la baja en la conversacion, que es una charla facil— y no la
+             extranjera, a quien habria que corregirle a la suba. El fallback
+             falla hacia el lado barato de explicar. No "arreglar" esto
+             poniendo 45 aca. -->
         <div class="programa-top">
-          <div class="monto"><span class="n">USD 35</span><span class="u">/ mes</span></div>
+          <span class="lanz">Precio fundadoras</span>
+          <div class="monto">
+            <s class="ref" id="precio-ref">USD 175</s>
+            <span class="n">USD 90</span><span class="u">/ mes</span>
+          </div>
+          <p class="conv" id="conv-ars" hidden></p>
+          <p class="cupo" id="cupo">Quedan 5 lugares</p>
           <a class="programa-cta" href="#contacto">Quiero empezar</a>
         </div>
+        <script>
+        /* ===== Precio por pais =====
+           Este script esta ACA, pegado al bloque del precio, y no al final del
+           body con todo el resto. El motivo es el pedido de Gaston de que el
+           precio no parpadee: un script inline se ejecuta durante el parseo,
+           antes de que el navegador pinte lo que sigue, asi que la escala ya
+           esta resuelta la primera vez que el bloque se dibuja. Si esto se
+           mueve al script grande del final, aparece una ventana en la que se
+           puede llegar a ver USD 90 y despues cambiar a 45. No moverlo.
+
+           (Se intento medir el parpadeo con la API de paint timing en vez de
+           prevenirlo, y no se pudo: la pestaña del harness corre en segundo
+           plano, Chrome no pinta ahi y `performance.getEntriesByType('paint')`
+           vuelve vacio. Es la misma trampa de la pestaña oculta que ya esta
+           anotada en memory.md.)
+
+           TZ_AR y ES_AR quedan en el scope global de los scripts clasicos, asi
+           que el script del final los reusa para la conversion a pesos: la
+           deteccion de Argentina se define una sola vez, aca.
+
+           OJO con TZ_AR: chequear solo el prefijo "America/Argentina/" NO
+           alcanza. Chrome en Windows devuelve el alias viejo
+           "America/Buenos_Aires" —verificado el 25/08/2026— y sin los alias de
+           abajo ninguna visitante argentina entra por esta rama. El bug es
+           silencioso: el fallback es la escala internacional y la pagina se ve
+           perfecta igual.
+
+           El cupo de 10 lo eligio Jimena el 27/08/2026 sobre el rango 10-12
+           del documento de estrategia. El 5 del HTML sale del rango
+           internacional 5-6 con el mismo criterio (el piso), pero ese NO lo
+           confirmo ella: si aparece el numero real, cambiarlo. */
+        const TZ_AR = /^America\/(Argentina\/|Buenos_Aires$|Cordoba$|Rosario$|Catamarca$|Mendoza$|Jujuy$)/;
+        const ES_AR = TZ_AR.test(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
+        const ESCALA_AR = { ref: 'USD 90', precio: 'USD 45', cupo: 'Quedan 10 lugares' };
+        if (ES_AR) {
+          const ref  = document.getElementById('precio-ref');
+          const n    = document.querySelector('.programa-top .n');
+          const cupo = document.getElementById('cupo');
+          if (ref)  ref.textContent  = ESCALA_AR.ref;
+          if (n)    n.textContent    = ESCALA_AR.precio;
+          if (cupo) cupo.textContent = ESCALA_AR.cupo;
+        }
+        </script>
         <ul class="programa-feats reveal stagger">
           <li>
             <span class="pf-n">01</span>
@@ -2673,25 +2788,46 @@
           <li>
             <span class="pf-n">04</span>
             <div>
-              <h4>Revisión con datos reales</h4>
-              <p>Cada dos semanas reviso tus fotos, medidas, peso y un video tuyo. Ajusto el plan con esos datos, no a ojo.</p>
+              <h4>Reporte semanal</h4>
+              <p>Cada semana completás una planilla contándome cómo venís, y me mandás videos entrenando para que te corrija la técnica.</p>
             </div>
           </li>
           <li>
             <span class="pf-n">05</span>
+            <div>
+              <h4>Revisión mensual con datos reales</h4>
+              <p>Cada mes reviso tus fotos, medidas y peso. Ajusto el plan con esos datos, no a ojo.</p>
+            </div>
+          </li>
+          <li>
+            <span class="pf-n">06</span>
             <div>
               <h4>Videollamada mensual 1 a 1</h4>
               <p>Para entender el porqué de cada ajuste. No busco que me obedezcas: busco que aprendas el proceso.</p>
             </div>
           </li>
           <li>
-            <span class="pf-n">06</span>
+            <span class="pf-n">07</span>
             <div>
               <h4>Comunidad de mujeres</h4>
               <p>Compartir el camino con otras mujeres que van en la misma dirección es lo que sostiene el compromiso en el tiempo.</p>
             </div>
           </li>
         </ul>
+        <!-- Adicional, sin precio publicado. Es la unica parte de la oferta
+             sin cifra a la vista, y es una decision tomada, no un olvido: la
+             estrategia de precios (estrategia/estrategia-de-precios-metodo-raiz.docx,
+             seccion 6) define que el valor del adicional se revela en la
+             entrevista inicial, para no complicar la lectura del precio
+             principal. Si alguien lo completa "para que quede prolijo", esta
+             deshaciendo la decision. -->
+        <div class="programa-extra">
+          <span class="pe-tag">Adicional</span>
+          <div>
+            <h4>Tu entrenadora en vivo, mientras entrenás</h4>
+            <p>Una clase individual por videollamada, con vos entrenando y yo del otro lado corrigiéndote en el momento. Se suma a todo lo que ya incluye el programa; el valor te lo cuento en la entrevista inicial.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -3131,6 +3267,58 @@
     if (!evento) return;
     gtag('event', evento, { ubicacion });
   });
+
+  // Referencia en pesos debajo del precio, solo para quien entra desde
+  // Argentina. Cuatro cosas para tener en cuenta si esto se toca:
+  //
+  //  - El precio real sigue siendo el de arriba, en dolares. Esta linea es una
+  //    aproximacion (de ahi el "≈") y vive en un <p hidden> que solo aparece
+  //    si la cotizacion llego. Sin JavaScript, con adblock o con la API caida,
+  //    la pagina muestra el precio en dolares y nada mas, que es correcto
+  //    igual: no queda un hueco ni un numero viejo.
+  //  - La deteccion es por zona horaria, no por IP ni geolocalizacion, y la
+  //    comparte con el precio por pais de aca abajo: TZ_AR se toca en un solo
+  //    lugar y las dos cosas lo siguen.
+  //  - OJO con TZ_AR, que costo el primer intento: chequear solo el prefijo
+  //    "America/Argentina/" NO alcanza. Chrome en Windows devuelve el alias
+  //    viejo "America/Buenos_Aires" —verificado el 25/08/2026 en la maquina de
+  //    Jimena, con la zona horaria del sistema en Buenos Aires— y ahi el
+  //    parentesis no aparecia nunca. El bug es silencioso: como el fallback es
+  //    mostrar solo USD, la pagina se ve bien y nadie se entera. Los otros
+  //    nombres de la lista son los alias viejos de las provincias.
+  //  - El monto NO esta escrito aca: se lee del DOM. Si el precio cambia se
+  //    toca un solo lugar, el <span class="n">, y esto lo sigue.
+  //  - DOLAR es que cotizacion se usa. Cambiar esa palabra es todo el cambio.
+  const DOLAR = 'blue';
+
+  // ===== Referencia en pesos =====
+  // ES_AR y el precio ya los resolvio el script inline que esta pegado al
+  // bloque del precio, mas arriba en el documento. Se lee de ahi para que la
+  // deteccion de Argentina viva en un solo lugar. El typeof es por si ese
+  // script no llego a correr: en ese caso no hay conversion, que es el
+  // comportamiento correcto (la pagina queda mostrando la escala
+  // internacional, en dolares, sin ningun parentesis en pesos).
+  (async () => {
+    if (typeof ES_AR === 'undefined' || !ES_AR) return;
+    const linea = document.getElementById('conv-ars');
+    const cifra = document.querySelector('.programa-top .n');
+    if (!linea || !cifra) return;
+
+    const usd = parseFloat(cifra.textContent.replace(/[^\d.]/g, ''));
+    if (!usd) return;
+
+    try {
+      const r = await fetch('https://dolarapi.com/v1/dolares/' + DOLAR, { cache: 'no-store' });
+      if (!r.ok) return;
+      const { venta } = await r.json();
+      if (!venta) return;
+      // Redondeado a los 500 pesos: la cotizacion se mueve todos los dias, y
+      // un numero al peso promete una precision que este dato no tiene.
+      const pesos = Math.round(usd * venta / 500) * 500;
+      linea.textContent = '(≈ $ ' + pesos.toLocaleString('es-AR') + ' al valor de hoy)';
+      linea.hidden = false;
+    } catch (err) { /* queda el precio en dolares, que es el precio real */ }
+  })();
 </script>
 
 </body>

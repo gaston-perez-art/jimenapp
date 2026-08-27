@@ -77,7 +77,7 @@ gantt
 
 | Owner | Tarea | Estado | Bloquea a |
 |---|---|---|---|
-| @gaston | Business case al programa único | 🔴 Pendiente | Decisiones de precio |
+| @gaston | Business case sobre las dos escalas | 🔴 Pendiente | Decisiones de precio |
 | @gaston | Reescribir "En qué me especializo" | 🟡 Pendiente | — |
 | @gaston | Misión, visión y propósito | 🟡 Pendiente | BMC |
 | @gaston | Business Model Canvas | 🟡 Pendiente | FODA |
@@ -85,12 +85,16 @@ gantt
 | @gaston | Planillas de seguimiento | 🟢 Pendiente | Argumento de venta |
 | @gaston | Sección "esto no es para vos" | 🟢 Idea del benchmark | — |
 | @gaston | Reordenar la web por el problema | 🟢 Idea del benchmark | — |
-| @jimena | Horas reales de una alumna | 🟡 En curso | Sostener USD 35/mes |
+| @jimena | Horas reales de una alumna | 🟡 En curso | Valida la estimación de 2-3 h/mes de la estrategia |
+| @jimena | Confirmar el cupo internacional (hoy publica 5, sin confirmar) | 🟡 Pendiente | — |
+| @jimena | Confirmar a qué dólar cobra (hoy el sitio usa blue) | 🟢 Pendiente | Conversión a pesos |
 | @jimena | Descuento a docentes | 🟢 Idea sin definir | — |
 | Los dos | Nombre del método | 🟡 Pendiente | Sostener precio |
 | Los dos | CTA de sesión de valoración | 🟢 Idea del benchmark | — |
 
 ## Cerradas en los últimos días
+
+**25-27/08:** conversión a pesos bajo el precio, solo para visitantes de Argentina (y el bug del alias de zona horaria, que era invisible en producción) · llegó el documento de estrategia de precios de Jimena y entró al repo · el precio pasó a **USD 45 fundadoras** · adicional de clase en vivo 1 a 1, sin precio publicado · la lista del programa pasó a 7 items al separar el reporte semanal de la revisión mensual · **se cerró el bloqueante del precio por país, abierto desde el 20/08**: cada visitante ve una sola escala, con el precio de referencia tachado y el cupo.
 
 **18/08:** pasada de sistema visual (blanco dominante, títulos livianos y grandes, botones en píldora, header en vidrio) · Testimonios rediseñada como cinta arrastrable · servidor de QA local para dejar de publicar solo para revisar · sincronización de los cuatro archivos de documentación.
 
@@ -99,4 +103,4 @@ gantt
 
 **14/08:** benchmark world class de 18 sitios · eyebrows sacados · bug del menú hamburguesa entre 401 y 720px.
 
-**12-13/08:** posicionamiento hormonal · precio único USD 35/mes · programa único en reemplazo de los tres planes · hero reescrito · "Sobre mí" con la historia real · video de alumnas en el hero · primeros testimonios reales.
+**12-13/08:** posicionamiento hormonal · precio único USD 35/mes (vigente hasta el 27/08) · programa único en reemplazo de los tres planes · hero reescrito · "Sobre mí" con la historia real · video de alumnas en el hero · primeros testimonios reales.
