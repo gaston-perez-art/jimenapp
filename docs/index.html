@@ -1620,6 +1620,13 @@
     display:flex; flex-direction:column; align-items:center;
   }
   .planes .programa-cta{margin-top:auto;}
+  /* `margin-top:auto` empuja el boton al fondo, pero cuando la franja no
+     tiene aire sobrante ese auto vale 0 y el ultimo renglon queda pegado al
+     boton: pasaba en el plan 2 a todo ancho, y en los dos apilados en mobile,
+     donde tampoco sobra espacio. El margen de abajo del ultimo dato es el
+     piso; el auto sigue repartiendo lo que sobre por encima de ese piso. */
+  .planes .programa-top .cupo,
+  .planes .programa-top .sin-precio-nota{margin-bottom:22px;}
   /* Adentro de dos columnas la lista va en UNA sola: a ~470px de tarjeta,
      dos columnas dejan ~200px por item y cada titulo se parte en cuatro
      renglones. */
@@ -2881,7 +2888,7 @@
            el unico lugar donde queda escrito el porque. -->
       <div class="programa-card reveal" id="plan-vivo">
         <div class="programa-top">
-          <h3 class="plan-nombre">Método Raíz + En vivo</h3>
+          <h3 class="plan-nombre">Método Raíz + Tu entrenadora en vivo</h3>
           <span class="lanz">Con clases en vivo</span>
           <p class="sin-precio">Todo el programa,<br>más yo del otro lado</p>
           <p class="sin-precio-nota">¿Querés saber más?</p>

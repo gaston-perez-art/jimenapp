@@ -97,7 +97,7 @@ Decisiones económicas y de posicionamiento. Viven en `estrategia/`.
 - [ ] 🟡 FODA con competencia directa
 - [x] Posicionamiento definido: especialización en salud hormonal femenina, +35 años (12/08/2026)
 - [x] Precio único USD 35/mes confirmado, programa único reemplaza a los tres planes (13/08/2026) — **superado el 27/08/2026 por la estrategia de tres etapas y dos escalas**
-- [x] **La clase en vivo pasó a ser un plan aparte** (pedido de Jimena, 27/08/2026): dos tarjetas en paralelo, "Método Raíz" (7 items, con precio) y "Método Raíz + En vivo" (los mismos 7 más la clase en vivo como item 08, sin precio publicado). Reemplaza a la franja "Adicional" al pie de la tarjeta única
+- [x] **La clase en vivo pasó a ser un plan aparte** (pedido de Jimena, 27/08/2026): dos tarjetas en paralelo, "Método Raíz" (7 items, con precio) y "Método Raíz + Tu entrenadora en vivo" (los mismos 7 más la clase en vivo como item 08, sin precio publicado). Reemplaza a la franja "Adicional" al pie de la tarjeta única
   - 🟡 **Queda por decidir si el plan 2 lleva su propio cupo.** Hoy el "Quedan N lugares" está solo en el plan base, así que la escasez la sostiene una sola de las dos tarjetas
   - 🟡 **Las dos listas de features son dos copias del mismo texto**, a propósito (ver `memory.md`). Si se edita un feature hay que editarlo en los dos lados
 - [x] **Estrategia de precios definida** (27/08/2026, documento de Jimena en `estrategia/estrategia-de-precios-metodo-raiz.docx`): penetración en tres etapas, dos escalas por país, adicional de clase en vivo sin precio publicado, y cuatro reglas que la sostienen (escasez real, fecha de cierre visible, precio congelado para fundadoras, referencia tachada). Vigencia desde el 1/09/2026
