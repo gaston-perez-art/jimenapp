@@ -1528,32 +1528,8 @@
     letter-spacing:.12em; text-transform:uppercase; color:var(--bronze-text);
   }
   .programa-top .monto{display:flex; align-items:baseline; justify-content:center; gap:9px;}
-  /* Precio de referencia tachado. Comparte el baseline con el monto y va
-     antes, no despues: el ancla mental tiene que ser el precio de la etapa 3,
-     y el de fundadoras se lee como la excepcion temporal. Es un <s> y no un
-     span con line-through para que un lector de pantalla tambien sepa que ese
-     numero ya no rige. */
-  .programa-top .ref{
-    font-size:24px; color:var(--ink-soft); letter-spacing:-.02em;
-    text-decoration-thickness:1.5px;
-  }
-  /* El cupo es el otro dato que sostiene el precio de fundadoras. Mono, como
-     el resto de los datos del sitio, y en vino porque es lo unico de la franja
-     que tiene que leerse con algo de urgencia. */
-  .programa-top .cupo{
-    margin:11px 0 0; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
-    letter-spacing:.06em; text-transform:uppercase; color:var(--wine-600);
-  }
   .programa-top .n{font-size:52px; font-weight:500; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
   .programa-top .u{font-size:15px; color:var(--ink-soft);}
-  /* Referencia en pesos. Va debajo del monto y no adentro de .monto: ahi
-     dentro es una fila flex con baseline compartida y el parentesis competia
-     de igual a igual con la cifra de 52px. */
-  .programa-top .conv{
-    margin:9px 0 0; font-family:'IBM Plex Mono',monospace;
-    font-size:13px; color:var(--ink-soft);
-  }
-  .programa-top .conv[hidden]{display:none;}
   .programa-cta{
     display:inline-block; margin-top:20px;
     padding:14px 32px; border-radius:var(--r-pill); text-decoration:none;
@@ -1598,14 +1574,14 @@
     display:grid; grid-template-columns:1fr 1fr; gap:26px;
     max-width:1040px; margin:0 auto; align-items:start;
   }
-  /* Las dos franjas de precio miden distinto por contenido: la del plan base
-     tiene monto, conversion y cupo; la del plan 2 tiene dos renglones de
-     texto y una linea. Medido: 309 contra 333px, y los dos CTA quedaban
-     desalineados 23px, que a esta escala se ve. `subgrid` hace que la fila de
+  /* Las dos franjas de precio pueden medir distinto segun el copy: la del
+     plan base cambia de un monto a dos renglones de texto para quien entra
+     desde Argentina (ver el script de #plan-base), y la del plan 2 siempre
+     tiene dos renglones de texto y una linea. `subgrid` hace que la fila de
      la franja sea LA MISMA para las dos tarjetas, asi que se igualan solas y
      siguen igualandose si manana cambia el copy. Donde no haya subgrid la
-     regla se ignora y vuelve el desfasaje de 23px, que es el estado anterior:
-     degrada a feo, no a roto. */
+     regla se ignora y vuelve un posible desfasaje entre los dos CTA: degrada
+     a feo, no a roto. */
   .planes{grid-template-rows:auto auto;}
   .planes .programa-card{
     max-width:none; margin:0;
@@ -1625,7 +1601,6 @@
      boton: pasaba en el plan 2 a todo ancho, y en los dos apilados en mobile,
      donde tampoco sobra espacio. El margen de abajo del ultimo dato es el
      piso; el auto sigue repartiendo lo que sobre por encima de ese piso. */
-  .planes .programa-top .cupo,
   .planes .programa-top .sin-precio-nota{margin-bottom:22px;}
   /* Adentro de dos columnas la lista va en UNA sola: a ~470px de tarjeta,
      dos columnas dejan ~200px por item y cada titulo se parte en cuatro
@@ -2778,34 +2753,30 @@
 
       <div class="planes">
       <div class="programa-card reveal" id="plan-base">
-        <!-- OJO: los numeros escritos aca son los de la escala INTERNACIONAL,
-             a proposito. El script los reemplaza por los argentinos cuando la
-             visitante entra desde Argentina. Si el script no corre, la que ve
-             el precio equivocado tiene que ser la argentina —se le corrige a
-             la baja en la conversacion, que es una charla facil— y no la
-             extranjera, a quien habria que corregirle a la suba. El fallback
-             falla hacia el lado barato de explicar. No "arreglar" esto
-             poniendo 45 aca. -->
+        <!-- OJO: lo escrito aca es el precio INTERNACIONAL fijo, a proposito.
+             El script de abajo lo reemplaza por el bloque "consultar" solo
+             cuando la visitante entra desde Argentina. Si el script no corre,
+             la que ve el precio equivocado es la argentina —se le explica en
+             la conversacion que ese numero es el internacional, charla facil—
+             y no la extranjera, a quien habria que corregirle a la suba. El
+             fallback sigue fallando hacia el lado barato de explicar. -->
         <div class="programa-top">
           <h3 class="plan-nombre">Método Raíz</h3>
-          <span class="lanz">Precio fundadoras</span>
-          <div class="monto">
-            <s class="ref" id="precio-ref">USD 175</s>
-            <span class="n">USD 90</span><span class="u">/ mes</span>
+          <div class="monto" id="precio-bloque">
+            <span class="n">USD 350</span><span class="u">/ mes</span>
           </div>
-          <p class="conv" id="conv-ars" hidden></p>
-          <p class="cupo" id="cupo">Quedan 5 lugares</p>
-          <a class="programa-cta" href="#contacto">Quiero empezar</a>
+          <a class="programa-cta" id="cta-plan-base" href="#contacto">Quiero empezar</a>
         </div>
         <script>
         /* ===== Precio por pais =====
            Este script esta ACA, pegado al bloque del precio, y no al final del
            body con todo el resto. El motivo es el pedido de Gaston de que el
            precio no parpadee: un script inline se ejecuta durante el parseo,
-           antes de que el navegador pinte lo que sigue, asi que la escala ya
-           esta resuelta la primera vez que el bloque se dibuja. Si esto se
-           mueve al script grande del final, aparece una ventana en la que se
-           puede llegar a ver USD 90 y despues cambiar a 45. No moverlo.
+           antes de que el navegador pinte lo que sigue, asi que el bloque ya
+           esta resuelto la primera vez que se dibuja. Si esto se mueve al
+           script grande del final, aparece una ventana en la que se puede
+           llegar a ver "USD 350" y despues cambiar a "Consultá tu precio".
+           No moverlo.
 
            (Se intento medir el parpadeo con la API de paint timing en vez de
            prevenirlo, y no se pudo: la pestaña del harness corre en segundo
@@ -2813,31 +2784,36 @@
            vuelve vacio. Es la misma trampa de la pestaña oculta que ya esta
            anotada en memory.md.)
 
-           TZ_AR y ES_AR quedan en el scope global de los scripts clasicos, asi
-           que el script del final los reusa para la conversion a pesos: la
-           deteccion de Argentina se define una sola vez, aca.
-
            OJO con TZ_AR: chequear solo el prefijo "America/Argentina/" NO
            alcanza. Chrome en Windows devuelve el alias viejo
            "America/Buenos_Aires" —verificado el 25/08/2026— y sin los alias de
            abajo ninguna visitante argentina entra por esta rama. El bug es
-           silencioso: el fallback es la escala internacional y la pagina se ve
+           silencioso: el fallback es el precio internacional y la pagina se ve
            perfecta igual.
 
-           El cupo de 10 lo eligio Jimena el 27/08/2026 sobre el rango 10-12
-           del documento de estrategia. El 5 del HTML sale del rango
-           internacional 5-6 con el mismo criterio (el piso), pero ese NO lo
-           confirmo ella: si aparece el numero real, cambiarlo. */
+           Decision de Gaston (21/09/2026): se abandona el esquema de
+           fundadoras/etapas/cupo del 27/08. Ahora hay una sola escala fija,
+           USD 350/mes, para todo el mundo excepto Argentina, que no ve ningun
+           numero en el sitio: consulta el precio de lanzamiento por WhatsApp,
+           en privado con Jimena. */
         const TZ_AR = /^America\/(Argentina\/|Buenos_Aires$|Cordoba$|Rosario$|Catamarca$|Mendoza$|Jujuy$)/;
         const ES_AR = TZ_AR.test(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
-        const ESCALA_AR = { ref: 'USD 90', precio: 'USD 45', cupo: 'Quedan 10 lugares' };
         if (ES_AR) {
-          const ref  = document.getElementById('precio-ref');
-          const n    = document.querySelector('#plan-base .n');
-          const cupo = document.getElementById('cupo');
-          if (ref)  ref.textContent  = ESCALA_AR.ref;
-          if (n)    n.textContent    = ESCALA_AR.precio;
-          if (cupo) cupo.textContent = ESCALA_AR.cupo;
+          const bloque = document.getElementById('precio-bloque');
+          const cta    = document.getElementById('cta-plan-base');
+          if (bloque) {
+            bloque.outerHTML =
+              '<p class="sin-precio">Consultá tu<br>precio de lanzamiento</p>' +
+              '<p class="sin-precio-nota">Te lo cuento por WhatsApp</p>';
+          }
+          if (cta) {
+            cta.textContent = 'Consultar por WhatsApp';
+            cta.href = 'https://api.whatsapp.com/send?phone=541135863879&text=' +
+              encodeURIComponent('🏋️‍♀️ Hola Jime, quiero saber el precio de lanzamiento del Método Raíz');
+            cta.target = '_blank';
+            cta.rel = 'noopener';
+            cta.dataset.ga = 'whatsapp_precio';
+          }
         }
         </script>
         <ul class="programa-feats reveal stagger">
@@ -3413,58 +3389,6 @@
     if (!evento) return;
     gtag('event', evento, { ubicacion });
   });
-
-  // Referencia en pesos debajo del precio, solo para quien entra desde
-  // Argentina. Cuatro cosas para tener en cuenta si esto se toca:
-  //
-  //  - El precio real sigue siendo el de arriba, en dolares. Esta linea es una
-  //    aproximacion (de ahi el "≈") y vive en un <p hidden> que solo aparece
-  //    si la cotizacion llego. Sin JavaScript, con adblock o con la API caida,
-  //    la pagina muestra el precio en dolares y nada mas, que es correcto
-  //    igual: no queda un hueco ni un numero viejo.
-  //  - La deteccion es por zona horaria, no por IP ni geolocalizacion, y la
-  //    comparte con el precio por pais de aca abajo: TZ_AR se toca en un solo
-  //    lugar y las dos cosas lo siguen.
-  //  - OJO con TZ_AR, que costo el primer intento: chequear solo el prefijo
-  //    "America/Argentina/" NO alcanza. Chrome en Windows devuelve el alias
-  //    viejo "America/Buenos_Aires" —verificado el 25/08/2026 en la maquina de
-  //    Jimena, con la zona horaria del sistema en Buenos Aires— y ahi el
-  //    parentesis no aparecia nunca. El bug es silencioso: como el fallback es
-  //    mostrar solo USD, la pagina se ve bien y nadie se entera. Los otros
-  //    nombres de la lista son los alias viejos de las provincias.
-  //  - El monto NO esta escrito aca: se lee del DOM. Si el precio cambia se
-  //    toca un solo lugar, el <span class="n"> del plan base, y esto lo sigue.
-  //  - DOLAR es que cotizacion se usa. Cambiar esa palabra es todo el cambio.
-  const DOLAR = 'blue';
-
-  // ===== Referencia en pesos =====
-  // ES_AR y el precio ya los resolvio el script inline que esta pegado al
-  // bloque del precio, mas arriba en el documento. Se lee de ahi para que la
-  // deteccion de Argentina viva en un solo lugar. El typeof es por si ese
-  // script no llego a correr: en ese caso no hay conversion, que es el
-  // comportamiento correcto (la pagina queda mostrando la escala
-  // internacional, en dolares, sin ningun parentesis en pesos).
-  (async () => {
-    if (typeof ES_AR === 'undefined' || !ES_AR) return;
-    const linea = document.getElementById('conv-ars');
-    const cifra = document.querySelector('#plan-base .n');
-    if (!linea || !cifra) return;
-
-    const usd = parseFloat(cifra.textContent.replace(/[^\d.]/g, ''));
-    if (!usd) return;
-
-    try {
-      const r = await fetch('https://dolarapi.com/v1/dolares/' + DOLAR, { cache: 'no-store' });
-      if (!r.ok) return;
-      const { venta } = await r.json();
-      if (!venta) return;
-      // Redondeado a los 500 pesos: la cotizacion se mueve todos los dias, y
-      // un numero al peso promete una precision que este dato no tiene.
-      const pesos = Math.round(usd * venta / 500) * 500;
-      linea.textContent = '(≈ $ ' + pesos.toLocaleString('es-AR') + ' al valor de hoy)';
-      linea.hidden = false;
-    } catch (err) { /* queda el precio en dolares, que es el precio real */ }
-  })();
 </script>
 
 </body>

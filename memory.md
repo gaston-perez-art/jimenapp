@@ -828,6 +828,21 @@ Debajo del monto en dólares aparece una referencia en pesos —`(≈ $ 70.000 a
 
 **El bug que casi se publica, y que vale para el precio por país que viene:** el chequeo de zona horaria pedía el prefijo `America/Argentina/`, y **Chrome en Windows devuelve el alias viejo `America/Buenos_Aires`**. Verificado el 25/08 en la máquina de Jimena, con la zona horaria del sistema en Buenos Aires. El resultado era que el paréntesis no aparecía nunca. **Es un bug silencioso**: como el fallback correcto es mostrar solo USD, la página se ve perfecta y nadie se entera. Ahora hay una constante `TZ_AR` con los dos formatos y los alias de provincias, probada contra diez zonas horarias. **La detección por país que está pendiente va a pisar exactamente esta piedra: reusar `TZ_AR`.**
 
+### 21/09/2026 — El esquema de fundadoras se abandona: precio fijo internacional, consulta privada para Argentina
+
+**Decisión de Gastón, un mes después de la estrategia del 27/08: se pisa por completo el esquema de tres etapas y dos escalas.** `estrategia/estrategia-de-precios-metodo-raiz.docx` queda desactualizado en la parte de precio (el resto —seguimiento real, adicional sin publicar— sigue vigente). Nuevo esquema, mucho más simple:
+
+- **Internacional: USD 350/mes, fijo y limpio.** Sin tachado de referencia, sin cupo, sin fecha de cierre, sin etapas. Es el precio de catálogo, no una oferta de lanzamiento.
+- **Argentina: no ve ningún número en el sitio.** El bloque de precio dice "Consultá tu precio de lanzamiento" con un botón que abre WhatsApp directo (mensaje precargado), y el valor se lo cuenta Jimena en privado, por canal directo — no en la web.
+
+**Por qué se pisa una decisión que costó tanto documentar y depurar (script pegado al bloque, alias de zona horaria, subgrid, conversión a pesos):** la mecánica de detección por país (`TZ_AR`/`ES_AR`, sin parpadeo) seguía siendo válida y se reusó entera — lo que cambió es *qué* se muestra en cada rama, no *cómo* se decide la rama. Nadie objetó el porqué del cambio de fondo en esta sesión; se registra la decisión, no la justificación de negocio, que solo la tiene Gastón/Jimena.
+
+**Consecuencia técnica: la conversión a pesos (`dolarapi.com`, sección "Conversión a pesos" arriba) se eliminó del sitio.** Su única razón de ser era mostrar una referencia en ARS bajo el precio en USD que veía Argentina, y Argentina ya no ve ningún precio en USD para convertir. Se sacaron el `<p id="conv-ars">`, el bloque de `<script>` que hacía el fetch, y las clases CSS `.ref`, `.cupo` y `.conv`, que quedaban sin ningún elemento que las usara. `.lanz` se conservó: sigue en uso en la tarjeta del plan 2 ("Con clases en vivo").
+
+**Verificado en `localhost:8899` el 21/09/2026** con el navegador en zona horaria `America/Buenos_Aires` (así se probó la rama argentina directamente, sin necesidad de spoofear nada): el bloque muestra "Consultá tu precio de lanzamiento" / "Te lo cuento por WhatsApp" y el botón abre `api.whatsapp.com` con el texto correcto, decodificado. El HTML crudo servido (sin JS) confirma `USD 350` limpio. El regex `TZ_AR` se retesteó contra seis zonas horarias (tres argentinas, tres no) y sigue clasificando bien.
+
+**Pendiente, no bloqueante:** `estrategia/business-case.md` y `estrategia/propuesta-de-valor.md` siguen citando el esquema de fundadoras (45/90) en sus números — igual que ya estaban desactualizados sobre el programa único de USD 35 antes del 27/08. Reescribirlos es tarea de negocio, no de código, y no bloquea que el sitio esté correcto.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
