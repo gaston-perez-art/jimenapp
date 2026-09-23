@@ -66,8 +66,8 @@
   <p class="sub">Completá los datos y se genera el enlace para mandarle a quien compró el regalo. Quien lo recibe lo abre tocando la caja.</p>
 
   <form id="f" autocomplete="off">
-    <label>Qué incluye
-      <input name="i" required maxlength="60" placeholder="Ej.: 4 clases de entrenamiento">
+    <label>Cantidad de sesiones <small>la tarjeta dice "5 sesiones de entrenamiento"</small>
+      <input name="i" type="number" inputmode="numeric" min="1" max="99" step="1" required placeholder="Ej.: 5">
     </label>
     <div class="row">
       <label>Para <small>quien lo recibe</small>

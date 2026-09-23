@@ -1527,9 +1527,6 @@
     font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500;
     letter-spacing:.12em; text-transform:uppercase; color:var(--bronze-text);
   }
-  .programa-top .monto{display:flex; align-items:baseline; justify-content:center; gap:9px;}
-  .programa-top .n{font-size:52px; font-weight:500; color:var(--wine-900); letter-spacing:-.03em; line-height:1;}
-  .programa-top .u{font-size:15px; color:var(--ink-soft);}
   .programa-cta{
     display:inline-block; margin-top:20px;
     padding:14px 32px; border-radius:var(--r-pill); text-decoration:none;
@@ -1989,8 +1986,6 @@
   /* ---------- Pantallas chicas: 360px y menos ---------- */
   @media (max-width:400px){
     .wrap{padding-left:16px; padding-right:16px;}
-    .programa-top .n{font-size:34px;}
-    .programa-top .ref{font-size:18px;}
     .programa-top .sin-precio{font-size:21px;}
     .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
     .planes .programa-feats{padding:20px 18px;}
@@ -2753,69 +2748,17 @@
 
       <div class="planes">
       <div class="programa-card reveal" id="plan-base">
-        <!-- OJO: lo escrito aca es el precio INTERNACIONAL fijo, a proposito.
-             El script de abajo lo reemplaza por el bloque "consultar" solo
-             cuando la visitante entra desde Argentina. Si el script no corre,
-             la que ve el precio equivocado es la argentina —se le explica en
-             la conversacion que ese numero es el internacional, charla facil—
-             y no la extranjera, a quien habria que corregirle a la suba. El
-             fallback sigue fallando hacia el lado barato de explicar. -->
+        <!-- Sin precio publicado, para nadie (decision de Gaston del
+             23/09/2026). Hasta esa fecha el internacional veia USD 350 y un
+             script por zona horaria le cambiaba el bloque a Argentina; ahora
+             todas ven la version que antes era solo argentina, y el valor lo
+             cuenta Jimena por WhatsApp. Sin script, no hay nada que parpadee. -->
         <div class="programa-top">
           <h3 class="plan-nombre">Método Raíz</h3>
-          <div class="monto" id="precio-bloque">
-            <span class="n">USD 350</span><span class="u">/ mes</span>
-          </div>
-          <a class="programa-cta" id="cta-plan-base" href="#contacto">Quiero empezar</a>
+          <p class="sin-precio">Consultá tu<br>precio de lanzamiento</p>
+          <p class="sin-precio-nota">Te lo cuento por WhatsApp</p>
+          <a class="programa-cta" data-ga="whatsapp_precio" href="https://api.whatsapp.com/send?phone=541135863879&amp;text=%F0%9F%8F%8B%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F%20Hola%20Jime%2C%20quiero%20saber%20el%20precio%20de%20lanzamiento%20del%20M%C3%A9todo%20Ra%C3%ADz" target="_blank" rel="noopener">Consultar por WhatsApp</a>
         </div>
-        <script>
-        /* ===== Precio por pais =====
-           Este script esta ACA, pegado al bloque del precio, y no al final del
-           body con todo el resto. El motivo es el pedido de Gaston de que el
-           precio no parpadee: un script inline se ejecuta durante el parseo,
-           antes de que el navegador pinte lo que sigue, asi que el bloque ya
-           esta resuelto la primera vez que se dibuja. Si esto se mueve al
-           script grande del final, aparece una ventana en la que se puede
-           llegar a ver "USD 350" y despues cambiar a "Consultá tu precio".
-           No moverlo.
-
-           (Se intento medir el parpadeo con la API de paint timing en vez de
-           prevenirlo, y no se pudo: la pestaña del harness corre en segundo
-           plano, Chrome no pinta ahi y `performance.getEntriesByType('paint')`
-           vuelve vacio. Es la misma trampa de la pestaña oculta que ya esta
-           anotada en memory.md.)
-
-           OJO con TZ_AR: chequear solo el prefijo "America/Argentina/" NO
-           alcanza. Chrome en Windows devuelve el alias viejo
-           "America/Buenos_Aires" —verificado el 25/08/2026— y sin los alias de
-           abajo ninguna visitante argentina entra por esta rama. El bug es
-           silencioso: el fallback es el precio internacional y la pagina se ve
-           perfecta igual.
-
-           Decision de Gaston (21/09/2026): se abandona el esquema de
-           fundadoras/etapas/cupo del 27/08. Ahora hay una sola escala fija,
-           USD 350/mes, para todo el mundo excepto Argentina, que no ve ningun
-           numero en el sitio: consulta el precio de lanzamiento por WhatsApp,
-           en privado con Jimena. */
-        const TZ_AR = /^America\/(Argentina\/|Buenos_Aires$|Cordoba$|Rosario$|Catamarca$|Mendoza$|Jujuy$)/;
-        const ES_AR = TZ_AR.test(Intl.DateTimeFormat().resolvedOptions().timeZone || '');
-        if (ES_AR) {
-          const bloque = document.getElementById('precio-bloque');
-          const cta    = document.getElementById('cta-plan-base');
-          if (bloque) {
-            bloque.outerHTML =
-              '<p class="sin-precio">Consultá tu<br>precio de lanzamiento</p>' +
-              '<p class="sin-precio-nota">Te lo cuento por WhatsApp</p>';
-          }
-          if (cta) {
-            cta.textContent = 'Consultar por WhatsApp';
-            cta.href = 'https://api.whatsapp.com/send?phone=541135863879&text=' +
-              encodeURIComponent('🏋️‍♀️ Hola Jime, quiero saber el precio de lanzamiento del Método Raíz');
-            cta.target = '_blank';
-            cta.rel = 'noopener';
-            cta.dataset.ga = 'whatsapp_precio';
-          }
-        }
-        </script>
         <ul class="programa-feats reveal stagger">
           <li>
             <span class="pf-n">01</span>

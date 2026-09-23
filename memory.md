@@ -843,6 +843,18 @@ Debajo del monto en dólares aparece una referencia en pesos —`(≈ $ 70.000 a
 
 **Pendiente, no bloqueante:** `estrategia/business-case.md` y `estrategia/propuesta-de-valor.md` siguen citando el esquema de fundadoras (45/90) en sus números — igual que ya estaban desactualizados sobre el programa único de USD 35 antes del 27/08. Reescribirlos es tarea de negocio, no de código, y no bloquea que el sitio esté correcto.
 
+### 23/09/2026 — Sin precios en todo el sitio, y la gift card se entiende mejor
+
+**Decisión de Gastón: el sitio deja de publicar precios, para Argentina y para el exterior.** Todas las visitantes ven lo que hasta ahora veía solo Argentina: "Consultá tu precio de lanzamiento / Te lo cuento por WhatsApp" y el botón "Consultar por WhatsApp" (`data-ga="whatsapp_precio"`). El bloque quedó escrito en el HTML y **se eliminó el script de zona horaria** (`TZ_AR`/`ES_AR`) junto con el CSS del número (`.monto`, `.n`, `.u`, `.ref`). Como ya no hay una rama que decidir, tampoco hay nada que parpadee. Si algún día vuelve un precio diferenciado por país, la mecánica está en la entrada del 21/09 y en el historial de git.
+
+**Iteración de la gift card, después del primer uso real:**
+• **Una persona leyó los tres puntos de progreso como un carrusel e intentó deslizar.** Se sacaron los puntos. La pista ahora es un dedo 👆 que toca sobre la caja con una onda en cada toque, y el texto dice cuántas veces tocar: "Tocá la caja 3 veces para abrirla" → "¡Eso! Tocá otra vez" → "Una más y es tuyo".
+• **Un regalo abierto queda abierto.** Se guarda en `localStorage` con la clave del código. Al volver a entrar se muestra la tarjeta directo, sin animación, sin confeti y sin volver a mandar `regalo_abierto` a GA4. Vale solo para ese navegador: en otro teléfono se abre de nuevo.
+• "Conocé a Jime" lleva a `/#sobre`.
+• **La tarjeta pasó a decir "5 sesiones de entrenamiento".** El generador ya no pregunta "Qué incluye" en texto libre sino la **cantidad de sesiones**, como número. La tarjeta muestra el número grande y la unidad al lado en letra liviana, y con 1 escribe "sesión". Los enlaces viejos, que traen texto libre, se siguen mostrando como antes.
+• En la tarjeta, la marca de raíz se reemplazó por el emoji 🏋️‍♀️.
+• **Preview propio.** Antes el enlace mostraba el og-image de Método Raíz. Ahora usa `img/regalo/og-gift-card.jpg`, con "GIFT CARD 🎁 / Te regalaron entrenamiento" y la tarjeta dibujada, y el título "GIFT CARD 🎁 Te regalaron entrenamiento". WhatsApp cachea el preview por URL, así que los enlaces viejos pueden seguir mostrando el anterior.
+
 ### 23/09/2026 — Gift card con unboxing: `/regalo/` y `/regalo/crear/`
 
 **Pedido de Gastón: están comprando clases de Jime para regalar**, y hacía falta algo para entregar el regalo. La referencia es Bigbox: un enlace que se abre y se desenvuelve tocando.
