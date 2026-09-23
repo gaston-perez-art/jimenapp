@@ -849,8 +849,9 @@ Debajo del monto en dólares aparece una referencia en pesos —`(≈ $ 70.000 a
 
 **Iteración de la gift card, después del primer uso real:**
 • **Una persona leyó los tres puntos de progreso como un carrusel e intentó deslizar.** Se sacaron los puntos. La pista ahora es un dedo 👆 que toca sobre la caja con una onda en cada toque, y el texto dice cuántas veces tocar: "Tocá la caja 3 veces para abrirla" → "¡Eso! Tocá otra vez" → "Una más y es tuyo".
-• **Un regalo abierto queda abierto.** Se guarda en `localStorage` con la clave del código. Al volver a entrar se muestra la tarjeta directo, sin animación, sin confeti y sin volver a mandar `regalo_abierto` a GA4. Vale solo para ese navegador: en otro teléfono se abre de nuevo.
-• "Conocé a Jime" lleva a `/#sobre`.
+• ~~Un regalo abierto queda abierto~~ — **se probó y se revirtió el mismo día, por pedido de Gastón**: cada vez que se abre el enlace hay que volver a tocar la caja. El unboxing es la experiencia; mostrar la tarjeta ya abierta se la sacaba a quien vuelve a entrar para mostrársela a alguien.
+• **"Conocé a Jime" dejó de ser un link subrayado al pie**: es una tarjeta con borde bronce, la foto de Jime (`jimena-avatar.jpg`), "Quién va a entrenar con vos" y una flecha que se mueve. Lleva a `/#sobre`.
+• **Con el regalo abierto, todo sube.** El escenario se achica al alto de la tarjeta y la pista de toque deja de ocupar lugar, así que el mensaje queda 70px debajo de la tarjeta y no ~180px.
 • **La tarjeta pasó a decir "5 sesiones de entrenamiento".** El generador ya no pregunta "Qué incluye" en texto libre sino la **cantidad de sesiones**, como número. La tarjeta muestra el número grande y la unidad al lado en letra liviana, y con 1 escribe "sesión". Los enlaces viejos, que traen texto libre, se siguen mostrando como antes.
 • En la tarjeta, la marca de raíz se reemplazó por el emoji 🏋️‍♀️.
 • **Preview propio.** Antes el enlace mostraba el og-image de Método Raíz. Ahora usa `img/regalo/og-gift-card.jpg`, con "GIFT CARD 🎁 / Te regalaron entrenamiento" y la tarjeta dibujada, y el título "GIFT CARD 🎁 Te regalaron entrenamiento". WhatsApp cachea el preview por URL, así que los enlaces viejos pueden seguir mostrando el anterior.
