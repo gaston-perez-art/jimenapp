@@ -843,6 +843,18 @@ Debajo del monto en dólares aparece una referencia en pesos —`(≈ $ 70.000 a
 
 **Pendiente, no bloqueante:** `estrategia/business-case.md` y `estrategia/propuesta-de-valor.md` siguen citando el esquema de fundadoras (45/90) en sus números — igual que ya estaban desactualizados sobre el programa único de USD 35 antes del 27/08. Reescribirlos es tarea de negocio, no de código, y no bloquea que el sitio esté correcto.
 
+### 23/09/2026 — Gift card con unboxing: `/regalo/` y `/regalo/crear/`
+
+**Pedido de Gastón: están comprando clases de Jime para regalar**, y hacía falta algo para entregar el regalo. La referencia es Bigbox: un enlace que se abre y se desenvuelve tocando.
+
+• **`/regalo/`** es la pantalla de quien recibe el regalo. Hay una caja vino con moño bronce y tres toques: el primero desata el moño, el segundo hace volar la tapa y el tercero saca la tarjeta. Después aparecen el mensaje de quien regala, la fecha de vencimiento si hay, y el botón **"Canjear mi regalo"**, que abre WhatsApp con el código precargado. Tiene confeti y un brillo que cruza la tarjeta. Con `prefers-reduced-motion` no hay movimiento.
+• **`/regalo/crear/`** es de uso interno, sin link desde el sitio y con `noindex`. Es un formulario con qué incluye, para, de, mensaje, vencimiento y código, que genera el enlace y lo copia o lo manda por WhatsApp. El código sale del formato `JIME-XXXXX` y no usa 0/O ni 1/I/L porque se dicta.
+• **Los datos del regalo viajan en el `#hash` del enlace**, como JSON en base64url. No quedan en el repo, que es público, no llegan al servidor y el preview de WhatsApp no los muestra: el preview siempre dice "Tenés un regalo 🎁". Nada del contenido está fijo en el código: **qué incluye cada gift card lo escribe Jime en el formulario**, en línea con la regla de no escribir datos de negocio sin preguntar.
+• **El código no se valida solo.** No hay backend: Jime tiene que anotar los códigos que emite y tacharlos cuando se canjean. El formulario se lo recuerda.
+• **Excepción a la regla de "visible sin JavaScript":** acá no hay contenido estático que mostrar, porque el regalo se decodifica del hash. Sin JS se ve un aviso.
+• GA4: `regalo_abierto` al sacar la tarjeta y `contacto_whatsapp` con `ubicacion: regalo` al canjear.
+• Medido a 360, 390 y 1280: sin scroll horizontal, y todo lo tocable mide 44px o más. **Bug del test, no de la página:** al cambiar solo el `#hash`, `goto` no recarga, y las tres medidas veían el regalo ya abierto. Hay que pasar por `about:blank` entre cada una.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.

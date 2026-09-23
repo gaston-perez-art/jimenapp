@@ -68,6 +68,9 @@ Ajustes directos sobre `docs/index.html`, sin decisión de negocio pendiente det
 
 Todo lo que hace crecer la base de alumnas o sostiene a las que ya están, más allá del sitio.
 
+- [x] 🔴 **Gift card con unboxing** (23/09/2026): `/regalo/` para quien lo recibe y `/regalo/crear/` para generar cada enlace. Ver `memory.md`
+- [ ] 🟡 **Jime tiene que llevar la lista de códigos emitidos y canjeados**: la gift card no tiene backend que los valide
+
 - [ ] 🔴 Reglas de la comunidad de WhatsApp para alumnas activas: cuándo se abre el grupo, quién modera. Urgente porque ya se promociona como feature 06 del programa en el sitio en vivo y todavía no existe operativamente
 - [x] **Ponerle nombre al método de Jimena: es el "Método Raíz"** (dato de Gastón, 19/08/2026). Todavía no aparece escrito en ningún lado del sitio ni de la documentación — ver el pendiente de bajarlo a `contexto.md` y al sitio, más abajo.
 - [x] 🟡 **Bajar el "Método Raíz" a `contexto.md` y al sitio** (20/08/2026). En el sitio abre el lead del hero: "Desarrollé mi **Método Raíz** para que puedas...". Primero se probó como etiqueta mono debajo del título y quedaba como dato técnico, siendo el activo que sostiene el precio. **Falta todavía en `estrategia/`**

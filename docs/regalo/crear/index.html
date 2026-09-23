@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crear gift card — Entrená con Jime</title>
+<!-- Herramienta interna: sin link desde el sitio y sin indexar. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/marca/favicon-32.png">
+<meta name="theme-color" content="#5C1F32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241F26; --ink-soft:#5B5460; --line:#E7E2E5;
+    --paper:#FFFFFF; --paper-dim:#FAF8F6;
+    --wine-900:#5C1F32; --wine-600:#9D3A57; --wine-100:#F3E4E9;
+    --bronze:#A9824A; --bronze-text:#8A6636;
+    --ease-ui:cubic-bezier(.16,1,.3,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Archivo', system-ui, sans-serif; background:var(--paper-dim); color:var(--ink); -webkit-font-smoothing:antialiased;}
+  main{max-width:520px; margin:0 auto; padding:40px 16px 64px;}
+  h1{font-size:28px; font-weight:500; letter-spacing:-.01em;}
+  .sub{margin-top:8px; color:var(--ink-soft); line-height:1.5;}
+  form{margin-top:28px; display:grid; gap:18px;}
+  label{display:grid; gap:6px; font-size:14px; font-weight:600;}
+  label small{font-weight:400; color:var(--ink-soft);}
+  input, textarea{
+    width:100%; min-height:48px; padding:12px 14px;
+    font:400 16px/1.4 'Archivo', system-ui, sans-serif; color:var(--ink);
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+  }
+  textarea{min-height:96px; resize:vertical;}
+  input:focus, textarea:focus{outline:2px solid var(--wine-600); outline-offset:1px; border-color:transparent;}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  @media (max-width:420px){ .row{grid-template-columns:1fr;} }
+  .code{display:flex; gap:8px;}
+  .code input{font-family:'IBM Plex Mono', monospace; letter-spacing:.06em;}
+  button, .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    min-height:48px; padding:12px 20px; border-radius:999px; border:1px solid var(--wine-600);
+    font:600 15px/1 'Archivo', system-ui, sans-serif; text-decoration:none; cursor:pointer;
+    background:var(--paper); color:var(--wine-900);
+    transition:background .25s var(--ease-ui), color .25s var(--ease-ui);
+  }
+  button.primary, .btn.primary{background:var(--wine-600); color:#fff;}
+  button.primary:hover, .btn.primary:hover{background:var(--wine-900); border-color:var(--wine-900);}
+  button.ghost{white-space:nowrap;}
+  .out{margin-top:28px; padding:20px; background:var(--paper); border:1px solid var(--line); border-radius:16px; display:none;}
+  .out.on{display:block;}
+  .out h2{font-size:16px; font-weight:600;}
+  .link{
+    margin-top:10px; padding:12px; border-radius:10px; background:var(--wine-100);
+    font:400 13px/1.45 'IBM Plex Mono', monospace; word-break:break-all; color:var(--wine-900);
+  }
+  .actions{margin-top:14px; display:flex; flex-wrap:wrap; gap:10px;}
+  .note{margin-top:16px; font-size:14px; line-height:1.5; color:var(--ink-soft);}
+  .note strong{color:var(--bronze-text);}
+</style>
+</head>
+<body>
+<main>
+  <h1>Crear una gift card</h1>
+  <p class="sub">Completá los datos y se genera el enlace para mandarle a quien compró el regalo. Quien lo recibe lo abre tocando la caja.</p>
+
+  <form id="f" autocomplete="off">
+    <label>Qué incluye
+      <input name="i" required maxlength="60" placeholder="Ej.: 4 clases de entrenamiento">
+    </label>
+    <div class="row">
+      <label>Para <small>quien lo recibe</small>
+        <input name="p" maxlength="30" placeholder="Nombre">
+      </label>
+      <label>De <small>quien lo regala</small>
+        <input name="d" maxlength="30" placeholder="Nombre">
+      </label>
+    </div>
+    <label>Mensaje <small>opcional</small>
+      <textarea name="m" maxlength="220" placeholder="Lo que quiera decirle quien regala"></textarea>
+    </label>
+    <div class="row">
+      <label>Válida hasta <small>opcional</small>
+        <input name="v" maxlength="20" placeholder="Ej.: 31/12/2026">
+      </label>
+      <label>Código
+        <span class="code"><input name="c" maxlength="14" required><button type="button" class="ghost" id="nuevo" aria-label="Generar otro código">↻</button></span>
+      </label>
+    </div>
+    <button class="primary" type="submit">Generar enlace</button>
+  </form>
+
+  <section class="out" id="out" aria-live="polite">
+    <h2>Enlace listo</h2>
+    <p class="link" id="link"></p>
+    <div class="actions">
+      <button type="button" class="primary" id="copiar">Copiar enlace</button>
+      <a class="btn" id="enviar" target="_blank" rel="noopener">Mandar por WhatsApp</a>
+      <a class="btn" id="ver" target="_blank" rel="noopener">Ver cómo se abre</a>
+    </div>
+    <p class="note"><strong>Anotá el código.</strong> Cuando la persona te escriba para canjear, te lo va a mandar en el mensaje: así sabés que es una gift card real y que no se usó dos veces.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  var f = document.getElementById('f');
+  // Sin 0/O ni 1/I/L: el codigo se dicta y se copia a mano.
+  var ABC = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  function codigo(){
+    var s = '';
+    var r = new Uint32Array(5);
+    crypto.getRandomValues(r);
+    for(var i=0;i<r.length;i++) s += ABC[r[i] % ABC.length];
+    return 'JIME-' + s;
+  }
+  f.c.value = codigo();
+  document.getElementById('nuevo').onclick = function(){ f.c.value = codigo(); };
+
+  // JSON -> UTF-8 -> base64url. Es el formato que lee /regalo/.
+  function empaquetar(obj){
+    var bytes = new TextEncoder().encode(JSON.stringify(obj));
+    var bin = '';
+    for(var i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+
+  var url = '';
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var g = {};
+    ['i','p','d','m','v','c'].forEach(function(k){
+      var v = f[k].value.trim();
+      if(v) g[k] = v;
+    });
+    url = location.origin + '/regalo/#g=' + empaquetar(g);
+    document.getElementById('link').textContent = url;
+    document.getElementById('ver').href = url;
+    var txt = '🎁 ' + (g.p ? g.p + ', t' : 'T') + 'enés un regalo. Abrilo acá: ' + url;
+    document.getElementById('enviar').href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(txt);
+    var out = document.getElementById('out');
+    out.classList.add('on');
+    out.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  document.getElementById('copiar').onclick = function(){
+    var b = this;
+    navigator.clipboard.writeText(url).then(function(){
+      b.textContent = 'Copiado';
+      setTimeout(function(){ b.textContent = 'Copiar enlace'; }, 1800);
+    });
+  };
+})();
+</script>
+</body>
+</html>
