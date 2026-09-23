@@ -843,6 +843,18 @@ Debajo del monto en dólares aparece una referencia en pesos —`(≈ $ 70.000 a
 
 **Pendiente, no bloqueante:** `estrategia/business-case.md` y `estrategia/propuesta-de-valor.md` siguen citando el esquema de fundadoras (45/90) en sus números — igual que ya estaban desactualizados sobre el programa único de USD 35 antes del 27/08. Reescribirlos es tarea de negocio, no de código, y no bloquea que el sitio esté correcto.
 
+### 23/09/2026 — La gift card ya tiene un caso real
+
+**La gift card no es una idea: ya se vendió una.** Una persona compró una gift card de sesiones con Jime por fuera del sitio y se la entregó con el enlace de `/regalo/`. Todo lo que se iteró ese día salió de ese uso real, no de suposiciones:
+
+• **Quien la recibió leyó los puntos de progreso como un carrusel e intentó deslizar.** Por eso se reemplazaron por el dedo que toca y el texto "Tocá la caja 3 veces".
+• **En la tarjeta quedó un "5" solo**, porque "Qué incluye" era texto libre y se cargó únicamente el número. Por eso el generador pasó a pedir la cantidad de sesiones y la tarjeta dice "5 sesiones de entrenamiento".
+• **El preview del enlace mostraba la imagen de Método Raíz.** Por eso se hizo `og-gift-card.jpg`.
+
+**Cómo se vende hoy:** fuera del sitio. El sitio no tiene checkout: la compra, el pago y el registro de a quién va lo resuelve Jime por su lado, y el sitio solo pone el envoltorio. **La cantidad de sesiones y el código de cada gift card vendida no se guardan en el repo**, que es público: quedan en el enlace y en el registro de Jime.
+
+**Lección de ese día: la caché de GitHub Pages.** Pages sirve todo con `cache-control: max-age=600`, así que después de un push el navegador puede seguir mostrando la versión vieja hasta 10 minutos, aunque el servidor ya tenga la nueva (se verificó con `curl`: `x-cache: MISS` y el HTML nuevo). Para mirar al instante: Cmd+Shift+R en la compu, incógnito en el celular, o agregar `?v=2` antes del `#` del enlace. **No es un deploy fallido: no hay que volver a pushear.**
+
 ### 23/09/2026 — Sin precios en todo el sitio, y la gift card se entiende mejor
 
 **Decisión de Gastón: el sitio deja de publicar precios, para Argentina y para el exterior.** Todas las visitantes ven lo que hasta ahora veía solo Argentina: "Consultá tu precio de lanzamiento / Te lo cuento por WhatsApp" y el botón "Consultar por WhatsApp" (`data-ga="whatsapp_precio"`). El bloque quedó escrito en el HTML y **se eliminó el script de zona horaria** (`TZ_AR`/`ES_AR`) junto con el CSS del número (`.monto`, `.n`, `.u`, `.ref`). Como ya no hay una rama que decidir, tampoco hay nada que parpadee. Si algún día vuelve un precio diferenciado por país, la mecánica está en la entrada del 21/09 y en el historial de git.

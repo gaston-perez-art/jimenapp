@@ -70,6 +70,7 @@ Todo lo que hace crecer la base de alumnas o sostiene a las que ya están, más 
 
 - [x] 🔴 **Sin precios en todo el sitio** (23/09/2026): internacional también pasa a "Consultá por WhatsApp"; se eliminó el script por zona horaria. Ver `memory.md`
 - [x] 🔴 **Gift card con unboxing** (23/09/2026, iterada el mismo día: pista de toque en vez de puntos, queda abierta al volver, preview propio): `/regalo/` para quien lo recibe y `/regalo/crear/` para generar cada enlace. Ver `memory.md`
+- [x] **Primera gift card vendida** (23/09/2026), por fuera del sitio y entregada con el enlace de `/regalo/`
 - [ ] 🟡 **Jime tiene que llevar la lista de códigos emitidos y canjeados**: la gift card no tiene backend que los valide
 
 - [ ] 🔴 Reglas de la comunidad de WhatsApp para alumnas activas: cuándo se abre el grupo, quién modera. Urgente porque ya se promociona como feature 06 del programa en el sitio en vivo y todavía no existe operativamente
