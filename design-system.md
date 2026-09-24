@@ -29,6 +29,14 @@ corren en loop, porque cuentan algo que pasa en el tiempo. Las piezas se ocultan
 `@keyframe`. Los keyframes de los loops se calcularon juntos: si se cambia la duración de un ciclo,
 hay que recalcular todos sus porcentajes, no tocar uno solo.
 
+**Planes (`#servicios`, 23-24/09/2026).** En escritorio son dos tarjetas en una grilla de 4 filas
+(cabecera, ventaja, lista, pie) que cada tarjeta toma con `subgrid`: las listas y los botones quedan
+alineados renglón contra renglón. "El programa" es el **recomendado**, con un badge en degradé
+vino→bronce sobre el borde y el borde vino. Cada tarjeta lleva su ventaja en el mismo lugar y con el
+mismo bloque vino: "A tu ritmo" o "Clases en vivo 1 a 1". **Ninguna muestra lo que no incluye.**
+"Método Raíz" se nombra una sola vez, en el título de la sección. En mobile, a 720px o menos, se
+elige con dos tiles lado a lado, a la Netflix (radios + `:checked`), y abajo va una sola tarjeta.
+
 **Ritmo de fondos del recorrido:** blanco → dim → blanco → dim → **oscuro** → dim → blanco → **footer dim**. La única sección oscura es "Cómo trabajo", y el footer se mantiene claro para no disputárselo: la caja de contacto que va justo arriba ya es el último momento fuerte de color (gradiente vino→bronce).
 
 ## Páginas legales
@@ -94,6 +102,17 @@ la lectura de la página.
 
 Solo de **721px para arriba**. En mobile no cambia nada: abajo de ese ancho manda la hamburguesa y
 el menú desplegable está anclado al alto del header.
+
+**Menú de mobile (23/09/2026).** Se despliega como cortina desde el borde de abajo del header con
+`clip-path` (abre en `.55s` con la curva de interacción y cierra en `.34s`): el panel no se mueve, así
+que nunca cruza por detrás del header de vidrio. Los links son renglones con separador que entran de a
+uno, "Escribime" va a lo ancho y la hamburguesa se vuelve una X, con cada línea rotando sobre su propio
+centro. Ojo: `.navlinks a` le gana en especificidad a `.navcta`. Por eso el CTA se estiliza con
+`.navlinks .navcta`.
+
+**CTA fijo de mobile (`.cta-fija`, 23/09/2026).** Es una barra de vidrio abajo con el mismo botón del
+hero. Aparece cuando ese botón sale de pantalla y se oculta sobre `#servicios`, `#contacto`, el footer y
+con el menú abierto. Entra y sale con las mismas curvas que el menú. Sin JS no aparece.
 
 **Los 67px son invariantes.** La tarjeta baja de 66 a 54px y los 6px de aire arriba y abajo reponen
 la diferencia. Tres detalles que lo sostienen y que ya costaron una vez:
@@ -244,7 +263,7 @@ De `contexto.md` y las convenciones del sitio:
 | Campo | Valor hoy |
 |---|---|
 | `<title>` | "Jimena Ibañez — Recomposición corporal para mujeres +35" |
-| `favicon` | `img/marca/favicon-16/32/48.png` + `apple-touch-icon.png` (180). Tres PNG con `sizes` explícito en vez de un `.ico` multi-tamaño: un binario no se puede revisar en un diff |
+| `favicon` | `img/marca/monograma-16/32/48.png` + `monograma-apple-touch.png` (180), desde el 23/09/2026. Tres PNG con `sizes` explícito en vez de un `.ico` multi-tamaño: un binario no se puede revisar en un diff |
 | `og:image` | `img/marca/og-image.jpg` — 1200×630, isotipo + logotipo sobre crema, con `og:image:width/height/alt` |
 | `theme-color` | `#5C1F32` |
 | Analítica | GA4 `G-CNR32WF83Z`. El atributo es `data-ga="canal_ubicacion"` y un mapa explícito traduce el canal al evento (`whatsapp`→`contacto_whatsapp`, `instagram`→`visita_instagram`, `tiktok`→`visita_tiktok`). **Un canal que no esté en el mapa no manda evento**, a propósito: antes caía por defecto en `visita_instagram` y la métrica mentía sin romperse |
