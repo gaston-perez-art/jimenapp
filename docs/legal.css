@@ -59,9 +59,8 @@ nav.wrap{display:flex; align-items:center; justify-content:space-between; height
   color:var(--wine-900); text-decoration:none;
   display:inline-flex; align-items:center; gap:11px;
 }
-/* Misma marca que el header del sitio: la solida, no el isotipo de aro.
-   Ver el comentario de .logo en index.html. */
-.logo img{width:30px; height:30px; flex:0 0 30px;}
+/* Solo el nombre, como el header del sitio: ver el comentario de .logo en
+   index.html. */
 .logo .logotxt span{color:var(--bronze);}
 /* Volver es la unica accion del header en estas paginas: quien entro aca vino
    desde el footer y lo que necesita es el camino de vuelta, no el menu entero. */

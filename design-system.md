@@ -18,10 +18,16 @@
 **Todo lo que rote o escale declara su propio `transform-origin`** (23/08/2026). En SVG el valor
 inicial de `transform-origin` es `0 0`, no `50% 50%`, así que con `transform-box:fill-box` el origen
 cae en la esquina superior izquierda de la caja del elemento. `.pvRing` rotaba -90° alrededor de esa
-esquina y el aro terminaba un diámetro entero más arriba. Vale para las cuatro ilustraciones de
-`.pin-viz`: el origen **no** se declara en el selector genérico —le gana en especificidad a las
+esquina y el aro terminaba un diámetro entero más arriba. La regla sigue valiendo para cualquier SVG
+animado, aunque esas ilustraciones (`.pin-viz`) se sacaron el 23/09/2026: el origen **no** se declara en el selector genérico —le gana en especificidad a las
 clases que sí necesitan un origen distinto, que fue el bug de las barras del 22/08— sino en cada
 clase que transforma.
+
+**Maquetas del proceso (`.maq`, 23/09/2026):** arrancan cuando la etapa entra (`.in-view`). La
+evaluación se anima una sola vez y queda quieta. El chat (16s), el plan (12s) y el gráfico (10s)
+corren en loop, porque cuentan algo que pasa en el tiempo. Las piezas se ocultan solo dentro del
+`@keyframe`. Los keyframes de los loops se calcularon juntos: si se cambia la duración de un ciclo,
+hay que recalcular todos sus porcentajes, no tocar uno solo.
 
 **Ritmo de fondos del recorrido:** blanco → dim → blanco → dim → **oscuro** → dim → blanco → **footer dim**. La única sección oscura es "Cómo trabajo", y el footer se mantiene claro para no disputárselo: la caja de contacto que va justo arriba ya es el último momento fuerte de color (gradiente vino→bronce).
 
@@ -33,14 +39,17 @@ Su lenguaje propio, que el sitio no tenía: columna de texto a `68ch` (arriba de
 
 ## Logo
 
-**Existe desde el 23/08/2026.** El sistema tiene **tres piezas**, y la que se usa depende del
-tamaño, no del gusto.
+**Cambio del 23/09/2026:** el header ya no lleva símbolo, solo el nombre ("Jimena Ibañez." con el
+punto bronce), y el favicon es el **monograma "J."**: J blanca en Archivo 800 con el punto bronce
+(`#C9A26A`) sobre un cuadrado vino `--wine-900` con 22% de redondeo. La raíz queda como la marca
+del **método**: og:image y firma del footer. Más abajo se conserva el historial de la marca sólida.
 
 | Pieza | Archivo | Dónde | Desde/hasta |
 |---|---|---|---|
-| **Marca sólida** — raíz blanca sobre disco vino | `marca-96/192/512.png`, `favicon-16/32/48.png`, `apple-touch-icon.png` | Favicon, header del sitio y de las legales, foto de perfil | **Todo lo menor a 120px** |
+| **Monograma "J."** | `monograma-16/32/48/512.png`, `monograma-apple-touch.png` (180, sin redondeo: iOS pone su máscara) | Favicon de todas las páginas, foto de perfil | Todo lo chico |
 | **Isotipo** — raíz vino dentro de aro bronce | `isotipo-512.png` | og:image, manual, presentaciones, impresos | **120px para arriba** |
 | **Firma con silueta** — la raíz sale de la columna | `silueta.png` | Solo el footer del sitio | 268px de ancho |
+| ~~Marca sólida~~ — raíz blanca sobre disco vino | `marca-*.png`, `favicon-*.png` | **Sin uso desde el 23/09/2026** | — |
 
 Todo vive en `docs/img/marca/`. Los masters de 1024px están en `materiales/marca/`, fuera de
 `docs/` para que GitHub Pages no los sirva. El registro visual de las piezas es
@@ -67,8 +76,8 @@ vino con el tronco adentro, que es lo que un favicon puede dar.
 **Pendiente: vectorizar.** Son PNG corregidos a mano. Un SVG no vuelve a tener el problema del aro
 en ningún tamaño, se ve nítido en retina y pesa una fracción. Es el próximo paso, no un bloqueante.
 
-**Arquitectura de marca: arriba la persona, abajo el método.** El header lleva la marca sólida +
-"Jimena Ibañez" en Archivo; el footer lleva la firma con silueta, que trae "Método Raíz" adentro.
+**Arquitectura de marca: arriba la persona, abajo el método.** El header lleva
+"Jimena Ibañez." en Archivo (desde el 23/09/2026, sin símbolo); el footer lleva la firma con silueta, que trae "Método Raíz" adentro.
 Jimena es quien vende, Método Raíz es lo que vende. Por eso **el logotipo serif del lockup no entra
 al sitio**: vive en el og:image, el manual y los impresos, donde tiene lugar para respirar. La
 decisión del 11/08 sobre tipografía (grotesca sans, ver abajo) sigue en pie donde importaba, que es

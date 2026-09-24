@@ -11,10 +11,10 @@
      un binario que no se puede revisar en un diff, y los navegadores que
      importan eligen solo por el atributo sizes. El de 16 es el que se ve en la
      pestaña; el de 48 lo usan los accesos directos de escritorio. -->
-<link rel="icon" type="image/png" sizes="16x16" href="/img/marca/favicon-16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/img/marca/favicon-32.png">
-<link rel="icon" type="image/png" sizes="48x48" href="/img/marca/favicon-48.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/img/marca/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/marca/monograma-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/marca/monograma-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/img/marca/monograma-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/marca/monograma-apple-touch.png">
 <meta name="theme-color" content="#5C1F32">
 
 <!-- Open Graph / redes sociales -->
@@ -150,6 +150,31 @@
     outline-offset:3px;
   }
 
+  /* ---------- CTA fijo abajo (mobile) ----------
+     Ver el comentario del HTML. Sube y baja con la misma curva que el menu:
+     entra con la de interaccion, sale mas rapido. visibility con retardo
+     lo saca del tab cuando esta escondido. */
+  .cta-fija{display:none;}
+  @media (max-width:720px){
+    .has-js .cta-fija{
+      display:block; position:fixed; left:0; right:0; bottom:0; z-index:40;
+      padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(255,255,255,.93);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      border-top:1px solid var(--line);
+      transform:translateY(110%); visibility:hidden;
+      transition:transform .32s cubic-bezier(.4,0,.2,1), visibility 0s linear .32s;
+    }
+    .has-js .cta-fija.ver{
+      transform:none; visibility:visible;
+      transition:transform .5s cubic-bezier(.16,1,.3,1), visibility 0s;
+    }
+    .cta-fija .btn-primary{width:100%; justify-content:center; padding:14px 22px; font-size:16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .has-js .cta-fija{transition:none !important;}
+  }
+
   /* ---------- Nav ---------- */
   header{
     position:sticky; top:0; z-index:50;
@@ -182,12 +207,12 @@
     text-decoration:none;
     display:flex; align-items:center; gap:11px;
   }
-  /* La marca del header es la SOLIDA (raiz blanca sobre disco vino), no el
-     isotipo de aro. A 30px el aro bronce y las raices finas se promedian
-     contra el blanco y queda una mancha rosa: medido, el isotipo delicado
-     recien se lee de 120px para arriba. Ese vive en el og:image y en los
-     materiales impresos, donde hay tamaño. */
-  .logo img{width:30px; height:30px; flex:0 0 30px;}
+  /* El header lleva solo el nombre, sin simbolo (23/09/2026). La raiz en
+     disco vino se saco: a 30px se leia como un arbol invertido y nadie la
+     asociaba con entrenamiento. El simbolo chico ahora es el monograma "J."
+     (favicon), que sale de dos cosas que la marca ya tenia: la inicial y el
+     punto bronce del final del nombre. La raiz sigue siendo la marca del
+     METODO: og:image y firma del footer. */
   .logo .logotxt span{color:var(--bronze);}
   .navlinks{
     display:flex; align-items:center; gap:36px;
@@ -1204,9 +1229,9 @@
      Unica seccion oscura del recorrido. Antes toda la pagina alternaba entre
      --paper y --paper-dim, dos crema casi identicos: por eso el sitio se leia
      monocromatico aunque la paleta definida no lo fuera. El corte oscuro a
-     mitad de pagina es lo que le da ritmo al scroll. Las tarjetas blancas
-     (.pin-viz) y sus SVG no se tocan: sobre el fondo oscuro pasan a ser el
-     elemento de mas contraste de la seccion, que es justo lo que se busca. */
+     mitad de pagina es lo que le da ritmo al scroll. Las maquetas blancas
+     (.maq) sobre el fondo oscuro pasan a ser el elemento de mas contraste de
+     la seccion, que es justo lo que se busca. */
   #proceso{
     background:linear-gradient(170deg, var(--wine-950), var(--wine-900));
     color:#fff;
@@ -1215,14 +1240,6 @@
   }
   #proceso h2, #proceso h3{color:#fff;}
   #proceso .section-head p{color:rgba(255,255,255,.72);}
-  /* inversion de los detalles que asumian fondo claro */
-  #proceso .pin-prog i{background:rgba(255,255,255,.22);}
-  #proceso .pin-prog i.on{background:var(--bronze-light);}
-  #proceso .pin-prog em{color:rgba(255,255,255,.6);}
-  #proceso .paso{border-left-color:rgba(255,255,255,.18);}
-  #proceso .paso.on{border-left-color:var(--bronze-light);}
-  #proceso .paso .pn{color:var(--bronze-light);}
-  #proceso .paso p{color:rgba(255,255,255,.85);}
   .steps{display:grid; grid-template-columns:repeat(4, 1fr); gap:0;}
   .step{
     padding:0 22px 0 0;
@@ -1267,7 +1284,8 @@
      La caja pasa de 300px de alto a ~118px. Y no inventa un patron nuevo: el
      avatar redondo con nombre y linea de contexto es el MISMO componente de
      las tarjetas de testimonios (.t-av + .cab), y la estructura "dato a la
-     izquierda, CTA a la derecha" es la de .programa-top, la banda del precio. */
+     izquierda, CTA a la derecha" venia de la banda de precio de los planes,
+     que ya no existe (23/09/2026). */
   .contact-box{
     max-width:760px; margin:0 auto; text-align:left;
     display:flex; align-items:center; justify-content:space-between; gap:32px;
@@ -1503,34 +1521,71 @@
     .step{border-left:none; padding-left:0;}
   }
 
-  /* ================= PROGRAMA (precio unico) ================= */
-  .programa-card{
-    background:var(--card); border:1px solid var(--wine-600);
-    border-radius:var(--r-lg); box-shadow:var(--shadow-md);
-    max-width:900px; margin:0 auto; overflow:hidden;
+  /* ================= PROGRAMA: dos planes lado a lado (23/09/2026) =================
+     Ver el comentario del HTML de #servicios. Dos columnas SIEMPRE, tambien a
+     360px: es la forma clasica de comparar planes y la que Gaston pidio.
+     La grilla de afuera define cuatro filas (cabecera, diferencia, lista,
+     pie) y cada tarjeta las toma con subgrid, asi que el renglon de la
+     diferencia y los botones quedan a la misma altura en las dos aunque el
+     copy mida distinto. Donde no haya subgrid, cada tarjeta se ordena sola:
+     degrada a desalineado, no a roto. */
+  .planes{
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:auto auto 1fr auto;
+    column-gap:20px; max-width:860px; margin:0 auto;
   }
-  .programa-top{
-    padding:34px 32px; text-align:center;
-    /* Era un degrade rosa-a-beige (--wine-100 -> --bronze-soft), resto de la
-       paleta crema anterior. Sobre el sitio ya blanco quedaba como una franja
-       de otro color en el medio de la tarjeta, y era LO UNICO crema que se
-       seguia viendo. Ahora la separacion la hace la linea de abajo, no un
-       fondo: es como resuelven el bloque de precio las dos referencias. */
-    background:var(--card);
-    border-bottom:1px solid var(--line);
+  .plan{
+    grid-row:span 4; display:grid; grid-template-rows:subgrid; row-gap:0;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm); padding:28px 26px;
   }
-  /* Etiqueta "Precio de lanzamiento": mismo mono de labels que .pf-n y .pn,
-     no un badge de color. El precio tiene que seguir siendo lo unico que pesa
-     en la franja. */
-  .programa-top .lanz{
-    display:inline-block; margin-bottom:10px;
-    font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500;
+  /* Borde de 1px + un anillo de sombra, y no border:2px: con 2px el contenido
+     de esta tarjeta bajaba 1px y los dos botones dejaban de estar alineados. */
+  .plan-vivo{border-color:var(--wine-600); box-shadow:0 0 0 1px var(--wine-600), var(--shadow-md);}
+  .plan-tag{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500;
     letter-spacing:.12em; text-transform:uppercase; color:var(--bronze-text);
   }
+  .plan-nombre{font-size:24px; line-height:1.15; letter-spacing:-.02em; margin:8px 0 20px; color:var(--wine-900);}
+  .plan-nombre .mas{color:var(--bronze-text);}
+
+  /* La diferencia: mismo renglon, mismo lugar, en las dos. Incluida es un
+     bloque vino con check; no incluida, el mismo bloque apagado y tachado. */
+  .plan-dif{
+    border-radius:var(--r-md); padding:12px 14px 12px 44px; position:relative;
+    display:flex; flex-direction:column; gap:2px; margin-bottom:20px;
+  }
+  .plan-dif::before{
+    position:absolute; left:14px; top:12px; width:20px; height:20px; border-radius:50%;
+    display:grid; place-items:center; font-size:12px; font-weight:700; line-height:1;
+  }
+  .plan-dif b{font-size:15px; line-height:1.3;}
+  .plan-dif span{font-size:13px; line-height:1.35;}
+  .plan-dif.si{background:var(--wine-600); color:#fff;}
+  .plan-dif.si::before{content:"✓"; background:#fff; color:var(--wine-600);}
+  .plan-dif.si span{color:rgba(255,255,255,.85);}
+  .plan-dif.no{background:var(--paper-dim); border:1px dashed var(--line); color:var(--ink-soft);}
+  .plan-dif.no::before{content:"✕"; background:var(--line); color:var(--ink-soft);}
+  .plan-dif.no b{font-weight:500; text-decoration:line-through; text-decoration-color:rgba(91,84,96,.5);}
+
+  .plan-lista{list-style:none; margin:0 0 24px; padding:0; display:flex; flex-direction:column; gap:10px;}
+  .plan-lista li{position:relative; padding-left:26px; font-size:14.5px; line-height:1.35; color:var(--ink);}
+  .plan-lista li::before{
+    content:"✓"; position:absolute; left:0; top:1px; width:18px; height:18px; border-radius:50%;
+    display:grid; place-items:center; background:var(--wine-100); color:var(--wine-600);
+    font-size:11px; font-weight:700;
+  }
+  .plan-pie{display:flex; flex-direction:column; gap:12px; align-self:end;}
+  .plan-pie p{margin:0; font-size:14px; color:var(--ink-soft);}
+
+  /* Selector de mobile (ver el comentario del HTML). En escritorio no existe:
+     los radios quedan fuera de vista pero accesibles, los tiles no se dibujan. */
+  .plan-radio{position:absolute; opacity:0; width:1px; height:1px; pointer-events:none;}
+  .plan-tiles{display:none;}
+
   .programa-cta{
-    display:inline-block; margin-top:20px;
-    padding:14px 32px; border-radius:var(--r-pill); text-decoration:none;
-    font-weight:600; font-size:15px;
+    display:flex; align-items:center; justify-content:center; text-align:center; min-height:48px;
+    padding:12px 22px; border-radius:var(--r-pill); text-decoration:none;
+    font-weight:600; font-size:15px; line-height:1.2;
     background:linear-gradient(135deg, var(--wine-600), var(--bronze));
     background-size:160% 160%; background-position:0% 50%;
     color:#fff; border:1px solid transparent;
@@ -1541,286 +1596,201 @@
     transform:translateY(-2px);
     box-shadow:0 10px 22px -8px rgba(157,58,87,.4), 0 4px 14px -6px rgba(169,130,74,.35);
   }
-  .programa-feats{
-    list-style:none; margin:0; padding:28px 32px 32px;
-    display:grid; grid-template-columns:1fr 1fr; gap:22px 28px;
-  }
-  .programa-feats li{display:flex; gap:14px; align-items:flex-start;}
-  /* Con la lista en 7 items (pasó de 6 el 27/08/2026, al separar el reporte
-     semanal de la revisión mensual) el último queda solo en la fila y deja un
-     hueco a la derecha, justo encima de la franja del adicional. Spanear las
-     dos columnas convierte ese hueco en una fila deliberada. La condicion
-     "impar Y ultimo" solo se cumple cuando la cantidad total es impar, asi que
-     si algun dia vuelven a ser 6 u 8 esto se apaga solo. */
-  .programa-feats li:nth-child(odd):last-child{grid-column:1 / -1;}
-  .programa-feats .pf-n{
-    flex:0 0 auto; font-family:'IBM Plex Mono',monospace; font-size:12px;
-    color:var(--bronze-text); font-weight:600; letter-spacing:.06em; margin-top:2px;
-  }
-  .programa-feats h4{font-size:15.5px; margin:0 0 4px;}
-  .programa-feats p{margin:0; font-size:14px; line-height:1.45; color:var(--ink-soft);}
-  /* ================= DOS PLANES (27/08/2026) =================
-     El adicional de clase en vivo dejo de ser una franja al pie de la unica
-     tarjeta y paso a ser su propia tarjeta, por pedido de Jimena. Cada
-     tarjeta repite la lista COMPLETA en vez de decir "todo lo del plan
-     anterior mas la clase en vivo": una lista de un item al lado de una de
-     siete hace ver al plan mas caro como el que trae menos, aunque la letra
-     chica diga lo contrario. La unica diferencia entre las dos listas es el
-     item 08. */
-  .planes{
-    display:grid; grid-template-columns:1fr 1fr; gap:26px;
-    max-width:1040px; margin:0 auto; align-items:start;
-  }
-  /* Las dos franjas de precio pueden medir distinto segun el copy: la del
-     plan base cambia de un monto a dos renglones de texto para quien entra
-     desde Argentina (ver el script de #plan-base), y la del plan 2 siempre
-     tiene dos renglones de texto y una linea. `subgrid` hace que la fila de
-     la franja sea LA MISMA para las dos tarjetas, asi que se igualan solas y
-     siguen igualandose si manana cambia el copy. Donde no haya subgrid la
-     regla se ignora y vuelve un posible desfasaje entre los dos CTA: degrada
-     a feo, no a roto. */
-  .planes{grid-template-rows:auto auto;}
-  .planes .programa-card{
-    max-width:none; margin:0;
-    display:grid; grid-row:span 2; grid-template-rows:subgrid;
-  }
-  /* Con la franja ya igualada, el CTA se empuja al fondo con margin-top:auto
-     y los dos botones caen a la misma altura aunque arriba haya distinta
-     cantidad de renglones. align-items:center es porque en columna flex el
-     boton, que es inline-block, se estiraria de lado a lado. */
-  .planes .programa-top{
-    padding:30px 26px;
-    display:flex; flex-direction:column; align-items:center;
-  }
-  .planes .programa-cta{margin-top:auto;}
-  /* `margin-top:auto` empuja el boton al fondo, pero cuando la franja no
-     tiene aire sobrante ese auto vale 0 y el ultimo renglon queda pegado al
-     boton: pasaba en el plan 2 a todo ancho, y en los dos apilados en mobile,
-     donde tampoco sobra espacio. El margen de abajo del ultimo dato es el
-     piso; el auto sigue repartiendo lo que sobre por encima de ese piso. */
-  .planes .programa-top .sin-precio-nota{margin-bottom:22px;}
-  /* Adentro de dos columnas la lista va en UNA sola: a ~470px de tarjeta,
-     dos columnas dejan ~200px por item y cada titulo se parte en cuatro
-     renglones. */
-  .planes .programa-feats{grid-template-columns:1fr; gap:18px; padding:26px 28px 30px;}
-  .plan-nombre{font-size:19px; margin:0 0 14px; letter-spacing:-.01em; line-height:1.35;}
-  /* El plan 2 se llama igual que el otro y la diferencia va abajo, en un
-     renglon aparte. El "+" arranca ESE renglon en vez de cerrar el de arriba:
-     leido de corrido, "Metodo Raiz / + Tu entrenadora en vivo" dice que hay un
-     programa y algo que se le suma. Con el "+" al final del primer renglon
-     ("Metodo Raiz +") el nombre queda cortado a la mitad y las dos tarjetas
-     dejan de leerse como el mismo programa. */
-  .plan-suma{
-    display:block; margin-top:4px;
-    font-size:15px; font-weight:500; color:var(--wine-600);
-  }
-  .plan-suma .mas{color:var(--bronze-text); font-weight:600;}
-  /* El plan 2 no publica precio, por la misma decision de la estrategia que
-     antes dejaba el adicional sin cifra (docx, seccion 6): el valor se cuenta
-     en la entrevista inicial. Ocupa el lugar del monto para que las dos
-     franjas midan parecido, pero en cuerpo menor —un texto a 52px pesaria
-     mas que el precio real de al lado—. NO completarlo con un numero "para
-     que quede prolijo": es una decision, no un olvido. */
-  .programa-top .sin-precio{
-    font-size:27px; color:var(--wine-900); letter-spacing:-.02em; line-height:1.15;
-  }
-  .programa-top .sin-precio-nota{
-    margin:11px 0 0; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
-    letter-spacing:.06em; text-transform:uppercase; color:var(--wine-600);
-  }
-  /* El item que diferencia al plan 2. Fondo tenue en vez de un badge: la
-     lista tiene que seguir leyendose como lista, y el ojo cae ahi igual
-     porque es el unico item con fondo. */
-  .programa-feats li.es-extra{
-    background:var(--wine-100); border-radius:var(--r-md);
-    padding:14px 16px; margin:-4px;
-  }
 
-  /* ================= PROCESO con panel fijo =================
-     position:sticky puro. El JS solo sincroniza que diapositiva se ve; si
-     falla queda la primera y la columna de texto se lee entera igual. */
-  .proceso-grid{display:grid; grid-template-columns:.92fr 1.08fr; gap:56px; align-items:start;}
-  .pin{position:sticky; top:104px; height:min(500px,68vh); display:flex; align-items:center;}
-  .pin-inner{position:relative; width:100%; height:100%;}
-  .pin-slide{
-    position:absolute; inset:0; opacity:0; transform:translateY(12px);
-    transition:opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1);
-    display:flex; flex-direction:column; justify-content:center; gap:18px;
-  }
-  .pin-slide.on{opacity:1; transform:none;}
-  .pin-slide h3{font-size:clamp(30px,3.6vw,50px); max-width:15ch;}
-  .pin-prog{display:flex; gap:7px; align-items:center;}
-  .pin-prog i{width:24px; height:3px; border-radius:2px; background:var(--line); display:block;}
-  .pin-prog i.on{background:var(--wine-600);}
-  .pin-prog em{font-family:'IBM Plex Mono',monospace; font-style:normal; font-size:11.5px;
-               letter-spacing:.12em; color:var(--ink-soft); margin-left:8px;}
-  .pin-viz{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--r-lg);
-    box-shadow:var(--shadow-sm); padding:22px; height:210px;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .pasos{display:flex; flex-direction:column;}
-  .paso{
-    min-height:70vh; display:flex; flex-direction:column; justify-content:center; gap:11px;
-    border-left:2px solid var(--line); padding-left:28px; transition:border-color .4s ease;
-  }
-  .paso.on{border-color:var(--wine-600);}
-  .paso .pn{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--bronze); letter-spacing:.1em;}
-  .paso .pn{opacity:.45; transition:opacity .4s ease; color:var(--wine-600); font-weight:500;}
-  .paso p{margin:0; color:var(--ink-soft); font-size:16px; max-width:44ch; opacity:.45; transition:opacity .4s ease;}
-  .paso.on .pn, .paso.on p{opacity:1;}
+  /* ================= PROCESO: cuatro etapas con maqueta (23/09/2026) =================
+     Cada etapa es texto + una maqueta de lo que pasa en ese paso: el chat de
+     la entrevista, la ficha de evaluacion, la semana del plan y la revision
+     del mes. Reemplaza al panel fijo con ilustraciones abstractas (ver el
+     comentario del HTML). Un solo marcado para escritorio y mobile, sin JS:
+     la etapa entra con el .reveal del sitio y lo de adentro cuelga de su
+     .in-view. Sin JS, o sin movimiento, las maquetas se ven completas.
 
-  /* ---------- Ilustraciones animadas de .pin-viz (22/08/2026) ----------
-     Cuatro loops en CSS, uno por diapositiva. Son SVG inline con clases
-     prefijadas 'pv' para no chocar con nada del resto de la hoja.
+     La linea vertical de la izquierda es la que dice "paso a paso": une las
+     cuatro etapas y el punto bronce marca donde arranca cada una. */
+  .etapas{list-style:none; margin:0; padding:0; position:relative;}
+  .etapa{
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,440px); gap:64px;
+    align-items:start; position:relative;
+    padding:0 0 88px 40px; border-left:2px solid rgba(255,255,255,.14);
+  }
+  .etapa:last-child{padding-bottom:0; border-left-color:transparent;}
+  .etapa::before{
+    content:""; position:absolute; left:-7px; top:4px; width:12px; height:12px;
+    border-radius:50%; background:var(--bronze-light); box-shadow:0 0 0 5px var(--wine-950);
+  }
+  .etapa-txt{display:flex; flex-direction:column; gap:12px;}
+  .etapa .pn{font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.1em;
+             text-transform:uppercase; color:var(--bronze-light); font-weight:500;}
+  .etapa h3{font-size:clamp(28px,3.2vw,42px); line-height:1.08; max-width:16ch; margin:0;}
+  .etapa-txt p{margin:0; color:rgba(255,255,255,.82); font-size:16px; max-width:46ch;}
 
-     REGLA BASE: aca va SOLO transform-box. NO fijar transform-origin en
-     este selector generico. Cuesta caro: '.pin-viz svg [class]' tiene mas
-     especificidad que '.pvWk', asi que un transform-origin declarado aca
-     le gana a las clases de abajo, las barras crecen desde su centro
-     —hacia arriba Y hacia abajo— y el sobrante inferior tapa las letras
-     de los dias. Fue exactamente el bug de la "M" de miercoles.
+  /* ---------- la maqueta: una tarjeta clara sobre la seccion oscura ---------- */
+  .maq{
+    background:var(--card); color:var(--ink); border-radius:var(--r-lg);
+    box-shadow:0 24px 48px -24px rgba(0,0,0,.55); padding:20px 20px 22px;
+    font-size:14px; line-height:1.4;
+  }
+  .maq p{margin:0;}
+  .maq-head{display:flex; align-items:center; gap:10px; padding-bottom:14px; margin-bottom:16px;
+            border-bottom:1px solid var(--line);}
+  .maq-head b{display:block; font-size:15px; font-weight:600; color:var(--wine-900);}
+  .maq-head small{display:block; font-size:12.5px; color:var(--ink-soft);}
+  .maq-head em{margin-left:auto; font-style:normal; font-family:'IBM Plex Mono',monospace;
+               font-size:10.5px; letter-spacing:.1em; color:var(--bronze-text);}
+  .maq-av{width:34px; height:34px; border-radius:50%; background:var(--wine-900); color:#fff;
+          display:grid; place-items:center; font-weight:700; font-size:15px; flex:0 0 34px;}
 
-     Las animaciones son mejora progresiva: ningun opacity:0 vive en una
-     regla base, solo dentro de los @keyframes. Si el navegador no anima,
-     los cuatro dibujos quedan visibles y completos.
+  /* 01 · chat en loop: la conversacion arranca, se escribe y vuelve a empezar.
+     Cada mensaje tiene su lugar reservado (.slot) y el "escribiendo" aparece
+     EN ese lugar, superpuesto: asi la tarjeta no salta de alto al entrar
+     cada burbuja. */
+  .maq-chat{display:flex; flex-direction:column; gap:8px;}
+  .maq-chat .maq-head{margin-bottom:8px;}
+  .slot{display:grid;}
+  .slot > *{grid-area:1 / 1;}
+  .slot.vos{justify-items:end;}
+  .slot.jime{justify-items:start;}
+  .burb{max-width:82%; padding:9px 13px; border-radius:16px; font-size:14px;}
+  .vos .burb{background:var(--wine-100); color:var(--wine-900); border-bottom-right-radius:5px;}
+  .jime .burb{background:var(--paper-dim); border:1px solid var(--line); border-bottom-left-radius:5px;}
+  /* Sin JS o sin movimiento no hay nada que "escriba": se ve la charla entera. */
+  .typ{display:none; align-self:start; gap:4px; padding:12px 14px; border-radius:16px;}
+  .vos .typ{background:var(--wine-100); border-bottom-right-radius:5px;}
+  .jime .typ{background:var(--paper-dim); border:1px solid var(--line); border-bottom-left-radius:5px;}
+  .typ i{width:6px; height:6px; border-radius:50%; background:var(--wine-600); opacity:.55;}
 
-     Solo corren en escritorio: .pin{display:none} en <=960px, asi que en
-     mobile este bloque no dibuja nada. */
-  .pin-viz svg [class]{transform-box:fill-box;}
-  .pvMono{font-family:'IBM Plex Mono',monospace;}
-  /* La curva de entradas del design-system. Se declara como token local y no
-     global: el sitio maneja dos curvas y un nombre suelto en :root se presta
-     a que la proxima pasada agarre la equivocada. Ojo, un var() que no existe
-     invalida el shorthand 'animation' entero y no anima nada. */
-  .pin-viz{--pvEase:cubic-bezier(.25,.46,.45,.94);}
+  /* 02 · evaluacion */
+  /* Sin barras a proposito: una barra de "grasa corporal" al 66% no dice
+     nada, y la seccion se rehizo justamente por mostrar formas sin escala. */
+  .med{list-style:none; margin:0; padding:0; display:flex; flex-direction:column;}
+  .med li{display:flex; justify-content:space-between; gap:12px; align-items:baseline;
+          padding:10px 0; border-bottom:1px solid var(--line);}
+  .med li:last-child{border-bottom:0;}
+  .med span{color:var(--ink-soft);}
+  .med b{font-weight:600; font-variant-numeric:tabular-nums;}
+  .med b.ok{font-weight:500; color:var(--wine-600); font-size:13px;}
+  .med b.ok::before{content:"✓ "; font-weight:700;}
+  .maq-pie{margin-top:6px !important; padding-top:14px; border-top:1px dashed var(--line);
+           font-size:13px; color:var(--ink-soft);}
+  .maq-pie span{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink);
+                text-decoration:line-through; text-decoration-color:var(--wine-500); margin-right:8px;}
 
-  /* 01 · el chat se ACUMULA: cada mensaje entra despues de su "escribiendo"
-     y se queda hasta que termina el ciclo. */
-  .pvTyp{animation:pvTypShow 10s linear infinite;}
-  .pvTyp.t2{animation-delay:2.6s;}
-  .pvTyp.t3{animation-delay:5.2s;}
-  @keyframes pvTypShow{
-    0%{opacity:0;} 2%{opacity:1;} 12%{opacity:1;} 14%{opacity:0;} 100%{opacity:0;}
-  }
-  .pvDot{animation:pvDotBounce .95s ease-in-out infinite;}
-  .pvDot.d2{animation-delay:.14s;}
-  .pvDot.d3{animation-delay:.28s;}
-  @keyframes pvDotBounce{0%,100%{transform:translateY(0);} 50%{transform:translateY(-3.5px);}}
-  .pvMsg{animation:pvMsgIn 10s var(--pvEase) infinite; transform-origin:center;}
-  .pvMsg.m2{animation-delay:2.6s;}
-  .pvMsg.m3{animation-delay:5.2s;}
-  @keyframes pvMsgIn{
-    0%,13%{opacity:0; transform:translateY(8px) scale(.94);}
-    18%{opacity:1; transform:translateY(0) scale(1);}
-    92%{opacity:1; transform:translateY(0) scale(1);}
-    97%,100%{opacity:0; transform:translateY(-5px) scale(.99);}
-  }
+  /* 03 · de lo que me contaste a tu plan. Cada renglon junta una frase de la
+     alumna (las mismas del chat del paso 01) con la decision del plan que sale
+     de ella: es lo que hace que "no sale de una plantilla" se vea. */
+  .pares{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px;}
+  .pares li{display:flex; flex-direction:column; gap:4px;}
+  .pares q{font-size:13px; color:var(--ink-soft); quotes:"“" "”";}
+  .pares b{display:flex; gap:8px; font-weight:600; color:var(--wine-900); line-height:1.35;
+           background:var(--wine-100); border-radius:10px; padding:8px 12px;}
+  .pares b::before{content:"→"; color:var(--bronze-text); font-weight:700;}
 
-  /* 02 · anillo que se dibuja + caliper que mide */
-  /* transform-origin PROPIO, y no heredado del selector generico de arriba.
-     En SVG el valor inicial de transform-origin es `0 0`, no `50% 50%`: con
-     transform-box:fill-box eso es la esquina superior izquierda de la caja del
-     circulo. El rotate(-90deg) giraba el aro alrededor de esa esquina y lo
-     dejaba un diametro entero mas arriba, flotando fuera del anillo gris
-     —medido: 73.4px de desfasaje, exactamente 2r—.
-     Es la contracara del bug de las barras del 22/08: sacar el
-     transform-origin del selector generico arreglo `.pvWk` y rompio esto,
-     que dependia de el sin declararlo. La regla ahora es simple: **todo lo
-     que rote o escale declara su propio origen**. */
-  .pvRing{
-    animation:pvRingDraw 4.4s var(--pvEase) infinite;
-    transform:rotate(-90deg); transform-origin:center;
-  }
-  @keyframes pvRingDraw{
-    0%{stroke-dashoffset:264;} 30%{stroke-dashoffset:156;}
-    64%{stroke-dashoffset:156;} 90%,100%{stroke-dashoffset:264;}
-  }
-  .pvCalL{animation:pvCalL 4.4s var(--pvEase) infinite;}
-  .pvCalR{animation:pvCalR 4.4s var(--pvEase) infinite;}
-  @keyframes pvCalL{
-    0%,18%{transform:translateX(0);} 44%{transform:translateX(11px);}
-    72%{transform:translateX(11px);} 100%{transform:translateX(0);}
-  }
-  @keyframes pvCalR{
-    0%,18%{transform:translateX(0);} 44%{transform:translateX(-11px);}
-    72%{transform:translateX(-11px);} 100%{transform:translateX(0);}
-  }
-  .pvNum{font-variant-numeric:tabular-nums;}
+  /* 04 · el grafico: la curva se estanca, aparece el ajuste y vuelve a subir.
+     Todo con texto y ejes con escala: nada de barras sin etiqueta. */
+  .graf{display:block; width:100%; height:auto; overflow:visible;}
+  .graf text{font-family:'IBM Plex Mono',monospace; font-size:11px; fill:var(--ink-soft);}
+  .g-grid line{stroke:var(--line); stroke-width:1;}
+  .g-meseta{fill:var(--paper-dim); stroke:var(--line); stroke-dasharray:3 3;}
+  .graf .g-meseta-t{font-size:10.5px; fill:var(--ink-soft);}
+  .g-ajuste line{stroke:var(--wine-600); stroke-width:1.5; stroke-dasharray:4 4;}
+  .g-ajuste rect{fill:var(--wine-600);}
+  .graf .g-ajuste text{fill:#fff; font-size:10px; letter-spacing:.1em; font-weight:500;}
+  .g-linea{fill:none; stroke:var(--wine-600); stroke-width:3.5; stroke-linecap:round; stroke-linejoin:round;
+           stroke-dasharray:100; stroke-dashoffset:0;}
+  .g-fin{fill:var(--wine-900);}
+  .g-halo{fill:var(--bronze-light); opacity:.5;}
+  .graf .g-valor{font-size:13px; font-weight:500; fill:var(--wine-900);}
+  .ajuste{margin-top:16px !important; padding:12px 14px; border-radius:var(--r-md);
+          background:var(--paper-dim); border-left:3px solid var(--wine-600); font-size:13.5px;}
+  .ajuste small{display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+                letter-spacing:.1em; text-transform:uppercase; color:var(--wine-600); margin-bottom:3px;}
 
-  /* 03 · siete dias que pasan de plantilla pareja a la semana real */
-  .pvWk{transform-origin:center bottom; animation:pvWkMorph 5.5s var(--pvEase) infinite;}
-  .pvWk.w2{animation-delay:.06s;} .pvWk.w3{animation-delay:.12s;}
-  .pvWk.w4{animation-delay:.18s;} .pvWk.w5{animation-delay:.24s;}
-  .pvWk.w6{animation-delay:.30s;} .pvWk.w7{animation-delay:.36s;}
-  @keyframes pvWkMorph{
-    0%,14%{transform:scaleY(1); fill:#E9E4DE;}
-    38%{transform:scaleY(var(--s)); fill:var(--c);}
-    84%{transform:scaleY(var(--s)); fill:var(--c);}
-    96%,100%{transform:scaleY(1); fill:#E9E4DE;}
-  }
-  .pvWk.w1{--s:1.30; --c:#9D3A57;}
-  .pvWk.w2{--s:.34;  --c:#E9E4DE;}
-  .pvWk.w3{--s:1.62; --c:#9D3A57;}
-  .pvWk.w4{--s:.34;  --c:#E9E4DE;}
-  .pvWk.w5{--s:1.46; --c:#9D3A57;}
-  .pvWk.w6{--s:.74;  --c:#A9824A;}
-  .pvWk.w7{--s:.34;  --c:#E9E4DE;}
-  .pvCapA{animation:pvCapA 5.5s var(--pvEase) infinite;}
-  .pvCapB{animation:pvCapB 5.5s var(--pvEase) infinite;}
-  @keyframes pvCapA{0%,14%{opacity:1;} 30%,100%{opacity:0;}}
-  @keyframes pvCapB{0%,22%{opacity:0;} 38%,88%{opacity:1;} 96%,100%{opacity:0;}}
+  /* ---------- movimiento ----------
+     Dos maquetas cuentan su paso UNA vez y se quedan quietas para leerse
+     (evaluacion). Tres corren en loop porque cuentan algo que pasa en el
+     tiempo: la charla (01), el plan que se arma (03) y la curva (04).
+     Todo arranca recien cuando la etapa entra (.in-view), y cada pieza se
+     oculta SOLO dentro de su @keyframe, nunca en una regla base: sin JS o
+     con movimiento reducido las maquetas se ven completas y quietas. */
+  .maq{--mEase:cubic-bezier(.25,.46,.45,.94);}
+  @keyframes mSube{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+  .has-js .etapa.in-view .med li,
+  .has-js .etapa.in-view .maq-pie{animation:mSube .7s var(--mEase) both;}
+  .has-js .etapa.in-view .med li:nth-child(1){animation-delay:.6s;}
+  .has-js .etapa.in-view .med li:nth-child(2){animation-delay:.78s;}
+  .has-js .etapa.in-view .med li:nth-child(3){animation-delay:.96s;}
+  .has-js .etapa.in-view .med li:nth-child(4){animation-delay:1.14s;}
+  .has-js .etapa.in-view .maq-pie{animation-delay:1.6s;}
 
-  /* 04 · barras que crecen apoyadas en la linea de base */
-  .pvBar{transform-origin:center bottom; animation:pvBarGrow 5s var(--pvEase) infinite;}
-  .pvBar.b2{animation-delay:.11s;} .pvBar.b3{animation-delay:.22s;}
-  .pvBar.b4{animation-delay:.33s;} .pvBar.b5{animation-delay:.44s;}
-  @keyframes pvBarGrow{
-    0%{transform:scaleY(0);} 24%{transform:scaleY(1);}
-    84%{transform:scaleY(1);} 95%,100%{transform:scaleY(0);}
-  }
-  .pvTip{animation:pvTip 5s var(--pvEase) infinite;}
-  @keyframes pvTip{
-    0%,10%{opacity:0; transform:translateY(6px);}
-    26%{opacity:1; transform:translateY(0);}
-    84%{opacity:1; transform:translateY(0);}
-    95%,100%{opacity:0; transform:translateY(-3px);}
-  }
-  .pvHalo{animation:pvHalo 5s ease-out infinite; transform-origin:center;}
-  @keyframes pvHalo{
-    0%,44%{opacity:0; transform:scale(.6);}
-    56%{opacity:.5; transform:scale(1);}
-    74%,100%{opacity:0; transform:scale(1.7);}
-  }
+  /* Chat: ciclo de 16s. Cada mensaje: "escribiendo" 1.3s y la burbuja, que
+     se queda hasta que la charla entera se desvanece y vuelve a empezar.
+     Los tiempos salen de un script y no se tocan a mano uno por uno: si se
+     cambia el ciclo, se recalculan todos juntos. */
+  .has-js .etapa.in-view .typ{display:flex;}
+  @keyframes typPunto{0%,60%,100%{transform:translateY(0); opacity:.4;} 30%{transform:translateY(-4px); opacity:1;}}
+  .has-js .etapa.in-view .typ i{animation:typPunto 1s ease-in-out infinite;}
+  .has-js .etapa.in-view .typ i:nth-child(2){animation-delay:.15s;}
+  .has-js .etapa.in-view .typ i:nth-child(3){animation-delay:.3s;}
+  @keyframes typ1{0%,2.50%{opacity:0;} 3.44%,10.00%{opacity:1;} 10.63%,100%{opacity:0;}}
+  @keyframes burb1{0%,10.63%{opacity:0; transform:translateY(8px) scale(.97);} 12.81%,91.25%{opacity:1; transform:none;} 94.38%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .slot:nth-of-type(2) .typ{animation:typ1 16s linear infinite;}
+  .has-js .etapa.in-view .slot:nth-of-type(2) .burb{animation:burb1 16s var(--mEase) infinite;}
+  @keyframes typ2{0%,21.25%{opacity:0;} 22.19%,28.75%{opacity:1;} 29.38%,100%{opacity:0;}}
+  @keyframes burb2{0%,29.38%{opacity:0; transform:translateY(8px) scale(.97);} 31.56%,91.25%{opacity:1; transform:none;} 94.38%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .slot:nth-of-type(3) .typ{animation:typ2 16s linear infinite;}
+  .has-js .etapa.in-view .slot:nth-of-type(3) .burb{animation:burb2 16s var(--mEase) infinite;}
+  @keyframes typ3{0%,40.00%{opacity:0;} 40.94%,47.50%{opacity:1;} 48.12%,100%{opacity:0;}}
+  @keyframes burb3{0%,48.12%{opacity:0; transform:translateY(8px) scale(.97);} 50.31%,91.25%{opacity:1; transform:none;} 94.38%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .slot:nth-of-type(4) .typ{animation:typ3 16s linear infinite;}
+  .has-js .etapa.in-view .slot:nth-of-type(4) .burb{animation:burb3 16s var(--mEase) infinite;}
+  @keyframes typ4{0%,58.75%{opacity:0;} 59.69%,66.25%{opacity:1;} 66.88%,100%{opacity:0;}}
+  @keyframes burb4{0%,66.88%{opacity:0; transform:translateY(8px) scale(.97);} 69.06%,91.25%{opacity:1; transform:none;} 94.38%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .slot:nth-of-type(5) .typ{animation:typ4 16s linear infinite;}
+  .has-js .etapa.in-view .slot:nth-of-type(5) .burb{animation:burb4 16s var(--mEase) infinite;}
 
-  /* La diapositiva que no se ve no gasta CPU animando. */
-  .pin-slide:not(.on) .pin-viz svg [class]{animation-play-state:paused;}
+  /* Plan: ciclo de 12s. Primero lo que dijo la alumna, despues la decision
+     del plan que sale de eso. */
+  @keyframes par1q{0%,3.33%{opacity:0; transform:translateY(6px);} 6.67%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  @keyframes par1b{0%,10.00%{opacity:0; transform:translateX(-10px);} 13.75%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .pares li:nth-child(1) q{animation:par1q 12s var(--mEase) infinite;}
+  .has-js .etapa.in-view .pares li:nth-child(1) b{animation:par1b 12s var(--mEase) infinite;}
+  @keyframes par2q{0%,20.00%{opacity:0; transform:translateY(6px);} 23.33%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  @keyframes par2b{0%,26.67%{opacity:0; transform:translateX(-10px);} 30.42%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .pares li:nth-child(2) q{animation:par2q 12s var(--mEase) infinite;}
+  .has-js .etapa.in-view .pares li:nth-child(2) b{animation:par2b 12s var(--mEase) infinite;}
+  @keyframes par3q{0%,36.67%{opacity:0; transform:translateY(6px);} 40.00%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  @keyframes par3b{0%,43.33%{opacity:0; transform:translateX(-10px);} 47.08%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .pares li:nth-child(3) q{animation:par3q 12s var(--mEase) infinite;}
+  .has-js .etapa.in-view .pares li:nth-child(3) b{animation:par3b 12s var(--mEase) infinite;}
+  @keyframes par4q{0%,53.33%{opacity:0; transform:translateY(6px);} 56.67%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  @keyframes par4b{0%,60.00%{opacity:0; transform:translateX(-10px);} 63.75%,88.33%{opacity:1; transform:none;} 92.50%,100%{opacity:0; transform:none;}}
+  .has-js .etapa.in-view .pares li:nth-child(4) q{animation:par4q 12s var(--mEase) infinite;}
+  .has-js .etapa.in-view .pares li:nth-child(4) b{animation:par4b 12s var(--mEase) infinite;}
+
+  /* Grafico: ciclo de 10s. La linea se dibuja de 8% a 55% en forma LINEAL
+     (con easing el dibujo se desincroniza de la meseta y el ajuste, que
+     estan calculados sobre el largo del trazo: el mes 3 cae al 38,5%). */
+  @keyframes gLinea{0%,8%{stroke-dashoffset:100; opacity:1;} 55%,88%{stroke-dashoffset:0; opacity:1;} 94%,100%{stroke-dashoffset:0; opacity:0;}}
+  @keyframes gMeseta{0%,19%{opacity:0;} 23%,88%{opacity:1;} 94%,100%{opacity:0;}}
+  @keyframes gAjuste{0%,26%{opacity:0; transform:translateY(-6px);} 30%,88%{opacity:1; transform:none;} 94%,100%{opacity:0;}}
+  @keyframes gFin{0%,54%{opacity:0;} 57%,88%{opacity:1;} 94%,100%{opacity:0;}}
+  @keyframes gHalo{0%,56%{opacity:0; transform:scale(.5);} 62%{opacity:.6; transform:scale(1);} 76%,100%{opacity:0; transform:scale(1.8);}}
+  .has-js .etapa.in-view .g-linea{animation:gLinea 10s linear infinite;}
+  .has-js .etapa.in-view :is(.g-meseta,.g-meseta-t){animation:gMeseta 10s var(--mEase) infinite;}
+  .has-js .etapa.in-view .g-ajuste{animation:gAjuste 10s var(--mEase) infinite;}
+  .has-js .etapa.in-view :is(.g-fin,.g-valor){animation:gFin 10s var(--mEase) infinite;}
+  /* todo lo que escala declara su propio origen (ver design-system.md) */
+  .g-halo{transform-box:fill-box; transform-origin:center;}
+  .has-js .etapa.in-view .g-halo{animation:gHalo 10s ease-out infinite;}
+  .has-js .etapa.in-view .ajuste{animation:gMeseta 10s var(--mEase) infinite;}
 
   @media (prefers-reduced-motion:reduce){
-    .pin-viz svg [class]{animation:none !important;}
-    /* sin movimiento, el "escribiendo" se superpondria con su mensaje */
-    .pvTyp{display:none;}
+    .maq *, .plan{animation:none !important;}
+    .navtoggle line, .navlinks, .navlinks li{transition:none !important;}
+    .has-js .etapa.in-view .typ{display:none;}
   }
 
-  /* Lado a lado, el renglon extra del nombre del plan 2 corria su etiqueta y
-     todo lo de abajo 20px respecto del plan base, y esa desalineacion se ve
-     justo donde las dos tarjetas se comparan. Reservando dos renglones en las
-     dos, las etiquetas y los precios vuelven a arrancar a la misma altura.
-     Solo aplica de 961px para arriba: apiladas no hay con que comparar y el
-     hueco extra en el plan base seria aire de mas. */
-  @media (min-width:961px){
-    .planes .plan-nombre{min-height:calc(2 * 19px * 1.35);}
-  }
 
-  @media (max-width:960px){
-    .programa-feats{grid-template-columns:1fr;}
-    /* Dos tarjetas en paralelo dejan de entrar antes que la lista: a menos de
-       960px cada una cae por debajo de ~450px y la franja del precio se
-       aprieta. Apiladas se leen igual de bien, una debajo de la otra. */
-    .planes{grid-template-columns:1fr; max-width:900px; gap:22px;}
-    /* En 4 columnas cada item queda en ~160px y se parte en cuatro renglones,
-       asi que la tira terminaba mas alta en tablet que en escritorio. */
-  }
 
   /* ---------- Footer: tres formas segun el ancho ----------
      Los cortes salen de medir el contenido, no de numeros redondos. El item
@@ -1874,11 +1844,60 @@
       padding:22px 28px 30px;
       border-bottom:1px solid var(--line);
       gap:20px;
-      transform:translateY(-130%);
-      transition:transform .3s ease;
+      /* Se despliega DESDE el borde de abajo del header, como una cortina,
+         y se repliega igual (23/09/2026). Antes subia y bajaba con
+         translateY(-130%): el panel viajaba por detras del header, que es
+         vidrio al 93%, y al cerrarse se lo veia cruzar el logo — parecia
+         roto. clip-path recorta sin mover nada, asi que el panel nunca sale
+         de su lugar. El -40px de abajo al abrir deja ver la sombra.
+         Abrir usa la curva de interaccion y es mas lento que cerrar: entrar
+         se acompaña, salir se despeja. visibility con retardo saca los links
+         del tab cuando esta cerrado. */
+      clip-path:inset(0 0 100% 0);
+      visibility:hidden;
+      transition:clip-path .34s cubic-bezier(.4,0,.2,1), visibility 0s linear .34s;
     }
-    .navlinks.open{transform:translateY(0);}
+    .navlinks.open{
+      clip-path:inset(0 0 -40px 0);
+      visibility:visible;
+      transition:clip-path .55s cubic-bezier(.16,1,.3,1), visibility 0s;
+    }
+    /* los renglones bajan de a uno detras de la cortina */
+    .navlinks li{opacity:0; transform:translateY(-8px);
+                 transition:opacity .2s ease, transform .2s ease;}
+    .navlinks.open li{opacity:1; transform:none;
+                      transition:opacity .4s ease, transform .5s cubic-bezier(.16,1,.3,1);}
+    .navlinks.open li:nth-child(1){transition-delay:.06s;}
+    .navlinks.open li:nth-child(2){transition-delay:.11s;}
+    .navlinks.open li:nth-child(3){transition-delay:.16s;}
+    .navlinks.open li:nth-child(4){transition-delay:.21s;}
+    .navlinks.open li:nth-child(5){transition-delay:.26s;}
     .navtoggle{display:block;}
+
+    /* Menu abierto, rearmado el 23/09/2026. Tenia dos problemas:
+       • "Escribime" quedaba como una pildora apretada contra el texto:
+         `.navlinks a` (0,1,1) le gana a `.navcta` (0,1,0) y le pisaba el
+         padding horizontal con `padding:11px 0`. Ahora va con un selector que
+         le gana, y a lo ancho.
+       • Los links flotaban con ~60px de aire entre si. Ahora son renglones
+         con separador, y el menu termina con una sombra en vez de un corte. */
+    .navlinks{gap:0; padding:6px 20px 22px; align-items:stretch;
+              box-shadow:0 24px 32px -24px rgba(36,31,38,.28);}
+    .navlinks li{border-bottom:1px solid var(--line);}
+    .navlinks li:last-child{border-bottom:0; padding-top:18px;}
+    .navlinks a{padding:15px 0; font-size:17px;}
+    .navlinks a::after{display:none;}
+    .navlinks .navcta{display:block; padding:15px 22px; text-align:center; font-size:16px;}
+    /* La hamburguesa se vuelve una X al abrir. Cada linea rota sobre su
+       PROPIO centro (en SVG el origen inicial es 0 0, ver design-system.md). */
+    .navtoggle{border-radius:10px;}
+    .navtoggle:focus-visible{outline-offset:-2px;}
+    .navtoggle line{transition:transform .3s cubic-bezier(.16,1,.3,1), opacity .2s ease;}
+    .navtoggle line:nth-child(1){transform-origin:12px 6px;}
+    .navtoggle line:nth-child(3){transform-origin:12px 18px;}
+    .navtoggle[aria-expanded="true"] line:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .navtoggle[aria-expanded="true"] line:nth-child(2){opacity:0;}
+    .navtoggle[aria-expanded="true"] line:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
 
     /* botones a lo ancho: entran comodos y no parten el texto en dos lineas */
     .btn-primary{width:100%; justify-content:center; padding:17px 22px; font-size:16px;}
@@ -1958,15 +1977,57 @@
     .t-quote{margin-bottom:22px; max-width:none;}
     .step .stepnum{font-size:26px;}
 
-    /* El panel fijo es una mejora de escritorio. En mobile se oculta y la
-       columna de pasos se lee como lista normal, sin depender de JavaScript. */
-    .pin{display:none;}
-    .proceso-grid{grid-template-columns:1fr; gap:0;}
-    .paso{min-height:auto; padding:20px 0 20px 18px;}
-    .paso .pn, .paso p{opacity:1;}
-    .programa-card{border-radius:var(--r-md);}
-    .programa-top{padding:28px 22px;}
-    .programa-feats{padding:24px 22px 26px;}
+    /* Apiladas: el texto primero y su maqueta abajo, colgadas de la misma
+       linea vertical. */
+    .etapa{grid-template-columns:minmax(0,1fr); gap:24px; padding:0 0 56px 24px;}
+    .maq{max-width:440px;}
+    /* Mobile, a la Netflix: dos tiles lado a lado para elegir, y abajo UNA
+       tarjeta con el detalle del plan elegido. Lado a lado a 360px las dos
+       tarjetas completas quedaban de ~150px, con cada item partido en dos o
+       tres renglones. */
+    .plan-tiles{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 auto 14px; max-width:520px;}
+    .tile{
+      position:relative; display:flex; flex-direction:column; justify-content:flex-end; gap:4px;
+      min-height:96px; padding:14px 14px 13px; border-radius:var(--r-md); cursor:pointer;
+      background:var(--card); border:1px solid var(--line); color:var(--ink);
+      transition:background .25s ease, color .25s ease, border-color .25s ease;
+    }
+    .tile b{font-size:15.5px; line-height:1.2; color:var(--wine-900); padding-right:18px;}
+    .tile > span{font-size:12.5px; color:var(--ink-soft);}
+    .tile .mas{color:var(--bronze-text);}
+    /* el circulo del check, arriba a la derecha, como en Netflix */
+    .tile::after{
+      content:""; position:absolute; top:12px; right:12px; width:18px; height:18px; border-radius:50%;
+      border:1.5px solid var(--line); box-sizing:border-box;
+      display:grid; place-items:center; font-size:11px; font-weight:700; line-height:1;
+    }
+    #sel-base:checked ~ .plan-tiles .tile-base,
+    #sel-vivo:checked ~ .plan-tiles .tile-vivo{
+      background:linear-gradient(135deg, var(--wine-600), var(--bronze)); border-color:transparent;
+      box-shadow:0 10px 22px -12px rgba(157,58,87,.55);
+    }
+    #sel-base:checked ~ .plan-tiles .tile-base :is(b,span,.mas),
+    #sel-vivo:checked ~ .plan-tiles .tile-vivo :is(b,span,.mas){color:#fff;}
+    #sel-base:checked ~ .plan-tiles .tile-base::after,
+    #sel-vivo:checked ~ .plan-tiles .tile-vivo::after{content:"✓"; background:#fff; border:0; color:var(--wine-600);}
+    #sel-base:focus-visible ~ .plan-tiles .tile-base,
+    #sel-vivo:focus-visible ~ .plan-tiles .tile-vivo{outline:2px solid var(--wine-600); outline-offset:3px;}
+
+    /* Abajo, una sola tarjeta: la del plan elegido. La cabecera sobra, ya la
+       dice el tile. */
+    .planes{grid-template-columns:1fr; grid-template-rows:none; max-width:520px;}
+    .plan{display:none; grid-row:auto; padding:18px 18px 20px; border-radius:var(--r-md);}
+    #sel-base:checked ~ .planes #plan-base,
+    #sel-vivo:checked ~ .planes #plan-vivo{display:flex; flex-direction:column; animation:mSube .45s var(--mEase, ease) both;}
+    .plan-cab{display:none;}
+    /* La tarjeta oculta nunca intersecta, asi que el observador del .reveal
+       no le pondria .in-view y al elegirla quedaria en opacity 0. En mobile
+       la entrada la hace la animacion de arriba, no el reveal. */
+    .has-js .planes .plan.reveal{opacity:1; transform:none; transition:none;}
+    .plan-lista{gap:0; margin-bottom:18px;}
+    .plan-lista li{padding:11px 0 11px 28px; border-bottom:1px solid var(--line); font-size:14.5px;}
+    .plan-lista li::before{top:11px;}
+    .plan-pie{align-self:stretch; text-align:center;}
 
     /* Una sola columna: las tres listas de una linea apiladas ocupan menos
        alto que tres columnas de 90px con el titulo partido en dos renglones. */
@@ -1986,13 +2047,10 @@
   /* ---------- Pantallas chicas: 360px y menos ---------- */
   @media (max-width:400px){
     .wrap{padding-left:16px; padding-right:16px;}
-    .programa-top .sin-precio{font-size:21px;}
-    .programa-feats{grid-template-columns:1fr; padding:20px 18px;}
-    .planes .programa-feats{padding:20px 18px;}
-    .planes .programa-top{padding:26px 18px;}
     .section-head h2{font-size:32px;}
-    .paso{padding-left:14px;}
-    .paso p{font-size:15px;}
+    .etapa{padding-left:18px;}
+    .etapa-txt p{font-size:15px;}
+    .maq{padding:16px 14px 18px;}
     .hero-video{aspect-ratio:1/1;}
     .esp-lista{grid-template-columns:1fr;}
     .especialidades{padding:18px;}
@@ -2076,7 +2134,7 @@
 
 <header>
   <nav class="wrap">
-    <a href="#" class="logo"><img src="/img/marca/marca-96.png" alt="" width="30" height="30" decoding="async"><span class="logotxt">Jimena Ibañez<span>.</span></span></a>
+    <a href="#" class="logo"><span class="logotxt">Jimena Ibañez<span>.</span></span></a>
     <ul class="navlinks" id="navlinks">
       <li><a href="#sobre">Sobre mí</a></li>
       <li><a href="#testimonios">Testimonios</a></li>
@@ -2599,143 +2657,100 @@
         <h2>El proceso, paso a paso</h2>
       </div>
 
-      <div class="proceso-grid">
-        <div class="pin"><div class="pin-inner" id="pinProceso">
+      <!-- Cuatro etapas, cada una con su texto y una maqueta de lo que pasa de
+           verdad en ese paso (23/09/2026). Reemplaza al panel fijo con cuatro
+           ilustraciones abstractas —burbujas sin texto, un 41% sin decir de
+           que, barras sin etiqueta— que no se entendian, y que ademas en mobile
+           no se veian: el panel se ocultaba debajo de 960px.
+           Las maquetas son HTML, no SVG, para que el texto sea texto. Las cifras
+           son un EJEMPLO y lo dicen: no son de ninguna alumna. -->
+      <ol class="etapas">
 
-          <div class="pin-slide on">
-            <div class="pin-prog"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><em>01 DE 04</em></div>
-            <h3>Primero escuchar,<br>después entrenar.</h3>
-            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
-              <defs>
-                <linearGradient id="pvWineGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#9D3A57"/><stop offset="1" stop-color="#A9824A"/>
-                </linearGradient>
-              </defs>
-              <g class="pvTyp t1">
-                <rect x="14" y="14" width="58" height="32" rx="16" fill="#F3E4E9"/>
-                <circle class="pvDot d1" cx="31" cy="30" r="4" fill="#9D3A57"/>
-                <circle class="pvDot d2" cx="43" cy="30" r="4" fill="#9D3A57"/>
-                <circle class="pvDot d3" cx="55" cy="30" r="4" fill="#9D3A57"/>
-              </g>
-              <g class="pvMsg m1">
-                <rect x="14" y="14" width="122" height="32" rx="16" fill="#F3E4E9"/>
-                <rect x="30" y="24" width="78" height="6.5" rx="3.25" fill="#9D3A57" opacity=".8"/>
-                <rect x="30" y="35" width="48" height="6.5" rx="3.25" fill="#9D3A57" opacity=".45"/>
-              </g>
-              <g class="pvTyp t2">
-                <rect x="168" y="58" width="58" height="32" rx="16" fill="#EFE3CD"/>
-                <circle class="pvDot d1" cx="185" cy="74" r="4" fill="#A9824A"/>
-                <circle class="pvDot d2" cx="197" cy="74" r="4" fill="#A9824A"/>
-                <circle class="pvDot d3" cx="209" cy="74" r="4" fill="#A9824A"/>
-              </g>
-              <g class="pvMsg m2">
-                <rect x="96" y="58" width="130" height="48" rx="18" fill="url(#pvWineGrad)"/>
-                <rect x="112" y="72" width="94" height="6.5" rx="3.25" fill="#fff" opacity=".92"/>
-                <rect x="112" y="86" width="60" height="6.5" rx="3.25" fill="#fff" opacity=".6"/>
-              </g>
-              <g class="pvTyp t3">
-                <rect x="14" y="118" width="58" height="32" rx="16" fill="#F3E4E9"/>
-                <circle class="pvDot d1" cx="31" cy="134" r="4" fill="#9D3A57"/>
-                <circle class="pvDot d2" cx="43" cy="134" r="4" fill="#9D3A57"/>
-                <circle class="pvDot d3" cx="55" cy="134" r="4" fill="#9D3A57"/>
-              </g>
-              <g class="pvMsg m3">
-                <rect x="14" y="118" width="104" height="32" rx="16" fill="#F3E4E9"/>
-                <rect x="30" y="128" width="66" height="6.5" rx="3.25" fill="#9D3A57" opacity=".8"/>
-                <rect x="30" y="139" width="38" height="6.5" rx="3.25" fill="#9D3A57" opacity=".45"/>
-              </g>
-            </svg></div>
-          </div>
-
-          <div class="pin-slide">
-            <div class="pin-prog"><i class=""></i><i class="on"></i><i class=""></i><i class=""></i><em>02 DE 04</em></div>
-            <h3>Sin medir,<br>estamos adivinando.</h3>
-            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
-              <circle cx="120" cy="84" r="42" stroke="#E9E4DE" stroke-width="10"/>
-              <circle class="pvRing" cx="120" cy="84" r="42" stroke="#9D3A57" stroke-width="10"
-                      stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"/>
-              <text class="pvNum pvMono" x="120" y="93" text-anchor="middle" font-size="26"
-                    font-weight="500" fill="#5C1F32">41%</text>
-              <g class="pvCalL" stroke="#A9824A" stroke-width="6" stroke-linecap="round" fill="none">
-                <path d="M44 61 Q32 84 44 107"/>
-              </g>
-              <g class="pvCalR" stroke="#A9824A" stroke-width="6" stroke-linecap="round" fill="none">
-                <path d="M196 61 Q208 84 196 107"/>
-              </g>
-              <line x1="62" y1="152" x2="178" y2="152" stroke="#E9E4DE" stroke-width="1.5"/>
-              <text class="pvMono" x="120" y="172" text-anchor="middle" font-size="10.5"
-                    letter-spacing=".1em" fill="#8A6636">TU PUNTO DE PARTIDA</text>
-            </svg></div>
-          </div>
-
-          <div class="pin-slide">
-            <div class="pin-prog"><i class=""></i><i class=""></i><i class="on"></i><i class=""></i><em>03 DE 04</em></div>
-            <h3>Tu plan no sale<br>de una plantilla.</h3>
-            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
-              <rect class="pvWk w1" x="19"  y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <rect class="pvWk w2" x="49"  y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <rect class="pvWk w3" x="79"  y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <rect class="pvWk w4" x="109" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <rect class="pvWk w5" x="139" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <rect class="pvWk w6" x="169" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <rect class="pvWk w7" x="199" y="84" width="22" height="40" rx="7" fill="#E9E4DE"/>
-              <line x1="15" y1="130" x2="225" y2="130" stroke="#E9E4DE" stroke-width="1.5"/>
-              <g class="pvMono" font-size="11" fill="#8C838F" text-anchor="middle">
-                <text x="30" y="148">L</text>
-                <text x="60" y="148">M</text>
-                <text x="90" y="148">M</text>
-                <text x="120" y="148">J</text>
-                <text x="150" y="148">V</text>
-                <text x="180" y="148">S</text>
-                <text x="210" y="148">D</text>
-              </g>
-              <text class="pvCapA pvMono" x="120" y="174" text-anchor="middle" font-size="10"
-                    letter-spacing=".08em" fill="#8C838F">UNA PLANTILLA IGUAL PARA TODAS</text>
-              <text class="pvCapB pvMono" x="120" y="174" text-anchor="middle" font-size="10"
-                    letter-spacing=".08em" fill="#8A6636">TU SEMANA REAL</text>
-            </svg></div>
-          </div>
-
-          <div class="pin-slide">
-            <div class="pin-prog"><i class=""></i><i class=""></i><i class=""></i><i class="on"></i><em>04 DE 04</em></div>
-            <h3>El plan cambia<br>cuando vos cambiás.</h3>
-            <div class="pin-viz"><svg width="210" height="166" viewBox="0 0 240 190" fill="none" aria-hidden="true">
-              <rect class="pvBar b1" x="26"  y="108" width="24" height="42"  rx="5" fill="#E4C9D2"/>
-              <rect class="pvBar b2" x="64"  y="90"  width="24" height="60"  rx="5" fill="#D3A2B2"/>
-              <rect class="pvBar b3" x="102" y="70"  width="24" height="80"  rx="5" fill="#B14A67"/>
-              <rect class="pvBar b4" x="140" y="46"  width="24" height="104" rx="5" fill="#9D3A57"/>
-              <rect class="pvBar b5" x="178" y="22"  width="24" height="128" rx="5" fill="#A9824A"/>
-              <circle class="pvHalo" cx="190" cy="22" r="10" fill="#DCBA84"/>
-              <circle class="pvTip" cx="190" cy="22" r="4.5" fill="#5C1F32"/>
-              <line x1="18" y1="152" x2="216" y2="152" stroke="#E9E4DE" stroke-width="1.5"/>
-              <g class="pvMono" font-size="10" fill="#8C838F">
-                <text x="38"  y="172" text-anchor="middle">MES 1</text>
-                <text x="190" y="172" text-anchor="middle" fill="#8A6636">MES 6</text>
-              </g>
-            </svg></div>
-          </div>
-
-        </div></div>
-
-        <div class="pasos" id="pasosProceso">
-          <div class="paso on">
-            <span class="pn">01 · ENTREVISTA INICIAL</span>
+        <li class="etapa reveal">
+          <div class="etapa-txt">
+            <span class="pn">01 · Entrevista inicial</span>
+            <h3>Primero escuchar, después entrenar.</h3>
             <p>Es una conversación gratuita de 30min donde revisamos tus objetivos: qué probaste antes, qué te funcionó y qué no, tu historial de entrenamiento y tu situación de salud, incluidas las condiciones hormonales que cambian la forma de entrenar.</p>
           </div>
-          <div class="paso">
-            <span class="pn">02 · EVALUACIÓN</span>
+          <div class="maq maq-chat" aria-hidden="true">
+            <div class="maq-head"><span class="maq-av">J</span><div><b>Jimena</b><small>Entrevista inicial</small></div><em>30 MIN · GRATIS</em></div>
+            <div class="slot vos"><p class="typ"><i></i><i></i><i></i></p><p class="burb">Probé dietas y rutinas de todo tipo. Me cuido y mi cuerpo no cambia.</p></div>
+            <div class="slot jime"><p class="typ"><i></i><i></i><i></i></p><p class="burb">Contame qué probaste, qué te funcionó y qué no.</p></div>
+            <div class="slot vos"><p class="typ"><i></i><i></i><i></i></p><p class="burb">Entreno 3 veces por semana. Y tengo hipotiroidismo.</p></div>
+            <div class="slot jime"><p class="typ"><i></i><i></i><i></i></p><p class="burb">Eso cambia cómo entrenamos. Lo tenemos en cuenta desde el primer día.</p></div>
+          </div>
+        </li>
+
+        <li class="etapa reveal">
+          <div class="etapa-txt">
+            <span class="pn">02 · Evaluación</span>
+            <h3>Sin medir, estamos adivinando.</h3>
             <p>Hacemos un estudio de composición corporal, una evaluación física y una foto inicial. Ese punto de partida es lo que después te permite ver el progreso real, en vez de discutir con la balanza.</p>
           </div>
-          <div class="paso">
-            <span class="pn">03 · PLAN A MEDIDA</span>
+          <div class="maq maq-eval" aria-hidden="true">
+            <div class="maq-head"><div><b>Tu punto de partida</b><small>Semana 0</small></div><em>EJEMPLO</em></div>
+            <ul class="med">
+              <li><span>Masa muscular</span><b>23,8 kg</b></li>
+              <li><span>Grasa corporal</span><b>33 %</b></li>
+              <li><span>Cintura</span><b>84 cm</b></li>
+              <li><span>Fotos</span><b class="ok">Frente · perfil · espalda</b></li>
+            </ul>
+            <p class="maq-pie"><span>Peso: 68 kg</span>La balanza sola no dice qué cambió.</p>
+          </div>
+        </li>
+
+        <li class="etapa reveal">
+          <div class="etapa-txt">
+            <span class="pn">03 · Plan a medida</span>
+            <h3>Tu plan no sale de una plantilla.</h3>
             <p>Mesociclo por bloques con autorregulación por esfuerzo percibido, y educación alimentaria flexible y adaptada a tu gasto real, para que aprendas a comer y no sigas una dieta cerrada. Pensado para la semana que realmente tenés, no para una semana ideal que no existe.</p>
           </div>
-          <div class="paso">
-            <span class="pn">04 · SEGUIMIENTO REAL</span>
+          <div class="maq maq-plan" aria-hidden="true">
+            <div class="maq-head"><div><b>Tu plan</b><small>Armado con lo que me contaste</small></div><em>EJEMPLO</em></div>
+            <ul class="pares">
+              <li><q>Entreno 3 veces por semana</q><b>3 sesiones de 45′: lunes, miércoles y viernes</b></li>
+              <li><q>Tengo hipotiroidismo</q><b>Cargas por esfuerzo percibido, según cómo llegás ese día</b></li>
+              <li><q>Los viernes no llego al gimnasio</q><b>El viernes entrenás en casa, con mancuernas</b></li>
+              <li><q>No tomo lácteos</q><b>Desayunos sin lactosa que salen en 5 minutos</b></li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="etapa reveal">
+          <div class="etapa-txt">
+            <span class="pn">04 · Seguimiento real</span>
+            <h3>El plan cambia cuando vos cambiás.</h3>
             <p>Cada semana me pasás tu reporte y tus videos entrenando, y cada mes revisamos medidas, cargas y hábitos para ajustar el plan con esos datos. Es la diferencia entre un acompañamiento y un PDF con ejercicios.</p>
           </div>
-        </div>
-      </div>
+          <div class="maq maq-seg" aria-hidden="true">
+            <div class="maq-head"><div><b>Tu sentadilla, mes a mes</b><small>Carga de trabajo, en kg</small></div><em>EJEMPLO</em></div>
+            <svg class="graf" viewBox="0 0 400 206" role="presentation">
+              <g class="g-grid">
+                <line x1="34" y1="140" x2="392" y2="140"/><line x1="34" y1="80" x2="392" y2="80"/><line x1="34" y1="20" x2="392" y2="20"/>
+              </g>
+              <g class="g-eje">
+                <text x="26" y="144" text-anchor="end">20</text><text x="26" y="84" text-anchor="end">30</text><text x="26" y="24" text-anchor="end">40</text>
+                <text x="56" y="198" text-anchor="middle">MES 1</text><text x="116" y="198" text-anchor="middle">2</text>
+                <text x="176" y="198" text-anchor="middle">3</text><text x="236" y="198" text-anchor="middle">4</text>
+                <text x="296" y="198" text-anchor="middle">5</text><text x="356" y="198" text-anchor="middle">6</text>
+              </g>
+              <rect class="g-meseta" x="116" y="104" width="60" height="42" rx="6"/>
+              <text class="g-meseta-t" x="146" y="160" text-anchor="middle">meseta</text>
+              <g class="g-ajuste">
+                <line x1="176" y1="34" x2="176" y2="176"/>
+                <rect x="138" y="14" width="76" height="20" rx="10"/>
+                <text x="176" y="28" text-anchor="middle">AJUSTE</text>
+              </g>
+              <path class="g-linea" pathLength="100" d="M56 140 L116 125 L176 125 L236 95 L296 65 L356 50"/>
+              <circle class="g-halo" cx="356" cy="50" r="12"/>
+              <circle class="g-fin" cx="356" cy="50" r="5"/>
+              <text class="g-valor" x="356" y="36" text-anchor="middle">35 kg</text>
+            </svg>
+            <p class="ajuste"><small>Mes 3</small>La carga se estancó. Ajustamos volumen y descanso, y volvió a subir.</p>
+          </div>
+        </li>
+
+      </ol>
     </div>
   </section>
 
@@ -2746,153 +2761,92 @@
         <h2>Dos formas de hacer el Método Raíz</h2>
       </div>
 
+      <!-- Dos tarjetas lado a lado, tambien en mobile, y la diferencia ADENTRO
+           de cada una, en el mismo renglon: arriba de todo, "Clases en vivo 1
+           a 1" incluida en una y tachada en la otra (23/09/2026, segunda
+           vuelta). Debajo, la lista comun con titulos solos: con las
+           descripciones cada tarjeta medía ~1200px y las dos parecian la
+           misma. Las descripciones completas quedan guardadas al final de
+           este comentario.
+
+           Los renglones de las dos tarjetas quedan a la misma altura por
+           subgrid (ver .planes en el CSS): la comparacion se hace de lado a
+           lado, renglon contra renglon.
+
+           Sin precio publicado, para nadie (decision de Gaston del 23/09/2026):
+           el valor lo cuenta Jimena por WhatsApp. El de la clase en vivo se
+           revela en la entrevista inicial (estrategia/estrategia-de-precios-
+           metodo-raiz.docx, seccion 6). Si alguien completa una cifra "para
+           que quede prolijo", esta deshaciendo una decision.
+
+           Descripciones guardadas:
+           01 Tu rutina se arma sobre tu día a día real, entrenes donde entrenes.
+           02 Ajustada a tus horarios, tus gustos y tus alergias o intolerancias. Comidas simples, que resuelven en minutos.
+           03 Escribime cuando lo necesites. Estoy del otro lado para responderte y sostenerte en el día a día.
+           04 Cada semana completás una planilla contándome cómo venís, y me mandás videos entrenando para que te corrija la técnica.
+           05 Cada mes reviso tus fotos, medidas y peso. Ajusto el plan con esos datos, no a ojo.
+           06 Para entender el porqué de cada ajuste. No busco que me obedezcas: busco que aprendas el proceso.
+           07 Compartir el camino con otras mujeres que van en la misma dirección es lo que sostiene el compromiso en el tiempo.
+           08 Una clase individual por videollamada, con vos entrenando y yo del otro lado corrigiéndote en el momento. -->
+      <!-- Selector de mobile, a la Netflix: dos tiles lado a lado y abajo el
+           detalle del plan elegido. Dos radios y :checked, sin una linea de JS.
+           En escritorio los tiles no se ven y las dos tarjetas van lado a lado.
+           Arranca elegido el plan con clases en vivo, como Netflix arranca en
+           su plan mas completo. -->
+      <input class="plan-radio" type="radio" name="plan-sel" id="sel-base">
+      <input class="plan-radio" type="radio" name="plan-sel" id="sel-vivo" checked>
+      <div class="plan-tiles" aria-hidden="true">
+        <label for="sel-base" class="tile tile-base"><b>Método Raíz</b><span>Sin clases en vivo</span></label>
+        <label for="sel-vivo" class="tile tile-vivo"><b>Método Raíz <span class="mas">+</span>&nbsp;en&nbsp;vivo</b><span>Con clases 1&nbsp;a&nbsp;1</span></label>
+      </div>
       <div class="planes">
-      <div class="programa-card reveal" id="plan-base">
-        <!-- Sin precio publicado, para nadie (decision de Gaston del
-             23/09/2026). Hasta esa fecha el internacional veia USD 350 y un
-             script por zona horaria le cambiaba el bloque a Argentina; ahora
-             todas ven la version que antes era solo argentina, y el valor lo
-             cuenta Jimena por WhatsApp. Sin script, no hay nada que parpadee. -->
-        <div class="programa-top">
-          <h3 class="plan-nombre">Método Raíz</h3>
-          <p class="sin-precio">Consultá tu<br>precio de lanzamiento</p>
-          <p class="sin-precio-nota">Te lo cuento por WhatsApp</p>
-          <a class="programa-cta" data-ga="whatsapp_precio" href="https://api.whatsapp.com/send?phone=541135863879&amp;text=%F0%9F%8F%8B%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F%20Hola%20Jime%2C%20quiero%20saber%20el%20precio%20de%20lanzamiento%20del%20M%C3%A9todo%20Ra%C3%ADz" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+        <div class="plan reveal" id="plan-base">
+          <div class="plan-cab">
+            <span class="plan-tag">El programa</span>
+            <h3 class="plan-nombre">Método Raíz</h3>
+          </div>
+          <div class="plan-dif no">
+            <b>Clases en vivo 1&nbsp;a&nbsp;1</b>
+            <span>No incluidas</span>
+          </div>
+          <ul class="plan-lista">
+            <li>Entrenamiento en gimnasio o en casa</li>
+            <li>Alimentación flexible</li>
+            <li>Tu entrenadora en WhatsApp</li>
+            <li>Reporte semanal con videos</li>
+            <li>Revisión mensual con datos</li>
+            <li>Videollamada mensual</li>
+            <li>Comunidad de mujeres</li>
+          </ul>
+          <div class="plan-pie">
+            <p>Consultá tu precio de lanzamiento</p>
+            <a class="programa-cta" data-ga="whatsapp_precio" href="https://api.whatsapp.com/send?phone=541135863879&amp;text=%F0%9F%8F%8B%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F%20Hola%20Jime%2C%20quiero%20saber%20el%20precio%20de%20lanzamiento%20del%20M%C3%A9todo%20Ra%C3%ADz" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+          </div>
         </div>
-        <ul class="programa-feats reveal stagger">
-          <li>
-            <span class="pf-n">01</span>
-            <div>
-              <h4>Entrenamiento adaptado a gimnasio o en casa</h4>
-              <p>Tu rutina se arma sobre tu día a día real, entrenes donde entrenes.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">02</span>
-            <div>
-              <h4>Alimentación flexible</h4>
-              <p>Ajustada a tus horarios, tus gustos y tus alergias o intolerancias. Comidas simples, que resuelven en minutos.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">03</span>
-            <div>
-              <h4>Tu entrenadora en WhatsApp</h4>
-              <p>Escribime cuando lo necesites. Estoy del otro lado para responderte y sostenerte en el día a día.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">04</span>
-            <div>
-              <h4>Reporte semanal</h4>
-              <p>Cada semana completás una planilla contándome cómo venís, y me mandás videos entrenando para que te corrija la técnica.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">05</span>
-            <div>
-              <h4>Revisión mensual con datos reales</h4>
-              <p>Cada mes reviso tus fotos, medidas y peso. Ajusto el plan con esos datos, no a ojo.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">06</span>
-            <div>
-              <h4>Videollamada mensual 1 a 1</h4>
-              <p>Para entender el porqué de cada ajuste. No busco que me obedezcas: busco que aprendas el proceso.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">07</span>
-            <div>
-              <h4>Comunidad de mujeres</h4>
-              <p>Compartir el camino con otras mujeres que van en la misma dirección es lo que sostiene el compromiso en el tiempo.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
 
-      <!-- Plan 2. La lista es la misma del plan base mas el item 08, escrita
-           entera y no por referencia: ver el comentario de .planes en el CSS.
-           Si se toca un texto de la lista de arriba, hay que tocarlo aca
-           tambien —son dos copias a proposito—.
-
-           SIN PRECIO PUBLICADO, y es una decision tomada: la estrategia de
-           precios (estrategia/estrategia-de-precios-metodo-raiz.docx, seccion
-           6) define que el valor de la clase en vivo se revela en la
-           entrevista inicial, para no complicar la lectura del precio
-           principal. Si alguien completa la cifra "para que quede prolijo",
-           esta deshaciendo la decision. Desde el 27/08 la tarjeta ya no
-           dice siquiera "el valor te lo cuento en la entrevista" —Jimena
-           lo cambio por "¿Queres saber mas?"—, asi que este comentario es
-           el unico lugar donde queda escrito el porque. -->
-      <div class="programa-card reveal" id="plan-vivo">
-        <div class="programa-top">
-          <h3 class="plan-nombre">Método Raíz<span class="plan-suma"><span class="mas">+</span> Tu entrenadora en vivo</span></h3>
-          <span class="lanz">Con clases en vivo</span>
-          <p class="sin-precio">Todo el programa,<br>más yo del otro lado</p>
-          <p class="sin-precio-nota">¿Querés saber más?</p>
-          <a class="programa-cta" href="#contacto">Quiero sumar las clases</a>
+        <div class="plan plan-vivo reveal" id="plan-vivo">
+          <div class="plan-cab">
+            <span class="plan-tag">Con clases en vivo</span>
+            <h3 class="plan-nombre">Método Raíz <span class="mas">+</span>&nbsp;en&nbsp;vivo</h3>
+          </div>
+          <div class="plan-dif si">
+            <b>Clases en vivo 1&nbsp;a&nbsp;1</b>
+            <span>Entrenás y te corrijo en el momento</span>
+          </div>
+          <ul class="plan-lista">
+            <li>Entrenamiento en gimnasio o en casa</li>
+            <li>Alimentación flexible</li>
+            <li>Tu entrenadora en WhatsApp</li>
+            <li>Reporte semanal con videos</li>
+            <li>Revisión mensual con datos</li>
+            <li>Videollamada mensual</li>
+            <li>Comunidad de mujeres</li>
+          </ul>
+          <div class="plan-pie">
+            <p>¿Querés saber más?</p>
+            <a class="programa-cta" href="#contacto">Quiero sumar las clases</a>
+          </div>
         </div>
-        <ul class="programa-feats reveal stagger">
-          <li>
-            <span class="pf-n">01</span>
-            <div>
-              <h4>Entrenamiento adaptado a gimnasio o en casa</h4>
-              <p>Tu rutina se arma sobre tu día a día real, entrenes donde entrenes.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">02</span>
-            <div>
-              <h4>Alimentación flexible</h4>
-              <p>Ajustada a tus horarios, tus gustos y tus alergias o intolerancias. Comidas simples, que resuelven en minutos.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">03</span>
-            <div>
-              <h4>Tu entrenadora en WhatsApp</h4>
-              <p>Escribime cuando lo necesites. Estoy del otro lado para responderte y sostenerte en el día a día.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">04</span>
-            <div>
-              <h4>Reporte semanal</h4>
-              <p>Cada semana completás una planilla contándome cómo venís, y me mandás videos entrenando para que te corrija la técnica.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">05</span>
-            <div>
-              <h4>Revisión mensual con datos reales</h4>
-              <p>Cada mes reviso tus fotos, medidas y peso. Ajusto el plan con esos datos, no a ojo.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">06</span>
-            <div>
-              <h4>Videollamada mensual 1 a 1</h4>
-              <p>Para entender el porqué de cada ajuste. No busco que me obedezcas: busco que aprendas el proceso.</p>
-            </div>
-          </li>
-          <li>
-            <span class="pf-n">07</span>
-            <div>
-              <h4>Comunidad de mujeres</h4>
-              <p>Compartir el camino con otras mujeres que van en la misma dirección es lo que sostiene el compromiso en el tiempo.</p>
-            </div>
-          </li>
-          <li class="es-extra">
-            <span class="pf-n">08</span>
-            <div>
-              <h4>Tu entrenadora en vivo, mientras entrenás</h4>
-              <p>Una clase individual por videollamada, con vos entrenando y yo del otro lado corrigiéndote en el momento.</p>
-            </div>
-          </li>
-        </ul>
-      </div>
       </div>
     </div>
   </section>
@@ -2976,6 +2930,18 @@
     </div>
   </section>
 </main>
+
+<!-- CTA fijo abajo, solo mobile (23/09/2026). Aparece cuando el boton del
+     hero sale de pantalla y se oculta sobre Planes, Contacto y el footer, que
+     tienen sus propios botones, y con el menu abierto. Mismo texto y destino
+     que el del hero; data-ga propio para medir si suma o solo reparte clics.
+     Sin JS no aparece: es mejora progresiva. -->
+<div class="cta-fija" id="ctaFija">
+  <a class="btn-primary" data-ga="whatsapp_sticky" href="https://api.whatsapp.com/send?phone=541135863879&amp;text=%F0%9F%8F%8B%EF%B8%8F%E2%80%8D%E2%99%80%EF%B8%8F%20Hola%20Jime%2C%20quiero%20coordinar%20mi%20entrevista%20inicial" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/></svg>
+      Quiero mi entrevista gratuita
+    </a>
+</div>
 
 <footer>
   <div class="wrap fgrid">
@@ -3127,65 +3093,28 @@
     }
   }
 
-  // Proceso con panel fijo: sincroniza que diapositiva se muestra segun el paso
-  // que este en pantalla. El sticky es CSS puro; esto solo cambia una clase.
-  // Si falla, queda visible la primera diapositiva y los cuatro pasos se leen
-  // enteros igual, que es exactamente lo que se ve en mobile.
+  // CTA fijo de mobile: visible solo cuando el boton del hero ya no esta en
+  // pantalla, no hay Planes / Contacto / footer a la vista y el menu esta
+  // cerrado. Si algo falla, la barra queda escondida (su estado base).
   try {
-    const pin = document.getElementById('pinProceso');
-    const col = document.getElementById('pasosProceso');
-    if (pin && col && 'IntersectionObserver' in window) {
-      const slides = Array.from(pin.querySelectorAll('.pin-slide'));
-      const pasos  = Array.from(col.querySelectorAll('.paso'));
-      const pio = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (!e.isIntersecting) return;
-          const i = pasos.indexOf(e.target);
-          if (i < 0) return;
-          slides.forEach((s, k) => s.classList.toggle('on', k === i));
-          pasos.forEach((b, k) => b.classList.toggle('on', k === i));
-        });
-      }, { rootMargin: '-45% 0px -45% 0px' });
-      pasos.forEach(b => pio.observe(b));
+    const barra = document.getElementById('ctaFija');
+    const heroBtn = document.querySelector('.hero .btn-primary');
+    const zonas = ['#servicios', '#contacto', 'footer'].map(q => document.querySelector(q)).filter(Boolean);
+    const menu = document.getElementById('navlinks');
+    if (barra && heroBtn && 'IntersectionObserver' in window) {
+      const aLaVista = new Set();
+      const actualizar = () => {
+        const menuAbierto = menu && menu.classList.contains('open');
+        barra.classList.toggle('ver', aLaVista.size === 0 && !menuAbierto);
+      };
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => e.isIntersecting ? aLaVista.add(e.target) : aLaVista.delete(e.target));
+        actualizar();
+      });
+      [heroBtn, ...zonas].forEach(el => obs.observe(el));
+      if (menu) new MutationObserver(actualizar).observe(menu, { attributes: true, attributeFilter: ['class'] });
     }
-  } catch (err) { /* la primera diapositiva queda visible por CSS */ }
-
-  // El 41% del anillo de la diapositiva 02: es lo unico de las cuatro
-  // ilustraciones que CSS no puede animar, porque el contenido de un <text>
-  // no es una propiedad animable. El resto son keyframes puros.
-  // El numero queda escrito en el HTML, asi que sin JS se lee 41% fijo.
-  try {
-    const anillo = document.querySelector('.pvNum');
-    const aro = document.querySelector('.pvRing');
-    const quieto = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    if (anillo && aro && !quieto.matches && aro.getAnimations) {
-      const dibujo = aro.getAnimations()[0];
-      if (dibujo) {
-        // El contador se lee del reloj de la PROPIA animacion del aro, no del
-        // reloj de pared. Es la unica forma de que no se desincronicen: el CSS
-        // pausa el aro cuando su diapositiva no esta activa
-        // (.pin-slide:not(.on)), y con un cronometro propio el numero seguiria
-        // contando contra un arco congelado. Al volver a la diapositiva 02 se
-        // veria el aro lleno diciendo 12%.
-        // Con currentTime, si el aro se pausa el numero se pausa con el.
-        const CICLO = 4400, TOPE = 41;
-        const cuadro = () => {
-          const ms = Number(dibujo.currentTime) || 0;
-          const t = (ms % CICLO) / CICLO;
-          let v;
-          // Mismos tramos que @keyframes pvRingDraw: si se toca uno, tocar el otro.
-          if (t < .30)      v = Math.round((t / .30) * TOPE);
-          else if (t < .64) v = TOPE;
-          else if (t < .90) v = Math.round(TOPE * (1 - (t - .64) / .26));
-          else              v = 0;
-          anillo.textContent = Math.max(0, v) + '%';
-          requestAnimationFrame(cuadro);
-        };
-        requestAnimationFrame(cuadro);
-      }
-    }
-  } catch (err) { /* queda el 41% que ya viene escrito en el HTML */ }
+  } catch (err) { /* la barra queda escondida */ }
 
   // ---------- cinta de testimonios: hover la relentece, y se puede arrastrar con el mouse ----------
   // Referencia: la cinta de coderhouse.com. Dos cosas:
