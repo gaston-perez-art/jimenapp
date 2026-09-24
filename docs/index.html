@@ -1540,7 +1540,20 @@
   }
   /* Borde de 1px + un anillo de sombra, y no border:2px: con 2px el contenido
      de esta tarjeta bajaba 1px y los dos botones dejaban de estar alineados. */
-  .plan-vivo{border-color:var(--wine-600); box-shadow:0 0 0 1px var(--wine-600), var(--shadow-md);}
+  /* El destacado es el Metodo Raiz (feedback de Jimena, 23/09/2026): es lo
+     que el negocio quiere vender, porque las clases en vivo no escalan con
+     su tiempo. Por eso lleva el badge y el borde, y NO muestra lo que no
+     incluye: la clase en vivo aparece solo, en positivo, en la otra tarjeta.
+     Sin el renglon de la diferencia, su lista ocupa las filas 2 y 3 de la
+     subgrilla y arranca pegada a la cabecera; los botones siguen alineados. */
+  .plan-reco{position:relative; border-color:var(--wine-600); box-shadow:0 0 0 1px var(--wine-600), var(--shadow-md);}
+  .plan-reco .plan-lista{grid-row:2 / span 2; align-self:start;}
+  .plan-badge{
+    position:absolute; top:0; left:26px; transform:translateY(-50%);
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:500; letter-spacing:.12em;
+    text-transform:uppercase; color:#fff; padding:5px 12px; border-radius:var(--r-pill);
+    background:linear-gradient(135deg, var(--wine-600), var(--bronze));
+  }
   .plan-tag{
     display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:500;
     letter-spacing:.12em; text-transform:uppercase; color:var(--bronze-text);
@@ -1548,8 +1561,8 @@
   .plan-nombre{font-size:24px; line-height:1.15; letter-spacing:-.02em; margin:8px 0 20px; color:var(--wine-900);}
   .plan-nombre .mas{color:var(--bronze-text);}
 
-  /* La diferencia: mismo renglon, mismo lugar, en las dos. Incluida es un
-     bloque vino con check; no incluida, el mismo bloque apagado y tachado. */
+  /* La diferencia: solo en la tarjeta que la tiene, como bloque vino con
+     check. La otra no dice lo que le falta (ver .plan-reco). */
   .plan-dif{
     border-radius:var(--r-md); padding:12px 14px 12px 44px; position:relative;
     display:flex; flex-direction:column; gap:2px; margin-bottom:20px;
@@ -1563,9 +1576,6 @@
   .plan-dif.si{background:var(--wine-600); color:#fff;}
   .plan-dif.si::before{content:"✓"; background:#fff; color:var(--wine-600);}
   .plan-dif.si span{color:rgba(255,255,255,.85);}
-  .plan-dif.no{background:var(--paper-dim); border:1px dashed var(--line); color:var(--ink-soft);}
-  .plan-dif.no::before{content:"✕"; background:var(--line); color:var(--ink-soft);}
-  .plan-dif.no b{font-weight:500; text-decoration:line-through; text-decoration-color:rgba(91,84,96,.5);}
 
   .plan-lista{list-style:none; margin:0 0 24px; padding:0; display:flex; flex-direction:column; gap:10px;}
   .plan-lista li{position:relative; padding-left:26px; font-size:14.5px; line-height:1.35; color:var(--ink);}
@@ -2028,6 +2038,10 @@
     .plan-lista li{padding:11px 0 11px 28px; border-bottom:1px solid var(--line); font-size:14.5px;}
     .plan-lista li::before{top:11px;}
     .plan-pie{align-self:stretch; text-align:center;}
+    /* el "Recomendado" ya lo dice el tile: en la tarjeta de abajo sobra */
+    .plan-badge{display:none;}
+    .plan-reco .plan-lista{align-self:stretch;}
+    .tile-base > span{color:var(--bronze-text); font-weight:600;}
 
     /* Una sola columna: las tres listas de una linea apiladas ocupan menos
        alto que tres columnas de 90px con el titulo partido en dos renglones. */
@@ -2761,10 +2775,11 @@
         <h2>Dos formas de hacer el Método Raíz</h2>
       </div>
 
-      <!-- Dos tarjetas lado a lado, tambien en mobile, y la diferencia ADENTRO
-           de cada una, en el mismo renglon: arriba de todo, "Clases en vivo 1
-           a 1" incluida en una y tachada en la otra (23/09/2026, segunda
-           vuelta). Debajo, la lista comun con titulos solos: con las
+      <!-- Dos tarjetas lado a lado. El Metodo Raiz es el RECOMENDADO (feedback
+           de Jimena, 23/09/2026: es lo que el negocio quiere vender, las
+           clases en vivo no escalan con su tiempo), y no muestra lo que no
+           incluye. La diferencia aparece solo en la otra tarjeta, arriba de
+           todo y en positivo: "Clases en vivo 1 a 1". Debajo, la lista comun con titulos solos: con las
            descripciones cada tarjeta medía ~1200px y las dos parecian la
            misma. Las descripciones completas quedan guardadas al final de
            este comentario.
@@ -2791,23 +2806,19 @@
       <!-- Selector de mobile, a la Netflix: dos tiles lado a lado y abajo el
            detalle del plan elegido. Dos radios y :checked, sin una linea de JS.
            En escritorio los tiles no se ven y las dos tarjetas van lado a lado.
-           Arranca elegido el plan con clases en vivo, como Netflix arranca en
-           su plan mas completo. -->
-      <input class="plan-radio" type="radio" name="plan-sel" id="sel-base">
-      <input class="plan-radio" type="radio" name="plan-sel" id="sel-vivo" checked>
+           Arranca elegido el Metodo Raiz, que es el recomendado. -->
+      <input class="plan-radio" type="radio" name="plan-sel" id="sel-base" checked>
+      <input class="plan-radio" type="radio" name="plan-sel" id="sel-vivo">
       <div class="plan-tiles" aria-hidden="true">
-        <label for="sel-base" class="tile tile-base"><b>Método Raíz</b><span>Sin clases en vivo</span></label>
+        <label for="sel-base" class="tile tile-base"><b>Método Raíz</b><span>Recomendado</span></label>
         <label for="sel-vivo" class="tile tile-vivo"><b>Método Raíz <span class="mas">+</span>&nbsp;en&nbsp;vivo</b><span>Con clases 1&nbsp;a&nbsp;1</span></label>
       </div>
       <div class="planes">
-        <div class="plan reveal" id="plan-base">
+        <div class="plan plan-reco reveal" id="plan-base">
+          <span class="plan-badge">Recomendado</span>
           <div class="plan-cab">
             <span class="plan-tag">El programa</span>
             <h3 class="plan-nombre">Método Raíz</h3>
-          </div>
-          <div class="plan-dif no">
-            <b>Clases en vivo 1&nbsp;a&nbsp;1</b>
-            <span>No incluidas</span>
           </div>
           <ul class="plan-lista">
             <li>Entrenamiento en gimnasio o en casa</li>
