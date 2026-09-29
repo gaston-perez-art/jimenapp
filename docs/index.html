@@ -1627,6 +1627,38 @@
     display:grid; place-items:center; background:var(--wine-100); color:var(--wine-600);
     font-size:11px; font-weight:700;
   }
+  /* ---- Hover de las tarjetas de planes (28/09/2026) ----
+     Gaston vio que la gente toca las tarjetas. El hover responde a eso
+     sin llevar a ningun lado: la tarjeta sube 4px, la sombra se ahonda y los
+     checks de la lista se encienden de arriba abajo, uno detras de otro. Es
+     la animacion que cuenta algo: "todo esto viene incluido".
+     Mismo criterio que .dolor: la subida va con `translate` porque el
+     `transform` es de la entrada (.reveal), y las duraciones van en lista
+     para que la entrada conserve su 1.5s y el hover responda en .35s.
+     Los retardos de la cascada van SOLO en el :hover, asi al salir los
+     checks se apagan todos juntos y rapido, sin una cascada al reves. */
+  .has-js .plan.reveal{
+    transition-property:opacity, transform, translate, box-shadow, border-color;
+    transition-duration:1.5s, 1.5s, .35s, .35s, .35s;
+    transition-timing-function:cubic-bezier(.25,.46,.45,.94);
+  }
+  .plan-lista li::before{transition:background-color .25s ease, color .25s ease;}
+  @media (hover:hover){
+    .plan:hover{translate:0 -4px; box-shadow:var(--shadow-md);}
+    .plan-vivo:hover{border-color:#E4D3D9;}
+    .plan-reco:hover{box-shadow:0 0 0 1px var(--wine-600), 0 4px 8px rgba(36,31,38,.06), 0 24px 44px -20px rgba(122,38,64,.35);}
+    .plan:hover .plan-lista li::before{background:var(--wine-600); color:#fff;}
+    .plan:hover .plan-lista li:nth-child(2)::before{transition-delay:.05s;}
+    .plan:hover .plan-lista li:nth-child(3)::before{transition-delay:.10s;}
+    .plan:hover .plan-lista li:nth-child(4)::before{transition-delay:.15s;}
+    .plan:hover .plan-lista li:nth-child(5)::before{transition-delay:.20s;}
+    .plan:hover .plan-lista li:nth-child(6)::before{transition-delay:.25s;}
+    .plan:hover .plan-lista li:nth-child(7)::before{transition-delay:.30s;}
+    .plan:hover .plan-lista li:nth-child(8)::before{transition-delay:.35s;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .plan:hover{translate:none;}
+  }
   .plan-pie{display:flex; flex-direction:column; gap:12px; align-self:end;}
   .plan-pie p{margin:0; font-size:14px; color:var(--ink-soft);}
 
