@@ -1985,6 +1985,18 @@
            -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;}
     .t-mas::-webkit-scrollbar{display:none;}
     .t-cinta{animation:none; will-change:auto;}
+    /* Con JS (segunda vuelta, 28/09/2026): el scroll nativo se trababa al
+       avanzarlo de a fracciones de pixel y el blanco seguia apareciendo.
+       Ahora queda UN solo grupo y el script mueve cada tarjeta por separado
+       con transform: cada una es una capa chica (nada de pistas de 4000px que
+       iOS no pinta), el movimiento es subpixel y la que sale por la izquierda
+       reaparece por la derecha. El dedo la arrastra en horizontal y el
+       vertical sigue siendo scroll de pagina (touch-action:pan-y). */
+    .has-js .t-mas{overflow:hidden; touch-action:pan-y;}
+    .has-js .t-cinta{width:auto;}
+    .has-js .t-cinta > .t-grupo:nth-child(n+2){display:none;}
+    .has-js .t-grupo{margin-right:0;}
+    .has-js .t-mini{will-change:transform;}
     .t-mini{padding:24px 22px 20px; border-radius:var(--r-md);}
     .t-av{width:48px; height:48px;}
     .t-autor .t-av{width:56px; height:56px;}
@@ -3273,56 +3285,79 @@
     }
   } catch (err) { /* la cinta sigue girando a velocidad constante */ }
 
-  // ---------- cinta de testimonios en mobile: scroll nativo infinito (28/09/2026) ----------
-  // En mobile la cinta es un scroller horizontal (ver el CSS del breakpoint de
-  // 720px). Este bloque la avanza sola a ~18 px/s y, como los grupos son
-  // identicos, la mantiene siempre en el grupo del medio: al pasarse de un
-  // grupo se corre exactamente un grupo, que se ve igual. Asi el dedo puede
-  // deslizar para cualquier lado sin llegar nunca al final.
-  // Mientras el dedo esta encima (y un rato despues, para que termine la
-  // inercia) el avance automatico se suspende.
+  // ---------- cinta de testimonios en mobile: tarjetas en carrusel infinito (28/09/2026) ----------
+  // En mobile queda un solo grupo (ver el CSS del breakpoint de 720px) y cada
+  // tarjeta se ubica con su propio transform. `off` es cuanto avanzo la cinta;
+  // la posicion de cada tarjeta se envuelve modulo el largo del grupo, asi que
+  // la que sale por la izquierda vuelve a entrar por la derecha y nunca hay
+  // final. El dedo arrastra `off` y al soltar queda la inercia del gesto, que
+  // se va apagando hasta volver al avance automatico.
   try {
     const mas = document.querySelector('.t-mas');
-    const grupos = mas ? mas.querySelectorAll('.t-grupo') : [];
+    const grupo = mas ? mas.querySelector('.t-grupo') : null;
+    const cards = grupo ? [...grupo.children] : [];
     const esMobile = window.matchMedia('(max-width: 720px)');
     const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (mas && grupos.length >= 3 && !quieto) {
-      const VEL = 18;                       // px por segundo
-      const ancho = () => grupos[1].offsetLeft - grupos[0].offsetLeft;
-      let pos = null, tocando = false, pausaHasta = 0, tPrev = 0;
-      mas.addEventListener('touchstart', () => { tocando = true; }, { passive: true });
-      const soltar = () => { tocando = false; pausaHasta = performance.now() + 1200; };
+    if (mas && cards.length >= 2 && !quieto) {
+      const VEL = 20;                         // px por segundo, avance solo
+      let off = 0, fling = 0, tPrev = 0, visible = false, corriendo = false;
+      let tocando = false, eje = null, x0 = 0, y0 = 0, offInicio = 0, ultX = 0, ultT = 0, velDedo = 0;
+
+      const ubicar = () => {
+        const paso = cards[1].offsetLeft - cards[0].offsetLeft;
+        const total = paso * cards.length;
+        cards.forEach((c, i) => {
+          const base = i * paso;
+          const x = ((base - off + paso) % total + total) % total - paso;
+          c.style.transform = `translate3d(${(x - base).toFixed(2)}px,0,0)`;
+        });
+      };
+      const limpiar = () => cards.forEach(c => { c.style.transform = ''; });
+
+      const frame = (t) => {
+        if (!visible || !esMobile.matches) { corriendo = false; tPrev = 0; if (!esMobile.matches) limpiar(); return; }
+        const dt = tPrev ? Math.min(0.05, (t - tPrev) / 1000) : 0;
+        tPrev = t;
+        if (!tocando) {
+          off += (VEL + fling) * dt;
+          fling *= Math.exp(-dt * 3);
+          if (Math.abs(fling) < 1) fling = 0;
+        }
+        ubicar();
+        requestAnimationFrame(frame);
+      };
+      const arrancar = () => { if (!corriendo && visible && esMobile.matches) { corriendo = true; requestAnimationFrame(frame); } };
+
+      new IntersectionObserver(es => { visible = es[0].isIntersecting; arrancar(); }).observe(mas);
+      esMobile.addEventListener('change', arrancar);
+
+      mas.addEventListener('touchstart', (e) => {
+        const p = e.touches[0];
+        tocando = true; eje = null; x0 = ultX = p.clientX; y0 = p.clientY;
+        ultT = performance.now(); offInicio = off; fling = 0; velDedo = 0;
+      }, { passive: true });
+      mas.addEventListener('touchmove', (e) => {
+        if (!tocando) return;
+        const p = e.touches[0];
+        const dx = p.clientX - x0, dy = p.clientY - y0;
+        if (eje === null && Math.hypot(dx, dy) > 6) eje = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (eje === 'y') { tocando = false; return; }   // es scroll de pagina: la cinta sigue sola
+        if (eje !== 'x') return;
+        const ahora = performance.now();
+        const dtm = (ahora - ultT) / 1000;
+        if (dtm > 0) velDedo = 0.7 * velDedo + 0.3 * (-(p.clientX - ultX) / dtm);
+        ultX = p.clientX; ultT = ahora;
+        off = offInicio - dx;
+      }, { passive: true });
+      const soltar = () => {
+        if (!tocando) return;
+        tocando = false;
+        if (eje === 'x' && performance.now() - ultT < 120) fling = Math.max(-2500, Math.min(2500, velDedo)) - VEL;
+      };
       mas.addEventListener('touchend', soltar, { passive: true });
       mas.addEventListener('touchcancel', soltar, { passive: true });
-      mas.addEventListener('scroll', () => {
-        const ahora = performance.now();
-        if (!tocando && ahora < pausaHasta) pausaHasta = Math.max(pausaHasta, ahora + 250);
-      }, { passive: true });
-
-      const paso = (t) => {
-        const dt = tPrev ? Math.min(0.1, (t - tPrev) / 1000) : 0;
-        tPrev = t;
-        if (esMobile.matches) {
-          const G = ancho();
-          if (G > 0) {
-            if (pos === null) { pos = G; mas.scrollLeft = G; }
-            const usuario = tocando || t < pausaHasta;
-            if (usuario) pos = mas.scrollLeft;
-            else pos += VEL * dt;
-            if (!tocando) {
-              if (pos >= G * 2) pos -= G;
-              else if (pos < G * 0.5) pos += G;
-            }
-            if (!usuario || Math.abs(mas.scrollLeft - pos) > 1) mas.scrollLeft = pos;
-          }
-        } else {
-          pos = null;
-        }
-        requestAnimationFrame(paso);
-      };
-      requestAnimationFrame(paso);
     }
-  } catch (err) { /* queda el scroll horizontal manual */ }
+  } catch (err) { /* sin JS de por medio queda el scroll horizontal manual */ }
 
   // GA4: clics en los CTA salientes. Delegado, asi que no depende de cuando
   // se rendericen los links. Si gtag no cargo (adblock), el link funciona igual.
