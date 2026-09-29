@@ -1976,8 +1976,15 @@
        El keyframe propio usa -50% y NO `calc(-100% / 2)` a proposito: el
        patron con calc() es el que reescribe build-testimonios.py, y este no
        tiene que moverse cuando cambie la cantidad de grupos de desktop. */
-    .t-cinta > .t-grupo:nth-child(n+3){display:none;}
-    .t-cinta{animation-name:marquee-mobile; animation-duration:85s;}
+    /* 28/09/2026: en mobile la cinta deja de ser una animacion CSS y pasa a
+       ser un scroll horizontal nativo que el script avanza solo y envuelve
+       al pasar un grupo: se puede deslizar con el dedo en las dos direcciones
+       y nunca llega a un final en blanco. Un scroller nativo se rasteriza por
+       tiles, asi que tampoco vuelve el blanco de la capa gigante de iOS. */
+    .t-mas{overflow-x:auto; overflow-y:hidden; scrollbar-width:none;
+           -webkit-overflow-scrolling:touch; overscroll-behavior-x:contain;}
+    .t-mas::-webkit-scrollbar{display:none;}
+    .t-cinta{animation:none; will-change:auto;}
     .t-mini{padding:24px 22px 20px; border-radius:var(--r-md);}
     .t-av{width:48px; height:48px;}
     .t-autor .t-av{width:56px; height:56px;}
@@ -2203,7 +2210,7 @@
            una ventana estable de ~1.5s al inicio del clip (antes de que arranque el salto),
            que es donde la cara entra bien en el recorte 3:4. Recorte vertical 3:4 (720x960),
            sin audio, tramos cortos con una transicion breve entre cada uno (~9s de loop). -->
-      <video id="heroVideoEl" muted loop playsinline preload="metadata"
+      <video id="heroVideoEl" autoplay muted loop playsinline preload="auto"
              poster="img/alumnas-entrenando-poster.jpg">
         <source src="video/alumnas-entrenando.mp4" type="video/mp4">
       </video>
@@ -3093,8 +3100,11 @@
     const ocultarPlaceholder = () => { videoPh.style.display = 'none'; };
     // readyState >= 2 (HAVE_CURRENT_DATA) cubre el caso contrario: si el video
     // ya venia cargado de cache, `loadeddata` ya paso y no se vuelve a emitir.
-    if (heroVideoEl.readyState >= 2) ocultarPlaceholder();
-    else heroVideoEl.addEventListener('loadeddata', ocultarPlaceholder);
+    if (heroVideoEl.readyState >= 1) ocultarPlaceholder();
+    // 28/09/2026: iOS con preload puede no emitir `loadeddata` hasta reproducir,
+    // y el cartel quedaba encima del poster. Con la metadata ya hay video real.
+    ['loadedmetadata', 'loadeddata', 'playing'].forEach(ev =>
+      heroVideoEl.addEventListener(ev, ocultarPlaceholder));
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       // Se pidio menos movimiento: se carga para que se vea el primer frame,
@@ -3102,6 +3112,18 @@
       heroVideoEl.load();
     } else {
       heroVideoEl.play().catch(() => {});
+      // iOS en modo ahorro de bateria bloquea el autoplay aunque el video sea
+      // mudo. Cualquier toque o scroll cuenta como gesto: ahi se reintenta.
+      const reintentar = () => {
+        if (!heroVideoEl.paused) return quitar();
+        heroVideoEl.play().then(quitar).catch(() => {});
+      };
+      const eventos = ['touchstart', 'pointerdown', 'scroll', 'keydown'];
+      const quitar = () => eventos.forEach(ev => window.removeEventListener(ev, reintentar));
+      eventos.forEach(ev => window.addEventListener(ev, reintentar, { passive: true }));
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && heroVideoEl.paused) heroVideoEl.play().catch(() => {});
+      });
     }
   }
 
@@ -3250,6 +3272,57 @@
       }
     }
   } catch (err) { /* la cinta sigue girando a velocidad constante */ }
+
+  // ---------- cinta de testimonios en mobile: scroll nativo infinito (28/09/2026) ----------
+  // En mobile la cinta es un scroller horizontal (ver el CSS del breakpoint de
+  // 720px). Este bloque la avanza sola a ~18 px/s y, como los grupos son
+  // identicos, la mantiene siempre en el grupo del medio: al pasarse de un
+  // grupo se corre exactamente un grupo, que se ve igual. Asi el dedo puede
+  // deslizar para cualquier lado sin llegar nunca al final.
+  // Mientras el dedo esta encima (y un rato despues, para que termine la
+  // inercia) el avance automatico se suspende.
+  try {
+    const mas = document.querySelector('.t-mas');
+    const grupos = mas ? mas.querySelectorAll('.t-grupo') : [];
+    const esMobile = window.matchMedia('(max-width: 720px)');
+    const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (mas && grupos.length >= 3 && !quieto) {
+      const VEL = 18;                       // px por segundo
+      const ancho = () => grupos[1].offsetLeft - grupos[0].offsetLeft;
+      let pos = null, tocando = false, pausaHasta = 0, tPrev = 0;
+      mas.addEventListener('touchstart', () => { tocando = true; }, { passive: true });
+      const soltar = () => { tocando = false; pausaHasta = performance.now() + 1200; };
+      mas.addEventListener('touchend', soltar, { passive: true });
+      mas.addEventListener('touchcancel', soltar, { passive: true });
+      mas.addEventListener('scroll', () => {
+        const ahora = performance.now();
+        if (!tocando && ahora < pausaHasta) pausaHasta = Math.max(pausaHasta, ahora + 250);
+      }, { passive: true });
+
+      const paso = (t) => {
+        const dt = tPrev ? Math.min(0.1, (t - tPrev) / 1000) : 0;
+        tPrev = t;
+        if (esMobile.matches) {
+          const G = ancho();
+          if (G > 0) {
+            if (pos === null) { pos = G; mas.scrollLeft = G; }
+            const usuario = tocando || t < pausaHasta;
+            if (usuario) pos = mas.scrollLeft;
+            else pos += VEL * dt;
+            if (!tocando) {
+              if (pos >= G * 2) pos -= G;
+              else if (pos < G * 0.5) pos += G;
+            }
+            if (!usuario || Math.abs(mas.scrollLeft - pos) > 1) mas.scrollLeft = pos;
+          }
+        } else {
+          pos = null;
+        }
+        requestAnimationFrame(paso);
+      };
+      requestAnimationFrame(paso);
+    }
+  } catch (err) { /* queda el scroll horizontal manual */ }
 
   // GA4: clics en los CTA salientes. Delegado, asi que no depende de cuando
   // se rendericen los links. Si gtag no cargo (adblock), el link funciona igual.
