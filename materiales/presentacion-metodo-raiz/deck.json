@@ -1,0 +1,15 @@
+{
+  "v": 4,
+  "createdOnFiles": {"v": 1, "at": "2026-09-29T12:00:00Z"},
+  "title": "Método Raíz · Presentación",
+  "order": ["cover", "dolor", "porque", "funciona", "pilares", "incluye", "pasos", "noes", "voces", "quien", "planes", "cierre"],
+  "sections": {
+    "s1": {"description": "Para quién es y por qué lo que probó antes no funcionó", "start": "cover"},
+    "s2": {"description": "Qué es Método Raíz, qué incluye y cómo se trabaja", "start": "funciona"},
+    "s3": {"description": "Quién está detrás, qué dicen las alumnas y cómo seguir", "start": "voces"}
+  },
+  "faces": {
+    "archivo": {"family": "Archivo", "href": "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap"}
+  },
+  "designSystems": []
+}
