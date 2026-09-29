@@ -636,7 +636,39 @@
   /* El reloj del calendario se recorta del calendario con un relleno del
      color del azulejo, en vez de dejar que se crucen los dos trazos. Va por
      CSS y no hardcodeado en el SVG para que siga al token si cambia el fondo. */
-  .dolor-ico .ico-cut{fill:var(--paper-dim);}
+  .dolor-ico .ico-cut{fill:var(--paper-dim); transition:fill .35s ease;}
+  /* ---- Hover de las tarjetas de dolores (28/09/2026) ----
+     Apenas: sube 3px, la sombra se hace un poco mas honda, el borde toma un
+     tono de marca y el azulejo del icono se entibia. No es un boton, asi que
+     nada de cambio de color de fondo ni cursor de mano.
+     La subida va con `translate` y NO con `transform`, a proposito: el
+     transform ya lo usa la entrada escalonada (.reveal.stagger) y los dos se
+     pisarian. Por el mismo motivo las duraciones van en una lista: la entrada
+     conserva su 1.25s con el retardo de cada tarjeta (--d) y el hover
+     responde en .35s sin retardo, entrando y saliendo. El #problema del
+     selector es lo que le gana al transition-delay de .stagger. */
+  .dolor-ico{transition:background-color .35s ease, border-color .35s ease, transform .35s ease;}
+  .has-js #problema .dolores.reveal.stagger > .dolor{
+    transition-property:opacity, transform, translate, box-shadow, border-color;
+    transition-duration:1.25s, 1.25s, .35s, .35s, .35s;
+    transition-timing-function:cubic-bezier(.25,.46,.45,.94);
+    transition-delay:var(--d,0s), var(--d,0s), 0s, 0s, 0s;
+  }
+  #problema .dolor:nth-child(2){--d:.16s;}
+  #problema .dolor:nth-child(3){--d:.32s;}
+  #problema .dolor:nth-child(4){--d:.48s;}
+  #problema .dolor:nth-child(5){--d:.64s;}
+  #problema .dolor:nth-child(6){--d:.80s;}
+  @media (hover:hover){
+    .dolor:hover{translate:0 -3px; box-shadow:var(--shadow-md); border-color:#E4D3D9;}
+    .dolor:hover .dolor-ico{background:var(--wine-100); border-color:#EBD7DE; transform:scale(1.04);}
+    /* el recorte del reloj sigue al color del azulejo, si no queda un parche */
+    .dolor:hover .dolor-ico .ico-cut{fill:var(--wine-100);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .dolor:hover{translate:none;}
+    .dolor:hover .dolor-ico{transform:none;}
+  }
   .dolor p{
     margin:0 0 0 20px; padding-left:20px;
     border-left:1px solid var(--line);
