@@ -1,6 +1,8 @@
 # Presentación de Método Raíz
 
-Presentación de 12 diapositivas que Jimena muestra en la entrevista inicial con cada interesada. Armada el 29/09/2026.
+Presentación de 12 diapositivas armada el 29/09/2026 para la entrevista inicial.
+
+**Ese mismo día Jimena eligió usar otra, la suya del Google Drive ("Método Raíz", 15 diapositivas).** Esta queda como alternativa. El guion de la que se usa está en `materiales/entrevista-inicial/guion-presentacion.md`.
 
 **La versión viva, que se presenta y se descarga en PDF o PowerPoint, está en Claude:** https://claude.ai/artifact/8uzf7SBQFaegCBuFEaq92R (privada: se comparte desde su menú "Compartir").
 
