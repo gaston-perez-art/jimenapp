@@ -908,6 +908,105 @@ Las cifras dicen EJEMPLO y no son de ninguna alumna. Sin JS o con movimiento red
 • GA4: `regalo_abierto` al sacar la tarjeta y `contacto_whatsapp` con `ubicacion: regalo` al canjear.
 • Medido a 360, 390 y 1280: sin scroll horizontal, y todo lo tocable mide 44px o más. **Bug del test, no de la página:** al cambiar solo el `#hash`, `goto` no recarga, y las tres medidas veían el regalo ya abierto. Hay que pasar por `about:blank` entre cada una.
 
+### 09-13/10/2026 — Promoción en Instagram, mensaje de seguimiento, reels y packs de clases en vivo
+
+**Estado al 13/10/2026.** La web está en vivo y la semana 1 de historias del lanzamiento se publicó el 28/09. Ya entraron las **primeras 3 alumnas fundadoras** a Método Raíz. Varias consultas por WhatsApp no respondieron después del primer mensaje, y para eso se definió un mensaje de seguimiento (abajo). El video de bienvenida existe; **el video de presentación del programa todavía no**.
+
+> Los datos de alumnas de esta entrada están anonimizados a propósito: el repo es público (ver `CLAUDE.md`).
+
+#### Plan de promoción en Instagram
+
+**Prioridad de esta semana**
+• Seguimiento a las consultas sin respuesta, invitando a la primera entrevista gratuita.
+• Grabar el **video de presentación del programa** (3 a 4 minutos). Se envía antes de la entrevista y va fijo en destacadas.
+• 3 reels educativos por semana.
+• 4 a 5 historias por día, 3 días a la semana: bastidores, preguntas con encuesta y un llamado a escribir.
+
+**Próximas 2 semanas**
+• Sumar Método Raíz y el link de la web a la bio de Instagram.
+• Sesión de fotos para tener banco de contenido.
+• Destacada "Cómo es la entrevista inicial".
+• Un carrusel por semana con el enfoque "esto es para vos si…".
+• Pedir a las fundadoras su opinión y **autorización escrita** antes de publicar nada de ellas.
+
+**Después**
+• Guía descargable (por ejemplo, de perimenopausia) para captar emails. La base puede ser `materiales/Manual_Metodo_Raiz_Jimena_Ibanez.pdf`.
+• TikTok reutilizando los reels (falta el usuario para el footer).
+• Una vez por mes, medir qué publicación generó más consultas y repetir ese formato.
+
+**Reglas de contenido (se suman a las de marca)**
+• Sin promesas de resultados ni "antes y después" prometedores.
+• Sin condiciones clínicas como gancho de venta: se habla de síntomas y situaciones cotidianas.
+• **No usar la balanza como medida de progreso ni sugerir que "hacer todo bien" es comer poco.** Decisión de Jimena del 09/10/2026.
+• Cada pieza cierra con un llamado claro: escribir por WhatsApp para agendar la primera charla gratuita.
+• Cifras científicas con "alrededor de", y sin afirmar que el entrenamiento "previene" o "evita" enfermedades: se dice "ayuda a cuidar" o "apoya".
+
+#### Mensaje de seguimiento a consultas sin respuesta
+
+Orden: primero la versión con invitación a la entrevista; 5 a 7 días después, si sigue sin contestar, el último aviso suave. Reemplazar "hace unos días" por el día real si se recuerda. **Los mensajes no mencionan precio**: el precio se habla en la entrevista.
+
+• **Con invitación a entrevista:** "¡Hola! Soy Jimena, entrenadora de Método Raíz 🌱 Vi que me escribiste y quedó pendiente la charla. Te invito a una primera entrevista gratuita: charlamos de cómo estás hoy, qué objetivo tenés y te cuento cómo trabajo, para que veas si encajamos. Antes te puedo mandar un video cortito explicando el programa. ¿Te lo paso y buscamos un día que te quede cómodo?"
+• **Último aviso suave:** "¡Hola! Soy Jimena. Te escribo una última vez por si se te pasó mi mensaje 😊 Sigo teniendo lugar para sumar alumnas a Método Raíz y me encantaría charlar con vos, sin compromiso. Si preferís dejarlo para más adelante, lo entiendo perfecto. ¡Cualquier cosa me escribís cuando quieras!"
+
+#### Reels educativos
+
+**Reel 1 · "Comer menos no es la respuesta"** (guion definitivo, ~40 s)
+• **Escena 1, gancho (0 a 4 s).** Texto: "¿Años comiendo menos y nada cambia?". Dice: "Si llevás años comiendo menos y tu cuerpo no cambia, esto es para vos."
+• **Escena 2, el problema (4 a 14 s).** Texto: "Tu cuerpo se adapta". Dice: "Cuando comés muy poco durante mucho tiempo, tu cuerpo se pone en modo ahorro. Tenés menos energía, dormís peor, más hambre, más ansiedad, y entrenás con menos fuerza."
+• **Escena 3, el estrés (14 a 22 s).** Texto: "Vivir a dieta también es estrés". Dice: "Y vivir contando todo, con culpa y con hambre, también estresa al cuerpo. Eso no te acerca a sentirte mejor, te agota." (Alternativa: "No es falta de voluntad. Es que tu cuerpo te está pidiendo que lo cuides, no que lo castigues.")
+• **Escena 4, la solución (22 a 32 s).** Texto: "Comer suficiente + fuerza". Dice: "Lo que sí funciona es comer lo suficiente, con buena proteína, y entrenar fuerza. Así tu cuerpo conserva el músculo y ya no vive en modo supervivencia."
+• **Escena 5, cierre (32 a 40 s).** Texto: "Escribime 'RAÍZ'". Dice: "Yo acompaño a mujeres de más de 35 que están cansadas de las dietas. Si querés que lo veamos juntas, escribime por WhatsApp y agendamos una primera charla gratuita."
+• **Epígrafe:** "Comer menos no es la solución. Comer bien y entrenar fuerza cambia el juego 💪 ¿Te pasó? Contame en comentarios 👇 #entrenamientodefuerza #mujeresmas35 #recomposicioncorporal #metodoraiz"
+
+**Por qué se descartó la escena sobre la balanza:** apoyaba la idea de que la balanza es el termómetro del progreso y sugería que "hacer todo bien" es comer poco. Va contra el enfoque del método.
+
+**Dónde grabar:** en el espacio de entrenamiento (barra, mancuernas o rack de fondo, sin personas a cuadro) o, si no se puede, contra una pared lisa y clara con luz natural de frente. Vertical, a la altura de los ojos, plano de cintura o pecho hacia arriba, con subtítulos. El cierre, en plano más cálido y sonriendo.
+
+**Reel 2 · "¿Por qué toda mujer debería entrenar fuerza? Más a partir de los 30"** (~40 s)
+• **Gancho:** "Después de los 30, tu cuerpo empieza a perder músculo si no lo entrenás. Y casi nadie te lo cuenta."
+• **Músculo:** "Desde esa edad se pierde masa muscular de forma gradual, alrededor de un 3 a un 8 % por década. Y el músculo es lo que te da fuerza, energía y autonomía."
+• **Huesos y salud:** "Entrenar fuerza cuida tus huesos, mejora cómo tu cuerpo usa la energía, te ayuda a sentirte más capaz en el día a día y prepara tu cuerpo para la perimenopausia y la menopausia."
+• **Lo que no es:** "No se trata de bajar de peso ni de verte de determinada manera. Se trata de tener un cuerpo fuerte para toda la vida."
+• **Cierre:** "Yo acompaño a mujeres de más de 35 a empezar a entrenar fuerza de forma segura y sostenible. Escribime por WhatsApp y agendamos una primera charla gratuita."
+• **Ojo con la cifra:** el rango de 3 a 8 % por década es de uso habitual en la bibliografía pero varía mucho entre personas. Si se quiere citar fuente en el epígrafe, buscar una revisión científica concreta y registrarla en `product-discovery/`.
+
+**Reels siguientes (ideas):** "Qué es la proteína y cuánta necesitás sin hacer dieta"; "Mitos de entrenar fuerza"; "Entrenar con resistencia a la insulina" (hablar de la situación de la persona, no de la condición como gancho).
+
+#### Clases en vivo: packs por adelantado y retención
+
+**Contexto (anónimo):** una alumna de tiempo entrena 4 veces por semana con clases en vivo; su hermana, iniciante y viviendo en otro país, recibió 5 clases de regalo para conocer el programa. El objetivo es convertir a la hermana en alumna paga sin perder a la primera.
+
+**Principios**
+• **Precio individual, no conjunto.** Cada alumna tiene objetivos, nivel y frecuencia distintos, y un precio atado a dos personas obliga a renegociar si una deja.
+• No se toca el acuerdo de la alumna de tiempo. Se la reconoce por recomendar con un beneficio aparte.
+• Mismo esquema para las dos: son hermanas y van a comparar. No hay descuentos "secretos".
+• La clase en vivo sigue a **USD 15** cada una, más todo lo que incluye Método Raíz (ver la entrada del 25-27/08).
+
+**Pack por adelantado (esquema vigente)**
+• **Pack de 2 meses, pagado por adelantado.** El motivo real: la plataforma de cobro aplica una comisión alta por cada pago, y un solo pago la reduce. Cobrar por adelantado además ordena la agenda y es retención.
+• 2 clases por semana: 16 clases, USD 240.
+• 3 clases por semana: 24 clases, USD 360.
+• **Incentivo de ingreso, solo en el primer pack:** 1 clase de regalo (17 en vez de 16, 25 en vez de 24). Es un gesto de bienvenida, no una rebaja permanente del valor de la clase.
+• Alternativa si duda: pack de 1 mes a USD 15 por clase, sin regalo. La clase extra queda solo para el pack de 2 meses.
+
+**Reglas del pack**
+• Las clases tienen vigencia dentro de los 2 meses del pack.
+• Cancelación con 24 horas de aviso. Si cancela Jimena, se reprograma sin descontar. Si cancela la alumna con menos de 24 h, la clase se pierde.
+
+**Para la alumna que recomienda**
+• Una clase en vivo de regalo al mes mientras su hermana siga activa. Es un agradecimiento y no depende de quién pague.
+• Pueden pagar el pack juntas en un solo movimiento (ahorra una comisión), siempre como opción y nunca dándolo por hecho.
+
+**Momento de la propuesta**
+• En la clase 4 de las 5 de regalo, repasar lo logrado (técnica, fuerza, cómo se siente) y presentar el pack, con fecha límite al terminar la clase 5.
+• Una clase cancelada por Jimena se reprograma y no descuenta de las 5.
+
+#### Qué NO va en el repositorio
+
+• Planillas, planes de alimentación, casos y mediciones de alumnas, incluidas las de la alumna de tiempo.
+• Cualquier dato personal o corporal de Jimena y de su familia.
+• Nombres, países y montos de pago de alumnas puntuales.
+
 ## Estructura de la página web
 
 Hero → **Problema ("¿Te suena algo de esto?")** → Sobre mí → Testimonios → **Cómo trabajo** → **Programa** → Contacto (WhatsApp) → Footer.
@@ -951,6 +1050,21 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 - Hallazgo central del business case: el techo del negocio lo fija el precio, no la capacidad. El plan más caro es el que peor rinde por hora de trabajo.
 
 ## Pendientes
+
+### Pendientes nuevos del 13/10/2026 (promoción y clases en vivo)
+
+Detalle en la entrada "09-13/10/2026" de Decisiones de diseño.
+
+- [ ] 🔴 Grabar el video de presentación del programa (se envía antes de la entrevista inicial y va en destacadas).
+- [ ] 🔴 Hacer seguimiento a las consultas de WhatsApp sin respuesta con el mensaje definido.
+- [ ] 🟡 Grabar el reel 1 y el reel 2 y medir cuál genera más consultas.
+- [ ] 🟡 Agregar Método Raíz y el link de la web a la bio de Instagram.
+- [ ] 🟡 Sesión de fotos para banco de contenido (también cubre el pendiente de la foto de "Sobre mí").
+- [ ] 🟡 Pedir opinión y autorización escrita a las 3 alumnas fundadoras; recién después usar cualquier cosa de ellas.
+- [ ] 🟡 Presentar el pack de 2 meses a la alumna en período de prueba en la clase 4, con fecha límite en la clase 5.
+- [ ] 🟡 Escribir en un lugar visible la política de cancelación de 24 h y de vigencia de las clases del pack.
+- [ ] 🟢 Registrar la fuente científica de los reels educativos en `product-discovery/`.
+- [ ] 🟢 TikTok: pasar el usuario a Gastón para sumarlo al footer.
 
 ### Estado al cerrar el 18/08/2026 — leer esto primero
 
