@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Martes 10 — Nuestro día</title>
+<meta name="description" content="Una invitación para el martes.">
+<!-- Pagina personal: no se indexa ni se linkea desde el sitio. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/marca/monograma-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/img/marca/monograma-apple-touch.png">
+<meta name="theme-color" content="#3E1422">
+<!-- Preview de WhatsApp sin spoilers: no dice que hay adentro. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="Jime, tenés una invitación ♥">
+<meta property="og:description" content="Martes 10/11. Abrila.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --wine-950:#3E1422;
+  --wine-900:#5C1F32;
+  --wine-600:#9D3A57;
+  --wine-100:#F3E4E9;
+  --bronze:#A9824A;
+  --bronze-light:#DCBA84;
+  --bronze-text:#8A6636;
+  --ink:#241F26;
+  --paper:#FAF6F2;
+  --white:#FFFFFF;
+  --radius:20px;
+  --sans:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  background:var(--paper);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- Portada ---------- */
+.cover{
+  position:relative;
+  overflow:hidden;
+  min-height:100svh;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;
+  padding:72px 24px 96px;
+  color:var(--white);
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(220,186,132,.22), transparent 60%),
+    linear-gradient(170deg,var(--wine-950) 0%,var(--wine-900) 45%,var(--wine-600) 100%);
+}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--bronze-light);
+}
+.seal{
+  width:84px;height:84px;margin:28px auto 30px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(220,186,132,.55);
+}
+.seal svg{width:38px;height:38px;fill:var(--bronze-light)}
+.cover h1{
+  font-weight:700;
+  font-size:clamp(40px,11vw,84px);
+  line-height:1.02;letter-spacing:-.025em;
+  max-width:12ch;
+}
+.cover h1 em{font-style:italic;color:var(--bronze-light)}
+.cover .lead{
+  margin-top:22px;
+  font-size:clamp(17px,4.4vw,21px);
+  max-width:30ch;
+  color:rgba(255,255,255,.88);
+}
+.date-pill{
+  margin-top:34px;
+  display:inline-flex;align-items:center;gap:10px;
+  min-height:48px;padding:0 22px;
+  border-radius:999px;
+  background:var(--white);color:var(--wine-900);
+  font-family:var(--mono);font-weight:500;font-size:15px;letter-spacing:.04em;
+}
+.scroll-hint{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);
+}
+
+/* Corazones que suben: solo decoracion */
+.hearts{position:absolute;inset:0;pointer-events:none}
+.hearts span{
+  position:absolute;bottom:-40px;
+  color:var(--bronze-light);opacity:.0;
+  font-size:18px;
+}
+
+/* ---------- Itinerario ---------- */
+main{max-width:640px;margin:0 auto;padding:72px 20px 40px}
+.section-title{
+  text-align:center;
+  font-size:clamp(28px,7vw,40px);font-weight:700;letter-spacing:-.02em;
+  color:var(--wine-900);
+}
+.section-sub{
+  text-align:center;margin-top:8px;
+  font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--bronze-text);
+}
+
+.timeline{list-style:none;margin-top:44px;position:relative}
+.timeline::before{
+  content:"";position:absolute;left:27px;top:28px;bottom:28px;width:2px;
+  background:linear-gradient(var(--wine-600),var(--bronze));
+  border-radius:2px;
+}
+.stop{position:relative;padding-left:76px;margin-bottom:28px}
+.stop:last-child{margin-bottom:0}
+.dot{
+  position:absolute;left:0;top:0;
+  width:56px;height:56px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--white);
+  border:2px solid var(--wine-600);
+  box-shadow:0 0 0 6px var(--paper);
+}
+.dot svg{width:26px;height:26px;stroke:var(--wine-600);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card{
+  background:var(--white);
+  border-radius:var(--radius);
+  padding:22px 22px 20px;
+  box-shadow:0 1px 2px rgba(36,31,38,.05),0 12px 32px -12px rgba(92,31,50,.18);
+}
+.time{
+  font-family:var(--mono);font-weight:500;font-size:14px;letter-spacing:.06em;
+  color:var(--wine-600);
+}
+.card h3{
+  margin-top:6px;
+  font-size:24px;line-height:1.15;font-weight:700;letter-spacing:-.015em;
+  color:var(--wine-900);
+}
+.card .place{margin-top:6px;font-size:16px;color:var(--ink)}
+.card .note{margin-top:10px;font-size:15px;color:#5a5260}
+.tag{
+  display:inline-block;margin-top:14px;
+  padding:5px 12px;border-radius:999px;
+  background:var(--wine-100);color:var(--wine-900);
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+}
+.map{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:14px;min-height:44px;
+  color:var(--wine-600);font-weight:600;font-size:15px;text-decoration:none;
+  border-bottom:1px solid transparent;
+}
+.map:hover,.map:focus-visible{border-bottom-color:currentColor}
+.map svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.tags-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tags-row .tag{margin-top:14px}
+
+/* ---------- Que llevar ---------- */
+.bag{
+  margin-top:56px;
+  border-radius:var(--radius);
+  padding:26px 22px;
+  background:var(--wine-100);
+}
+.bag h2{font-size:20px;font-weight:700;color:var(--wine-900)}
+.bag ul{list-style:none;margin-top:12px;display:grid;gap:8px}
+.bag li{display:flex;gap:10px;font-size:16px}
+.bag li::before{content:"♥";color:var(--wine-600);flex:none}
+
+/* ---------- Carta ---------- */
+.letter{
+  margin-top:56px;text-align:center;
+  padding:44px 24px;
+  border-radius:var(--radius);
+  color:var(--white);
+  background:linear-gradient(150deg,var(--wine-900),var(--wine-600) 70%,var(--bronze));
+}
+.letter p{font-size:clamp(19px,5vw,23px);line-height:1.45;max-width:28ch;margin:0 auto}
+.letter .sign{
+  margin-top:22px;
+  font-family:var(--mono);font-size:14px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--bronze-light);
+}
+.cta{
+  margin-top:28px;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:52px;padding:0 26px;
+  border-radius:999px;
+  background:var(--white);color:var(--wine-900);
+  font-weight:700;font-size:16px;text-decoration:none;
+}
+.cta:focus-visible{outline:3px solid var(--bronze-light);outline-offset:3px}
+.cta svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+
+footer{
+  text-align:center;padding:36px 20px 48px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--bronze-text);
+}
+
+/* ---------- Animaciones: mejora progresiva ---------- */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  @keyframes beat{0%,100%{transform:scale(1)}12%{transform:scale(1.12)}24%{transform:scale(1)}36%{transform:scale(1.08)}}
+  @keyframes float{
+    0%{opacity:0;transform:translateY(0) scale(.8)}
+    15%{opacity:.55}
+    100%{opacity:0;transform:translateY(-105svh) scale(1.1)}
+  }
+  @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
+
+  .cover .eyebrow{animation:rise .8s .1s both}
+  .seal{animation:rise .8s .25s both}
+  .seal svg{animation:beat 2.4s 1.2s ease-in-out infinite}
+  .cover h1{animation:rise .9s .4s both}
+  .cover .lead{animation:rise .9s .6s both}
+  .date-pill{animation:rise .9s .8s both}
+  .scroll-hint{animation:nudge 2s 1.6s ease-in-out infinite}
+
+  .hearts span{animation:float linear infinite}
+  .hearts span:nth-child(1){left:8%; animation-duration:11s;animation-delay:0s;  font-size:14px}
+  .hearts span:nth-child(2){left:22%;animation-duration:14s;animation-delay:3s;  font-size:20px}
+  .hearts span:nth-child(3){left:38%;animation-duration:12s;animation-delay:6s;  font-size:12px}
+  .hearts span:nth-child(4){left:61%;animation-duration:15s;animation-delay:1.5s;font-size:22px}
+  .hearts span:nth-child(5){left:77%;animation-duration:10s;animation-delay:4.5s;font-size:15px}
+  .hearts span:nth-child(6){left:90%;animation-duration:13s;animation-delay:8s;  font-size:18px}
+}
+@media (min-width:720px){
+  main{padding-top:96px}
+}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span></div>
+
+  <p class="eyebrow">Invitación sorpresa</p>
+  <div class="seal" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.4 2.5h1.8c.8-1.4 2.3-2.5 4.4-2.5 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>
+  </div>
+  <h1>Jime, el martes es <em>nuestro</em>.</h1>
+  <p class="lead">Te invito a pasar el día conmigo. Ya está todo reservado: vos solo traé ganas.</p>
+  <p class="date-pill">Martes 10 de noviembre</p>
+
+  <p class="scroll-hint" aria-hidden="true">Mirá el plan ↓</p>
+</header>
+
+<main>
+  <h2 class="section-title">Nuestro día de amor</h2>
+  <p class="section-sub">El itinerario</p>
+
+  <ol class="timeline">
+    <li class="stop">
+      <span class="dot" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>
+      </span>
+      <div class="card">
+        <p class="time">09:00 – 10:00</p>
+        <h3>Entrenamos juntos</h3>
+        <p class="place">Megatlon Barrio Norte</p>
+        <p class="note">Arrancamos el día como más te gusta: moviéndonos. Hoy la que entrena sos vos, no la que entrena a otras.</p>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&query=Megatlon+Barrio+Norte+Buenos+Aires" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Ver en el mapa
+        </a>
+      </div>
+    </li>
+
+    <li class="stop">
+      <span class="dot" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3.5c0 1 .8 1.5.8 2.5M11.5 3.5c0 1 .8 1.5.8 2.5"/></svg>
+      </span>
+      <div class="card">
+        <p class="time">10:00</p>
+        <h3>Desayuno en El Gato Negro</h3>
+        <p class="place">Av. Corrientes 1669, San Nicolás</p>
+        <p class="note">Té en hebras, café y algo rico en uno de los cafés más lindos de Buenos Aires.</p>
+        <div class="tags-row">
+          <span class="tag">Reserva confirmada · 2 personas</span>
+        </div>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&query=El+Gato+Negro+Av.+Corrientes+1669+Buenos+Aires" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Ver en el mapa
+        </a>
+      </div>
+    </li>
+
+    <li class="stop">
+      <span class="dot" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M3 17c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><path d="M3 20.5c1.5 0 1.5-1 3-1s1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1"/><path d="M8 13V5.5a2 2 0 0 1 4 0M16 13V5.5a2 2 0 0 0-4 0M8 9h8"/></svg>
+      </span>
+      <div class="card">
+        <p class="time">11:30 – 14:30</p>
+        <h3>Día de spa</h3>
+        <p class="place">Konke Hotel Buenos Aires</p>
+        <p class="note">Tres horas para no hacer nada más que relajarnos. Cerramos el día como te merecés.</p>
+        <div class="tags-row">
+          <span class="tag">Para 2 personas</span>
+        </div>
+        <a class="map" href="https://www.google.com/maps/search/?api=1&query=Konke+Hotel+Buenos+Aires" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Ver en el mapa
+        </a>
+      </div>
+    </li>
+  </ol>
+
+  <section class="bag" aria-labelledby="bag-title">
+    <h2 id="bag-title">Qué llevar</h2>
+    <ul>
+      <li>Ropa y zapatillas para entrenar</li>
+      <li>Malla, ojotas y algo cómodo para el spa</li>
+      <li>Muchas ganas de pasarla lindo</li>
+    </ul>
+  </section>
+
+  <section class="letter" aria-label="Mensaje">
+    <p>Pasás tus días cuidando a otras. El martes me toca cuidarte a vos.</p>
+    <p class="sign">Con todo mi amor · Gastón</p>
+    <a class="cta" href="nuestro-dia.ics" download>
+      <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+      Agendalo en tu calendario
+    </a>
+  </section>
+</main>
+
+<footer>Martes 10 · 11 · 2026</footer>
+
+</body>
+</html>
