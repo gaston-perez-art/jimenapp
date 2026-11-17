@@ -1051,6 +1051,16 @@ El orden es deliberado: **el método va antes que el precio**. Explicar cómo se
 
 ## Pendientes
 
+### 17/11/2026 — Historias de bastidores: "a veces la actitud hay que buscarla"
+
+Primera secuencia de historias de cercanía después del lanzamiento: una selfie de buen humor, dos videos contando que la mañana real fue difícil, una placa de autocuidado y un sticker de preguntas. Todo, con textos y decisiones, está en `materiales/historias/actitud-2026-11-17/`.
+
+**Criterios que quedan para próximas historias:**
+• **Una placa que sigue a un video retoma la última frase del video.** Así la secuencia se lee como una sola historia y no como publicaciones sueltas.
+• **En una placa de historia van 4 ítems como máximo**, con prioridad para lo que es terreno de Jimena: movimiento y nutrición. Es el mismo criterio que la placa 9 del lanzamiento.
+• **Para que escriban se usa el sticker de preguntas, no texto suelto.** Si la cuenta responde poco, primero va una encuesta, que se contesta con un toque.
+• **Placa sin foto cuando la secuencia ya abrió con una foto de Jimena.**
+
 ### Pendientes nuevos del 13/10/2026 (promoción y clases en vivo)
 
 Detalle en la entrada "09-13/10/2026" de Decisiones de diseño.
